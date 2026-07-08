@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fabric8 | Shop & Quote</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body>
+    <div class="topline"><a href="#quote">NO ONLINE PRICES - BUILD ONE QUOTE REQUEST</a></div>
+    <header class="header">
+      <a class="logo" href="home.html"><img src="assets/fabric8-logo-white.png" alt="Fabric8" /></a>
+      <nav><a href="home.html">Home</a><a href="shop.html">Shop</a><a href="services.html">Services</a><a href="sectors.html">Sectors</a><a href="method.html">Method</a><a href="about.html">About</a></nav>
+      <a class="quote-link" href="#quote">Quote <span id="cartCount">0</span></a>
+    </header>
+
+    <main>
+      <section class="page-hero shop-hero">
+        <div><p>Product Catalog</p><h1>Shop uniforms by product type.</h1><span>Select items, preview branding, and request one quotation.</span></div>
+      </section>
+
+      <section class="catalog-page">
+        <div class="product-configurator">
+          <div class="fashion-product-view">
+            <img id="featuredProductImage" src="White Polo Shirt.png" alt="Selected uniform product" />
+          </div>
+          <div class="fashion-product-panel">
+            <p class="control-title">Shop by product type</p>
+            <h2 id="featuredProductName">Polo Shirt</h2>
+            <span id="featuredProductText">Classic corporate polo, clean and professional.</span>
+            <label>Category<select id="categoryFilter"><option value="Top Wear">Top Wear</option></select></label>
+            <label>Product<select id="productSelect"></select></label>
+            <div>
+              <p class="control-title">Color</p>
+              <div id="colorFilter" class="color-filter" aria-label="Select product color"></div>
+            </div>
+            <label>Quantity<input id="productQuantity" type="number" min="1" value="50" /></label>
+            <button id="addSelectedProduct" class="button primary" type="button">Add to Quote Cart</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="studio" class="studio-page">
+        <div class="section-head"><p>Branding Atelier</p><h2>Upload your logo and preview placement.</h2></div>
+        <div class="studio">
+          <div class="studio-stage">
+            <img id="studioShirt" src="White Polo Shirt.png" alt="Selected garment" />
+            <div id="logoPreview" class="logo-preview left-chest">Logo</div>
+          </div>
+          <div class="studio-controls">
+            <div class="studio-product-name">
+              <p>Selected garment</p>
+              <h3>Essential White T-Shirt</h3>
+              <span>One clean preview garment for logo placement and color direction.</span>
+            </div>
+            <div>
+              <p class="control-title">Garment color</p>
+              <div id="studioColorSwatches" class="studio-color-swatches" aria-label="Garment color selection"></div>
+            </div>
+            <label>Logo upload<input id="logoUpload" type="file" accept="image/*" /></label>
+            <label>Placement<select id="placementSelect"><option value="left-chest">Left chest</option><option value="center-chest">Center chest</option><option value="right-sleeve">Right sleeve</option><option value="back-large">Back print</option></select></label>
+            <label>Logo size<input id="logoSize" type="range" min="8" max="38" value="13" /></label>
+            <label>Finish<select id="finishSelect"><option>Embroidery</option><option>Screen printing</option><option>Heat transfer</option></select></label>
+            <button id="addStudioQuote" class="button primary" type="button">Add Branded Mockup</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="quote" class="quote-page">
+        <div class="section-head"><p>Quote Request</p><h2>Send your selected products to Fabric8.</h2></div>
+        <div class="quote-wrap">
+          <div><h3>Quote Cart</h3><div id="cartItems" class="cart-items"></div><button id="clearCart" class="button dark" type="button">Clear Cart</button></div>
+          <form id="quoteForm" class="quote-form">
+            <input name="Full name" required placeholder="Full name*" />
+            <input name="Company name" required placeholder="Company name*" />
+            <input name="Email" type="email" required placeholder="Email*" />
+            <input name="Phone" required placeholder="Phone*" />
+            <select name="Industry" required><option value="">Industry*</option><option>Food and Beverage</option><option>Hospitality</option><option>Corporate</option><option>Healthcare</option><option>Industrial</option><option>Education</option><option>Aviation</option><option>Other</option></select>
+            <input name="Country" required placeholder="Country*" />
+            <input name="City" required placeholder="City*" />
+            <input name="Required delivery date" type="date" required />
+            <textarea name="Message" rows="5" required placeholder="Message / notes*"></textarea>
+            <button class="button primary" type="submit">Submit Quote Request</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script src="site.js"></script>
+  </body>
+</html>
