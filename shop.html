@@ -36,10 +36,9 @@
             <span id="featuredProductText">Classic corporate polo, clean and professional.</span>
             <p id="featuredProductLong" style="color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 8px;"></p>
 
-          <div style="display: flex; gap: 24px; align-items: flex-start; margin-bottom: 16px;">
-            <details style="flex: 1;">
-              <summary style="color: var(--green); font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: underline; margin-top: 8px; margin-bottom: 16px;">More details</summary>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: var(--ink); padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+            <details style="margin-bottom: 12px; border-bottom: 1px solid var(--line); padding-bottom: 12px;">
+              <summary style="color: var(--green); font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> More details</summary>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px; color: var(--ink); margin-top: 12px;">
                 <div><strong>Fabric:</strong> <span id="featuredProductFabric"></span></div>
                 <div><strong>GSM:</strong> <span id="featuredProductGsm"></span></div>
                 <div><strong>Sizes:</strong> <span id="featuredProductSizes"></span></div>
@@ -51,18 +50,18 @@
               </div>
             </details>
             
-            <details style="flex: 1;">
-              <summary style="color: var(--green); font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: underline; margin-top: 8px; margin-bottom: 16px;">Filters & Search</summary>
-              <div style="padding-bottom: 16px; border-bottom: 1px solid var(--line);">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
-                  <label>Search<input type="search" id="productSearch" placeholder="Search..."></label>
+            <details style="margin-bottom: 16px; border-bottom: 1px solid var(--line); padding-bottom: 12px;">
+              <summary style="color: var(--green); font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> Filters & Search</summary>
+              <div style="margin-top: 12px;">
+                <div style="margin-bottom: 8px;">
+                  <label>Search<input type="search" id="productSearch" placeholder="Search products..."></label>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
                   <label>Sort By<select id="sortFilter">
                     <option value="featured">Featured</option>
                     <option value="A-Z">Name A-Z</option>
                     <option value="Z-A">Name Z-A</option>
                   </select></label>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
                   <label>Gender<select id="genderFilter">
                     <option value="All">All Genders</option>
                     <option value="Men">Men</option>
@@ -76,7 +75,6 @@
                 </div>
               </div>
             </details>
-          </div>
             <label>Category<select id="categoryFilter"><option value="Top Wear">Top Wear</option></select></label>
             <label>Product<select id="productSelect"></select></label>
             <label>Size
