@@ -516,8 +516,12 @@ function setupStudio() {
         const rect = logoPreview.getBoundingClientRect();
         const stageRect = studioStage.getBoundingClientRect();
         
-        logoPreview.style.width = rect.width + "px";
-        logoPreview.style.height = rect.height + "px";
+        const newSizePct = (rect.width / stageRect.width) * 100;
+        logoPreview.style.setProperty("--logo-size", newSizePct + "%");
+        const logoSizeInput = $("#logoSize");
+        if (logoSizeInput) {
+          logoSizeInput.value = newSizePct;
+        }
         logoPreview.className = "logo-preview custom";
         
         initLeft = ((rect.left - stageRect.left) / stageRect.width) * 100;
@@ -526,6 +530,10 @@ function setupStudio() {
         logoPreview.style.left = initLeft + "%";
         logoPreview.style.top = initTop + "%";
         logoPreview.style.transform = "none";
+        
+        // Remove explicit inline width/height to let CSS variable take over
+        logoPreview.style.width = "";
+        logoPreview.style.height = "";
       } else {
         initLeft = parseFloat(logoPreview.style.left) || 0;
         initTop = parseFloat(logoPreview.style.top) || 0;
