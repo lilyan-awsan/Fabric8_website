@@ -81,7 +81,8 @@
               <div id="colorFilter" class="color-filter" aria-label="Select product color"></div>
             </div>
             <label>Quantity<input id="productQuantity" type="number" min="1" value="50" /></label>
-            <button id="addSelectedProduct" class="button primary" type="button">Add to Quote Cart</button>
+            <button id="addSelectedProduct" class="button primary" type="button" style="margin-bottom: 8px;">Next: Add Branding</button>
+            <button id="addBlankProduct" class="button secondary" type="button" style="font-size: 11px; padding: 10px; background: transparent; color: var(--muted); border: 1px solid var(--border);">Skip branding, add blank items to cart</button>
           </div>
         </div>
       </section>
@@ -96,12 +97,8 @@
           <div class="studio-controls">
             <div class="studio-product-name">
               <p>Selected garment</p>
-              <h3>Essential White T-Shirt</h3>
-              <span>One clean preview garment for logo placement and color direction.</span>
-            </div>
-            <div>
-              <p class="control-title">Garment color</p>
-              <div id="studioColorSwatches" class="studio-color-swatches" aria-label="Garment color selection"></div>
+              <h3 id="studioProductName">Select a product above</h3>
+              <span id="studioProductColorDesc">Please choose a product and click Next.</span>
             </div>
             <label>Logo upload<input id="logoUpload" type="file" accept="image/*" /></label>
             <label>Placement<select id="placementSelect"><option value="left-chest">Left chest</option><option value="center-chest">Center chest</option><option value="right-sleeve">Right sleeve</option><option value="back-large">Back print</option></select></label>
@@ -111,7 +108,7 @@
               <input type="checkbox" id="logoDisclaimer" style="width: 16px; min-height: 16px; margin-top: 2px;" />
               <span>I confirm that I hold the copyright and bear all legal responsibility for any logos or artwork uploaded.</span>
             </label>
-            <button id="addStudioQuote" class="button primary" type="button">Add Branded Mockup</button>
+            <button id="addStudioQuote" class="button primary" type="button">Add to Quote Cart</button>
           </div>
         </div>
       </section>

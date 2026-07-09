@@ -472,8 +472,11 @@ function setupStudio() {
   if (!shirt) return;
   shirt.dataset.color = "white";
   const studioColors = ["White", "Black", "Navy", "Grey", "Green", "Red"];
-  $("#studioColorSwatches").innerHTML = studioColors.map((c) => colorButton(c)).join("");
-  $("#studioColorSwatches").querySelector('[data-color="White"]').classList.add("active");
+  const studioSwatches = $("#studioColorSwatches");
+  if (studioSwatches) {
+    studioSwatches.innerHTML = studioColors.map((c) => colorButton(c)).join("");
+    studioSwatches.querySelector('[data-color="White"]').classList.add("active");
+  }
   $("#placementSelect").addEventListener("change", (event) => { 
     $("#logoPreview").className = `logo-preview ${event.target.value}`; 
     if (event.target.value !== "custom") {
@@ -569,13 +572,32 @@ function setupStudio() {
       alert("You must agree to the legal disclaimer before adding a branded mockup.");
       return;
     }
-    cart.push({
-      sku: "F8-BRAND",
-      name: "Branded uniform mockup",
-      quantity: 50,
-      color: activeStudioColor,
-      branding: `${$("#finishSelect").value}, ${$("#placementSelect").selectedOptions[0].textContent}`
-    });
+    
+    const selectedProduct = products.find((p) => p.sku === selectedProductSku);
+    if (!selectedProduct) {
+      alert("Please select a product from the catalog first.");
+      return;
+    }
+    
+    const quantity = parseInt($("#productQuantity")?.value || 50);
+    const selectedSize = $("#sizeSelect")?.value || "Standard";
+    const brandingString = `${$("#finishSelect").value}, ${$("#placementSelect").selectedOptions[0].textContent}`;
+
+    const existing = cart.find(
+      (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize && item.branding === brandingString
+    );
+
+    if (existing) {
+      existing.quantity += quantity;
+    } else {
+      cart.push({
+        ...selectedProduct,
+        quantity,
+        color: activeCatalogColor,
+        size: selectedSize,
+        branding: brandingString
+      });
+    }
     saveCart();
     renderCart();
     location.hash = "quote";
@@ -587,8 +609,54 @@ document.addEventListener("click", (event) => {
   const remove = event.target.closest("[data-remove]");
   const colorDot = event.target.closest(".color-dot");
   const addSelected = event.target.closest("#addSelectedProduct");
+  const addBlank = event.target.closest("#addBlankProduct");
+  
   if (add) addToCart(add.dataset.add);
-  if (addSelected) addToCart(selectedProductSku);
+  if (addBlank) addToCart(selectedProductSku);
+  
+  if (addSelected) {
+    const selectedProduct = products.find((p) => p.sku === selectedProductSku);
+    if (!selectedProduct) return;
+    
+    const quantity = parseInt($("#productQuantity")?.value || 50);
+    const selectedSize = $("#sizeSelect")?.value;
+
+    if (!selectedSize) {
+      alert("Please select a size before proceeding.");
+      return;
+    }
+    if (!activeCatalogColor) {
+      alert("Please select a color before proceeding.");
+      return;
+    }
+    if (quantity < 1 || isNaN(quantity)) {
+      alert("Please enter a valid quantity.");
+      return;
+    }
+
+    const studioName = $("#studioProductName");
+    if (studioName) studioName.textContent = selectedProduct.name;
+    
+    const studioDesc = $("#studioProductColorDesc");
+    if (studioDesc) studioDesc.textContent = `Color: ${activeCatalogColor} | Size: ${selectedSize} | Qty: ${quantity}`;
+    
+    activeStudioColor = activeCatalogColor;
+    const shirtImg = $("#studioShirt");
+    if (shirtImg) {
+      shirtImg.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
+      const colorImg = selectedProduct.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+      if (colorImg) {
+         shirtImg.src = colorImg;
+      } else {
+         shirtImg.src = selectedProduct.images?.[0] || "White Polo Shirt.png";
+      }
+    }
+    
+    const studioSection = $("#studio");
+    if (studioSection) {
+      studioSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }
   if (colorDot) {
     const parent = colorDot.parentElement;
     parent.querySelectorAll(".color-dot").forEach((button) => button.classList.remove("active"));
