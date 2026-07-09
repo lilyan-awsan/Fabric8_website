@@ -581,7 +581,14 @@ function setupStudio() {
     
     const quantity = parseInt($("#productQuantity")?.value || 50);
     const selectedSize = $("#sizeSelect")?.value || "Standard";
-    const brandingString = `${$("#finishSelect").value}, ${$("#placementSelect").selectedOptions[0].textContent}`;
+    let placementText = $("#placementSelect").selectedOptions[0].textContent;
+    if ($("#placementSelect").value === "custom") {
+      const left = parseFloat($("#logoPreview").style.left).toFixed(1);
+      const top = parseFloat($("#logoPreview").style.top).toFixed(1);
+      const size = parseFloat($("#logoPreview").style.getPropertyValue("--logo-size") || 13).toFixed(1);
+      placementText += ` [Pos: X=${left}%, Y=${top}%, Size=${size}%]`;
+    }
+    const brandingString = `${$("#finishSelect").value}, ${placementText}`;
 
     const existing = cart.find(
       (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize && item.branding === brandingString
