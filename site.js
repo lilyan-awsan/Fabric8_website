@@ -464,7 +464,10 @@ function addToCart(sku) {
   }
   saveCart();
   renderCart();
-  location.hash = "quote";
+  const quoteSection = $("#quote");
+  if (quoteSection) {
+    quoteSection.scrollIntoView({ behavior: "smooth" });
+  }
 }
 
 function setupStudio() {
@@ -607,7 +610,10 @@ function setupStudio() {
     }
     saveCart();
     renderCart();
-    location.hash = "quote";
+    const quoteSection = $("#quote");
+    if (quoteSection) {
+      quoteSection.scrollIntoView({ behavior: "smooth" });
+    }
   });
 }
 
