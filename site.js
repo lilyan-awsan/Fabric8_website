@@ -651,10 +651,12 @@ document.addEventListener("click", (event) => {
          shirtImg.src = selectedProduct.images?.[0] || "White Polo Shirt.png";
       }
     }
-    
     const studioSection = $("#studio");
     if (studioSection) {
-      studioSection.scrollIntoView({ behavior: "smooth" });
+      studioSection.style.display = "block";
+      setTimeout(() => {
+        studioSection.scrollIntoView({ behavior: "smooth" });
+      }, 50); // slight delay to ensure display: block has rendered before scrolling
     }
   }
   if (colorDot) {
