@@ -474,10 +474,81 @@ function setupStudio() {
   const studioColors = ["White", "Black", "Navy", "Grey", "Green", "Red"];
   $("#studioColorSwatches").innerHTML = studioColors.map((c) => colorButton(c)).join("");
   $("#studioColorSwatches").querySelector('[data-color="White"]').classList.add("active");
-  $("#placementSelect").addEventListener("change", (event) => { $("#logoPreview").className = `logo-preview ${event.target.value}`; });
+  $("#placementSelect").addEventListener("change", (event) => { 
+    $("#logoPreview").className = `logo-preview ${event.target.value}`; 
+    if (event.target.value !== "custom") {
+      $("#logoPreview").style.left = "";
+      $("#logoPreview").style.top = "";
+      $("#logoPreview").style.width = "";
+      $("#logoPreview").style.height = "";
+      $("#logoPreview").style.transform = "";
+    }
+  });
   $("#logoSize").addEventListener("input", (event) => {
     $("#logoPreview").style.setProperty("--logo-size", `${event.target.value}%`);
   });
+
+  const logoPreview = $("#logoPreview");
+  const placementSelect = $("#placementSelect");
+  const studioStage = document.querySelector(".studio-stage");
+  let isDragging = false, startX, startY, initLeft, initTop;
+
+  if (logoPreview && studioStage) {
+    logoPreview.style.cursor = "grab";
+    
+    logoPreview.addEventListener("mousedown", (e) => {
+      if (e.offsetX > logoPreview.offsetWidth - 15 && e.offsetY > logoPreview.offsetHeight - 15) return;
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      logoPreview.style.cursor = "grabbing";
+      
+      let customOpt = placementSelect.querySelector('option[value="custom"]');
+      if (!customOpt) {
+        customOpt = document.createElement("option");
+        customOpt.value = "custom";
+        customOpt.textContent = "Custom (Dragged)";
+        placementSelect.appendChild(customOpt);
+      }
+      
+      if (placementSelect.value !== "custom") {
+        placementSelect.value = "custom";
+        const rect = logoPreview.getBoundingClientRect();
+        const stageRect = studioStage.getBoundingClientRect();
+        
+        logoPreview.style.width = rect.width + "px";
+        logoPreview.style.height = rect.height + "px";
+        logoPreview.className = "logo-preview custom";
+        
+        initLeft = ((rect.left - stageRect.left) / stageRect.width) * 100;
+        initTop = ((rect.top - stageRect.top) / stageRect.height) * 100;
+        
+        logoPreview.style.left = initLeft + "%";
+        logoPreview.style.top = initTop + "%";
+        logoPreview.style.transform = "none";
+      } else {
+        initLeft = parseFloat(logoPreview.style.left) || 0;
+        initTop = parseFloat(logoPreview.style.top) || 0;
+      }
+      e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      const stageRect = studioStage.getBoundingClientRect();
+      const dx = ((e.clientX - startX) / stageRect.width) * 100;
+      const dy = ((e.clientY - startY) / stageRect.height) * 100;
+      logoPreview.style.left = (initLeft + dx) + "%";
+      logoPreview.style.top = (initTop + dy) + "%";
+    });
+
+    document.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        logoPreview.style.cursor = "grab";
+      }
+    });
+  }
   $("#logoUpload").addEventListener("change", (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
