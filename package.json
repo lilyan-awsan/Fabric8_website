@@ -1,0 +1,8 @@
+{
+  "name": "fabric8-website",
+  "version": "1.0.0",
+  "description": "Fabric-8 Website",
+  "dependencies": {
+    "resend": "^3.5.0"
+  }
+}
