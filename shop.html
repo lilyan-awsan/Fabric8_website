@@ -36,7 +36,8 @@
             <span id="featuredProductText">Classic corporate polo, clean and professional.</span>
             <p id="featuredProductLong" style="color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 8px;"></p>
 
-            <details style="margin-bottom: 16px;">
+          <div style="display: flex; gap: 24px; align-items: flex-start; margin-bottom: 16px;">
+            <details style="flex: 1;">
               <summary style="color: var(--green); font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: underline; margin-top: 8px; margin-bottom: 16px;">More details</summary>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: var(--ink); padding-bottom: 16px; border-bottom: 1px solid var(--line);">
                 <div><strong>Fabric:</strong> <span id="featuredProductFabric"></span></div>
@@ -49,26 +50,33 @@
                 <div style="grid-column: 1 / -1;"><strong>Branding:</strong> <span id="featuredProductBranding"></span></div>
               </div>
             </details>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
-              <label>Search<input type="search" id="productSearch" placeholder="Search..."></label>
-              <label>Sort By<select id="sortFilter">
-                <option value="featured">Featured</option>
-                <option value="A-Z">Name A-Z</option>
-                <option value="Z-A">Name Z-A</option>
-              </select></label>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
-              <label>Gender<select id="genderFilter">
-                <option value="All">All Genders</option>
-                <option value="Men">Men</option>
-                <option value="Women">Women</option>
-                <option value="Unisex">Unisex</option>
-              </select></label>
-              <label>Availability<select id="availabilityFilter">
-                <option value="All">All</option>
-                <option value="In Stock">In Stock</option>
-              </select></label>
-            </div>
+            
+            <details style="flex: 1;">
+              <summary style="color: var(--green); font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: underline; margin-top: 8px; margin-bottom: 16px;">Filters & Search</summary>
+              <div style="padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
+                  <label>Search<input type="search" id="productSearch" placeholder="Search..."></label>
+                  <label>Sort By<select id="sortFilter">
+                    <option value="featured">Featured</option>
+                    <option value="A-Z">Name A-Z</option>
+                    <option value="Z-A">Name Z-A</option>
+                  </select></label>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px;">
+                  <label>Gender<select id="genderFilter">
+                    <option value="All">All Genders</option>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Unisex">Unisex</option>
+                  </select></label>
+                  <label>Availability<select id="availabilityFilter">
+                    <option value="All">All</option>
+                    <option value="In Stock">In Stock</option>
+                  </select></label>
+                </div>
+              </div>
+            </details>
+          </div>
             <label>Category<select id="categoryFilter"><option value="Top Wear">Top Wear</option></select></label>
             <label>Product<select id="productSelect"></select></label>
             <label>Size
