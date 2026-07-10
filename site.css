@@ -120,7 +120,7 @@ input, select, textarea, button { font: inherit; }
   overflow: hidden;
   background:
     linear-gradient(120deg, rgba(5,7,6,.92), rgba(18,24,20,.84)),
-    url("assets/fabric8-service-people.png") center / cover no-repeat;
+    url("assets/fabric8-service-people.webp") center / cover no-repeat;
   pointer-events: none;
   animation: homeIntroOut .65s ease 3s forwards;
 }
@@ -145,7 +145,7 @@ input, select, textarea, button { font: inherit; }
 .home-intro-silk {
   position: absolute;
   inset: -20%;
-  background: url("assets/fabric8-silk-hero.png") center / cover no-repeat;
+  background: url("assets/fabric8-silk-hero.webp") center / cover no-repeat;
   opacity: .18;
   filter: blur(2px);
   animation: slowZoom 3s ease forwards;
@@ -272,7 +272,7 @@ input, select, textarea, button { font: inherit; }
   inset: 0;
   background:
     linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.46) 44%, rgba(0,0,0,.1)),
-    url("assets/fabric8-service-people.png") center / cover no-repeat;
+    url("assets/fabric8-service-people.webp") center / cover no-repeat;
   animation: slowZoom 18s ease-in-out infinite alternate;
 }
 .silk-motion {
@@ -366,9 +366,9 @@ input, select, textarea, button { font: inherit; }
   opacity: .55;
   animation: silkSweep 6.5s ease-in-out infinite;
 }
-.fashion-slide.one { background-image: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.38)), url("assets/fabric8-business-uniform-hero.png"); animation: slideOne 15s infinite, slowZoom 18s ease-in-out infinite alternate; }
-.fashion-slide.two { background-image: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("assets/fabric8-restaurant-uniforms.png"); animation: slideTwo 15s infinite, slowZoom 18s ease-in-out infinite alternate; }
-.fashion-slide.three { background-image: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("assets/fabric8-health-hospitality-uniforms.png"); animation: slideThree 15s infinite, slowZoom 18s ease-in-out infinite alternate; }
+.fashion-slide.one { background-image: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.38)), url("assets/fabric8-business-uniform-hero.webp"); animation: slideOne 15s infinite, slowZoom 18s ease-in-out infinite alternate; }
+.fashion-slide.two { background-image: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("assets/fabric8-restaurant-uniforms.webp"); animation: slideTwo 15s infinite, slowZoom 18s ease-in-out infinite alternate; }
+.fashion-slide.three { background-image: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("assets/fabric8-health-hospitality-uniforms.webp"); animation: slideThree 15s infinite, slowZoom 18s ease-in-out infinite alternate; }
 .fashion-copy,
 .page-hero > div {
   position: relative;
@@ -423,9 +423,9 @@ input, select, textarea, button { font: inherit; }
 .sector-cards a { font-size: 12px; font-weight: 900; text-transform: uppercase; color: var(--green); }
 
 .page-hero { min-height: 520px; }
-.shop-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-fashion-hero.png") center / cover; }
-.services-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-service-people.png") center / cover; }
-.sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-royal-atelier.png") center / cover; }
+.shop-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-fashion-hero.webp") center / cover; }
+.services-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-service-people.webp") center / cover; }
+.sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-royal-atelier.webp") center / cover; }
 .method-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("White Shirt.png") center / cover; }
 .about-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("Black Polo Shirt.jpg") center / cover; }
 

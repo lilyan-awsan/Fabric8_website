@@ -255,7 +255,7 @@ textarea {
   inset: 0;
   background:
     linear-gradient(90deg, rgba(7, 8, 8, 0.86), rgba(7, 8, 8, 0.54) 43%, rgba(7, 8, 8, 0.14)),
-    url("assets/fabric8-royal-atelier.png") center / cover no-repeat;
+    url("assets/fabric8-royal-atelier.webp") center / cover no-repeat;
   opacity: 1;
   transform: scale(1.04);
   animation: heroFadeOne 15s ease-in-out infinite, luxuryDrift 18s ease-in-out infinite alternate;
@@ -964,7 +964,7 @@ textarea:focus {
 .admin-section {
   background:
     linear-gradient(180deg, rgba(247, 246, 241, 0.96), rgba(236, 233, 224, 0.96)),
-    url("assets/fabric8-silk-hero.png") center / cover fixed;
+    url("assets/fabric8-silk-hero.webp") center / cover fixed;
 }
 
 .admin-shell {
