@@ -398,12 +398,14 @@ function renderProducts() {
 
   const sizeSelect = $("#sizeSelect");
   if (sizeSelect) {
+    const currentSize = sizeSelect.value;
     sizeSelect.innerHTML = '<option value="">Select a size...</option>';
     if (selected.sizes && Array.isArray(selected.sizes)) {
       selected.sizes.forEach(size => {
         const opt = document.createElement("option");
         opt.value = size;
         opt.textContent = size;
+        if (size === currentSize) opt.selected = true;
         sizeSelect.appendChild(opt);
       });
     }
