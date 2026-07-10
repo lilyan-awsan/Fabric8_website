@@ -569,6 +569,10 @@ input, select, textarea {
   padding: 12px;
   background: #fff;
 }
+input.error, select.error, textarea.error {
+  border-color: #b7342b !important;
+  background-color: #fff9f9;
+}
 .products {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

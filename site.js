@@ -801,3 +801,16 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
 renderProducts();
 renderCart();
 setupStudio();
+
+// Form Validation UI
+document.addEventListener("invalid", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA") {
+    e.target.classList.add("error");
+  }
+}, true); // Use capture to catch invalid events
+
+document.addEventListener("input", (e) => {
+  if (e.target.classList.contains("error") && e.target.checkValidity()) {
+    e.target.classList.remove("error");
+  }
+});
