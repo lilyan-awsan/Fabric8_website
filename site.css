@@ -353,6 +353,8 @@ input, select, textarea, button { font: inherit; }
   min-height: calc(100vh - 124px);
   overflow: hidden;
   color: #fff;
+  display: flex;
+  align-items: center;
 }
 .fashion-hero::before {
   content: "";
@@ -373,9 +375,6 @@ input, select, textarea, button { font: inherit; }
 .page-hero > div {
   position: relative;
   z-index: 2;
-  display: grid;
-  align-content: center;
-  min-height: inherit;
   width: min(780px, 90vw);
   padding: 70px 5vw;
 }
