@@ -1,25 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-import { getDatabase, ref as dbRef, get, set, remove, child } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
-import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
-
 // Make the page visible (removes opacity: 0 from site.css)
 document.body.classList.add("page-ready");
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB4o7k3og4IkpN-1hWLCm0swSKfep2bX3Q",
-  authDomain: "fabric8-backend.firebaseapp.com",
-  databaseURL: "https://fabric8-backend-default-rtdb.firebaseio.com",
-  projectId: "fabric8-backend",
-  storageBucket: "fabric8-backend.firebasestorage.app",
-  messagingSenderId: "218171330798",
-  appId: "1:218171330798:web:567df110bd198a60a123ff"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-const storage = getStorage(app);
 
 // DOM Elements
 const loginScreen = document.getElementById("loginScreen");
@@ -44,10 +24,14 @@ const imageUrlInput = document.getElementById("imageUrl");
 const uploadStatus = document.getElementById("uploadStatus");
 
 let productsList = [];
+let pendingImageBase64 = null;
+let pendingImageName = null;
 
 // --- Authentication ---
-onAuthStateChanged(auth, (user) => {
-  if (user) {
+let authToken = localStorage.getItem("adminToken");
+
+function checkAuth() {
+  if (authToken) {
     loginScreen.style.display = "none";
     dashboardScreen.style.display = "block";
     fetchProducts();
@@ -55,41 +39,51 @@ onAuthStateChanged(auth, (user) => {
     loginScreen.style.display = "flex";
     dashboardScreen.style.display = "none";
   }
-});
+}
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
-  loginError.textContent = "";
+  loginError.textContent = "Verifying...";
   
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const res = await fetch('/api/adminAuth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      authToken = data.token;
+      localStorage.setItem("adminToken", authToken);
+      loginError.textContent = "";
+      checkAuth();
+    } else {
+      loginError.textContent = "Invalid password. Please try again.";
+    }
   } catch (error) {
-    loginError.textContent = "Invalid email or password. Please try again.";
+    loginError.textContent = "Server error. Ensure you are on Vercel and ADMIN_PASSWORD is set.";
   }
 });
 
-logoutBtn.addEventListener("click", () => signOut(auth));
+logoutBtn.addEventListener("click", () => {
+  authToken = null;
+  localStorage.removeItem("adminToken");
+  checkAuth();
+});
 
-// --- Database CRUD ---
+// --- GitHub CMS CRUD ---
 async function fetchProducts() {
-  productTableBody.innerHTML = "<tr><td colspan='5'>Loading products...</td></tr>";
+  productTableBody.innerHTML = "<tr><td colspan='5'>Loading products from GitHub...</td></tr>";
   try {
-    const snapshot = await get(dbRef(db, "products"));
-    productsList = [];
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      for (const key in data) {
-        productsList.push({ id: key, ...data[key] });
-      }
-      // Sort A-Z
-      productsList.sort((a, b) => a.name.localeCompare(b.name));
-    }
+    const res = await fetch('data/products.json?t=' + Date.now());
+    if (!res.ok) throw new Error("Failed to read products.json");
+    productsList = await res.json();
+    productsList.sort((a, b) => a.name.localeCompare(b.name));
     renderTable();
   } catch (error) {
     console.error("Error fetching products:", error);
-    productTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading database. Make sure Rules are set to public for reading.</td></tr>";
+    productTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading database. Ensure data/products.json exists on GitHub.</td></tr>";
   }
 }
 
@@ -122,11 +116,43 @@ function renderTable() {
   document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.addEventListener("click", async (e) => {
       if(confirm("Are you sure you want to delete this product?")) {
-        await remove(dbRef(db, "products/" + e.target.dataset.id));
-        fetchProducts();
+        await syncWithGithub("delete", { id: e.target.dataset.id, sku: e.target.dataset.id });
       }
     });
   });
+}
+
+// --- Sync Helper ---
+async function syncWithGithub(action, product) {
+  try {
+    const payload = { token: authToken, action, product };
+    if (pendingImageBase64) {
+      payload.image = { name: pendingImageName, base64: pendingImageBase64 };
+    }
+
+    const res = await fetch('/api/githubSync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    const data = await res.json();
+    if (data.success) {
+      productsList = data.products;
+      renderTable();
+      alert(`Success! Changes saved to GitHub.\nNOTE: Vercel takes ~45 seconds to rebuild the website. Your changes will be live shortly.`);
+      return true;
+    } else {
+      if (data.message === "Unauthorized") {
+        logoutBtn.click();
+      }
+      alert("Error saving: " + data.message);
+      return false;
+    }
+  } catch (error) {
+    alert("Network error. Ensure you are on Vercel.");
+    return false;
+  }
 }
 
 // --- Modal & Form ---
@@ -135,6 +161,8 @@ function openModal(docId = null) {
   imagePreviewContainer.style.display = "none";
   imageUrlInput.value = "";
   uploadStatus.textContent = "";
+  pendingImageBase64 = null;
+  pendingImageName = null;
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
@@ -181,12 +209,13 @@ productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   
   const submitBtn = document.getElementById("saveProductBtn");
-  submitBtn.textContent = "Saving...";
+  submitBtn.textContent = "Saving to GitHub...";
   submitBtn.disabled = true;
 
   const docId = document.getElementById("docId").value || document.getElementById("sku").value;
   
   const productData = {
+    id: docId,
     sku: document.getElementById("sku").value,
     name: document.getElementById("name").value,
     category: document.getElementById("category").value,
@@ -203,48 +232,38 @@ productForm.addEventListener("submit", async (e) => {
     image: imageUrlInput.value || "assets/white.png"
   };
 
-  try {
-    await set(dbRef(db, "products/" + docId), productData);
-    closeModal();
-    fetchProducts();
-  } catch (error) {
-    console.error("Error saving:", error);
-    alert("Error saving product: " + error.message);
-  } finally {
-    submitBtn.textContent = "Save Product";
-    submitBtn.disabled = false;
-  }
+  const success = await syncWithGithub("save", productData);
+  if (success) closeModal();
+
+  submitBtn.textContent = "Save Product";
+  submitBtn.disabled = false;
 });
 
-// --- Storage Uploads ---
+// --- Image Preview (Base64) ---
 imageUpload.addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  uploadStatus.textContent = "Uploading image...";
-  const storageRef = ref(storage, 'products/' + file.name);
-  const uploadTask = uploadBytesResumable(storageRef, file);
-
-  uploadTask.on('state_changed', 
-    (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      uploadStatus.textContent = 'Upload is ' + Math.round(progress) + '% done';
-    }, 
-    (error) => {
-      uploadStatus.textContent = "Upload failed: " + error.message;
-    }, 
-    async () => {
-      const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-      imageUrlInput.value = downloadURL;
-      imagePreview.src = downloadURL;
-      imagePreviewContainer.style.display = "flex";
-      uploadStatus.textContent = "Upload successful!";
-      imageUpload.value = ""; // clear input
-    }
-  );
+  uploadStatus.textContent = "Processing image...";
+  
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    pendingImageBase64 = event.target.result;
+    pendingImageName = file.name;
+    imagePreview.src = pendingImageBase64;
+    imagePreviewContainer.style.display = "flex";
+    uploadStatus.textContent = "Image ready to be uploaded upon saving!";
+  };
+  reader.readAsDataURL(file);
 });
 
 removeImageBtn.addEventListener("click", () => {
   imageUrlInput.value = "";
+  pendingImageBase64 = null;
+  pendingImageName = null;
   imagePreviewContainer.style.display = "none";
+  uploadStatus.textContent = "";
 });
+
+// Init
+checkAuth();

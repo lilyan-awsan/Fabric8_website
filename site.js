@@ -1,32 +1,21 @@
 let products = [];
 
-if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-  const firebaseConfig = {
-    apiKey: "AIzaSyB4o7k3og4IkpN-1hWLCm0swSKfep2bX3Q",
-    authDomain: "fabric8-backend.firebaseapp.com",
-    databaseURL: "https://fabric8-backend-default-rtdb.firebaseio.com",
-    projectId: "fabric8-backend",
-    storageBucket: "fabric8-backend.firebasestorage.app",
-    messagingSenderId: "218171330798",
-    appId: "1:218171330798:web:567df110bd198a60a123ff"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-  
-  db.ref("products").once("value", (snapshot) => {
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      for (const key in data) {
-        products.push(data[key]);
-      }
-      products.sort((a, b) => a.name.localeCompare(b.name));
-    }
+async function loadProducts() {
+  try {
+    const res = await fetch('data/products.json');
+    if (!res.ok) throw new Error("Failed to load products");
+    products = await res.json();
+    products.sort((a, b) => a.name.localeCompare(b.name));
     initSite();
-  });
-} else {
-  initSite();
+  } catch (err) {
+    console.error("Error loading products:", err);
+    // Even if it fails, try to init the site to not leave it blank
+    initSite();
+  }
 }
+
+// Start loading
+loadProducts();
 
 
 const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
