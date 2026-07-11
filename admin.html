@@ -102,10 +102,18 @@
           </div>
           <div class="input-group">
             <label>Gender</label>
-            <div class="checkbox-group" id="genderGroup">
-              <label><input type="checkbox" value="Men"> Men</label>
-              <label><input type="checkbox" value="Women"> Women</label>
-              <label><input type="checkbox" value="Unisex"> Unisex</label>
+            <div class="multi-select">
+              <div class="select-box">
+                <span class="selected-text" id="genderText">Select Gender</span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="dropdown-menu" style="display: none;">
+                <div class="checkbox-group column" id="genderGroup">
+                  <label><input type="checkbox" value="Men"> Men</label>
+                  <label><input type="checkbox" value="Women"> Women</label>
+                  <label><input type="checkbox" value="Unisex"> Unisex</label>
+                </div>
+              </div>
             </div>
           </div>
           <div class="input-group full-width">
@@ -121,31 +129,53 @@
             <textarea id="long" rows="3" required></textarea>
           </div>
           <div class="input-group full-width">
-            <label>Sizes <a href="#" id="selectAllSizes" style="float: right; font-size: 0.8em; color: var(--accent); text-decoration: none;">Select All</a></label>
-            <div class="checkbox-group wrap" id="sizesGroup">
-              <label><input type="checkbox" value="XS"> XS</label>
-              <label><input type="checkbox" value="S"> S</label>
-              <label><input type="checkbox" value="M"> M</label>
-              <label><input type="checkbox" value="L"> L</label>
-              <label><input type="checkbox" value="XL"> XL</label>
-              <label><input type="checkbox" value="2XL"> 2XL</label>
-              <label><input type="checkbox" value="3XL"> 3XL</label>
-              <label><input type="checkbox" value="4XL"> 4XL</label>
-              <input type="text" id="otherSizes" placeholder="Other sizes (comma separated)" style="width: auto; flex: 1; min-width: 150px; padding: 4px; height: 28px; margin-left: 10px;">
+            <label>Sizes</label>
+            <div class="multi-select">
+              <div class="select-box">
+                <span class="selected-text" id="sizesText">Select Sizes</span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="dropdown-menu" style="display: none;">
+                <div class="dropdown-header">
+                  <a href="#" id="selectAllSizes" class="select-all">Select All</a>
+                </div>
+                <div class="checkbox-group column" id="sizesGroup">
+                  <label><input type="checkbox" value="XS"> XS</label>
+                  <label><input type="checkbox" value="S"> S</label>
+                  <label><input type="checkbox" value="M"> M</label>
+                  <label><input type="checkbox" value="L"> L</label>
+                  <label><input type="checkbox" value="XL"> XL</label>
+                  <label><input type="checkbox" value="2XL"> 2XL</label>
+                  <label><input type="checkbox" value="3XL"> 3XL</label>
+                  <label><input type="checkbox" value="4XL"> 4XL</label>
+                  <input type="text" id="otherSizes" placeholder="Other sizes (comma separated)" style="width: 100%; margin-top: 10px; padding: 6px;">
+                </div>
+              </div>
             </div>
           </div>
           <div class="input-group full-width">
-            <label>Colors <a href="#" id="selectAllColors" style="float: right; font-size: 0.8em; color: var(--accent); text-decoration: none;">Select All</a></label>
-            <div class="checkbox-group wrap" id="colorsGroup">
-              <label><input type="checkbox" value="Black"> Black</label>
-              <label><input type="checkbox" value="White"> White</label>
-              <label><input type="checkbox" value="Red"> Red</label>
-              <label><input type="checkbox" value="Navy"> Navy</label>
-              <label><input type="checkbox" value="Green"> Green</label>
-              <label><input type="checkbox" value="Burgundy"> Burgundy</label>
-              <label><input type="checkbox" value="Light Grey"> Light Grey</label>
-              <label><input type="checkbox" value="Dark Grey"> Dark Grey</label>
-              <input type="text" id="otherColors" placeholder="Other colors (comma separated)" style="width: auto; flex: 1; min-width: 150px; padding: 4px; height: 28px; margin-left: 10px;">
+            <label>Colors</label>
+            <div class="multi-select">
+              <div class="select-box">
+                <span class="selected-text" id="colorsText">Select Colors</span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="dropdown-menu" style="display: none;">
+                <div class="dropdown-header">
+                  <a href="#" id="selectAllColors" class="select-all">Select All</a>
+                </div>
+                <div class="checkbox-group column" id="colorsGroup">
+                  <label><input type="checkbox" value="Black"> Black</label>
+                  <label><input type="checkbox" value="White"> White</label>
+                  <label><input type="checkbox" value="Red"> Red</label>
+                  <label><input type="checkbox" value="Navy"> Navy</label>
+                  <label><input type="checkbox" value="Green"> Green</label>
+                  <label><input type="checkbox" value="Burgundy"> Burgundy</label>
+                  <label><input type="checkbox" value="Light Grey"> Light Grey</label>
+                  <label><input type="checkbox" value="Dark Grey"> Dark Grey</label>
+                  <input type="text" id="otherColors" placeholder="Other colors (comma separated)" style="width: 100%; margin-top: 10px; padding: 6px;">
+                </div>
+              </div>
             </div>
           </div>
           <div class="input-group">

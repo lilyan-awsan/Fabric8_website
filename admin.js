@@ -179,6 +179,9 @@ function openModal(docId = null) {
   document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => cb.checked = false);
   document.getElementById("otherSizes").value = "";
   document.getElementById("otherColors").value = "";
+  updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
+  updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
+  updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors');
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
@@ -222,6 +225,11 @@ function openModal(docId = null) {
         }
       });
       document.getElementById("otherColors").value = otherColorsArr.join(", ");
+
+      updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
+      updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
+      updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors');
+
       document.getElementById("fabric").value = p.fabric || "";
       document.getElementById("gsm").value = p.gsm || "";
       document.getElementById("leadTime").value = p.leadTime || "";
@@ -344,6 +352,7 @@ document.getElementById("selectAllSizes").addEventListener("click", (e) => {
   const cbs = document.querySelectorAll("#sizesGroup input[type='checkbox']");
   const allChecked = Array.from(cbs).every(cb => cb.checked);
   cbs.forEach(cb => cb.checked = !allChecked);
+  updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
 });
 
 document.getElementById("selectAllColors").addEventListener("click", (e) => {
@@ -351,4 +360,46 @@ document.getElementById("selectAllColors").addEventListener("click", (e) => {
   const cbs = document.querySelectorAll("#colorsGroup input[type='checkbox']");
   const allChecked = Array.from(cbs).every(cb => cb.checked);
   cbs.forEach(cb => cb.checked = !allChecked);
+  updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors');
+});
+
+// --- Multi-Select Dropdown Logic ---
+document.querySelectorAll('.multi-select .select-box').forEach(box => {
+  box.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const menu = box.nextElementSibling;
+    const isVisible = menu.style.display === 'block';
+    document.querySelectorAll('.multi-select .dropdown-menu').forEach(m => m.style.display = 'none');
+    if (!isVisible) {
+      menu.style.display = 'block';
+    }
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.multi-select')) {
+    document.querySelectorAll('.multi-select .dropdown-menu').forEach(m => m.style.display = 'none');
+  }
+});
+
+function updateMultiSelectText(groupId, textId, defaultText) {
+  const checked = Array.from(document.querySelectorAll(`#${groupId} input[type='checkbox']:checked`)).map(cb => cb.value);
+  const textEl = document.getElementById(textId);
+  if (checked.length === 0) {
+    textEl.textContent = defaultText;
+  } else if (checked.length <= 3) {
+    textEl.textContent = checked.join(', ');
+  } else {
+    textEl.textContent = `${checked.length} selected`;
+  }
+}
+
+document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => {
+  cb.addEventListener('change', () => updateMultiSelectText('genderGroup', 'genderText', 'Select Gender'));
+});
+document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => {
+  cb.addEventListener('change', () => updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes'));
+});
+document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => {
+  cb.addEventListener('change', () => updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors'));
 });
