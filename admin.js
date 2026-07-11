@@ -103,12 +103,12 @@ function renderTable() {
   }
 
   productsList.forEach(p => {
-    const imgSrc = (p.image && (p.image.startsWith('assets/') || p.image.startsWith('http'))) ? p.image : `assets/${p.image || 'white.png'}`;
-    const rawFallback = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${imgSrc}`;
+    const imgSrc = p.image ? (p.image.startsWith('http') ? p.image : p.image) : 'https://via.placeholder.com/60?text=No+Image';
+    const rawFallback = (p.image && !p.image.startsWith('http')) ? `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${p.image}` : 'https://via.placeholder.com/60?text=No+Image';
     
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><img src="${imgSrc}" onerror="this.onerror=null; this.src='${rawFallback}';" class="prod-thumb"></td>
+      <td><img src="${imgSrc}" onerror="this.onerror=null; this.src='${rawFallback}';" class="prod-thumb" alt="Product Image"></td>
       <td><strong>${p.sku}</strong></td>
       <td>${p.name}</td>
       <td>${p.category}</td>
