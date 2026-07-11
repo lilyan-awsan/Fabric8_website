@@ -15,11 +15,10 @@ body {
   background: var(--paper);
   color: var(--ink);
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity .45s ease, transform .45s ease;
+  transition: opacity .45s ease;
 }
 body.page-ready,
-body.landing-body { opacity: 1; transform: translateY(0); }
+body.landing-body { opacity: 1; }
 body::after {
   content: "";
   position: fixed;
