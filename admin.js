@@ -102,8 +102,8 @@ function renderTable() {
       <td>${p.name}</td>
       <td>${p.category}</td>
       <td class="action-btns">
-        <button class="btn-icon edit-btn" data-id="${p.id}">Edit</button>
-        <button class="btn-icon delete delete-btn" data-id="${p.id}">Delete</button>
+        <button class="btn-icon edit-btn" data-id="${p.sku}">Edit</button>
+        <button class="btn-icon delete delete-btn" data-id="${p.sku}">Delete</button>
       </td>
     `;
     productTableBody.appendChild(tr);
@@ -166,9 +166,9 @@ function openModal(docId = null) {
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
-    const p = productsList.find(x => x.id === docId);
+    const p = productsList.find(x => x.id === docId || x.sku === docId);
     if (p) {
-      document.getElementById("docId").value = p.id;
+      document.getElementById("docId").value = p.sku;
       document.getElementById("sku").value = p.sku || "";
       document.getElementById("name").value = p.name || "";
       document.getElementById("category").value = p.category || "Top Wear";
