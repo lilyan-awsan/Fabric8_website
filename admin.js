@@ -3,6 +3,9 @@ import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from
 import { getDatabase, ref as dbRef, get, set, remove, child } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
+// Make the page visible (removes opacity: 0 from site.css)
+document.body.classList.add("page-ready");
+
 const firebaseConfig = {
   apiKey: "AIzaSyB4o7k3og4IkpN-1hWLCm0swSKfep2bX3Q",
   authDomain: "fabric8-backend.firebaseapp.com",
