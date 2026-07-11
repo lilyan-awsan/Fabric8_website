@@ -574,6 +574,14 @@ function initSite() {
   if (typeof renderProducts === 'function') renderProducts();
   if (typeof renderCart === 'function') renderCart();
   if (typeof setupStudio === 'function') setupStudio();
+  
+  // Check for SKU in URL to auto-open product modal (from Admin panel link)
+  const urlParams = new URLSearchParams(window.location.search);
+  const sku = urlParams.get('sku');
+  if (sku && typeof openProductModal === 'function') {
+    // Small delay to ensure DOM is ready and grid is painted
+    setTimeout(() => openProductModal(sku), 100);
+  }
 }
 
 // Form Validation UI
