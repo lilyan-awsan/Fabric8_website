@@ -280,3 +280,20 @@ body {
   font-size: 13px;
   color: var(--accent);
 }
+
+/* Fix site.css overrides */
+body.page-ready {
+  transform: none !important;
+}
+
+.login-box .logo img {
+  width: 150px;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+select option {
+  background: #222;
+  color: #fff;
+}
