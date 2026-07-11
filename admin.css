@@ -19,6 +19,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 .admin-login-screen {
   display: flex;
   align-items: center;
