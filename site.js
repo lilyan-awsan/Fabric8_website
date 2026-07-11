@@ -208,8 +208,8 @@ function renderCart() {
 
 function addToCart(sku) {
   const selectedProduct = products.find((p) => p.sku === sku);
-  const quantity = parseInt($("#productQuantity")?.value || 50);
-  const selectedSize = $("#sizeSelect")?.value;
+  const quantity = parseInt($("#modalProductQuantity")?.value || 50);
+  const selectedSize = $("#modalSizeSelect")?.value;
 
   if (!selectedSize) {
     alert("Please select a size before adding to the cart.");
@@ -358,8 +358,8 @@ function setupStudio() {
       return;
     }
     
-    const quantity = parseInt($("#productQuantity")?.value || 50);
-    const selectedSize = $("#sizeSelect")?.value || "Standard";
+    const quantity = parseInt($("#modalProductQuantity")?.value || 50);
+    const selectedSize = $("#modalSizeSelect")?.value || "Standard";
     let placementText = $("#placementSelect").selectedOptions[0].textContent;
     if ($("#placementSelect").value === "custom") {
       const left = parseFloat($("#logoPreview").style.left).toFixed(1);
