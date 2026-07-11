@@ -20,7 +20,10 @@
       <div id="loginError" class="error-msg"></div>
       <div class="input-group">
         <label>Password</label>
-        <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="current-password">
+        <div style="position: relative;">
+          <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="current-password" style="padding-right: 40px;">
+          <button type="button" id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: var(--muted); padding: 0;">👁️</button>
+        </div>
       </div>
       <button id="loginBtn" class="quote-link w-full">Login</button>
     </div>

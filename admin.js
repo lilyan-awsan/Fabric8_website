@@ -3,8 +3,8 @@ document.body.classList.add("page-ready");
 
 // DOM Elements
 const loginScreen = document.getElementById("loginScreen");
-const dashboardScreen = document.getElementById("dashboardScreen");
-const loginForm = document.getElementById("loginForm");
+const dashboardScreen = document.getElementById("dashboard");
+const loginBtn = document.getElementById("loginBtn");
 const loginError = document.getElementById("loginError");
 const logoutBtn = document.getElementById("logoutBtn");
 
@@ -41,9 +41,9 @@ function checkAuth() {
   }
 }
 
-loginForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const password = document.getElementById("loginPassword").value;
+async function handleLogin() {
+  const password = document.getElementById("adminPassword").value;
+  if (!password) return;
   loginError.textContent = "Verifying...";
   
   try {
@@ -64,7 +64,28 @@ loginForm.addEventListener("submit", async (e) => {
   } catch (error) {
     loginError.textContent = "Server error. Ensure you are on Vercel and ADMIN_PASSWORD is set.";
   }
+}
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", handleLogin);
+}
+document.getElementById("adminPassword")?.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") handleLogin();
 });
+
+const togglePasswordBtn = document.getElementById("togglePassword");
+if (togglePasswordBtn) {
+  togglePasswordBtn.addEventListener("click", () => {
+    const pwdInput = document.getElementById("adminPassword");
+    if (pwdInput.type === "password") {
+      pwdInput.type = "text";
+      togglePasswordBtn.textContent = "🙈";
+    } else {
+      pwdInput.type = "password";
+      togglePasswordBtn.textContent = "👁️";
+    }
+  });
+}
 
 logoutBtn.addEventListener("click", () => {
   authToken = null;
