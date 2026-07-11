@@ -22,76 +22,93 @@
         <div><p>Product Catalog</p><h1>Shop uniforms by product type.</h1><span>Select items, preview branding, and request one quotation.</span></div>
       </section>
 
-      <section class="catalog-page">
-        <div class="product-configurator">
-          <div class="fashion-product-view">
-            <img id="featuredProductImage" src="White Polo Shirt.png" alt="Selected uniform product" />
-          </div>
-          <div class="fashion-product-panel">
-            <p class="control-title">Shop by product type</p>
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-              <h2 id="featuredProductName">Polo Shirt</h2>
-              <span id="featuredProductSku" class="eyebrow" style="margin: 0;">SKU: F8-001</span>
+      <section class="catalog-page" style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
+        <div class="catalog-layout">
+          <!-- Sidebar Filters -->
+          <aside class="catalog-sidebar">
+            <h3 style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase;">Filters</h3>
+            <div class="filter-group">
+              <label for="productSearch" style="font-size: 12px; font-weight: bold;">Search</label>
+              <input type="search" id="productSearch" placeholder="Search by SKU or name..." style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
             </div>
-            <span id="featuredProductText">Classic corporate polo, clean and professional.</span>
-            <p id="featuredProductLong" style="color: var(--muted); font-size: 13px; line-height: 1.5; margin-top: 8px;"></p>
-
-            <details style="margin-bottom: 12px; border-bottom: 1px solid var(--line); padding-bottom: 12px;">
-              <summary style="color: var(--green); font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> More details</summary>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px; color: var(--ink); margin-top: 12px;">
-                <div><strong>Fabric:</strong> <span id="featuredProductFabric"></span></div>
-                <div><strong>GSM:</strong> <span id="featuredProductGsm"></span></div>
-                <div><strong>Sizes:</strong> <span id="featuredProductSizes"></span></div>
-                <div><strong>MOQ:</strong> <span id="featuredProductMoq"></span></div>
-                <div><strong>Lead Time:</strong> <span id="featuredProductLeadTime"></span></div>
-                <div><strong>Availability:</strong> <span id="featuredProductAvailability"></span></div>
-                <div style="grid-column: 1 / -1;"><strong>Care:</strong> <span id="featuredProductCare"></span></div>
-                <div style="grid-column: 1 / -1;"><strong>Branding:</strong> <span id="featuredProductBranding"></span></div>
-              </div>
-            </details>
             
-            <details style="margin-bottom: 16px; border-bottom: 1px solid var(--line); padding-bottom: 12px;">
-              <summary style="color: var(--green); font-size: 13px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg> Filters & Search</summary>
-              <div style="margin-top: 12px;">
-                <div style="margin-bottom: 8px;">
-                  <label>Search<input type="search" id="productSearch" placeholder="Search products..."></label>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                  <label>Sort By<select id="sortFilter">
-                    <option value="featured">Featured</option>
-                    <option value="A-Z">Name A-Z</option>
-                    <option value="Z-A">Name Z-A</option>
-                  </select></label>
-                  <label>Gender<select id="genderFilter">
-                    <option value="All">All Genders</option>
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                    <option value="Unisex">Unisex</option>
-                  </select></label>
-                  <label>Availability<select id="availabilityFilter">
-                    <option value="All">All</option>
-                    <option value="In Stock">In Stock</option>
-                  </select></label>
-                </div>
+            <div class="filter-group">
+              <label style="font-size: 12px; font-weight: bold;">Category</label>
+              <div id="categoryFilterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                <!-- Categories injected here -->
               </div>
-            </details>
-            <label>Category<select id="categoryFilter"><option value="Top Wear">Top Wear</option></select></label>
-            <label>Product<select id="productSelect"></select></label>
-            <label>Size
-              <select id="sizeSelect">
-                <option value="">Select a size...</option>
-              </select>
-            </label>
-            <div>
-              <p class="control-title" style="margin-bottom: 12px;">Color</p>
-              <div id="colorFilter" class="color-filter" aria-label="Select product color"></div>
             </div>
-            <label>Quantity<input id="productQuantity" type="number" min="1" value="50" /></label>
-            <button id="addSelectedProduct" class="button primary" type="button" style="margin-bottom: 8px;">Next: Add Branding</button>
-            <button id="addBlankProduct" class="button secondary" type="button" style="font-size: 11px; padding: 10px; background: transparent; color: var(--muted); border: 1px solid var(--border);">Skip branding, add blank items to cart</button>
+
+            <div class="filter-group" style="margin-top: 24px;">
+              <label style="font-size: 12px; font-weight: bold;">Sort By</label>
+              <select id="sortFilter" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
+                <option value="featured">Featured</option>
+                <option value="A-Z">Name A-Z</option>
+                <option value="Z-A">Name Z-A</option>
+              </select>
+            </div>
+          </aside>
+
+          <!-- Main Grid -->
+          <div class="catalog-main">
+            <div id="productGrid" class="catalog-grid">
+              <!-- Product Cards injected here -->
+            </div>
           </div>
         </div>
       </section>
+
+      <!-- Product Modal -->
+      <div id="productModal" class="product-modal" style="display: none;">
+        <div class="product-modal-content">
+          <button class="modal-close" id="closeProductModal">&times;</button>
+          
+          <div class="product-modal-layout">
+            <div class="product-modal-image">
+              <img id="modalProductImage" src="" alt="Product">
+            </div>
+            
+            <div class="product-modal-details">
+              <span id="modalProductCategory" class="eyebrow" style="margin: 0; font-size: 11px;">Category</span>
+              <h2 id="modalProductName" style="margin: 4px 0 8px; font-size: 28px; font-weight: 900; letter-spacing: -0.02em;">Product Name</h2>
+              <span id="modalProductSku" style="color: var(--muted); font-size: 13px;">SKU: XXX-XXX</span>
+              
+              <p id="modalProductDesc" style="margin-top: 16px; font-size: 14px; line-height: 1.6; color: var(--ink);"></p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; color: var(--ink); margin-top: 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 16px 0;">
+                <div><strong>Material:</strong> <span id="modalProductFabric"></span></div>
+                <div><strong>GSM:</strong> <span id="modalProductGsm"></span></div>
+                <div><strong>MOQ:</strong> <span id="modalProductMoq"></span></div>
+                <div><strong>Lead Time:</strong> <span id="modalProductLeadTime"></span></div>
+                <div><strong>Availability:</strong> <span id="modalProductAvailability"></span></div>
+                <div style="grid-column: 1 / -1;"><strong>Sizes Available:</strong> <span id="modalProductSizesList"></span></div>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 8px;">Select Size*</label>
+                <select id="modalSizeSelect" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="">Select a size...</option>
+                </select>
+              </div>
+
+              <div style="margin-top: 16px;">
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 8px;">Select Color*</label>
+                <div id="modalColorFilter" class="color-filter"></div>
+              </div>
+              
+              <div style="margin-top: 16px;">
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 8px;">Quantity* (Minimum <span id="minQtyLabel">50</span>)</label>
+                <input id="modalProductQuantity" type="number" min="1" value="50" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;" />
+              </div>
+
+              <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button id="modalAddBranding" class="button primary" style="flex: 1;">Next: Add Branding</button>
+                <button id="modalAddBlank" class="button secondary" style="flex: 1; background: transparent; border: 1px solid var(--ink); color: var(--ink);">Add Blank to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <section id="studio" class="studio-page" style="display: none;">
         <div class="section-head"><p>Branding Atelier</p><h2>Upload your logo and preview placement.</h2></div>

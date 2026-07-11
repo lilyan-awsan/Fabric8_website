@@ -55,90 +55,124 @@ function saveCart() {
   localStorage.setItem("fabric8QuoteCart", JSON.stringify(cart));
 }
 
-function renderProducts() {
-  const productImage = $("#featuredProductImage");
-  if (!productImage) return;
 
+let activeCategoryFilter = "All";
+let activeSearchTerm = "";
+let activeSortTerm = "featured";
+
+function renderFilters() {
   const categories = [...new Set(products.map((p) => p.category))].sort();
-  const categoryFilter = $("#categoryFilter");
-  const productSelect = $("#productSelect");
-  const colorFilter = $("#colorFilter");
+  const container = $("#categoryFilterContainer");
+  if (!container) return;
+  
+  let html = `<button type="button" class="category-btn ${activeCategoryFilter === 'All' ? 'active' : ''}" data-cat="All">All Categories</button>`;
+  categories.forEach(cat => {
+    html += `<button type="button" class="category-btn ${activeCategoryFilter === cat ? 'active' : ''}" data-cat="${cat}">${cat}</button>`;
+  });
+  container.innerHTML = html;
+  
+  container.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      activeCategoryFilter = e.target.dataset.cat;
+      renderFilters(); // re-render to update active class
+      renderProducts();
+    });
+  });
+}
 
-  const searchVal = $("#productSearch")?.value.toLowerCase() || "";
-  const sortVal = $("#sortFilter")?.value || "featured";
-  const genderVal = $("#genderFilter")?.value || "All";
-  const availabilityVal = $("#availabilityFilter")?.value || "All";
+function renderProducts() {
+  renderFilters();
+  const grid = $("#productGrid");
+  if (!grid) return;
 
-  if (categoryFilter.options.length === 1) {
-    categoryFilter.innerHTML = categories.map((c) => `<option>${c}</option>`).join("");
-    if (categories.includes("Top Wear")) categoryFilter.value = "Top Wear";
+  activeSearchTerm = $("#productSearch")?.value.toLowerCase() || "";
+  activeSortTerm = $("#sortFilter")?.value || "featured";
+
+  let filtered = products;
+
+  if (activeCategoryFilter !== "All") {
+    filtered = filtered.filter(p => p.category === activeCategoryFilter);
   }
 
-  const cat = categoryFilter.value;
-  let filtered = products.filter((p) => p.category === cat);
+  if (activeSearchTerm) {
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(activeSearchTerm) || p.sku.toLowerCase().includes(activeSearchTerm));
+  }
 
-  if (searchVal) {
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(searchVal) || p.sku.toLowerCase().includes(searchVal) || p.long.toLowerCase().includes(searchVal));
-  }
-  if (genderVal !== "All") {
-    filtered = filtered.filter(p => p.gender.includes(genderVal) || p.gender.includes("Unisex"));
-  }
-  if (availabilityVal !== "All") {
-    filtered = filtered.filter(p => p.availability === availabilityVal);
-  }
-  if (sortVal === "A-Z") {
+  if (activeSortTerm === "A-Z") {
     filtered.sort((a, b) => a.name.localeCompare(b.name));
-  } else if (sortVal === "Z-A") {
+  } else if (activeSortTerm === "Z-A") {
     filtered.sort((a, b) => b.name.localeCompare(a.name));
   }
 
   if (filtered.length === 0) {
-    productSelect.innerHTML = "<option value=''>No matches found</option>";
-    $("#featuredProductName").textContent = "No matching products";
+    grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--muted); padding: 40px;'>No products found matching your filters.</p>";
     return;
   }
 
-  if (!filtered.some((p) => p.sku === selectedProductSku)) selectedProductSku = filtered[0]?.sku || products[0].sku;
-  productSelect.innerHTML = filtered.map((p) => `<option value="${p.sku}" ${p.sku === selectedProductSku ? "selected" : ""}>${p.name}</option>`).join("");
-
-  const selected = products.find((p) => p.sku === selectedProductSku) || filtered[0] || products[0];
-  if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
-  colorFilter.innerHTML = selected.colors.map((c) => colorButton(c)).join("");
-  const activeButton = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
-  if (activeButton) activeButton.classList.add("active");
-
-  productImage.src = selected.image;
-  productImage.alt = selected.name;
-  productImage.dataset.color = activeCatalogColor.toLowerCase().replace(/\s+/g, "-");
-  $("#featuredProductName").textContent = selected.name;
-  $("#featuredProductText").textContent = selected.short;
-
-  if ($("#featuredProductSku")) $("#featuredProductSku").textContent = `SKU: ${selected.sku}`;
-  if ($("#featuredProductLong")) $("#featuredProductLong").textContent = selected.long;
-  if ($("#featuredProductFabric")) $("#featuredProductFabric").textContent = selected.fabric;
-  if ($("#featuredProductGsm")) $("#featuredProductGsm").textContent = selected.gsm;
-  if ($("#featuredProductSizes")) $("#featuredProductSizes").textContent = selected.sizes.join(", ");
-  if ($("#featuredProductMoq")) $("#featuredProductMoq").textContent = selected.moq;
-  if ($("#featuredProductLeadTime")) $("#featuredProductLeadTime").textContent = selected.leadTime;
-  if ($("#featuredProductCare")) $("#featuredProductCare").textContent = selected.care;
-  if ($("#featuredProductAvailability")) $("#featuredProductAvailability").textContent = selected.availability;
-  if ($("#featuredProductBranding")) $("#featuredProductBranding").textContent = selected.branding;
-
-  const sizeSelect = $("#sizeSelect");
-  if (sizeSelect) {
-    const currentSize = sizeSelect.value;
-    sizeSelect.innerHTML = '<option value="">Select a size...</option>';
-    if (selected.sizes && Array.isArray(selected.sizes)) {
-      selected.sizes.forEach(size => {
-        const opt = document.createElement("option");
-        opt.value = size;
-        opt.textContent = size;
-        if (size === currentSize) opt.selected = true;
-        sizeSelect.appendChild(opt);
-      });
-    }
-  }
+  grid.innerHTML = filtered.map(p => {
+    const imgSrc = p.image ? (p.image.startsWith('http') ? p.image : p.image) : 'White Polo Shirt.png';
+    return `
+      <div class="product-card" onclick="openProductModal('${p.sku}')">
+        <img src="${imgSrc}" class="product-card-img" alt="${p.name}">
+        <div class="product-card-info">
+          <span class="product-card-category">${p.category}</span>
+          <h3 class="product-card-title">${p.name}</h3>
+          <button class="product-card-btn" type="button">View Details</button>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
+
+function openProductModal(sku) {
+  const selected = products.find(p => p.sku === sku);
+  if (!selected) return;
+  
+  selectedProductSku = sku;
+  if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
+
+  const imgSrc = selected.image ? (selected.image.startsWith('http') ? selected.image : selected.image) : 'White Polo Shirt.png';
+  $("#modalProductImage").src = imgSrc;
+  $("#modalProductName").textContent = selected.name;
+  $("#modalProductCategory").textContent = selected.category;
+  $("#modalProductSku").textContent = `SKU: ${selected.sku}`;
+  $("#modalProductDesc").textContent = selected.long || selected.short;
+  
+  $("#modalProductFabric").textContent = selected.fabric || "N/A";
+  $("#modalProductGsm").textContent = selected.gsm || "N/A";
+  $("#modalProductMoq").textContent = selected.moq || "N/A";
+  $("#minQtyLabel").textContent = selected.moq ? selected.moq.replace(/[^0-9]/g, '') || "50" : "50";
+  $("#modalProductQuantity").min = $("#minQtyLabel").textContent;
+  $("#modalProductQuantity").value = $("#minQtyLabel").textContent;
+
+  $("#modalProductLeadTime").textContent = selected.leadTime || "N/A";
+  $("#modalProductAvailability").textContent = selected.availability || "N/A";
+  $("#modalProductSizesList").textContent = selected.sizes?.join(", ") || "N/A";
+
+  // Sizes
+  const sizeSelect = $("#modalSizeSelect");
+  sizeSelect.innerHTML = '<option value="">Select a size...</option>';
+  if (selected.sizes && Array.isArray(selected.sizes)) {
+    selected.sizes.forEach(size => {
+      sizeSelect.innerHTML += `<option value="${size}">${size}</option>`;
+    });
+  }
+
+  // Colors
+  const colorFilter = $("#modalColorFilter");
+  colorFilter.innerHTML = selected.colors.map(c => colorButton(c)).join("");
+  const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
+  if (activeBtn) activeBtn.classList.add("active");
+
+  $("#productModal").style.display = "flex";
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.id === "productModal" || e.target.id === "closeProductModal") {
+    $("#productModal").style.display = "none";
+  }
+});
+
 
 function colorStyle(color) {
   return colorMap[color] || "#d8d2c5";
@@ -363,8 +397,8 @@ document.addEventListener("click", (event) => {
   const add = event.target.closest("[data-add]");
   const remove = event.target.closest("[data-remove]");
   const colorDot = event.target.closest(".color-dot");
-  const addSelected = event.target.closest("#addSelectedProduct");
-  const addBlank = event.target.closest("#addBlankProduct");
+  const addSelected = event.target.closest("#modalAddBranding");
+  const addBlank = event.target.closest("#modalAddBlank");
   
   if (add) addToCart(add.dataset.add);
   if (addBlank) addToCart(selectedProductSku);
@@ -373,8 +407,8 @@ document.addEventListener("click", (event) => {
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
     if (!selectedProduct) return;
     
-    const quantity = parseInt($("#productQuantity")?.value || 50);
-    const selectedSize = $("#sizeSelect")?.value;
+    const quantity = parseInt($("#modalProductQuantity")?.value || 50);
+    const selectedSize = $("#modalSizeSelect")?.value;
 
     if (!selectedSize) {
       alert("Please select a size before proceeding.");
@@ -403,9 +437,12 @@ document.addEventListener("click", (event) => {
       if (colorImg) {
          shirtImg.src = colorImg;
       } else {
-         shirtImg.src = selectedProduct.images?.[0] || "White Polo Shirt.png";
+         const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
+         shirtImg.src = imgSrc;
       }
     }
+    
+    $("#productModal").style.display = "none";
     const studioSection = $("#studio");
     if (studioSection) {
       studioSection.style.display = "block";
@@ -435,10 +472,9 @@ document.addEventListener("click", (event) => {
 });
 
 ["input", "change"].forEach((eventName) => {
-  ["#categoryFilter", "#productSelect", "#productSearch", "#sortFilter", "#genderFilter", "#availabilityFilter"].forEach((selector) => {
+  ["#productSearch", "#sortFilter", "#genderFilter", "#availabilityFilter"].forEach((selector) => {
     const el = $(selector);
     if (el) el.addEventListener(eventName, (event) => {
-      if (event.target.id === "productSelect") selectedProductSku = event.target.value;
       renderProducts();
     });
   });
