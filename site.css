@@ -991,7 +991,7 @@ input.error, select.error, textarea.error {
 
 .product-modal-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 4fr 5fr;
 }
 
 @media (max-width: 768px) {
@@ -1017,6 +1017,8 @@ input.error, select.error, textarea.error {
 }
 
 .product-modal-details {
-  padding: 40px;
+  padding: 32px;
   background: #fff;
+  max-height: 90vh;
+  overflow-y: auto;
 }
