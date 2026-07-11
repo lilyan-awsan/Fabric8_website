@@ -347,6 +347,12 @@ function setupStudio() {
     reader.readAsDataURL(file);
   });
   $("#addStudioQuote").addEventListener("click", () => {
+    const logoUpload = $("#logoUpload");
+    if (logoUpload && (!logoUpload.files || logoUpload.files.length === 0)) {
+      alert("Please upload your logo file before adding this item to the quote cart.");
+      return;
+    }
+    
     if (!$("#logoDisclaimer")?.checked) {
       alert("You must agree to the legal disclaimer before adding a branded mockup.");
       return;
