@@ -174,6 +174,7 @@ function openModal(docId = null) {
   uploadStatus.textContent = "";
   pendingImageBase64 = null;
   pendingImageName = null;
+  document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => cb.checked = false);
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
@@ -183,7 +184,12 @@ function openModal(docId = null) {
       document.getElementById("sku").value = p.sku || "";
       document.getElementById("name").value = p.name || "";
       document.getElementById("category").value = p.category || "Top Wear";
-      document.getElementById("gender").value = p.gender || "Men / Women / Unisex";
+      
+      const pGender = p.gender || "Men / Women / Unisex";
+      document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => {
+        cb.checked = pGender.includes(cb.value);
+      });
+      
       document.getElementById("sectors").value = p.sectors || "";
       document.getElementById("short").value = p.short || "";
       document.getElementById("long").value = p.long || "";
@@ -230,7 +236,7 @@ productForm.addEventListener("submit", async (e) => {
     sku: document.getElementById("sku").value,
     name: document.getElementById("name").value,
     category: document.getElementById("category").value,
-    gender: document.getElementById("gender").value,
+    gender: Array.from(document.querySelectorAll("#genderGroup input[type='checkbox']:checked")).map(cb => cb.value).join(" / ") || "Unisex",
     sectors: document.getElementById("sectors").value,
     short: document.getElementById("short").value,
     long: document.getElementById("long").value,
