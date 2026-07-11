@@ -240,6 +240,10 @@ function addToCart(sku) {
   }
   saveCart();
   renderCart();
+  
+  const modal = $("#productModal");
+  if (modal) modal.style.display = "none";
+  
   const quoteSection = $("#quote");
   if (quoteSection) {
     quoteSection.scrollIntoView({ behavior: "smooth" });
