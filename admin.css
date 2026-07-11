@@ -156,6 +156,11 @@ body {
   filter: invert(1);
 }
 
+.admin-header .logo img {
+  max-height: 36px;
+  width: auto;
+}
+
 .admin-controls {
   display: flex;
   align-items: center;
