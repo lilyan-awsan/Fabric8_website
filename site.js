@@ -1,294 +1,33 @@
-const products = [
-  {
-    sku: "F8-001",
-    name: "Polo Shirt",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Classic corporate polo, clean and professional.",
-    long: "A tailored, comfortable polo shirt made from durable cotton or cotton-blend fabric. Reinforced collar and cuffs hold their shape through repeated washing, making it ideal for daily corporate wear.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Navy", "Grey", "Turquoise Blue", "Pink", "Brown", "Baby Blue", "Olive Green", "Orange", "Yellow", "Green", "Red", "Charcoal", "Blue", "Purple"],
-    gender: "Men / Women / Unisex",
-    image: "White Polo Shirt.png"
-  },
-  {
-    sku: "F8-002",
-    name: "Waiter Vest",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality",
-    short: "Sleek, lightweight vest for front-of-house staff.",
-    long: "A slim-fit vest designed for restaurant and hospitality teams. Offers a professional silhouette over a dress shirt while allowing full range of motion for serving.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-003",
-    name: "Cargo Vest",
-    category: "Top Wear",
-    sectors: "Hospitality, Corporate, Healthcare, Industrial, Aviation",
-    short: "Rugged utility vest with functional storage.",
-    long: "Built for staff who need hands-free storage on the job, with secure pockets for tools, phones, and equipment.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "Beige", "Navy"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-004",
-    name: "Chef Hat",
-    category: "Head Wear",
-    sectors: "Food and beverage, Hospitality",
-    short: "Traditional toque for a professional kitchen image.",
-    long: "A classic pleated chef hat that keeps kitchen staff cool while signaling culinary professionalism.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["White", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-005",
-    name: "Chef Beret",
-    category: "Head Wear",
-    sectors: "Food and beverage, Hospitality",
-    short: "Modern, low-profile alternative to the toque.",
-    long: "A soft, flat-topped kitchen cap offering a contemporary look for culinary teams.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["White", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-006",
-    name: "Chef Bandana",
-    category: "Head Wear",
-    sectors: "Food and beverage, Hospitality",
-    short: "Practical head covering for active kitchen staff.",
-    long: "A tie-back bandana that keeps hair contained and sweat away from the face during high-heat kitchen work.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["White", "Black", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-007",
-    name: "Lab Coats",
-    category: "Outer Wear",
-    sectors: "Healthcare",
-    short: "Crisp, professional coats for healthcare teams.",
-    long: "A knee-length lab coat designed for clinical and laboratory environments, with durable easy-care fabric and convenient pockets.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["White", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-008",
-    name: "Cargo Pants",
-    category: "Bottom Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Durable, functional pants for on-the-go teams.",
-    long: "Rugged pants with utility pockets and reinforced stitching for facilities, warehouse, or maintenance staff.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "Charcoal", "Beige", "Navy"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-009",
-    name: "Workwear / Waiter Pants",
-    category: "Bottom Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Polished, comfortable pants for service staff.",
-    long: "A versatile pant designed for all-day wear in hospitality and service settings, with wrinkle-resistant fabric and comfortable movement.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "Charcoal", "Beige", "Navy"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-010",
-    name: "Caps",
-    category: "Head Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Adjustable branded cap for outdoor or retail teams.",
-    long: "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Red", "Navy", "Green", "Burgundy", "Light Grey", "Charcoal", "Yellow", "Brown"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-011",
-    name: "Chef Jackets",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality",
-    short: "Signature double-breasted jacket for culinary professionals.",
-    long: "A durable, heat-resistant jacket featuring the classic double-breasted design and breathable reinforced construction.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["White", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-012",
-    name: "Scrubs",
-    category: "Top Wear",
-    sectors: "Healthcare",
-    short: "Comfortable, easy-care scrubs for clinical teams.",
-    long: "A two-piece top-and-pant set made from soft, breathable, easy-care fabric suited to long clinical shifts.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "Navy", "Burgundy", "Charcoal", "Ocean Blue", "White", "Baby Blue", "Olive Green"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-013",
-    name: "Chef Pants",
-    category: "Bottom Wear",
-    sectors: "Food and beverage, Hospitality",
-    short: "Comfortable, durable pants built for the kitchen.",
-    long: "Loose-fit pants designed for comfort and safety in hot kitchen environments with durable stain-resistant fabric.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "Striped", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-014",
-    name: "Full Apron",
-    category: "Accessories",
-    sectors: "Food and beverage, Hospitality, Corporate, Industrial",
-    short: "Classic full-coverage apron for kitchen and service staff.",
-    long: "A durable apron covering chest to knees, secured with adjustable neck and waist ties for a comfortable fit.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Striped", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-015",
-    name: "Full Apron With Pocket",
-    category: "Accessories",
-    sectors: "Food and beverage, Hospitality, Corporate, Industrial",
-    short: "Full-coverage apron with added on-the-job storage.",
-    long: "A full protective apron with a front pocket for order pads, tools, or a phone.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Striped", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-016",
-    name: "Half Apron",
-    category: "Accessories",
-    sectors: "Food and beverage, Hospitality",
-    short: "Lightweight waist apron for quick-service environments.",
-    long: "A waist-down apron that offers essential protection without bulk for counter service, baristas, and retail staff.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Striped", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-017",
-    name: "Half Apron With Pocket",
-    category: "Accessories",
-    sectors: "Food and beverage, Hospitality",
-    short: "Practical waist apron with built-in storage.",
-    long: "A lightweight waist apron with a front pocket for order pads, cash, or small tools.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Striped", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-018",
-    name: "T-shirt",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Everyday essential for casual team uniforms.",
-    long: "A soft, breathable cotton tee ideal for casual work environments, events, or team apparel programs.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Navy", "Burgundy", "Baby Blue", "American Blue", "Army Green", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-019",
-    name: "Oversized T-shirt",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Relaxed, modern fit for a trend-forward team look.",
-    long: "A loose, oversized tee that offers a contemporary silhouette for casual or streetwear-inspired uniform programs.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-020",
-    name: "Dri-Fit T-shirt",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Moisture-wicking tee for active or outdoor roles.",
-    long: "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Blue", "Baby Blue", "Yellow", "Green", "Red", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-021",
-    name: "Dri-Fit Polo",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Performance polo for active, client-facing teams.",
-    long: "A professional polo silhouette with moisture-wicking performance fabric for active or outdoor staff.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Blue", "Baby Blue", "Yellow", "Green", "Red", "Custom Colors"],
-    gender: "Men / Women / Unisex",
-    image: "Black Polo Shirt.jpg"
-  },
-  {
-    sku: "F8-022",
-    name: "Shirts",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Versatile button-up for a polished corporate look.",
-    long: "A clean, professional button-up shirt suited for office, retail, or client-facing roles.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Grey", "Navy", "Baby Blue"],
-    gender: "Men / Women / Unisex",
-    image: "White Shirt.png"
-  },
-  {
-    sku: "F8-023",
-    name: "Hoodie",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education",
-    short: "Comfortable layer for casual or outdoor work settings.",
-    long: "A soft, heavyweight hoodie offering warmth and comfort for cooler environments or casual team apparel.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Navy", "Charcoal", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-024",
-    name: "Zip-up Hoodie",
-    category: "Top Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education",
-    short: "Easy-layer hoodie for year-round versatility.",
-    long: "A full-zip hoodie with easy on/off wear over uniforms, durable fabric, and a relaxed fit.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black", "White", "Navy", "Charcoal", "Custom Colors"],
-    gender: "Men / Women / Unisex"
-  },
-  {
-    sku: "F8-025",
-    name: "Puffer Jacket",
-    category: "Outer Wear",
-    sectors: "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    short: "Insulated outerwear for cold-weather work environments.",
-    long: "A lightweight quilted jacket with water-resistant fabric and insulated construction for outdoor or cold conditions.",
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    colors: ["Black"],
-    gender: "Men / Women / Unisex"
-  }
-].map(p => ({
-  ...p,
-  fabric: "Premium Poly-Cotton Blend",
-  gsm: "180-220 GSM",
-  moq: "50 pieces",
-  leadTime: "14-21 Business Days",
-  care: "Machine wash cold, do not bleach.",
-  branding: "Embroidery, Screen Print, Heat Transfer",
-  availability: "In Stock",
-  image: p.image || "White Polo Shirt.png",
-  colors: p.colors || ["Black", "White"]
-}));
+let products = [];
+
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4o7k3og4IkpN-1hWLCm0swSKfep2bX3Q",
+    authDomain: "fabric8-backend.firebaseapp.com",
+    databaseURL: "https://fabric8-backend-default-rtdb.firebaseio.com",
+    projectId: "fabric8-backend",
+    storageBucket: "fabric8-backend.firebasestorage.app",
+    messagingSenderId: "218171330798",
+    appId: "1:218171330798:web:567df110bd198a60a123ff"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  
+  db.ref("products").once("value", (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      for (const key in data) {
+        products.push(data[key]);
+      }
+      products.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    initSite();
+  });
+} else {
+  initSite();
+}
+
 
 const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
 const $ = (selector) => document.querySelector(selector);
@@ -800,9 +539,11 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   }
 });
 
-renderProducts();
-renderCart();
-setupStudio();
+function initSite() {
+  if (typeof renderProducts === 'function') renderProducts();
+  if (typeof renderCart === 'function') renderCart();
+  if (typeof setupStudio === 'function') setupStudio();
+}
 
 // Form Validation UI
 document.addEventListener("invalid", (e) => {

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fabric-8 | Admin Dashboard</title>
+  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="admin-login-screen">
+    <div class="login-box">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/Fabric8_Logos/fabric8_wordmark_white.svg" alt="Fabric8" width="100">
+        </a>
+      </div>
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" required>
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required>
+        </div>
+        <p id="loginError" class="error-msg"></p>
+        <button type="submit" class="button primary w-full">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Screen -->
+  <div id="dashboardScreen" class="admin-dashboard" style="display: none;">
+    <header class="admin-header">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/Fabric8_Logos/fabric8_wordmark_white.svg" alt="Fabric8" width="100">
+        </a>
+      </div>
+      <div class="admin-controls">
+        <span>Logged in as Admin</span>
+        <button id="logoutBtn" class="button outline">Log Out</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <h1>Product Catalog</h1>
+        <button id="addProductBtn" class="button primary">Add New Product</button>
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>SKU</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody">
+            <!-- Products injected here -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="productModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add Product</h2>
+        <button id="closeModalBtn" class="close-btn">&times;</button>
+      </div>
+      <form id="productForm">
+        <input type="hidden" id="docId">
+        <div class="form-grid">
+          <div class="input-group">
+            <label>SKU</label>
+            <input type="text" id="sku" required>
+          </div>
+          <div class="input-group">
+            <label>Product Name</label>
+            <input type="text" id="name" required>
+          </div>
+          <div class="input-group">
+            <label>Category</label>
+            <select id="category" required>
+              <option value="Top Wear">Top Wear</option>
+              <option value="Bottom Wear">Bottom Wear</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Gender</label>
+            <input type="text" id="gender" value="Men / Women / Unisex" required>
+          </div>
+          <div class="input-group full-width">
+            <label>Sectors (comma separated)</label>
+            <input type="text" id="sectors" placeholder="e.g. Corporate, Healthcare">
+          </div>
+          <div class="input-group full-width">
+            <label>Short Description</label>
+            <input type="text" id="short" required>
+          </div>
+          <div class="input-group full-width">
+            <label>Long Description</label>
+            <textarea id="long" rows="3" required></textarea>
+          </div>
+          <div class="input-group">
+            <label>Sizes (comma separated)</label>
+            <input type="text" id="sizes" placeholder="e.g. XS,S,M,L,XL" required>
+          </div>
+          <div class="input-group">
+            <label>Colors (comma separated)</label>
+            <input type="text" id="colors" placeholder="e.g. Black,White,Navy" required>
+          </div>
+          <div class="input-group">
+            <label>Fabric / Composition</label>
+            <input type="text" id="fabric" placeholder="e.g. 100% Cotton">
+          </div>
+          <div class="input-group">
+            <label>GSM</label>
+            <input type="text" id="gsm" placeholder="e.g. 180 GSM">
+          </div>
+          <div class="input-group">
+            <label>Lead Time</label>
+            <input type="text" id="leadTime" placeholder="e.g. 2-3 Weeks">
+          </div>
+          <div class="input-group">
+            <label>MOQ</label>
+            <input type="text" id="moq" placeholder="e.g. 50 Pieces">
+          </div>
+          
+          <div class="input-group full-width image-upload-group">
+            <label>Product Image</label>
+            <div id="imagePreviewContainer" class="image-preview" style="display:none;">
+              <img id="imagePreview" src="" alt="Preview">
+              <button type="button" id="removeImageBtn" class="button outline small">Remove Image</button>
+            </div>
+            <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/webp">
+            <input type="hidden" id="imageUrl">
+            <p id="uploadStatus" class="upload-status"></p>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" id="cancelModalBtn" class="button outline">Cancel</button>
+          <button type="submit" id="saveProductBtn" class="button primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK via CDN -->
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

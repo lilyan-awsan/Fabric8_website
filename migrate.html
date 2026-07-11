@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firebase Migration Tool</title>
+  <style>
+    body { font-family: sans-serif; padding: 40px; background: #f0f0f0; }
+    button { padding: 12px 24px; background: #111; color: #fff; cursor: pointer; border: none; font-size: 16px; border-radius: 4px; }
+    #log { margin-top: 20px; background: #fff; padding: 20px; border-radius: 4px; max-height: 400px; overflow-y: auto; font-family: monospace; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Database Migration Tool</h1>
+  <p>Click the button below to upload all hardcoded products from site.js directly into your new Firebase Firestore Database.</p>
+  <button id="migrateBtn">Start Migration</button>
+  <div id="log"></div>
+
+  <script src="site.js"></script>
+  <!-- Use compat libraries so this works without a local server -->
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB4o7k3og4IkpN-1hWLCm0swSKfep2bX3Q",
+      authDomain: "fabric8-backend.firebaseapp.com",
+      databaseURL: "https://fabric8-backend-default-rtdb.firebaseio.com",
+      projectId: "fabric8-backend",
+      storageBucket: "fabric8-backend.firebasestorage.app",
+      messagingSenderId: "218171330798",
+      appId: "1:218171330798:web:567df110bd198a60a123ff"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const logEl = document.getElementById("log");
+
+    function log(msg) {
+      logEl.textContent += msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    document.getElementById("migrateBtn").addEventListener("click", async () => {
+      document.getElementById("migrateBtn").disabled = true;
+      log("Starting migration of " + products.length + " products...");
+      
+      try {
+        for (let i = 0; i < products.length; i++) {
+          const p = products[i];
+          const docId = p.sku;
+          log(`Uploading ${docId} - ${p.name}...`);
+          
+          await db.ref("products/" + docId).set(p);
+        }
+        log("\n✅ MIGRATION COMPLETE! All products successfully uploaded to Realtime Database.");
+      } catch (error) {
+        log("\n❌ ERROR: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
