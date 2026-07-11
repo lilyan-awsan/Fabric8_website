@@ -89,6 +89,14 @@ async function fetchProducts() {
 
 function renderTable() {
   productTableBody.innerHTML = "";
+  
+  // Dynamically update category select options
+  const coreCats = ["Top Wear", "Bottom Wear", "Accessories", "Head Wear", "Outer Wear"];
+  const allCats = [...new Set([...coreCats, ...productsList.map(p => p.category)])].filter(Boolean).sort();
+  const catSelect = document.getElementById("category");
+  catSelect.innerHTML = allCats.map(c => `<option value="${c}">${c}</option>`).join('') + 
+                        `<option value="ADD_NEW" style="font-weight: bold; color: var(--accent);">+ Add New Category...</option>`;
+
   if (productsList.length === 0) {
     productTableBody.innerHTML = "<tr><td colspan='5'>No products found. Add one!</td></tr>";
     return;
@@ -267,3 +275,29 @@ removeImageBtn.addEventListener("click", () => {
 
 // Init
 checkAuth();
+
+// --- Add New Category Logic ---
+const categorySelect = document.getElementById("category");
+let previousCategory = "";
+
+categorySelect.addEventListener("focus", () => {
+  previousCategory = categorySelect.value;
+});
+
+categorySelect.addEventListener("change", (e) => {
+  if (e.target.value === "ADD_NEW") {
+    const newCat = prompt("Enter new category name:");
+    if (newCat && newCat.trim() !== "") {
+      const option = document.createElement("option");
+      option.value = newCat.trim();
+      option.textContent = newCat.trim();
+      categorySelect.insertBefore(option, categorySelect.lastElementChild);
+      categorySelect.value = newCat.trim();
+      previousCategory = newCat.trim();
+    } else {
+      categorySelect.value = previousCategory;
+    }
+  } else {
+    previousCategory = categorySelect.value;
+  }
+});
