@@ -469,6 +469,9 @@ document.addEventListener("click", (event) => {
       activeCatalogColor = colorDot.dataset.color;
       renderProducts();
     }
+    if (parent.id === "modalColorFilter") {
+      activeCatalogColor = colorDot.dataset.color;
+    }
     if (parent.id === "studioColorSwatches") {
       activeStudioColor = colorDot.dataset.color;
       $("#studioShirt").dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
