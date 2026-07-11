@@ -302,7 +302,12 @@ select option {
   display: flex;
   gap: 15px;
   align-items: center;
-  height: 48px;
+  height: auto;
+  min-height: 48px;
+}
+.checkbox-group.wrap {
+  flex-wrap: wrap;
+  padding: 8px 0;
 }
 
 .checkbox-group label {

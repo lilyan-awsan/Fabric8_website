@@ -120,13 +120,33 @@
             <label>Long Description</label>
             <textarea id="long" rows="3" required></textarea>
           </div>
-          <div class="input-group">
-            <label>Sizes (comma separated)</label>
-            <input type="text" id="sizes" placeholder="e.g. XS,S,M,L,XL" required>
+          <div class="input-group full-width">
+            <label>Sizes <a href="#" id="selectAllSizes" style="float: right; font-size: 0.8em; color: var(--accent); text-decoration: none;">Select All</a></label>
+            <div class="checkbox-group wrap" id="sizesGroup">
+              <label><input type="checkbox" value="XS"> XS</label>
+              <label><input type="checkbox" value="S"> S</label>
+              <label><input type="checkbox" value="M"> M</label>
+              <label><input type="checkbox" value="L"> L</label>
+              <label><input type="checkbox" value="XL"> XL</label>
+              <label><input type="checkbox" value="2XL"> 2XL</label>
+              <label><input type="checkbox" value="3XL"> 3XL</label>
+              <label><input type="checkbox" value="4XL"> 4XL</label>
+              <input type="text" id="otherSizes" placeholder="Other sizes (comma separated)" style="width: auto; flex: 1; min-width: 150px; padding: 4px; height: 28px; margin-left: 10px;">
+            </div>
           </div>
-          <div class="input-group">
-            <label>Colors (comma separated)</label>
-            <input type="text" id="colors" placeholder="e.g. Black,White,Navy" required>
+          <div class="input-group full-width">
+            <label>Colors <a href="#" id="selectAllColors" style="float: right; font-size: 0.8em; color: var(--accent); text-decoration: none;">Select All</a></label>
+            <div class="checkbox-group wrap" id="colorsGroup">
+              <label><input type="checkbox" value="Black"> Black</label>
+              <label><input type="checkbox" value="White"> White</label>
+              <label><input type="checkbox" value="Red"> Red</label>
+              <label><input type="checkbox" value="Navy"> Navy</label>
+              <label><input type="checkbox" value="Green"> Green</label>
+              <label><input type="checkbox" value="Burgundy"> Burgundy</label>
+              <label><input type="checkbox" value="Light Grey"> Light Grey</label>
+              <label><input type="checkbox" value="Dark Grey"> Dark Grey</label>
+              <input type="text" id="otherColors" placeholder="Other colors (comma separated)" style="width: auto; flex: 1; min-width: 150px; padding: 4px; height: 28px; margin-left: 10px;">
+            </div>
           </div>
           <div class="input-group">
             <label>Fabric / Composition</label>

@@ -175,6 +175,10 @@ function openModal(docId = null) {
   pendingImageBase64 = null;
   pendingImageName = null;
   document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => cb.checked = false);
+  document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => cb.checked = false);
+  document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => cb.checked = false);
+  document.getElementById("otherSizes").value = "";
+  document.getElementById("otherColors").value = "";
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
@@ -193,8 +197,31 @@ function openModal(docId = null) {
       document.getElementById("sectors").value = p.sectors || "";
       document.getElementById("short").value = p.short || "";
       document.getElementById("long").value = p.long || "";
-      document.getElementById("sizes").value = (p.sizes || []).join(", ");
-      document.getElementById("colors").value = (p.colors || []).join(", ");
+      // Populate Sizes
+      const pSizes = p.sizes || [];
+      const otherSizesArr = [];
+      document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => {
+        cb.checked = pSizes.includes(cb.value);
+      });
+      pSizes.forEach(s => {
+        if (!document.querySelector(`#sizesGroup input[type='checkbox'][value='${s}']`)) {
+          otherSizesArr.push(s);
+        }
+      });
+      document.getElementById("otherSizes").value = otherSizesArr.join(", ");
+
+      // Populate Colors
+      const pColors = p.colors || [];
+      const otherColorsArr = [];
+      document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => {
+        cb.checked = pColors.includes(cb.value);
+      });
+      pColors.forEach(c => {
+        if (!document.querySelector(`#colorsGroup input[type='checkbox'][value='${c}']`)) {
+          otherColorsArr.push(c);
+        }
+      });
+      document.getElementById("otherColors").value = otherColorsArr.join(", ");
       document.getElementById("fabric").value = p.fabric || "";
       document.getElementById("gsm").value = p.gsm || "";
       document.getElementById("leadTime").value = p.leadTime || "";
@@ -240,8 +267,8 @@ productForm.addEventListener("submit", async (e) => {
     sectors: document.getElementById("sectors").value,
     short: document.getElementById("short").value,
     long: document.getElementById("long").value,
-    sizes: document.getElementById("sizes").value.split(",").map(s => s.trim()).filter(s => s),
-    colors: document.getElementById("colors").value.split(",").map(s => s.trim()).filter(s => s),
+    sizes: [...new Set([...Array.from(document.querySelectorAll("#sizesGroup input[type='checkbox']:checked")).map(cb => cb.value), ...document.getElementById("otherSizes").value.split(",").map(s => s.trim()).filter(Boolean)])],
+    colors: [...new Set([...Array.from(document.querySelectorAll("#colorsGroup input[type='checkbox']:checked")).map(cb => cb.value), ...document.getElementById("otherColors").value.split(",").map(c => c.trim()).filter(Boolean)])],
     fabric: document.getElementById("fabric").value,
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
@@ -309,4 +336,19 @@ categorySelect.addEventListener("change", (e) => {
   } else {
     previousCategory = categorySelect.value;
   }
+});
+
+// --- Select All Logic ---
+document.getElementById("selectAllSizes").addEventListener("click", (e) => {
+  e.preventDefault();
+  const cbs = document.querySelectorAll("#sizesGroup input[type='checkbox']");
+  const allChecked = Array.from(cbs).every(cb => cb.checked);
+  cbs.forEach(cb => cb.checked = !allChecked);
+});
+
+document.getElementById("selectAllColors").addEventListener("click", (e) => {
+  e.preventDefault();
+  const cbs = document.querySelectorAll("#colorsGroup input[type='checkbox']");
+  const allChecked = Array.from(cbs).every(cb => cb.checked);
+  cbs.forEach(cb => cb.checked = !allChecked);
 });
