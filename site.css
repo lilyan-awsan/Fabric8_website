@@ -956,7 +956,7 @@ input.error, select.error, textarea.error {
   background: var(--paper);
   border-radius: 12px;
   width: 100%;
-  max-width: 900px;
+  max-width: 760px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
@@ -990,7 +990,7 @@ input.error, select.error, textarea.error {
 
 .product-modal-layout {
   display: grid;
-  grid-template-columns: 4fr 5fr;
+  grid-template-columns: 3fr 5fr;
 }
 
 @media (max-width: 768px) {
