@@ -1,9 +1,22 @@
-/* Admin Dashboard Styles */
+/* Admin Dashboard Styles - Premium Fabric8 Theme */
+
+:root {
+  --ink: #111;
+  --paper: #f7f5ef;
+  --green: #2f873d;
+  --muted: #70756e;
+  --line: rgba(17, 17, 17, 0.14);
+  --white: #fff;
+  --accent: #2f873d;
+  --sans: "Montserrat", system-ui, sans-serif;
+}
 
 body {
   margin: 0;
-  background: #f8f9fa;
-  font-family: var(--sans, sans-serif);
+  background: var(--paper);
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
 
 .admin-login-screen {
@@ -11,17 +24,18 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #111;
-  color: #fff;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .login-box {
-  background: #222;
+  background: var(--white);
   padding: 40px;
   border-radius: 12px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  border: 1px solid var(--line);
   text-align: center;
 }
 
@@ -29,10 +43,19 @@ body {
   margin-bottom: 24px;
 }
 
+.login-box .logo img {
+  width: 150px;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  filter: invert(1); /* Invert white logo to black */
+}
+
 .login-box h2 {
   margin-top: 0;
   margin-bottom: 24px;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .input-group {
@@ -46,31 +69,34 @@ body {
 
 .input-group label {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .08em;
   margin-bottom: 8px;
-  color: #aaa;
+  color: var(--muted);
 }
 
-.input-group input,
+.input-group input:not([type="checkbox"]),
 .input-group select,
 .input-group textarea {
   width: 100%;
-  padding: 12px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #fff;
-  border-radius: 4px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 6px;
   font-family: inherit;
   font-size: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(47,135,61,0.1);
 }
 
 .error-msg {
@@ -84,14 +110,50 @@ body {
   width: 100%;
 }
 
+.quote-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--white);
+  border: 1px solid var(--ink);
+  padding: 12px 20px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.quote-link:hover {
+  background: var(--white);
+  color: var(--ink);
+}
+
 /* Dashboard UI */
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 32px;
-  background: #111;
-  color: #fff;
+  background: var(--ink);
+  color: var(--white);
+}
+
+.admin-header.glassmorphism {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255,255,255,0.92);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+  color: var(--ink);
+}
+
+.admin-header.glassmorphism .logo img {
+  filter: invert(1);
 }
 
 .admin-controls {
@@ -112,18 +174,42 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .admin-topbar h1 {
   margin: 0;
-  font-size: 28px;
-  color: #111;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.admin-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-input, .filter-select {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--white);
+}
+.filter-input:focus, .filter-select:focus {
+  outline: none;
+  border-color: var(--green);
 }
 
 .table-container {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  border: 1px solid var(--line);
   overflow: auto;
 }
 
@@ -134,120 +220,136 @@ body {
 
 .admin-table th,
 .admin-table td {
-  padding: 16px;
+  padding: 16px 20px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
 }
 
 .admin-table th {
   background: #fdfdfd;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #666;
+  color: var(--muted);
   letter-spacing: .05em;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
+.admin-table tbody tr {
+  transition: background 0.2s ease;
+}
 .admin-table tbody tr:hover {
-  background: #fafafa;
+  background: rgba(47,135,61,0.03);
 }
 
 .prod-thumb {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
   background: #f0f0f0;
-  border-radius: 4px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
 }
 
 .action-btns {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btn-icon {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
-  color: #666;
-  font-size: 14px;
-  transition: color 0.2s;
+  padding: 8px;
+  color: var(--muted);
+  font-size: 16px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 .btn-icon:hover {
-  color: #111;
+  color: var(--green);
+  background: rgba(47,135,61,0.1);
+  transform: translateY(-2px);
 }
 
 .btn-icon.delete:hover {
   color: #e74c3c;
+  background: rgba(231,76,60,0.1);
 }
 
 /* Modal */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.4);
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 
 .modal-content {
-  background: #222;
+  background: var(--white);
   width: 100%;
   max-width: 800px;
   max-height: 90vh;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+  border: 1px solid var(--line);
 }
 
 .modal-header {
   padding: 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #fff;
+  color: var(--ink);
 }
 
 .modal-header h2 {
   margin: 0;
   font-size: 20px;
+  font-weight: 800;
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: #aaa;
+  color: var(--muted);
   font-size: 28px;
   cursor: pointer;
   line-height: 1;
+  transition: color 0.2s;
 }
 
 .close-btn:hover {
-  color: #fff;
+  color: var(--ink);
 }
 
 #productForm {
   padding: 24px;
   overflow-y: auto;
-  color: #fff;
+  color: var(--ink);
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 20px;
+  gap: 0 24px;
 }
 
 .modal-actions {
   padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid var(--line);
   display: flex;
   justify-content: flex-end;
   gap: 16px;
@@ -257,9 +359,14 @@ body {
 .image-upload-group {
   margin-top: 16px;
   padding: 20px;
-  border: 1px dashed rgba(255,255,255,0.2);
+  border: 2px dashed rgba(17,17,17,0.1);
   border-radius: 8px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(17,17,17,0.02);
+  transition: background 0.2s, border-color 0.2s;
+}
+.image-upload-group:hover {
+  background: rgba(47,135,61,0.02);
+  border-color: rgba(47,135,61,0.3);
 }
 
 .image-preview {
@@ -271,107 +378,102 @@ body {
 
 .image-preview img {
   max-width: 120px;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #f0f0f0;
+  border: 1px solid var(--line);
 }
 
 .upload-status {
   margin-top: 8px;
   font-size: 13px;
-  color: var(--accent);
+  color: var(--green);
+  font-weight: 600;
 }
 
-/* Fix site.css overrides */
-body.page-ready {
-  transform: none !important;
-}
-
-.login-box .logo img {
-  width: 150px;
-  height: auto;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-select option {
-  background: #222;
-  color: #fff;
-}
-
-.checkbox-group {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  height: auto;
-  min-height: 48px;
-}
-.checkbox-group.wrap {
-  flex-wrap: wrap;
-  padding: 8px 0;
-}
-.checkbox-group.column {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  margin-bottom: 0;
-  cursor: pointer;
-  color: #fff;
-}
-
-.checkbox-group input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: var(--accent);
-}
-
+/* Multi-select Dropdown */
 .multi-select {
   position: relative;
   width: 100%;
 }
 .multi-select .select-box {
-  background: #333;
-  border: 1px solid #444;
-  padding: 12px;
-  border-radius: 4px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  border-radius: 6px;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
-  color: #fff;
+  color: var(--ink);
   align-items: center;
+  transition: border-color 0.3s;
+}
+.multi-select .select-box:hover {
+  border-color: var(--green);
 }
 .multi-select .dropdown-menu {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: #222;
-  border: 1px solid #444;
-  border-radius: 4px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 6px;
   z-index: 1000;
-  padding: 15px;
+  padding: 16px;
   max-height: 300px;
   overflow-y: auto;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  margin-top: 5px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-top: 8px;
 }
 .multi-select .dropdown-header {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #444;
-  padding-bottom: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
 }
 .multi-select .select-all {
-  color: var(--accent);
-  font-size: 0.9rem;
+  color: var(--green);
+  font-size: 12px;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.checkbox-group.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  margin-bottom: 0;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--green);
+}
+
+.row-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--green);
+}
+#selectAllProducts {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--green);
 }

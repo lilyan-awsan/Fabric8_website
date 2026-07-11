@@ -97,40 +97,96 @@ function renderTable() {
   catSelect.innerHTML = allCats.map(c => `<option value="${c}">${c}</option>`).join('') + 
                         `<option value="ADD_NEW" style="font-weight: bold; color: var(--accent);">+ Add New Category...</option>`;
 
-  if (productsList.length === 0) {
-    productTableBody.innerHTML = "<tr><td colspan='5'>No products found. Add one!</td></tr>";
+  const searchTerm = document.getElementById("searchBox")?.value.toLowerCase() || "";
+  const categoryFilter = document.getElementById("categoryFilter")?.value || "All";
+
+  const filteredProducts = productsList.filter(p => {
+    const matchesSearch = p.sku.toLowerCase().includes(searchTerm) || p.name.toLowerCase().includes(searchTerm);
+    const matchesCategory = categoryFilter === "All" || p.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  if (filteredProducts.length === 0) {
+    productTableBody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No products found.</td></tr>";
     return;
   }
 
-  productsList.forEach(p => {
+  filteredProducts.forEach(p => {
     const imgSrc = p.image ? (p.image.startsWith('http') ? p.image : p.image) : 'https://via.placeholder.com/60?text=No+Image';
     const rawFallback = (p.image && !p.image.startsWith('http')) ? `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${p.image}` : 'https://via.placeholder.com/60?text=No+Image';
     
     const tr = document.createElement("tr");
     tr.innerHTML = `
+      <td><input type="checkbox" class="row-checkbox" value="${p.sku}"></td>
       <td><img src="${imgSrc}" onerror="this.onerror=null; this.src='${rawFallback}';" class="prod-thumb" alt="Product Image"></td>
       <td><strong>${p.sku}</strong></td>
       <td>${p.name}</td>
       <td>${p.category}</td>
       <td class="action-btns">
-        <button class="btn-icon edit-btn" data-id="${p.sku}">Edit</button>
-        <button class="btn-icon delete delete-btn" data-id="${p.sku}">Delete</button>
+        <a href="shop.html?sku=${p.sku}" target="_blank" class="btn-icon" title="View on Site" style="text-decoration:none;">👁️</a>
+        <button class="btn-icon edit-btn" data-id="${p.sku}" title="Edit">✏️</button>
+        <button class="btn-icon duplicate-btn" data-id="${p.sku}" title="Duplicate">📋</button>
+        <button class="btn-icon delete delete-btn" data-id="${p.sku}" title="Delete">🗑️</button>
       </td>
     `;
     productTableBody.appendChild(tr);
   });
 
   document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => openModal(e.target.dataset.id));
+    btn.addEventListener("click", (e) => openModal(e.currentTarget.dataset.id));
   });
   
-  document.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.addEventListener("click", async (e) => {
-      if(confirm("Are you sure you want to delete this product?")) {
-        await syncWithGithub("delete", { id: e.target.dataset.id, sku: e.target.dataset.id });
+  document.querySelectorAll(".duplicate-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const sku = e.currentTarget.dataset.id;
+      const productToDuplicate = productsList.find(p => p.sku === sku);
+      if (productToDuplicate) {
+        openModal(); // Open empty modal
+        // But fill it with product data, except SKU
+        setTimeout(() => {
+          document.getElementById("name").value = productToDuplicate.name + " (Copy)";
+          document.getElementById("category").value = productToDuplicate.category;
+          document.getElementById("sectors").value = productToDuplicate.sectors;
+          document.getElementById("short").value = productToDuplicate.short;
+          document.getElementById("long").value = productToDuplicate.long;
+          document.getElementById("fabric").value = productToDuplicate.fabric || "";
+          document.getElementById("gsm").value = productToDuplicate.gsm || "";
+          document.getElementById("leadTime").value = productToDuplicate.leadTime || "";
+          document.getElementById("moq").value = productToDuplicate.moq || "";
+          
+          // Note: We don't copy the image automatically to avoid collision, or we can just leave it empty.
+        }, 100);
       }
     });
   });
+
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      if(confirm("Are you sure you want to delete this product?")) {
+        await syncWithGithub("delete", { id: e.currentTarget.dataset.id, sku: e.currentTarget.dataset.id });
+      }
+    });
+  });
+
+  // Checkbox Logic
+  const selectAllCb = document.getElementById("selectAllProducts");
+  const rowCbs = document.querySelectorAll(".row-checkbox");
+  const bulkDeleteBtn = document.getElementById("bulkDeleteBtn");
+
+  const updateBulkDeleteVisibility = () => {
+    const checkedCount = document.querySelectorAll(".row-checkbox:checked").length;
+    bulkDeleteBtn.style.display = checkedCount > 0 ? "inline-block" : "none";
+    if (selectAllCb) selectAllCb.checked = checkedCount === rowCbs.length && rowCbs.length > 0;
+  };
+
+  if (selectAllCb) {
+    selectAllCb.addEventListener("change", (e) => {
+      rowCbs.forEach(cb => cb.checked = e.target.checked);
+      updateBulkDeleteVisibility();
+    });
+  }
+
+  rowCbs.forEach(cb => cb.addEventListener("change", updateBulkDeleteVisibility));
 }
 
 // --- Sync Helper ---
@@ -402,4 +458,27 @@ document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => {
 });
 document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => {
   cb.addEventListener('change', () => updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors'));
+});
+
+// --- Search, Filter & Bulk Delete Logic ---
+document.getElementById("searchBox")?.addEventListener("input", renderTable);
+document.getElementById("categoryFilter")?.addEventListener("change", renderTable);
+
+document.getElementById("bulkDeleteBtn")?.addEventListener("click", async () => {
+  const selectedSkus = Array.from(document.querySelectorAll(".row-checkbox:checked")).map(cb => cb.value);
+  if(selectedSkus.length === 0) return;
+  if(confirm(`Are you sure you want to delete ${selectedSkus.length} product(s)?`)) {
+    const btn = document.getElementById("bulkDeleteBtn");
+    const originalText = btn.textContent;
+    btn.textContent = "Deleting...";
+    btn.disabled = true;
+    try {
+      for (const sku of selectedSkus) {
+        await syncWithGithub("delete", { id: sku, sku: sku });
+      }
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  }
 });

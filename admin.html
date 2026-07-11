@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fabric-8 | Admin Dashboard</title>
-  <link rel="stylesheet" href="site.css">
+  <title>Admin Dashboard - Fabric-8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -12,50 +14,52 @@
   <div id="loginScreen" class="admin-login-screen">
     <div class="login-box">
       <div class="logo">
-        <a href="index.html">
-          <img src="assets/fabric8_logo_white.png" alt="Fabric8" width="100">
-        </a>
+        <img src="assets/fabric8_logo_white.png" alt="Fabric-8 Logo">
       </div>
       <h2>Admin Login</h2>
-      <form id="loginForm">
-        <div class="input-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" required>
-        </div>
-        <div class="input-group">
-          <label>Password</label>
-          <input type="password" id="loginPassword" required>
-        </div>
-        <p id="loginError" class="error-msg"></p>
-        <button type="submit" class="button primary w-full">Sign In</button>
-      </form>
+      <div id="loginError" class="error-msg"></div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="current-password">
+      </div>
+      <button id="loginBtn" class="quote-link w-full">Login</button>
     </div>
   </div>
 
-  <!-- Dashboard Screen -->
-  <div id="dashboardScreen" class="admin-dashboard" style="display: none;">
-    <header class="admin-header">
+  <!-- Dashboard -->
+  <div id="dashboard" style="display: none;">
+    <header class="admin-header glassmorphism">
       <div class="logo">
-        <a href="index.html">
-          <img src="assets/fabric8_logo_white.png" alt="Fabric8" width="100">
-        </a>
+        <img src="assets/fabric8_logo_white.png" alt="Fabric-8 Logo">
       </div>
       <div class="admin-controls">
-        <span>Logged in as Admin</span>
-        <button id="logoutBtn" class="button outline">Log Out</button>
+        <button id="logoutBtn" class="btn-icon">Logout</button>
       </div>
     </header>
 
     <main class="admin-main">
       <div class="admin-topbar">
-        <h1>Product Catalog</h1>
-        <button id="addProductBtn" class="button primary">Add New Product</button>
+        <h1>Products</h1>
+        
+        <div class="admin-filters">
+          <input type="text" id="searchBox" class="filter-input" placeholder="Search by SKU or Name...">
+          <select id="categoryFilter" class="filter-select">
+            <option value="All">All Categories</option>
+            <option value="Top Wear">Top Wear</option>
+            <option value="Bottom Wear">Bottom Wear</option>
+            <option value="Outerwear">Outerwear</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+          <button id="bulkDeleteBtn" class="quote-link" style="background: #e74c3c; color: #fff; border-color: #e74c3c; display: none;">Delete Selected</button>
+          <button id="addProductBtn" class="quote-link">+ Add Product</button>
+        </div>
       </div>
 
       <div class="table-container">
         <table class="admin-table">
           <thead>
             <tr>
+              <th style="width: 40px;"><input type="checkbox" id="selectAllProducts"></th>
               <th>Image</th>
               <th>SKU</th>
               <th>Name</th>
