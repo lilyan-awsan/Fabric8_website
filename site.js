@@ -113,7 +113,9 @@ function renderProducts() {
     const imgSrc = p.image ? (p.image.startsWith('http') ? p.image : p.image) : 'White Polo Shirt.png';
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
-        <img src="${imgSrc}" class="product-card-img" alt="${p.name}">
+        <div class="product-card-img-wrap">
+          <img src="${imgSrc}" class="product-card-img" alt="${p.name}">
+        </div>
         <div class="product-card-info">
           <span class="product-card-category">${p.category}</span>
           <h3 class="product-card-title">${p.name}</h3>
