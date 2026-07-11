@@ -103,9 +103,12 @@ function renderTable() {
   }
 
   productsList.forEach(p => {
+    const imgSrc = (p.image && (p.image.startsWith('assets/') || p.image.startsWith('http'))) ? p.image : `assets/${p.image || 'white.png'}`;
+    const rawFallback = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${imgSrc}`;
+    
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><img src="${p.image || 'assets/white.png'}" class="prod-thumb"></td>
+      <td><img src="${imgSrc}" onerror="this.onerror=null; this.src='${rawFallback}';" class="prod-thumb"></td>
       <td><strong>${p.sku}</strong></td>
       <td>${p.name}</td>
       <td>${p.category}</td>
