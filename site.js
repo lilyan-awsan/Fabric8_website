@@ -116,14 +116,14 @@ function renderProducts() {
     
     let imagesHtml = '';
     if (p.images && p.images.length > 0) {
-      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="min-width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; display: block;">`).join('');
+      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block;">`).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="min-width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; display: block;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block;">`;
     }
 
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
-        <div style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 4px; overflow: hidden;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
+        <div class="product-card-img" style="position: relative; overflow: hidden; padding: 0; margin: 0; border-radius: 4px 4px 0 0;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
           <div id="track-${p.sku}" data-index="0" style="display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%);">
             ${imagesHtml}
           </div>
