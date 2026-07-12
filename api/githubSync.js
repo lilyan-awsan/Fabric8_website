@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
 
-  const { token, action, product, image } = req.body;
+  const { token, action, product, newImages } = req.body;
   const adminPass = process.env.ADMIN_PASSWORD;
   const githubToken = process.env.GITHUB_TOKEN;
   
@@ -17,26 +17,31 @@ export default async function handler(req, res) {
   const jsonPath = "data/products.json";
 
   try {
-    // 1. If there's a new image, upload it to GitHub first
-    let imageUrl = product?.image || "assets/white.png";
-    if (image && image.base64 && image.name) {
-      const imgPath = `assets/products/${Date.now()}_${image.name.replace(/\s+/g, '_')}`;
-      const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${githubToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: `Upload image for ${product.sku}`,
-          content: image.base64.split(',')[1] // Remove 'data:image/png;base64,' prefix
-        })
-      });
-      if (!imgRes.ok) {
-        const err = await imgRes.json();
-        throw new Error("Failed to upload image to GitHub: " + err.message);
+    // 1. If there are new images, upload them to GitHub first
+    let finalImages = product?.existingImages || [];
+    
+    if (newImages && Array.isArray(newImages) && newImages.length > 0) {
+      for (const img of newImages) {
+        if (img.base64 && img.name) {
+          const imgPath = `assets/products/${Date.now()}_${img.name.replace(/\\s+/g, '_')}`;
+          const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${githubToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              message: `Upload image for ${product.sku}`,
+              content: img.base64.split(',')[1] // Remove 'data:image/png;base64,' prefix
+            })
+          });
+          if (!imgRes.ok) {
+            const err = await imgRes.json();
+            throw new Error("Failed to upload image to GitHub: " + err.message);
+          }
+          finalImages.push(imgPath);
+        }
       }
-      imageUrl = imgPath;
     }
 
     // 2. Fetch the current products.json to get its SHA and content
@@ -54,7 +59,13 @@ export default async function handler(req, res) {
 
     // 3. Apply the action
     if (action === "save") {
-      const newProduct = { ...product, image: imageUrl, id: product.sku };
+      delete product.existingImages;
+      const newProduct = { 
+        ...product, 
+        images: finalImages, 
+        image: finalImages.length > 0 ? finalImages[0] : "assets/white.png", 
+        id: product.sku 
+      };
       const existingIndex = productsList.findIndex(p => p.sku === product.sku || p.id === product.id);
       if (existingIndex >= 0) {
         productsList[existingIndex] = newProduct;

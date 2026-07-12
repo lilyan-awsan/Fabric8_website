@@ -64,8 +64,13 @@
           <button class="modal-close" id="closeProductModal">&times;</button>
           
           <div class="product-modal-layout">
-            <div class="product-modal-image">
-              <img id="modalProductImage" src="" alt="Product">
+            <div class="product-modal-image-container" style="display: flex; flex-direction: column; background: #f0f0f0;">
+              <div class="product-modal-image" style="flex: 1; min-height: 400px; position: relative;">
+                <img id="modalProductImage" src="" alt="Product" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div id="modalThumbnails" style="display: flex; gap: 8px; padding: 12px; overflow-x: auto; background: #fff; border-top: 1px solid var(--line);">
+                <!-- Thumbnails injected here -->
+              </div>
             </div>
             
             <div class="product-modal-details">

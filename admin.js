@@ -24,8 +24,8 @@ const imageUrlInput = document.getElementById("imageUrl");
 const uploadStatus = document.getElementById("uploadStatus");
 
 let productsList = [];
-let pendingImageBase64 = null;
-let pendingImageName = null;
+let pendingImages = [];
+let existingImages = [];
 
 // --- Authentication ---
 let authToken = localStorage.getItem("adminToken");
@@ -214,8 +214,8 @@ function renderTable() {
 async function syncWithGithub(action, product) {
   try {
     const payload = { token: authToken, action, product };
-    if (pendingImageBase64) {
-      payload.image = { name: pendingImageName, base64: pendingImageBase64 };
+    if (pendingImages.length > 0) {
+      payload.newImages = pendingImages.map(img => ({ name: img.name, base64: img.base64 }));
     }
 
     const res = await fetch('/api/githubSync', {
@@ -247,10 +247,11 @@ async function syncWithGithub(action, product) {
 function openModal(docId = null) {
   productForm.reset();
   imagePreviewContainer.style.display = "none";
+  imagePreviewContainer.innerHTML = "";
   imageUrlInput.value = "";
   uploadStatus.textContent = "";
-  pendingImageBase64 = null;
-  pendingImageName = null;
+  pendingImages = [];
+  existingImages = [];
   document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => cb.checked = false);
   document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => cb.checked = false);
   document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => cb.checked = false);
@@ -312,11 +313,12 @@ function openModal(docId = null) {
       document.getElementById("leadTime").value = p.leadTime || "";
       document.getElementById("moq").value = p.moq || "";
       
-      if (p.image) {
-        imageUrlInput.value = p.image;
-        imagePreview.src = p.image;
-        imagePreviewContainer.style.display = "flex";
+      if (p.images && p.images.length > 0) {
+        existingImages = [...p.images];
+      } else if (p.image) {
+        existingImages = [p.image];
       }
+      renderImagePreviews();
     }
   } else {
     modalTitle.textContent = "Add Product";
@@ -358,7 +360,7 @@ productForm.addEventListener("submit", async (e) => {
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
     moq: document.getElementById("moq").value,
-    image: imageUrlInput.value || "assets/white.png"
+    existingImages: existingImages
   };
 
   const success = await syncWithGithub("save", productData);
@@ -369,29 +371,69 @@ productForm.addEventListener("submit", async (e) => {
 });
 
 // --- Image Preview (Base64) ---
-imageUpload.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  uploadStatus.textContent = "Processing image...";
+function renderImagePreviews() {
+  imagePreviewContainer.innerHTML = "";
   
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    pendingImageBase64 = event.target.result;
-    pendingImageName = file.name;
-    imagePreview.src = pendingImageBase64;
-    imagePreviewContainer.style.display = "flex";
-    uploadStatus.textContent = "Image ready to be uploaded upon saving!";
-  };
-  reader.readAsDataURL(file);
-});
+  if (existingImages.length === 0 && pendingImages.length === 0) {
+    imagePreviewContainer.style.display = "none";
+    return;
+  }
+  
+  imagePreviewContainer.style.display = "flex";
+  
+  existingImages.forEach((imgUrl, index) => {
+    const div = document.createElement("div");
+    div.className = "preview-item";
+    div.innerHTML = `
+      <img src="${imgUrl}" alt="Existing">
+      <button type="button" class="remove-btn" onclick="removeExistingImage(${index})">&times;</button>
+    `;
+    imagePreviewContainer.appendChild(div);
+  });
+  
+  pendingImages.forEach((img, index) => {
+    const div = document.createElement("div");
+    div.className = "preview-item";
+    div.innerHTML = `
+      <img src="${img.base64}" alt="Pending">
+      <button type="button" class="remove-btn" onclick="removePendingImage(${index})">&times;</button>
+    `;
+    imagePreviewContainer.appendChild(div);
+  });
+}
 
-removeImageBtn.addEventListener("click", () => {
-  imageUrlInput.value = "";
-  pendingImageBase64 = null;
-  pendingImageName = null;
-  imagePreviewContainer.style.display = "none";
-  uploadStatus.textContent = "";
+window.removeExistingImage = function(index) {
+  existingImages.splice(index, 1);
+  renderImagePreviews();
+};
+
+window.removePendingImage = function(index) {
+  pendingImages.splice(index, 1);
+  renderImagePreviews();
+};
+
+imageUpload.addEventListener("change", async (e) => {
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
+
+  uploadStatus.textContent = "Processing images...";
+  
+  const readPromises = Array.from(files).map(file => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        resolve({ name: file.name, base64: event.target.result });
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+  
+  const results = await Promise.all(readPromises);
+  pendingImages = [...pendingImages, ...results];
+  
+  renderImagePreviews();
+  uploadStatus.textContent = "Images ready to be uploaded upon saving!";
+  imageUpload.value = ""; // reset input
 });
 
 // Init

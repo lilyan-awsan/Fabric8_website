@@ -203,12 +203,11 @@
           </div>
           
           <div class="input-group full-width image-upload-group">
-            <label>Product Image</label>
-            <div id="imagePreviewContainer" class="image-preview" style="display:none;">
-              <img id="imagePreview" src="" alt="Preview">
-              <button type="button" id="removeImageBtn" class="button outline small">Remove Image</button>
+            <label>Product Images</label>
+            <div id="imagePreviewContainer" class="image-preview-grid" style="display:flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+              <!-- Thumbnails injected here -->
             </div>
-            <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/webp">
+            <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/webp" multiple>
             <input type="hidden" id="imageUrl">
             <p id="uploadStatus" class="upload-status"></p>
           </div>

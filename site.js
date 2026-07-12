@@ -110,7 +110,9 @@ function renderProducts() {
   }
 
   grid.innerHTML = filtered.map(p => {
-    const imgSrc = p.image ? (p.image.startsWith('http') ? p.image : p.image) : 'White Polo Shirt.png';
+    let mainImg = p.image || 'White Polo Shirt.png';
+    if (p.images && p.images.length > 0) mainImg = p.images[0];
+    const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
         <img src="${imgSrc}" class="product-card-img" alt="${p.name}">
@@ -131,8 +133,23 @@ function openProductModal(sku) {
   selectedProductSku = sku;
   if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
 
-  const imgSrc = selected.image ? (selected.image.startsWith('http') ? selected.image : selected.image) : 'White Polo Shirt.png';
+  let mainImg = selected.image || 'White Polo Shirt.png';
+  if (selected.images && selected.images.length > 0) mainImg = selected.images[0];
+  const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
   $("#modalProductImage").src = imgSrc;
+  
+  const thumbnailsContainer = $("#modalThumbnails");
+  if (thumbnailsContainer) {
+    if (selected.images && selected.images.length > 1) {
+      thumbnailsContainer.style.display = "flex";
+      thumbnailsContainer.innerHTML = selected.images.map(img => {
+        return `<img src="${img}" alt="Thumbnail" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('modalProductImage').src='${img}'">`;
+      }).join("");
+    } else {
+      thumbnailsContainer.style.display = "none";
+      thumbnailsContainer.innerHTML = "";
+    }
+  }
   $("#modalProductName").textContent = selected.name;
   $("#modalProductCategory").textContent = selected.category;
   $("#modalProductSku").textContent = `SKU: ${selected.sku}`;
