@@ -116,9 +116,9 @@ function renderProducts() {
     
     let imagesHtml = '';
     if (p.images && p.images.length > 0) {
-      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover;">`).join('');
+      imagesHtml = p.images.map(img => `<div style="min-width: 100%; height: 100%; flex: 0 0 100%;"><img src="${img}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>`).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover;">`;
+      imagesHtml = `<div style="min-width: 100%; height: 100%; flex: 0 0 100%;"><img src="${imgSrc}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>`;
     }
 
     return `
