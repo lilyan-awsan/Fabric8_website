@@ -115,16 +115,20 @@ function renderProducts() {
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
     let imagesHtml = '';
+    const imgCount = p.images && p.images.length > 0 ? p.images.length : 1;
+    const trackWidth = imgCount * 100;
+    const imgWidth = 100 / imgCount;
+
     if (p.images && p.images.length > 0) {
-      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="flex: 0 0 100%; min-width: 100%; max-width: 100%; width: 100%; height: 100%; object-fit: cover; display: block;">`).join('');
+      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="width: ${imgWidth}%; height: 100%; object-fit: cover; display: inline-block; vertical-align: top; margin: 0; padding: 0; border: none;">`).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="flex: 0 0 100%; min-width: 100%; max-width: 100%; width: 100%; height: 100%; object-fit: cover; display: block;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; display: inline-block; vertical-align: top; margin: 0; padding: 0; border: none;">`;
     }
 
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
         <div class="product-card-img" style="position: relative; overflow: hidden; padding: 0; margin: 0; border-radius: 4px 4px 0 0;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
-          <div id="track-${p.sku}" data-index="0" style="position: absolute; left: 0; top: 0; display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%);">
+          <div id="track-${p.sku}" data-index="0" style="position: absolute; left: 0; top: 0; width: ${trackWidth}%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%); white-space: nowrap; font-size: 0;">
             ${imagesHtml}
           </div>
         </div>
@@ -177,8 +181,9 @@ window.nextImage = function(sku, direction) {
     currentIndex = p.images.length - 1;
   }
   
+  const stepPercent = 100 / p.images.length;
   trackEl.dataset.index = currentIndex;
-  trackEl.style.transform = `translateX(-${currentIndex * 100}%)`;
+  trackEl.style.transform = `translateX(-${currentIndex * stepPercent}%)`;
 };
 
 function openProductModal(sku) {
