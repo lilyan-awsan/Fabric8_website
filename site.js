@@ -132,9 +132,10 @@ window.slideshowTimers = {};
 
 window.startSlideshow = function(sku) {
   if (window.slideshowTimers[sku]) clearInterval(window.slideshowTimers[sku]);
+  window.nextImage(sku, 1); // Instantly change to the next image on hover
   window.slideshowTimers[sku] = setInterval(() => {
     window.nextImage(sku, 1);
-  }, 1200); // Change image every 1.2 seconds
+  }, 800); // Change image every 0.8 seconds
 };
 
 window.stopSlideshow = function(sku) {
