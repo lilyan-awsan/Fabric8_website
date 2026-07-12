@@ -315,6 +315,10 @@
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
     "moq": "50 pieces",
+    "images": [
+      "assets/products/1783795615435_polo_shirt1.png",
+      "assets/products/1783882682687_Black Polo Shirt.jpg"
+    ],
     "image": "assets/products/1783795615435_polo_shirt1.png"
   },
   {
