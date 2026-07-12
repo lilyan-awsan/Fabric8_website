@@ -1015,7 +1015,7 @@ input.error, select.error, textarea.error {
 
 #sidebarProductImage {
   width: 100%;
-  max-width: 280px;
+  max-width: 200px;
   margin: 0 auto;
   aspect-ratio: 4/5;
   object-fit: cover;
