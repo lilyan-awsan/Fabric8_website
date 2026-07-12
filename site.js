@@ -115,7 +115,13 @@ function renderProducts() {
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
-        <img src="${imgSrc}" class="product-card-img" alt="${p.name}">
+        <div style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 4px; overflow: hidden;" onmouseenter="this.querySelectorAll('.card-arrow').forEach(a => a.style.opacity='1')" onmouseleave="this.querySelectorAll('.card-arrow').forEach(a => a.style.opacity='0')">
+          <img id="img-${p.sku}" data-index="0" src="${imgSrc}" class="product-card-img" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
+          ${(p.images && p.images.length > 1) ? `
+            <button type="button" class="card-arrow" onclick="event.stopPropagation(); window.nextImage('${p.sku}', -1)" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 2; opacity: 0; transition: opacity 0.2s;">&#10094;</button>
+            <button type="button" class="card-arrow" onclick="event.stopPropagation(); window.nextImage('${p.sku}', 1)" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; z-index: 2; opacity: 0; transition: opacity 0.2s;">&#10095;</button>
+          ` : ''}
+        </div>
         <div class="product-card-info">
           <span class="product-card-category">${p.category}</span>
           <h3 class="product-card-title">${p.name}</h3>
@@ -125,6 +131,19 @@ function renderProducts() {
     `;
   }).join("");
 }
+
+window.nextImage = function(sku, direction) {
+  const p = products.find(x => x.sku === sku);
+  if (!p || !p.images || p.images.length <= 1) return;
+  const imgEl = document.getElementById(`img-${sku}`);
+  if (!imgEl) return;
+  let currentIndex = parseInt(imgEl.dataset.index || "0");
+  currentIndex += direction;
+  if (currentIndex < 0) currentIndex = p.images.length - 1;
+  if (currentIndex >= p.images.length) currentIndex = 0;
+  imgEl.dataset.index = currentIndex;
+  imgEl.src = p.images[currentIndex];
+};
 
 function openProductModal(sku) {
   const selected = products.find(p => p.sku === sku);
