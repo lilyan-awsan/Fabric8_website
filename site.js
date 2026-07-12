@@ -117,11 +117,6 @@ function renderProducts() {
       <div class="product-card" onclick="openProductModal('${p.sku}')">
         <div style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 4px; overflow: hidden;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
           <img id="img-${p.sku}" data-index="0" src="${imgSrc}" class="product-card-img" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
-          ${(p.images && p.images.length > 1) ? `
-            <div style="position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px; z-index: 2;">
-              ${p.images.map((_, i) => `<div class="dot-${p.sku}" data-dot-index="${i}" style="width: 6px; height: 6px; border-radius: 50%; background: ${i === 0 ? 'var(--ink)' : 'rgba(0,0,0,0.2)'}; transition: background 0.3s;"></div>`).join('')}
-            </div>
-          ` : ''}
         </div>
         <div class="product-card-info">
           <span class="product-card-category">${p.category}</span>
@@ -153,9 +148,6 @@ window.stopSlideshow = function(sku) {
   if (p && imgEl && p.images && p.images.length > 0) {
     imgEl.dataset.index = "0";
     imgEl.src = p.images[0];
-    document.querySelectorAll(`.dot-${sku}`).forEach((d, i) => {
-      d.style.background = i === 0 ? 'var(--ink)' : 'rgba(0,0,0,0.2)';
-    });
   }
 };
 
@@ -170,11 +162,6 @@ window.nextImage = function(sku, direction) {
   if (currentIndex >= p.images.length) currentIndex = 0;
   imgEl.dataset.index = currentIndex;
   imgEl.src = p.images[currentIndex];
-  
-  // Update indicator dots
-  document.querySelectorAll(`.dot-${sku}`).forEach((d, i) => {
-    d.style.background = i === currentIndex ? 'var(--ink)' : 'rgba(0,0,0,0.2)';
-  });
 };
 
 function openProductModal(sku) {
