@@ -113,10 +113,20 @@ function renderProducts() {
     let mainImg = p.image || 'White Polo Shirt.png';
     if (p.images && p.images.length > 0) mainImg = p.images[0];
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
+    
+    let imagesHtml = '';
+    if (p.images && p.images.length > 0) {
+      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; flex-shrink: 0;">`).join('');
+    } else {
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; flex-shrink: 0;">`;
+    }
+
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
         <div style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 4px; overflow: hidden;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
-          <img id="img-${p.sku}" data-index="0" src="${imgSrc}" class="product-card-img" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
+          <div id="track-${p.sku}" data-index="0" style="display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%);">
+            ${imagesHtml}
+          </div>
         </div>
         <div class="product-card-info">
           <span class="product-card-category">${p.category}</span>
@@ -143,26 +153,32 @@ window.stopSlideshow = function(sku) {
     clearInterval(window.slideshowTimers[sku]);
     window.slideshowTimers[sku] = null;
   }
-  // Reset to first image
+  // Reset to first image smoothly
   const p = products.find(x => x.sku === sku);
-  const imgEl = document.getElementById(`img-${sku}`);
-  if (p && imgEl && p.images && p.images.length > 0) {
-    imgEl.dataset.index = "0";
-    imgEl.src = p.images[0];
+  const trackEl = document.getElementById(`track-${sku}`);
+  if (p && trackEl && p.images && p.images.length > 0) {
+    trackEl.dataset.index = "0";
+    trackEl.style.transform = `translateX(0%)`;
   }
 };
 
 window.nextImage = function(sku, direction) {
   const p = products.find(x => x.sku === sku);
   if (!p || !p.images || p.images.length <= 1) return;
-  const imgEl = document.getElementById(`img-${sku}`);
-  if (!imgEl) return;
-  let currentIndex = parseInt(imgEl.dataset.index || "0");
+  const trackEl = document.getElementById(`track-${sku}`);
+  if (!trackEl) return;
+  let currentIndex = parseInt(trackEl.dataset.index || "0");
   currentIndex += direction;
-  if (currentIndex < 0) currentIndex = p.images.length - 1;
-  if (currentIndex >= p.images.length) currentIndex = 0;
-  imgEl.dataset.index = currentIndex;
-  imgEl.src = p.images[currentIndex];
+  
+  // If we reach the end, instantly snap back to 0 without transition, then slide
+  if (currentIndex >= p.images.length) {
+    currentIndex = 0;
+  } else if (currentIndex < 0) {
+    currentIndex = p.images.length - 1;
+  }
+  
+  trackEl.dataset.index = currentIndex;
+  trackEl.style.transform = `translateX(-${currentIndex * 100}%)`;
 };
 
 function openProductModal(sku) {
