@@ -115,20 +115,16 @@ function renderProducts() {
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
     let imagesHtml = '';
-    const imgCount = p.images && p.images.length > 0 ? p.images.length : 1;
-    const trackWidth = imgCount * 100;
-    const imgWidth = 100 / imgCount;
-
     if (p.images && p.images.length > 0) {
-      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="width: ${imgWidth}%; height: 100%; object-fit: cover;">`).join('');
+      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="min-width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; display: block;">`).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="min-width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; display: block;">`;
     }
 
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
         <div style="position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 4px; overflow: hidden;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
-          <div id="track-${p.sku}" data-index="0" style="display: flex; width: ${trackWidth}%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%);">
+          <div id="track-${p.sku}" data-index="0" style="display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%);">
             ${imagesHtml}
           </div>
         </div>
@@ -181,9 +177,8 @@ window.nextImage = function(sku, direction) {
     currentIndex = p.images.length - 1;
   }
   
-  const stepPercent = 100 / p.images.length;
   trackEl.dataset.index = currentIndex;
-  trackEl.style.transform = `translateX(-${currentIndex * stepPercent}%)`;
+  trackEl.style.transform = `translateX(-${currentIndex * 100}%)`;
 };
 
 function openProductModal(sku) {
