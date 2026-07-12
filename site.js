@@ -115,22 +115,19 @@ function renderProducts() {
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
     let imagesHtml = '';
-    const imgCount = p.images && p.images.length > 0 ? p.images.length : 1;
-    const trackWidth = imgCount * 100;
-    const imgWidth = 100 / imgCount;
-
-    if (p.images && p.images.length > 0) {
-      imagesHtml = p.images.map(img => `<img src="${img}" alt="${p.name}" style="width: ${imgWidth}%; height: 100%; object-fit: cover; display: inline-block; vertical-align: top; margin: 0; padding: 0; border: none;">`).join('');
+    if (p.images && p.images.length > 1) {
+      imagesHtml = `
+        <img id="img-main-${p.sku}" data-index="0" src="${p.images[0]}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover;">
+        <img id="img-next-${p.sku}" src="${p.images[1]}" alt="${p.name}" style="position: absolute; left: 100%; top: 0; width: 100%; height: 100%; object-fit: cover;">
+      `;
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; display: inline-block; vertical-align: top; margin: 0; padding: 0; border: none;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover;">`;
     }
 
     return `
       <div class="product-card" onclick="openProductModal('${p.sku}')">
         <div class="product-card-img" style="position: relative; overflow: hidden; padding: 0; margin: 0; border-radius: 4px 4px 0 0;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
-          <div id="track-${p.sku}" data-index="0" style="position: absolute; left: 0; top: 0; width: ${trackWidth}%; height: 100%; transition: transform 0.4s ease-in-out; transform: translateX(0%); white-space: nowrap; font-size: 0;">
-            ${imagesHtml}
-          </div>
+          ${imagesHtml}
         </div>
         <div class="product-card-info">
           <span class="product-card-category">${p.category}</span>
@@ -157,33 +154,45 @@ window.stopSlideshow = function(sku) {
     clearInterval(window.slideshowTimers[sku]);
     window.slideshowTimers[sku] = null;
   }
-  // Reset to first image smoothly
   const p = products.find(x => x.sku === sku);
-  const trackEl = document.getElementById(`track-${sku}`);
-  if (p && trackEl && p.images && p.images.length > 0) {
-    trackEl.dataset.index = "0";
-    trackEl.style.transform = `translateX(0%)`;
+  const mainImg = document.getElementById(`img-main-${sku}`);
+  if (p && mainImg && p.images && p.images.length > 0) {
+    mainImg.style.transition = 'none';
+    mainImg.src = p.images[0];
+    mainImg.style.left = '0';
+    mainImg.dataset.index = "0";
   }
 };
 
 window.nextImage = function(sku, direction) {
   const p = products.find(x => x.sku === sku);
   if (!p || !p.images || p.images.length <= 1) return;
-  const trackEl = document.getElementById(`track-${sku}`);
-  if (!trackEl) return;
-  let currentIndex = parseInt(trackEl.dataset.index || "0");
+  const mainImg = document.getElementById(`img-main-${sku}`);
+  const nextImg = document.getElementById(`img-next-${sku}`);
+  if (!mainImg || !nextImg) return;
+  
+  let currentIndex = parseInt(mainImg.dataset.index || "0");
   currentIndex += direction;
+  if (currentIndex >= p.images.length) currentIndex = 0;
+  if (currentIndex < 0) currentIndex = p.images.length - 1;
   
-  // If we reach the end, instantly snap back to 0 without transition, then slide
-  if (currentIndex >= p.images.length) {
-    currentIndex = 0;
-  } else if (currentIndex < 0) {
-    currentIndex = p.images.length - 1;
-  }
+  nextImg.src = p.images[currentIndex];
+  nextImg.style.transition = 'none';
+  nextImg.style.left = '100%';
   
-  const stepPercent = 100 / p.images.length;
-  trackEl.dataset.index = currentIndex;
-  trackEl.style.transform = `translateX(-${currentIndex * stepPercent}%)`;
+  void nextImg.offsetWidth; // Force reflow
+  
+  mainImg.style.transition = 'left 0.4s ease-in-out';
+  nextImg.style.transition = 'left 0.4s ease-in-out';
+  mainImg.style.left = '-100%';
+  nextImg.style.left = '0';
+  
+  setTimeout(() => {
+    mainImg.src = p.images[currentIndex];
+    mainImg.dataset.index = currentIndex;
+    mainImg.style.transition = 'none';
+    mainImg.style.left = '0';
+  }, 400);
 };
 
 function openProductModal(sku) {
