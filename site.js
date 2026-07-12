@@ -202,7 +202,7 @@ window.openProductModal = function(sku) {
   selectedProductSku = sku;
   if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
 
-  let mainImg = selected.image || 'White Polo Shirt.png';
+  let mainImg = selected.image || 'White T-Shirt.png';
   if (selected.images && selected.images.length > 0) mainImg = selected.images[0];
   const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
   $("#sidebarProductImage").src = imgSrc;
@@ -536,13 +536,14 @@ document.addEventListener("click", (event) => {
     activeStudioColor = activeCatalogColor;
     const shirtImg = $("#studioShirt");
     if (shirtImg) {
-      shirtImg.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
       const colorImg = selectedProduct.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
       if (colorImg) {
          shirtImg.src = colorImg;
+         shirtImg.dataset.color = "";
       } else {
-         const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
+         const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White T-Shirt.png';
          shirtImg.src = imgSrc;
+         shirtImg.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
       }
     }
     
@@ -557,8 +558,14 @@ document.addEventListener("click", (event) => {
       activeCatalogColor = colorDot.dataset.color;
       renderProducts();
     }
-    if (parent.id === "modalColorFilter") {
+    if (parent.id === "sidebarColorFilter" || parent.id === "modalColorFilter") {
       activeCatalogColor = colorDot.dataset.color;
+      const selectedProduct = products.find((p) => p.sku === selectedProductSku);
+      const colorImg = selectedProduct?.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+      if (colorImg) {
+        const sidebarImg = $("#sidebarProductImage");
+        if (sidebarImg) sidebarImg.src = colorImg;
+      }
     }
     if (parent.id === "studioColorSwatches") {
       activeStudioColor = colorDot.dataset.color;
