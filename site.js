@@ -259,6 +259,9 @@ document.addEventListener("click", (e) => {
     $("#productSidebar")?.classList.remove("open");
     $("#studioSidebar")?.classList.remove("open");
     $("#sidebarBackdrop")?.classList.remove("open");
+  } else if (e.target.id === "backToProduct") {
+    $("#studioSidebar")?.classList.remove("open");
+    $("#productSidebar")?.classList.add("open");
   }
 });
 
