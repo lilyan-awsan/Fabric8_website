@@ -255,8 +255,9 @@ window.openProductModal = function(sku) {
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target.id === "sidebarBackdrop" || e.target.id === "closeProductSidebar") {
+  if (e.target.id === "sidebarBackdrop" || e.target.id === "closeProductSidebar" || e.target.id === "closeStudioSidebar") {
     $("#productSidebar")?.classList.remove("open");
+    $("#studioSidebar")?.classList.remove("open");
     $("#sidebarBackdrop")?.classList.remove("open");
   }
 });
@@ -456,8 +457,8 @@ function setupStudio() {
       return;
     }
     
-    const quantity = parseInt($("#modalProductQuantity")?.value || 50);
-    const selectedSize = $("#modalSizeSelect")?.value || "Standard";
+    const quantity = parseInt($("#sidebarProductQuantity")?.value || 50);
+    const selectedSize = $("#sidebarSizeSelect")?.value || "Standard";
     let placementText = $("#placementSelect").selectedOptions[0].textContent;
     if ($("#placementSelect").value === "custom") {
       const left = parseFloat($("#logoPreview").style.left).toFixed(1);
@@ -484,6 +485,8 @@ function setupStudio() {
     }
     saveCart();
     renderCart();
+    $("#studioSidebar")?.classList.remove("open");
+    $("#sidebarBackdrop")?.classList.remove("open");
     const quoteSection = $("#quote");
     if (quoteSection) {
       quoteSection.scrollIntoView({ behavior: "smooth" });
@@ -541,14 +544,7 @@ document.addEventListener("click", (event) => {
     }
     
     $("#productSidebar")?.classList.remove("open");
-    $("#sidebarBackdrop")?.classList.remove("open");
-    const studioSection = $("#studio");
-    if (studioSection) {
-      studioSection.style.display = "block";
-      setTimeout(() => {
-        studioSection.scrollIntoView({ behavior: "smooth" });
-      }, 50); // slight delay to ensure display: block has rendered before scrolling
-    }
+    $("#studioSidebar")?.classList.add("open");
   }
   if (colorDot) {
     const parent = colorDot.parentElement;
