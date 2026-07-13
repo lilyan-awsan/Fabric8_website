@@ -3,14 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Fabric8 | Uniforms, Solved.</title>
-    <meta name="description" content="Fabric8 is a B2B uniform solutions company delivering fashion-grade uniforms, branding, logistics, and after-sales support." />
+    <title>Fabric8 | Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="site.css" />
   </head>
-  <body class="landing-body">
+  <body>
     <div class="royal-door" aria-hidden="true">
       <div class="door door-left"></div>
       <div class="door door-right"></div>
@@ -20,30 +19,49 @@
         <span>Fashion-grade uniform programs for modern teams</span>
       </div>
     </div>
-
-    <main class="landing">
-      <div class="landing-bg"></div>
-      <div class="silk-motion" aria-hidden="true"></div>
-      <nav class="landing-nav">
-        <img src="assets/fabric8-logo-white.webp" alt="Fabric8" />
+    <div class="topline"><a href="shop.html">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
+    <header class="header">
+      <a class="logo" href="home.html"><img src="assets/fabric8-logo-white.webp" alt="Fabric8" /></a>
+      <nav>
+        <a href="home.html">Home</a>
         <a href="shop.html">Shop</a>
+        <a href="services.html">Services</a>
+        <a href="sectors.html">Sectors</a>
+        <a href="method.html">Method</a>
+        <a href="about.html">About</a>
       </nav>
-      <section class="landing-copy">
-        <p>Premium B2B Uniform Atelier</p>
-        <h1>Uniforms, Solved.</h1>
-        <span>Fashion-grade service uniforms, built through consultation, branding, production, logistics, and after-sales support.</span>
-        <div class="landing-actions">
-          <a class="button primary" href="shop.html">Get Quote</a>
-          <a class="button light" href="shop.html">Shop Catalog</a>
-          <a class="button light" href="services.html">Services</a>
-          <a class="button light" href="sectors.html">Sectors</a>
+      <a class="quote-link" href="shop.html#quote">Get Quote</a>
+    </header>
+
+    <main>
+      <section class="fashion-hero">
+        <div class="fashion-slide one"></div>
+        <div class="fashion-slide two"></div>
+        <div class="fashion-slide three"></div>
+        <div class="fashion-copy">
+          <p>Corporate couture for working teams</p>
+          <h1>Uniforms, Solved.</h1>
+          <span>Built to perform. Styled to represent. Fabric8 delivers tailored uniform solutions for organizations that need more than a catalog.</span>
+          <a class="button primary" href="shop.html#quote">Get Quote</a>
         </div>
       </section>
-      <div class="landing-product" aria-hidden="true">
-        <img src="White Polo Shirt.png" alt="" />
-      </div>
+
+      <section class="editorial-grid">
+        <article>
+          <img src="White Polo Shirt.png" alt="White polo shirt" />
+          <div><p>New In</p><h2>Polo programs for branded daily wear.</h2><a href="shop.html">Shop Polos</a></div>
+        </article>
+        <article>
+          <img src="White Shirt.png" alt="White dress shirt" />
+          <div><p>Corporate</p><h2>Button-ups and front-facing team image wear.</h2><a href="shop.html">Shop Shirts</a></div>
+        </article>
+        <article>
+          <img src="Black Polo Shirt.jpg" alt="Black polo shirt" />
+          <div><p>Branding</p><h2>Embroidery and print placement preview.</h2><a href="shop.html#studio">Design Logo</a></div>
+        </article>
+      </section>
     </main>
-  
+    
     <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6;">
       <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
         <div>
@@ -64,5 +82,14 @@
       </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script src="site.js"></script>
+    <script>
+      // Lock scrolling while the door animation plays, then unlock it
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        document.body.style.overflow = '';
+      }, 3650);
+    </script>
   </body>
 </html>
