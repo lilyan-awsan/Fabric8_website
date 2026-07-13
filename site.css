@@ -848,7 +848,7 @@ input.error, select.error, textarea.error {
 @media (max-width: 980px) {
   .catalog-layout {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
   .catalog-sidebar {
     position: static;
