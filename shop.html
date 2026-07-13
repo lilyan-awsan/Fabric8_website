@@ -26,26 +26,30 @@
         <div class="catalog-layout">
           <!-- Sidebar Filters -->
           <aside class="catalog-sidebar">
-            <h3 style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase;">Filters</h3>
-            <div class="filter-group">
-              <label for="productSearch" style="font-size: 12px; font-weight: bold;">Search</label>
-              <input type="search" id="productSearch" placeholder="Search by SKU or name..." style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
-            </div>
-            
-            <div class="filter-group">
-              <label style="font-size: 12px; font-weight: bold;">Category</label>
-              <div id="categoryFilterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                <!-- Categories injected here -->
+            <h3 class="filter-toggle" style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+              Filters <span class="toggle-icon" style="display: none; font-size: 20px;">+</span>
+            </h3>
+            <div class="filter-contents">
+              <div class="filter-group">
+                <label for="productSearch" style="font-size: 12px; font-weight: bold;">Search</label>
+                <input type="search" id="productSearch" placeholder="Search by SKU or name..." style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
               </div>
-            </div>
+              
+              <div class="filter-group">
+                <label style="font-size: 12px; font-weight: bold;">Category</label>
+                <div id="categoryFilterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                  <!-- Categories injected here -->
+                </div>
+              </div>
 
-            <div class="filter-group" style="margin-top: 24px;">
-              <label style="font-size: 12px; font-weight: bold;">Sort By</label>
-              <select id="sortFilter" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
-                <option value="featured">Featured</option>
-                <option value="A-Z">Name A-Z</option>
-                <option value="Z-A">Name Z-A</option>
-              </select>
+              <div class="filter-group" style="margin-top: 24px;">
+                <label style="font-size: 12px; font-weight: bold;">Sort By</label>
+                <select id="sortFilter" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
+                  <option value="featured">Featured</option>
+                  <option value="A-Z">Name A-Z</option>
+                  <option value="Z-A">Name Z-A</option>
+                </select>
+              </div>
             </div>
           </aside>
 

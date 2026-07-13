@@ -848,10 +848,25 @@ input.error, select.error, textarea.error {
 @media (max-width: 980px) {
   .catalog-layout {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   .catalog-sidebar {
     position: static;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+  }
+  .catalog-sidebar .filter-toggle {
+    margin-bottom: 0 !important;
+  }
+  .filter-contents {
+    display: none;
+    margin-top: 20px;
+  }
+  .filter-contents.open {
+    display: block;
+  }
+  .toggle-icon {
+    display: block !important;
   }
 }
 
