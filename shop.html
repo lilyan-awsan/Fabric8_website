@@ -132,11 +132,24 @@
               <h3 id="studioProductName">Select a product above</h3>
               <span id="studioProductColorDesc">Please choose a product and click Next.</span>
             </div>
-            <label>Logo upload<input id="logoUpload" type="file" accept="image/*" /></label>
-            <label>Placement<select id="placementSelect"><option value="left-chest">Left chest</option><option value="center-chest">Center chest</option><option value="right-sleeve">Right sleeve</option><option value="back-large">Back print</option></select></label>
-            <label>Logo size<input id="logoSize" type="range" min="8" max="38" value="13" /></label>
-            <label>Finish<select id="finishSelect"><option>Embroidery</option><option>Screen printing</option><option>Heat transfer</option></select></label>
-            <label style="display: flex; align-items: start; gap: 10px; font-size: 11px; text-transform: none; color: var(--muted); margin: 12px 0;">
+            <label style="margin-top: 10px;">Logo upload<input id="logoUpload" type="file" accept="image/*" style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;" /></label>
+            <label style="margin-top: 10px;">Placement
+              <select id="placementSelect" style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                <option value="left-chest">Left chest</option>
+                <option value="right-chest">Right chest</option>
+                <option value="center">Center of T-shirt</option>
+                <option value="sleeve">Sleeve</option>
+              </select>
+            </label>
+            <label style="margin-top: 10px;">Logo size<input id="logoSize" type="range" min="8" max="38" value="13" /></label>
+            <label style="margin-top: 10px;">Finish
+              <select id="finishSelect" style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                <option>Embroidery</option>
+                <option>Screen printing</option>
+                <option>Heat transfer</option>
+              </select>
+            </label>
+            <label style="display: flex; align-items: start; gap: 10px; font-size: 11px; text-transform: none; color: var(--muted); margin: 16px 0;">
               <input type="checkbox" id="logoDisclaimer" style="width: 16px; min-height: 16px; margin-top: 2px;" />
               <span>I confirm that I hold the copyright and bear all legal responsibility for any logos or artwork uploaded.</span>
             </label>
