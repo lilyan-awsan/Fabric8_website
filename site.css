@@ -651,10 +651,10 @@ input.error, select.error, textarea.error {
   resize: both;
 }
 .logo-preview img { width: 100%; height: 100%; object-fit: contain; filter: none; }
-.logo-preview.left-chest { left: 45%; top: 35%; }
-.logo-preview.center-chest { left: 50%; top: 43%; width: calc(var(--logo-size, 13%) * 1.7); transform: translateX(-50%); }
-.logo-preview.right-sleeve { left: 71%; top: 37%; width: calc(var(--logo-size, 13%) * .9); transform: rotate(8deg); }
-.logo-preview.back-large { left: 50%; top: 38%; width: calc(var(--logo-size, 13%) * 2.6); transform: translateX(-50%); }
+.logo-preview.left-chest { left: 60%; top: 35%; }
+.logo-preview.right-chest { left: 32%; top: 35%; }
+.logo-preview.center { left: 50%; top: 40%; width: calc(var(--logo-size, 13%) * 1.5); transform: translateX(-50%); }
+.logo-preview.sleeve { left: 73%; top: 37%; width: calc(var(--logo-size, 13%) * .9); transform: rotate(8deg); }
 .studio-controls,
 .quote-form,
 .quote-wrap > div {
