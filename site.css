@@ -863,9 +863,7 @@ input.error, select.error, textarea.error {
     flex-direction: column;
   }
   .catalog-sidebar {
-    position: sticky;
-    top: 0;
-    z-index: 15;
+    position: relative;
     margin-bottom: 20px;
     padding: 16px 20px;
   }
