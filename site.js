@@ -689,3 +689,20 @@ document.addEventListener("input", (e) => {
     e.target.classList.remove("error");
   }
 });
+
+// Mobile Filter Toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const filterToggle = document.querySelector('.filter-toggle');
+  if (filterToggle) {
+    filterToggle.addEventListener('click', () => {
+      const contents = document.querySelector('.filter-contents');
+      if (contents) {
+        contents.classList.toggle('open');
+        const icon = filterToggle.querySelector('.toggle-icon');
+        if (icon) {
+          icon.textContent = contents.classList.contains('open') ? '−' : '+';
+        }
+      }
+    });
+  }
+});
