@@ -804,7 +804,7 @@ input.error, select.error, textarea.error {
 @keyframes slideThree { 0%,61%,100% { opacity: 0; } 68%,94% { opacity: 1; } }
 
 @media (max-width: 980px) {
-  .header { grid-template-columns: 1fr; padding: 16px 20px; }
+  .header { grid-template-columns: 1fr; padding: 16px 20px; position: relative; }
   .header nav { flex-wrap: wrap; justify-content: start; gap: 14px; }
   .editorial-grid, .products, .card-grid, .sector-cards, .method-list { grid-template-columns: repeat(2, 1fr); }
   .filters, .studio, .quote-wrap, .about-copy, .product-configurator { grid-template-columns: 1fr; }
@@ -830,6 +830,9 @@ input.error, select.error, textarea.error {
 @media (max-width: 768px) {
   .catalog-layout {
     grid-template-columns: 1fr;
+  }
+  .catalog-sidebar {
+    position: static;
   }
 }
 
