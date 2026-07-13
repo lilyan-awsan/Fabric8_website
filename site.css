@@ -619,6 +619,23 @@ input.error, select.error, textarea.error {
 .studio-stage img[data-color="grey"] { filter: grayscale(1) brightness(.75) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
 .studio-stage img[data-color="green"] { filter: sepia(.6) saturate(2.4) hue-rotate(65deg) brightness(.62) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
 .studio-stage img[data-color="red"] { filter: sepia(.7) saturate(3) hue-rotate(315deg) brightness(.68) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="light-grey"] { filter: grayscale(1) brightness(0.85) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="olive-green"] { filter: sepia(.6) saturate(1.5) hue-rotate(60deg) brightness(.5) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="army-green"] { filter: sepia(.5) saturate(1) hue-rotate(50deg) brightness(.4) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="burgundy"] { filter: sepia(.7) saturate(2) hue-rotate(330deg) brightness(.4) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="beige"] { filter: sepia(.4) saturate(1.5) hue-rotate(10deg) brightness(.85) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="charcoal"] { filter: grayscale(1) brightness(.35) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="blue"] { filter: sepia(.8) saturate(3) hue-rotate(190deg) brightness(.6) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="baby-blue"] { filter: sepia(.4) saturate(2) hue-rotate(180deg) brightness(1.1) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="turquoise-blue"] { filter: sepia(.6) saturate(3) hue-rotate(160deg) brightness(.9) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="ocean-blue"] { filter: sepia(.7) saturate(3) hue-rotate(180deg) brightness(.7) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="american-blue"] { filter: sepia(.5) saturate(2) hue-rotate(200deg) brightness(.4) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="pink"] { filter: sepia(.4) saturate(2) hue-rotate(300deg) brightness(1.1) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="brown"] { filter: sepia(.8) saturate(2) hue-rotate(340deg) brightness(.4) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="orange"] { filter: sepia(.8) saturate(4) hue-rotate(10deg) brightness(.9) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="yellow"] { filter: sepia(1) saturate(5) hue-rotate(40deg) brightness(1.1) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="purple"] { filter: sepia(.6) saturate(2) hue-rotate(260deg) brightness(.5) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
+.studio-stage img[data-color="striped"] { filter: grayscale(1) brightness(.6) drop-shadow(0 34px 44px rgba(0,0,0,.38)); }
 .logo-preview {
   position: absolute;
   display: grid;
