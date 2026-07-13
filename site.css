@@ -846,6 +846,7 @@ input.error, select.error, textarea.error {
   }
   .catalog-sidebar {
     position: relative;
+    top: 0;
     margin-bottom: 20px;
     padding: 16px 20px;
   }
