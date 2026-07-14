@@ -1172,6 +1172,43 @@ input.error, select.error, textarea.error {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.wizard-form::-webkit-scrollbar {
+  display: none;
+}
+.selection-card {
+  position: relative;
+  background: var(--white, #fff);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  display: block;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  min-height: 90px;
+}
+.selection-card input {
+  display: none;
+}
+.selection-card .card-content {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ink);
+}
+.selection-card.active {
+  border-color: var(--ink);
+  background: var(--bg-alt, #f5f5f5);
 }
 .wizard-product-name {
   padding: 20px 24px;
@@ -1196,6 +1233,9 @@ input.error, select.error, textarea.error {
 .wizard-steps-container {
   padding: 24px;
   flex: 1;
+}
+.wizard-steps-container .card-grid {
+  grid-template-columns: 1fr 1fr;
 }
 .step-title {
   margin: 0 0 16px 0;

@@ -803,6 +803,7 @@ function openTextWizard() {
   textWizardStep = 1;
   embroideryData = {
     type: '', size: 'medium', fontStyle: 'block', threadColor: threadColors[0].name,
+    bgColor: 'White', borderColor: 'Black',
     lineCount: 1, selectedStyleSku: '', position: '',
     textLines: { line1: '', line2: '', line3: '' }
   };
@@ -813,7 +814,23 @@ function openTextWizard() {
       `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-thread-color="${c.name}"></span>`
     ).join("");
   }
+
+  const bgContainer = document.getElementById("wizardBgColors");
+  if (bgContainer) {
+    bgContainer.innerHTML = threadColors.map(c => 
+      `<span class="bg-color-dot ${c.name === embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-bg-color="${c.name}"></span>`
+    ).join("");
+  }
+
+  const borderContainer = document.getElementById("wizardBorderColors");
+  if (borderContainer) {
+    borderContainer.innerHTML = threadColors.map(c => 
+      `<span class="border-color-dot ${c.name === embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-border-color="${c.name}"></span>`
+    ).join("");
+  }
   
+  document.getElementById("emblemColorOptions").style.display = "none";
+
   document.querySelectorAll('.selection-card, .template-card, .placement-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('input[name="embroideryType"], input[name="templateStyle"], input[name="wizardPosition"]').forEach(r => r.checked = false);
   document.querySelectorAll('#wizardLineCount button').forEach(b => b.classList.remove('active'));
@@ -862,7 +879,7 @@ function renderTextInputs() {
   let html = "";
   for (let i = 1; i <= embroideryData.lineCount; i++) {
     html += `
-      <div class="form-group" style="margin-bottom: 16px;">
+      <div class="form-group" style="margin-bottom: 16px; max-width: 320px;">
         <label>Line ${i} Text</label>
         <input type="text" class="wizard-text-input" data-line="${i}" maxlength="20" placeholder="Enter text..." value="${embroideryData.textLines[`line${i}`] || ''}" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px;">
         <div id="counter-line${i}" style="text-align: right; font-size: 10px; color: var(--muted); margin-top: 4px;">${(embroideryData.textLines[`line${i}`] || '').length} / 20 characters</div>
@@ -886,9 +903,24 @@ function renderTextPreview() {
   
   preview.style.fontFamily = embroideryData.fontStyle === "script" ? "cursive, 'Brush Script MT'" : "sans-serif";
   
-  const colorObj = threadColors.find(c => c.name === embroideryData.threadColor);
-  preview.style.color = colorObj ? colorObj.hex : "#000";
+  const threadColorObj = threadColors.find(c => c.name === embroideryData.threadColor);
+  preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
   
+  if (embroideryData.type === "emblem") {
+    const bgObj = threadColors.find(c => c.name === embroideryData.bgColor);
+    const borderObj = threadColors.find(c => c.name === embroideryData.borderColor);
+    
+    preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
+    preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
+    preview.style.padding = "6px 16px";
+    preview.style.borderRadius = "4px";
+  } else {
+    preview.style.backgroundColor = "transparent";
+    preview.style.border = "none";
+    preview.style.padding = "0";
+    preview.style.borderRadius = "0";
+  }
+
   preview.style.left = "50%";
   preview.style.top = "40%";
   preview.style.transform = "translate(-50%, -50%)";
@@ -990,6 +1022,24 @@ document.addEventListener("click", (e) => {
     embroideryData.threadColor = threadColorDot.dataset.threadColor;
     renderTextPreview();
   }
+
+  const bgColorDot = e.target.closest("#wizardBgColors .bg-color-dot");
+  if (bgColorDot) {
+    document.querySelectorAll("#wizardBgColors .bg-color-dot").forEach(d => { d.classList.remove("active"); d.style.boxShadow = "none"; });
+    bgColorDot.classList.add("active");
+    bgColorDot.style.boxShadow = "0 0 0 2px #fff, 0 0 0 4px var(--ink)";
+    embroideryData.bgColor = bgColorDot.dataset.bgColor;
+    renderTextPreview();
+  }
+
+  const borderColorDot = e.target.closest("#wizardBorderColors .border-color-dot");
+  if (borderColorDot) {
+    document.querySelectorAll("#wizardBorderColors .border-color-dot").forEach(d => { d.classList.remove("active"); d.style.boxShadow = "none"; });
+    borderColorDot.classList.add("active");
+    borderColorDot.style.boxShadow = "0 0 0 2px #fff, 0 0 0 4px var(--ink)";
+    embroideryData.borderColor = borderColorDot.dataset.borderColor;
+    renderTextPreview();
+  }
   
   const lineBtn = e.target.closest("#wizardLineCount button");
   if (lineBtn) {
@@ -1006,6 +1056,11 @@ document.addEventListener("change", (e) => {
     embroideryData.type = e.target.value;
     document.querySelectorAll('input[name="embroideryType"]').forEach(r => r.closest('.selection-card').classList.remove('active'));
     e.target.closest('.selection-card').classList.add('active');
+    const colorOpts = document.getElementById("emblemColorOptions");
+    if (colorOpts) {
+      colorOpts.style.display = embroideryData.type === "emblem" ? "block" : "none";
+    }
+    renderTextPreview();
   }
   if (e.target.name === "templateStyle") {
     embroideryData.selectedStyleSku = e.target.value;

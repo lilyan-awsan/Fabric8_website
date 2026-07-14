@@ -216,19 +216,17 @@
               <div class="wizard-steps-container">
                 <!-- Step 1: Type Selection -->
                 <div class="wizard-step" id="wizardStep1">
-                  <h4 class="step-title">1. Embroidery Type</h4>
-                  <div class="card-grid">
+                  <h4 class="step-title" style="margin: 0 0 4px 0;">1. Embroidery Type</h4>
+                  <div class="card-grid" style="margin-top: 4px;">
                     <label class="selection-card">
                       <input type="radio" name="embroideryType" value="emblem">
                       <div class="card-content">
-                        <span class="icon">🛡️</span>
                         <span>Emblem (Patch)</span>
                       </div>
                     </label>
                     <label class="selection-card">
                       <input type="radio" name="embroideryType" value="direct">
                       <div class="card-content">
-                        <span class="icon">🧵</span>
                         <span>Direct Embroidery</span>
                       </div>
                     </label>
@@ -260,6 +258,17 @@
                     <label>Thread Color</label>
                     <div class="color-swatches" id="wizardThreadColors">
                       <!-- Swatches populated by JS -->
+                    </div>
+                  </div>
+
+                  <div id="emblemColorOptions" style="display: none; margin-top: 16px;">
+                    <div class="form-group" style="margin-bottom: 16px;">
+                      <label>Background Color</label>
+                      <div class="color-swatches" id="wizardBgColors"></div>
+                    </div>
+                    <div class="form-group">
+                      <label>Border Color</label>
+                      <div class="color-swatches" id="wizardBorderColors"></div>
                     </div>
                   </div>
 
