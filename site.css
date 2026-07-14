@@ -1186,6 +1186,43 @@ input.error, select.error, textarea.error {
   background: var(--ink);
   color: #fff;
 }
+.selection-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  display: block;
+}
+.selection-card input {
+  display: none;
+}
+.selection-card .card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muted);
+}
+.selection-card .icon {
+  font-size: 32px;
+  line-height: 1;
+}
+.selection-card:hover {
+  border-color: var(--ink);
+}
+.selection-card.active {
+  border-color: var(--ink);
+  background: var(--bg-alt, #f5f5f5);
+}
+.selection-card.active .card-content {
+  color: var(--ink);
+}
 .template-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
