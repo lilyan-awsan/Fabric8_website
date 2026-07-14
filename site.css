@@ -1189,7 +1189,7 @@ input.error, select.error, textarea.error {
 .card-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 12px;
   margin-top: 12px;
 }
 .selection-card {
@@ -1203,8 +1203,8 @@ input.error, select.error, textarea.error {
   display: block;
   box-shadow: 0 4px 6px rgba(0,0,0,0.02);
   flex: 1;
-  min-width: 140px;
-  min-height: 160px;
+  min-width: 130px;
+  min-height: 110px;
 }
 .selection-card input {
   display: none;
@@ -1215,10 +1215,10 @@ input.error, select.error, textarea.error {
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 16px;
-  padding: 24px 10px;
+  gap: 8px;
+  padding: 16px 10px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--muted);
   text-transform: uppercase;
@@ -1227,18 +1227,19 @@ input.error, select.error, textarea.error {
   word-break: normal;
 }
 .selection-card .icon {
+  font-size: 36px;
   line-height: 1;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  color: var(--muted);
+  filter: grayscale(100%) opacity(0.6);
 }
 .selection-card:hover {
   border-color: var(--ink);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
 }
 .selection-card:hover .icon {
   transform: scale(1.1);
-  color: var(--ink);
+  filter: grayscale(0%) opacity(1);
 }
 .selection-card.active {
   border-color: var(--green);
@@ -1249,7 +1250,7 @@ input.error, select.error, textarea.error {
   color: var(--ink);
 }
 .selection-card.active .icon {
-  color: var(--green);
+  filter: grayscale(0%) opacity(1);
   transform: scale(1.15);
 }
 .template-grid {
