@@ -36,7 +36,14 @@ const threadColors = [
   { name: 'Blue', hex: '#2f6fb3' },
   { name: 'Black', hex: '#111111' },
   { name: 'White', hex: '#ffffff' },
-  { name: 'Gold', hex: '#ffd700' }
+  { name: 'Gold', hex: '#ffd700' },
+  { name: 'Navy', hex: '#17233f' },
+  { name: 'Grey', hex: '#9a9a96' },
+  { name: 'Green', hex: '#2f873d' },
+  { name: 'Burgundy', hex: '#800020' },
+  { name: 'Orange', hex: '#ff8c00' },
+  { name: 'Purple', hex: '#800080' },
+  { name: 'Pink', hex: '#ffc0cb' }
 ];
 
 const colorMap = {
@@ -901,7 +908,12 @@ function renderTextPreview() {
   }
   preview.innerHTML = text.join("<br>");
   
-  preview.style.fontFamily = embroideryData.fontStyle === "script" ? "cursive, 'Brush Script MT'" : "sans-serif";
+  let fontFamily = "sans-serif";
+  if (embroideryData.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
+  else if (embroideryData.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
+  else if (embroideryData.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
+  else if (embroideryData.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
+  preview.style.fontFamily = fontFamily;
   
   const threadColorObj = threadColors.find(c => c.name === embroideryData.threadColor);
   preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
