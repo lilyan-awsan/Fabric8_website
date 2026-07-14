@@ -924,13 +924,27 @@ function renderTextPreview() {
     
     preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
     preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
-    preview.style.padding = "6px 16px";
-    preview.style.borderRadius = "4px";
+    preview.style.padding = "16px";
+    
+    if (embroideryData.selectedStyleSku === "Style EM1092") {
+      preview.style.borderRadius = "50%";
+      preview.style.aspectRatio = "1 / 1";
+      preview.style.display = "flex";
+      preview.style.flexDirection = "column";
+      preview.style.justifyContent = "center";
+      preview.style.alignItems = "center";
+    } else {
+      preview.style.borderRadius = "4px";
+      preview.style.aspectRatio = "auto";
+      preview.style.display = "block";
+    }
   } else {
     preview.style.backgroundColor = "transparent";
     preview.style.border = "none";
     preview.style.padding = "0";
     preview.style.borderRadius = "0";
+    preview.style.aspectRatio = "auto";
+    preview.style.display = "block";
   }
 
   preview.style.left = "50%";
@@ -1075,6 +1089,7 @@ document.addEventListener("change", (e) => {
     embroideryData.selectedStyleSku = e.target.value;
     document.querySelectorAll('input[name="templateStyle"]').forEach(r => r.closest('.template-card').classList.remove('active'));
     e.target.closest('.template-card').classList.add('active');
+    renderTextPreview();
   }
   if (e.target.name === "wizardPosition") {
     embroideryData.position = e.target.value;
