@@ -1172,10 +1172,12 @@ input.error, select.error, textarea.error {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+.wizard-form, .sidebar-body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.wizard-form::-webkit-scrollbar {
+.wizard-form::-webkit-scrollbar, .sidebar-body::-webkit-scrollbar {
   display: none;
 }
 .selection-card {
