@@ -1227,10 +1227,9 @@ input.error, select.error, textarea.error {
   word-break: normal;
 }
 .selection-card .icon {
-  font-size: 48px;
   line-height: 1;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  filter: grayscale(100%) opacity(0.6);
+  color: var(--muted);
 }
 .selection-card:hover {
   border-color: var(--ink);
@@ -1239,7 +1238,7 @@ input.error, select.error, textarea.error {
 }
 .selection-card:hover .icon {
   transform: scale(1.1);
-  filter: grayscale(0%) opacity(1);
+  color: var(--ink);
 }
 .selection-card.active {
   border-color: var(--green);
@@ -1250,7 +1249,7 @@ input.error, select.error, textarea.error {
   color: var(--ink);
 }
 .selection-card.active .icon {
-  filter: grayscale(0%) opacity(1);
+  color: var(--green);
   transform: scale(1.15);
 }
 .template-grid {
