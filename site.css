@@ -1212,14 +1212,15 @@ input.error, select.error, textarea.error {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 32px 16px;
+  padding: 32px 20px;
   text-align: center;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
+  word-break: break-word;
 }
 .selection-card .icon {
   font-size: 48px;
