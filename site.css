@@ -1187,8 +1187,8 @@ input.error, select.error, textarea.error {
   color: #fff;
 }
 .card-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-top: 12px;
 }
@@ -1202,8 +1202,6 @@ input.error, select.error, textarea.error {
   overflow: hidden;
   display: block;
   box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-  flex: 1;
-  min-width: 130px;
   min-height: 110px;
 }
 .selection-card input {
