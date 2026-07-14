@@ -769,10 +769,13 @@ function openTextWizard() {
   const selectedProduct = products.find((p) => p.sku === selectedProductSku);
   if (!selectedProduct) return;
   
-  const quantity = parseInt(document.getElementById("sidebarProductQuantity")?.value || 50);
-  const selectedSize = document.getElementById("sidebarSizeSelect")?.value;
+  const quantityElement = document.getElementById("sidebarProductQuantity") || document.getElementById("modalProductQuantity");
+  const quantity = parseInt(quantityElement?.value || 50);
+  
+  const sizeElement = document.getElementById("sidebarSizeSelect") || document.getElementById("modalSizeSelect");
+  const selectedSize = sizeElement?.value;
 
-  if (!selectedSize || !activeCatalogColor) {
+  if (!selectedSize || !activeCatalogColor || activeCatalogColor === "all") {
     alert("Please select size and color before proceeding.");
     return;
   }
@@ -910,8 +913,12 @@ function renderSummary() {
 
 function addWizardToCart() {
   const selectedProduct = products.find((p) => p.sku === selectedProductSku);
-  const quantity = parseInt(document.getElementById("sidebarProductQuantity")?.value || 50);
-  const selectedSize = document.getElementById("sidebarSizeSelect")?.value || "Standard";
+  
+  const quantityElement = document.getElementById("sidebarProductQuantity") || document.getElementById("modalProductQuantity");
+  const quantity = parseInt(quantityElement?.value || 50);
+  
+  const sizeElement = document.getElementById("sidebarSizeSelect") || document.getElementById("modalSizeSelect");
+  const selectedSize = sizeElement?.value || "Standard";
   
   let linesText = [];
   for (let i = 1; i <= embroideryData.lineCount; i++) linesText.push(embroideryData.textLines[`line${i}`]);
