@@ -110,9 +110,24 @@
                 <input id="modalProductQuantity" type="number" min="1" value="50" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 13px;" />
               </div>
 
-              <div style="margin-top: 20px; display: flex; gap: 10px;">
-                <button id="modalAddBranding" class="button primary" style="flex: 1; padding: 10px 16px;">Next: Add Branding</button>
-                <button id="modalAddBlank" class="button secondary" style="flex: 1; padding: 10px 16px; background: transparent; border: 1px solid var(--ink); color: var(--ink);">Add Blank</button>
+              <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="margin-bottom: 8px;">
+                  <h4 style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px 0; text-align: center;">Select Customization Type</h4>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <label class="customization-card" style="border: 1px solid var(--line); border-radius: 4px; padding: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease;">
+                      <input type="radio" name="customizationType" value="upload_logo" style="display: none;">
+                      <span style="font-size: 13px; font-weight: bold;">Upload Logo</span>
+                    </label>
+                    <label class="customization-card" style="border: 1px solid var(--line); border-radius: 4px; padding: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease;">
+                      <input type="radio" name="customizationType" value="text_embroidery" style="display: none;">
+                      <span style="font-size: 13px; font-weight: bold;">Text Embroidery</span>
+                    </label>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                  <button id="modalAddBranding" class="button primary" style="flex: 1; padding: 10px 16px; display: none; transition: opacity 0.3s ease-in-out;">Next: Upload Logo</button>
+                  <button id="modalAddBlank" class="button secondary" style="flex: 1; padding: 10px 16px; background: transparent; border: 1px solid var(--ink); color: var(--ink);">Add Blank</button>
+                </div>
               </div>
             </div>
           </div>
