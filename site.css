@@ -1186,13 +1186,22 @@ input.error, select.error, textarea.error {
   background: var(--ink);
   color: #fff;
 }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 12px;
+}
 .selection-card {
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  position: relative;
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   display: block;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
 }
 .selection-card input {
   display: none;
@@ -1202,26 +1211,42 @@ input.error, select.error, textarea.error {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 24px 16px;
+  gap: 16px;
+  padding: 32px 16px;
   text-align: center;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 }
 .selection-card .icon {
-  font-size: 32px;
+  font-size: 48px;
   line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: grayscale(100%) opacity(0.6);
 }
 .selection-card:hover {
   border-color: var(--ink);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+}
+.selection-card:hover .icon {
+  transform: scale(1.1);
+  filter: grayscale(0%) opacity(1);
 }
 .selection-card.active {
-  border-color: var(--ink);
-  background: var(--bg-alt, #f5f5f5);
+  border-color: var(--green);
+  background: rgba(47, 135, 61, 0.04);
+  box-shadow: 0 0 0 1px var(--green);
 }
 .selection-card.active .card-content {
   color: var(--ink);
+}
+.selection-card.active .icon {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.15);
 }
 .template-grid {
   display: grid;
