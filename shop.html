@@ -1,403 +1,462 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Fabric8 | Shop & Quote</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="site.css?v=2" />
-  </head>
-  <body>
-    <div class="topline"><a href="#quote">NO ONLINE PRICES - BUILD ONE QUOTE REQUEST</a></div>
-    <header class="header">
-      <a class="logo" href="home.html"><img src="assets/fabric8-logo-white.webp" alt="Fabric8" /></a>
-      <nav><a href="home.html">Home</a><a href="shop.html">Shop</a><a href="services.html">Services</a><a href="sectors.html">Sectors</a><a href="method.html">Method</a><a href="about.html">About</a></nav>
-      <a class="quote-link" href="#quote">Quote <span id="cartCount">0</span></a>
-    </header>
 
-    <main>
-      <section class="page-hero shop-hero">
-        <div><p>Product Catalog</p><h1>Shop uniforms by product type.</h1><span>Select items, preview branding, and request one quotation.</span></div>
-      </section>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fabric8 | Shop & Quote</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="site.css?v=2" />
+</head>
 
-      <section class="catalog-page" style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
-        <div class="catalog-layout">
-          <!-- Sidebar Filters -->
-          <aside class="catalog-sidebar">
-            <h3 class="filter-toggle" style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-              Filters <span class="toggle-icon" style="display: none; font-size: 20px;">+</span>
-            </h3>
-            <div class="filter-contents">
-              <div class="filter-group">
-                <label for="productSearch" style="font-size: 12px; font-weight: bold;">Search</label>
-                <input type="search" id="productSearch" placeholder="Search by SKU or name..." style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+<body>
+  <div class="topline"><a href="#quote">NO ONLINE PRICES - BUILD ONE QUOTE REQUEST</a></div>
+  <header class="header">
+    <a class="logo" href="home.html"><img src="assets/fabric8-logo-white.webp" alt="Fabric8" /></a>
+    <nav><a href="home.html">Home</a><a href="shop.html">Shop</a><a href="services.html">Services</a><a
+        href="sectors.html">Sectors</a><a href="method.html">Method</a><a href="about.html">About</a></nav>
+    <a class="quote-link" href="#quote">Quote <span id="cartCount">0</span></a>
+  </header>
+
+  <main>
+    <section class="page-hero shop-hero">
+      <div>
+        <p>Product Catalog</p>
+        <h1>Shop uniforms by product type.</h1><span>Select items, preview branding, and request one quotation.</span>
+      </div>
+    </section>
+
+    <section class="catalog-page" style="max-width: 1400px; margin: 0 auto; padding: 40px 20px;">
+      <div class="catalog-layout">
+        <!-- Sidebar Filters -->
+        <aside class="catalog-sidebar">
+          <h3 class="filter-toggle"
+            style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            Filters <span class="toggle-icon" style="display: none; font-size: 20px;">+</span>
+          </h3>
+          <div class="filter-contents">
+            <div class="filter-group">
+              <label for="productSearch" style="font-size: 12px; font-weight: bold;">Search</label>
+              <input type="search" id="productSearch" placeholder="Search by SKU or name..."
+                style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+            </div>
+
+            <div class="filter-group">
+              <label style="font-size: 12px; font-weight: bold;">Category</label>
+              <div id="categoryFilterContainer"
+                style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                <!-- Categories injected here -->
               </div>
-              
-              <div class="filter-group">
-                <label style="font-size: 12px; font-weight: bold;">Category</label>
-                <div id="categoryFilterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                  <!-- Categories injected here -->
+            </div>
+
+            <div class="filter-group" style="margin-top: 24px;">
+              <label style="font-size: 12px; font-weight: bold;">Sort By</label>
+              <select id="sortFilter"
+                style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
+                <option value="featured">Featured</option>
+                <option value="A-Z">Name A-Z</option>
+                <option value="Z-A">Name Z-A</option>
+              </select>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Grid -->
+        <div class="catalog-main">
+          <div id="productGrid" class="catalog-grid">
+            <!-- Product Cards injected here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="product-modal" style="display: none;">
+      <div class="product-modal-content">
+        <button class="modal-close" id="closeProductModal">&times;</button>
+
+        <div class="product-modal-layout">
+          <div class="product-modal-image-container"
+            style="display: flex; flex-direction: column; background: #f0f0f0;">
+            <div class="product-modal-image" style="flex: 1; min-height: 400px; position: relative;">
+              <img id="modalProductImage" src="" alt="Product"
+                style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <div id="modalThumbnails"
+              style="display: flex; gap: 8px; padding: 12px; overflow-x: auto; background: #fff; border-top: 1px solid var(--line);">
+              <!-- Thumbnails injected here -->
+            </div>
+          </div>
+
+          <div class="product-modal-details">
+            <span id="modalProductCategory" class="eyebrow" style="margin: 0; font-size: 11px;">Category</span>
+            <h2 id="modalProductName"
+              style="margin: 4px 0 4px; font-size: 24px; font-weight: 900; letter-spacing: -0.02em;">Product Name</h2>
+            <span id="modalProductSku" style="color: var(--muted); font-size: 12px;">SKU: XXX-XXX</span>
+
+            <p id="modalProductDesc" style="margin-top: 12px; font-size: 13px; line-height: 1.5; color: var(--ink);">
+            </p>
+
+            <div
+              style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: var(--ink); margin-top: 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0;">
+              <div><strong>Material:</strong> <span id="modalProductFabric"></span></div>
+              <div><strong>GSM:</strong> <span id="modalProductGsm"></span></div>
+              <div><strong>MOQ:</strong> <span id="modalProductMoq"></span></div>
+              <div><strong>Lead Time:</strong> <span id="modalProductLeadTime"></span></div>
+              <div><strong>Availability:</strong> <span id="modalProductAvailability"></span></div>
+              <div style="grid-column: 1 / -1;"><strong>Sizes Available:</strong> <span
+                  id="modalProductSizesList"></span></div>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">Select
+                Size*</label>
+              <select id="modalSizeSelect"
+                style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 13px;">
+                <option value="">Select a size...</option>
+              </select>
+            </div>
+
+            <div style="margin-top: 12px;">
+              <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">Select
+                Color*</label>
+              <div id="modalColorFilter" class="color-filter"></div>
+            </div>
+
+            <div style="margin-top: 12px;">
+              <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">Quantity* (Minimum
+                <span id="minQtyLabel">50</span>)</label>
+              <input id="modalProductQuantity" type="number" min="1" value="50"
+                style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 13px;" />
+            </div>
+
+            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="margin-bottom: 8px;">
+                <h4
+                  style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px 0; text-align: center;">
+                  Select Customization Type</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <label class="customization-card"
+                    style="border: 1px solid var(--line); border-radius: 4px; padding: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease;">
+                    <input type="radio" name="customizationType" value="upload_logo" style="display: none;">
+                    <span style="font-size: 13px; font-weight: bold;">Upload Logo</span>
+                  </label>
+                  <label class="customization-card"
+                    style="border: 1px solid var(--line); border-radius: 4px; padding: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease;">
+                    <input type="radio" name="customizationType" value="text_embroidery" style="display: none;">
+                    <span style="font-size: 13px; font-weight: bold;">Text Embroidery</span>
+                  </label>
                 </div>
               </div>
-
-              <div class="filter-group" style="margin-top: 24px;">
-                <label style="font-size: 12px; font-weight: bold;">Sort By</label>
-                <select id="sortFilter" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
-                  <option value="featured">Featured</option>
-                  <option value="A-Z">Name A-Z</option>
-                  <option value="Z-A">Name Z-A</option>
-                </select>
-              </div>
-            </div>
-          </aside>
-
-          <!-- Main Grid -->
-          <div class="catalog-main">
-            <div id="productGrid" class="catalog-grid">
-              <!-- Product Cards injected here -->
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Sidebar Backdrop -->
-      <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
-
-      <!-- Product Sidebar -->
-      <aside id="productSidebar" class="product-sidebar">
-        <div class="sidebar-header">
-          <h2 style="font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0;">Configure Product</h2>
-          <button class="sidebar-close" id="closeProductSidebar">&times;</button>
-        </div>
-        
-        <div class="sidebar-body">
-          <div class="sidebar-image-container">
-            <img id="sidebarProductImage" src="" alt="Product">
-            <div id="sidebarThumbnails" class="sidebar-thumbnails"></div>
-          </div>
-          
-          <div class="sidebar-product-info">
-            <span id="sidebarProductCategory" class="eyebrow" style="margin: 0; font-size: 11px;">Category</span>
-            <h2 id="sidebarProductName" style="margin: 4px 0 4px; font-size: 24px; font-weight: 900; letter-spacing: -0.02em;">Product Name</h2>
-            <span id="sidebarProductSku" style="color: var(--muted); font-size: 12px;">SKU: XXX-XXX</span>
-            
-            <p id="sidebarProductDesc" style="margin-top: 12px; font-size: 13px; line-height: 1.5; color: var(--ink);"></p>
-            
-            <details class="product-accordion" style="margin-top: 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
-              <summary style="padding: 12px 0; font-weight: bold; font-size: 13px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;">
-                More Details <span class="accordion-icon">+</span>
-              </summary>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: var(--ink); padding: 0 0 12px 0;">
-                <div><strong>Material:</strong> <span id="sidebarProductFabric"></span></div>
-                <div><strong>GSM:</strong> <span id="sidebarProductGsm"></span></div>
-                <div><strong>MOQ:</strong> <span id="sidebarProductMoq"></span></div>
-                <div><strong>Lead Time:</strong> <span id="sidebarProductLeadTime"></span></div>
-                <div><strong>Availability:</strong> <span id="sidebarProductAvailability"></span></div>
-                <div style="grid-column: 1 / -1;"><strong>Sizes Available:</strong> <span id="sidebarProductSizesList"></span></div>
-              </div>
-            </details>
-
-            <div class="sidebar-config" style="margin-top: 20px;">
-              <div style="margin-bottom: 16px;">
-                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">Select Size*</label>
-                <select id="sidebarSizeSelect" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 13px;">
-                  <option value="">Select a size...</option>
-                </select>
-              </div>
-
-              <div style="margin-bottom: 16px;">
-                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">Select Color*</label>
-                <div id="sidebarColorFilter" class="color-filter"></div>
-              </div>
-              
-              <div>
-                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">Quantity* (Minimum <span id="sidebarMinQtyLabel">50</span>)</label>
-                <input id="sidebarProductQuantity" type="number" min="1" value="50" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 13px;" />
+              <div style="display: flex; gap: 10px;">
+                <button id="modalAddBranding" class="button primary"
+                  style="flex: 1; padding: 10px 16px; display: none; transition: opacity 0.3s ease-in-out;">Next: Upload
+                  Logo</button>
+                <button id="modalAddBlank" class="button secondary"
+                  style="flex: 1; padding: 10px 16px; background: transparent; border: 1px solid var(--ink); color: var(--ink);">Add
+                  Blank</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="sidebar-footer">
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="margin-bottom: 8px;">
-              <h4 style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px 0; text-align: center;">Select Customization Type</h4>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <label class="customization-card" style="border: 1px solid var(--line); border-radius: 4px; padding: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease;">
-                  <input type="radio" name="customizationType" value="upload_logo" style="display: none;">
-                  <span style="font-size: 13px; font-weight: bold;">Upload Logo</span>
-                </label>
-                <label class="customization-card" style="border: 1px solid var(--line); border-radius: 4px; padding: 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease;">
-                  <input type="radio" name="customizationType" value="text_embroidery" style="display: none;">
-                  <span style="font-size: 13px; font-weight: bold;">Text Embroidery</span>
-                </label>
-              </div>
+    <section id="studio" class="studio-page" style="display: none;">
+      <div class="section-head">
+        <p>Branding Atelier</p>
+        <h2>Upload your logo and preview placement.</h2>
+      </div>
+      <div class="studio">
+        <div class="studio-stage">
+          <img id="studioShirt" src="White Polo Shirt.png" alt="Selected garment" />
+          <div id="logoPreview" class="logo-preview left-chest">Logo</div>
+        </div>
+        <div class="studio-controls">
+          <div class="studio-product-name">
+            <p>Selected garment</p>
+            <h3 id="studioProductName">Select a product above</h3>
+            <span id="studioProductColorDesc">Please choose a product and click Next.</span>
+          </div>
+          <label style="margin-top: 10px;">Logo upload<input id="logoUpload" type="file" accept="image/*"
+              style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;" /></label>
+          <label style="margin-top: 10px;">Placement
+            <select id="placementSelect"
+              style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+              <option value="left-chest">Left chest</option>
+              <option value="right-chest">Right chest</option>
+              <option value="center">Center of T-shirt</option>
+              <option value="sleeve">Sleeve</option>
+            </select>
+          </label>
+          <label style="margin-top: 10px;">Logo size<input id="logoSize" type="range" min="8" max="38"
+              value="13" /></label>
+          <label style="margin-top: 10px;">Finish
+            <select id="finishSelect"
+              style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+              <option>Embroidery</option>
+              <option>Screen printing</option>
+              <option>Heat transfer</option>
+            </select>
+          </label>
+          <label
+            style="display: flex; align-items: start; gap: 10px; font-size: 11px; text-transform: none; color: var(--muted); margin: 16px 0;">
+            <input type="checkbox" id="logoDisclaimer" style="width: 16px; min-height: 16px; margin-top: 2px;" />
+            <span>I confirm that I hold the copyright and bear all legal responsibility for any logos or artwork
+              uploaded.</span>
+          </label>
+          <button id="addStudioQuote" class="button primary" type="button">Add to Quote Cart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Text Wizard Modal -->
+    <div id="textWizardModal" class="wizard-modal" style="display: none;">
+      <div class="wizard-container">
+        <div class="wizard-header">
+          <h2 style="font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0;">Text Customization</h2>
+          <button class="sidebar-close" id="closeTextWizard">&times;</button>
+        </div>
+        <div class="wizard-body">
+          <!-- Left Column: Live Preview -->
+          <div class="wizard-preview">
+            <div class="wizard-stage">
+              <img id="wizardShirt" src="White T-Shirt.png" alt="Selected garment" />
+              <div id="wizardTextPreview" class="text-preview"></div>
             </div>
-            <button id="sidebarAddBranding" class="button primary" style="width: 100%; padding: 14px; font-size: 14px; display: none; transition: opacity 0.3s ease-in-out;">Next: Upload Logo</button>
-            <button id="sidebarAddBlank" class="button secondary" style="width: 100%; padding: 14px; background: transparent; border: 1px solid var(--ink); color: var(--ink); font-size: 14px;">Add Blank</button>
           </div>
-        </div>
-      </aside>
 
-      <!-- Studio Sidebar -->
-      <aside id="studioSidebar" class="product-sidebar">
-        <div class="sidebar-header">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <button id="backToProduct" class="sidebar-close" style="font-size: 20px; width: 32px; height: 32px;" title="Back to Product">&#8592;</button>
-            <h2 style="font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0;">Branding Atelier</h2>
-          </div>
-          <button class="sidebar-close" id="closeStudioSidebar">&times;</button>
-        </div>
-        <div class="sidebar-body" style="padding: 0;">
-          <div class="studio-stage" style="aspect-ratio: 4/3; border-radius: 0; min-height: unset; padding: 0;">
-            <img id="studioShirt" src="White T-Shirt.png" alt="Selected garment" style="height: 90%; width: auto; object-fit: contain;" />
-            <div id="logoPreview" class="logo-preview left-chest">Logo</div>
-          </div>
-          <div class="studio-controls" style="border: none; padding: 24px;">
-            <div class="studio-product-name">
+          <!-- Right Column: Wizard Form -->
+          <div class="wizard-form">
+            <div class="wizard-product-name">
               <p>Selected garment</p>
-              <h3 id="studioProductName">Select a product above</h3>
-              <span id="studioProductColorDesc">Please choose a product and click Next.</span>
+              <h3 id="wizardProductName">Product Name</h3>
+              <span id="wizardProductColorDesc">Color / Size / Qty</span>
             </div>
-            <label style="margin-top: 10px;">Logo upload<input id="logoUpload" type="file" accept="image/*" style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;" /></label>
-            <label style="margin-top: 10px;">Placement
-              <select id="placementSelect" style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
-                <option value="left-chest">Left chest</option>
-                <option value="right-chest">Right chest</option>
-                <option value="center">Center of T-shirt</option>
-                <option value="sleeve">Sleeve</option>
-              </select>
-            </label>
-            <label style="margin-top: 10px;">Logo size<input id="logoSize" type="range" min="8" max="38" value="13" /></label>
-            <label style="margin-top: 10px;">Finish
-              <select id="finishSelect" style="padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
-                <option>Embroidery</option>
-                <option>Screen printing</option>
-                <option>Heat transfer</option>
-              </select>
-            </label>
-            <label style="display: flex; align-items: start; gap: 10px; font-size: 11px; text-transform: none; color: var(--muted); margin: 16px 0;">
-              <input type="checkbox" id="logoDisclaimer" style="width: 16px; min-height: 16px; margin-top: 2px;" />
-              <span>I confirm that I hold the copyright and bear all legal responsibility for any logos or artwork uploaded.</span>
-            </label>
-          </div>
-        </div>
-        <div class="sidebar-footer">
-          <button id="addStudioQuote" class="button primary" type="button" style="width: 100%; padding: 14px; font-size: 14px;">Add to Quote Cart</button>
-        </div>
-      </aside>
 
-      <!-- Text Wizard Modal -->
-      <div id="textWizardModal" class="wizard-modal" style="display: none;">
-        <div class="wizard-container">
-          <div class="wizard-header">
-            <h2 style="font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0;">Text Customization</h2>
-            <button class="sidebar-close" id="closeTextWizard">&times;</button>
-          </div>
-          <div class="wizard-body">
-            <!-- Left Column: Live Preview -->
-            <div class="wizard-preview">
-              <div class="wizard-stage">
-                <img id="wizardShirt" src="White T-Shirt.png" alt="Selected garment" />
-                <div id="wizardTextPreview" class="text-preview"></div>
-              </div>
-            </div>
-            
-            <!-- Right Column: Wizard Form -->
-            <div class="wizard-form">
-              <div class="wizard-product-name">
-                <p>Selected garment</p>
-                <h3 id="wizardProductName">Product Name</h3>
-                <span id="wizardProductColorDesc">Color / Size / Qty</span>
+            <div class="wizard-steps-container">
+              <!-- Step 1: Type Selection -->
+              <div class="wizard-step" id="wizardStep1">
+                <h4 class="step-title" style="margin: 0 0 4px 0;">1. Embroidery Type</h4>
+                <div class="card-grid" style="margin-top: 4px;">
+                  <label class="selection-card">
+                    <input type="radio" name="embroideryType" value="emblem">
+                    <div class="card-content">
+                      <span>Emblem (Patch)</span>
+                    </div>
+                  </label>
+                  <label class="selection-card">
+                    <input type="radio" name="embroideryType" value="direct">
+                    <div class="card-content">
+                      <span>Direct Embroidery</span>
+                    </div>
+                  </label>
+                </div>
               </div>
 
-              <div class="wizard-steps-container">
-                <!-- Step 1: Type Selection -->
-                <div class="wizard-step" id="wizardStep1">
-                  <h4 class="step-title">1. Embroidery Type</h4>
-                  <div class="card-grid">
-                    <label class="selection-card">
-                      <input type="radio" name="embroideryType" value="emblem">
-                      <div class="card-content">
-                        <span class="icon">🛡️</span>
-                        <span>Emblem (Patch)</span>
-                      </div>
+              <!-- Step 2: Style, Font & Color Filters -->
+              <div class="wizard-step" id="wizardStep2" style="display: none;">
+                <h4 class="step-title">2. Design Options</h4>
+                <div class="filter-row">
+                  <div class="form-group">
+                    <label>Size</label>
+                    <select id="wizardSize">
+                      <option value="small">Small</option>
+                      <option value="medium" selected>Medium</option>
+                      <option value="large">Large</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Font Style</label>
+                    <select id="wizardFontStyle">
+                      <option value="block">Block (Sans-serif)</option>
+                      <option value="script">Script (Cursive)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                  <label>Thread Color</label>
+                  <div class="color-swatches" id="wizardThreadColors">
+                    <!-- Swatches populated by JS -->
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                  <label>Number of Lines</label>
+                  <div class="segmented-control" id="wizardLineCount">
+                    <button type="button" data-lines="1" class="active">1</button>
+                    <button type="button" data-lines="2">2</button>
+                    <button type="button" data-lines="3">3</button>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 24px;">
+                  <label>Template Style</label>
+                  <div class="template-grid" id="wizardTemplates">
+                    <label class="template-card">
+                      <input type="radio" name="templateStyle" value="Style QZ7312">
+                      <div class="card-content">Straight Text<br><small>Style QZ7312</small></div>
                     </label>
-                    <label class="selection-card">
-                      <input type="radio" name="embroideryType" value="direct">
-                      <div class="card-content">
-                        <span class="icon">🧵</span>
-                        <span>Direct Embroidery</span>
-                      </div>
+                    <label class="template-card">
+                      <input type="radio" name="templateStyle" value="Style AR8821">
+                      <div class="card-content">Arch Text<br><small>Style AR8821</small></div>
+                    </label>
+                    <label class="template-card">
+                      <input type="radio" name="templateStyle" value="Style EM1092">
+                      <div class="card-content">Rounded Emblem<br><small>Style EM1092</small></div>
                     </label>
                   </div>
                 </div>
-
-                <!-- Step 2: Style, Font & Color Filters -->
-                <div class="wizard-step" id="wizardStep2" style="display: none;">
-                  <h4 class="step-title">2. Design Options</h4>
-                  <div class="filter-row">
-                    <div class="form-group">
-                      <label>Size</label>
-                      <select id="wizardSize">
-                        <option value="small">Small</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="large">Large</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Font Style</label>
-                      <select id="wizardFontStyle">
-                        <option value="block">Block (Sans-serif)</option>
-                        <option value="script">Script (Cursive)</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div class="form-group" style="margin-top: 16px;">
-                    <label>Thread Color</label>
-                    <div class="color-swatches" id="wizardThreadColors">
-                      <!-- Swatches populated by JS -->
-                    </div>
-                  </div>
-
-                  <div class="form-group" style="margin-top: 16px;">
-                    <label>Number of Lines</label>
-                    <div class="segmented-control" id="wizardLineCount">
-                      <button type="button" data-lines="1" class="active">1</button>
-                      <button type="button" data-lines="2">2</button>
-                      <button type="button" data-lines="3">3</button>
-                    </div>
-                  </div>
-
-                  <div class="form-group" style="margin-top: 24px;">
-                    <label>Template Style</label>
-                    <div class="template-grid" id="wizardTemplates">
-                      <label class="template-card">
-                        <input type="radio" name="templateStyle" value="Style QZ7312">
-                        <div class="card-content">Straight Text<br><small>Style QZ7312</small></div>
-                      </label>
-                      <label class="template-card">
-                        <input type="radio" name="templateStyle" value="Style AR8821">
-                        <div class="card-content">Arch Text<br><small>Style AR8821</small></div>
-                      </label>
-                      <label class="template-card">
-                        <input type="radio" name="templateStyle" value="Style EM1092">
-                        <div class="card-content">Rounded Emblem<br><small>Style EM1092</small></div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Step 3: Position Selection -->
-                <div class="wizard-step" id="wizardStep3" style="display: none;">
-                  <h4 class="step-title">3. Placement</h4>
-                  <div class="placement-grid">
-                    <label class="placement-card"><input type="radio" name="wizardPosition" value="left_chest"><span>Left Chest</span></label>
-                    <label class="placement-card"><input type="radio" name="wizardPosition" value="right_chest"><span>Right Chest</span></label>
-                    <label class="placement-card"><input type="radio" name="wizardPosition" value="center"><span>Center</span></label>
-                    <label class="placement-card"><input type="radio" name="wizardPosition" value="right_sleeve"><span>Right Sleeve</span></label>
-                    <label class="placement-card"><input type="radio" name="wizardPosition" value="left_sleeve"><span>Left Sleeve</span></label>
-                    <label class="placement-card"><input type="radio" name="wizardPosition" value="back"><span>Back</span></label>
-                  </div>
-                </div>
-
-                <!-- Step 4: Text Personalization -->
-                <div class="wizard-step" id="wizardStep4" style="display: none;">
-                  <h4 class="step-title">4. Text Input</h4>
-                  <div id="wizardTextInputsContainer">
-                    <!-- Text inputs generated dynamically -->
-                  </div>
-                </div>
-
-                <!-- Step 5: Summary -->
-                <div class="wizard-step" id="wizardStep5" style="display: none;">
-                  <h4 class="step-title">5. Summary</h4>
-                  <div class="summary-card">
-                    <ul id="wizardSummaryList" style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink);">
-                      <!-- Summary items injected here -->
-                    </ul>
-                  </div>
-                </div>
-
               </div>
+
+              <!-- Step 3: Position Selection -->
+              <div class="wizard-step" id="wizardStep3" style="display: none;">
+                <h4 class="step-title">3. Placement</h4>
+                <div class="placement-grid">
+                  <label class="placement-card"><input type="radio" name="wizardPosition" value="left_chest"><span>Left
+                      Chest</span></label>
+                  <label class="placement-card"><input type="radio" name="wizardPosition"
+                      value="right_chest"><span>Right Chest</span></label>
+                  <label class="placement-card"><input type="radio" name="wizardPosition"
+                      value="center"><span>Center</span></label>
+                  <label class="placement-card"><input type="radio" name="wizardPosition"
+                      value="right_sleeve"><span>Right Sleeve</span></label>
+                  <label class="placement-card"><input type="radio" name="wizardPosition" value="left_sleeve"><span>Left
+                      Sleeve</span></label>
+                  <label class="placement-card"><input type="radio" name="wizardPosition"
+                      value="back"><span>Back</span></label>
+                </div>
+              </div>
+
+              <!-- Step 4: Text Personalization -->
+              <div class="wizard-step" id="wizardStep4" style="display: none;">
+                <h4 class="step-title">4. Text Input</h4>
+                <div id="wizardTextInputsContainer">
+                  <!-- Text inputs generated dynamically -->
+                </div>
+              </div>
+
+              <!-- Step 5: Summary -->
+              <div class="wizard-step" id="wizardStep5" style="display: none;">
+                <h4 class="step-title">5. Summary</h4>
+                <div class="summary-card">
+                  <ul id="wizardSummaryList"
+                    style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink);">
+                    <!-- Summary items injected here -->
+                  </ul>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div class="wizard-footer" style="display: flex; gap: 10px; padding: 20px; border-top: 1px solid var(--line);">
-            <button id="wizardBtnBack" class="button secondary" style="display: none; padding: 12px 24px;">Back</button>
-            <div style="flex: 1;"></div>
-            <button id="wizardBtnNext" class="button primary" style="padding: 12px 24px;">Next Step</button>
-            <button id="wizardBtnConfirm" class="button primary" style="display: none; padding: 12px 24px; background: var(--green); border-color: var(--green);">Confirm & Apply</button>
+        </div>
+        <div class="wizard-footer" style="display: flex; gap: 10px; padding: 20px; border-top: 1px solid var(--line);">
+          <button id="wizardBtnBack" class="button secondary" style="display: none; padding: 12px 24px;">Back</button>
+          <div style="flex: 1;"></div>
+          <button id="wizardBtnNext" class="button primary" style="padding: 12px 24px;">Next Step</button>
+          <button id="wizardBtnConfirm" class="button primary"
+            style="display: none; padding: 12px 24px; background: var(--green); border-color: var(--green);">Confirm &
+            Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <section id="quote" class="quote-page">
+      <div class="section-head">
+        <p>Quote Request</p>
+        <h2>Send your selected products to Fabric8.</h2>
+      </div>
+      <div class="quote-wrap">
+        <div>
+          <h3>Quote Cart</h3>
+          <div id="cartItems" class="cart-items"></div><button id="clearCart" class="button dark" type="button">Clear
+            Cart</button>
+        </div>
+        <form id="quoteForm" class="quote-form">
+          <input name="Full name" required placeholder="Full name*" />
+          <input name="Job Title" required placeholder="Job Title*" />
+          <input name="Company name" required placeholder="Company name*" />
+          <input name="Email" type="email" required placeholder="Email*" />
+          <input name="Phone" required placeholder="Phone*" />
+          <select name="Industry" required>
+            <option value="">Industry*</option>
+            <option>Food and Beverage</option>
+            <option>Hospitality</option>
+            <option>Corporate</option>
+            <option>Healthcare</option>
+            <option>Industrial</option>
+            <option>Education</option>
+            <option>Aviation</option>
+            <option>Other</option>
+          </select>
+
+          <input name="Address 1" required placeholder="Address 1*" />
+          <input name="Address 2" placeholder="Address 2 (Suite, Floor, etc.)" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <input name="City" required placeholder="City*" />
+            <input name="State" required placeholder="State / Province*" />
           </div>
-        </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <input name="Zip" required placeholder="Zip / Postal Code*" />
+            <input name="Country" required placeholder="Country*" />
+          </div>
+
+          <label
+            style="display: flex; align-items: center; gap: 10px; font-size: 13px; text-transform: none; color: var(--ink); margin: 8px 0;">
+            <input type="checkbox" name="Billing same as shipping" value="Yes" checked
+              style="width: 18px; min-height: 18px; padding: 0; margin: 0;" />
+            Billing address is the same as shipping address
+          </label>
+
+          <label style="margin-top: 10px;">Required delivery date*
+            <input name="Required delivery date" type="date" required />
+          </label>
+
+          <label>Reference file (Logo, Tech Pack, etc.)
+            <input name="File Upload" type="file" accept=".pdf,.png,.jpg,.jpeg,.zip" style="padding: 9px;" />
+          </label>
+
+          <textarea name="Message" rows="5" required placeholder="Message / notes*"></textarea>
+          <button class="button primary" type="submit">Submit Quote Request</button>
+        </form>
       </div>
+    </section>
+  </main>
 
-      <section id="quote" class="quote-page">
-        <div class="section-head"><p>Quote Request</p><h2>Send your selected products to Fabric8.</h2></div>
-        <div class="quote-wrap">
-          <div><h3>Quote Cart</h3><div id="cartItems" class="cart-items"></div><button id="clearCart" class="button dark" type="button">Clear Cart</button></div>
-          <form id="quoteForm" class="quote-form">
-            <input name="Full name" required placeholder="Full name*" />
-            <input name="Job Title" required placeholder="Job Title*" />
-            <input name="Company name" required placeholder="Company name*" />
-            <input name="Email" type="email" required placeholder="Email*" />
-            <input name="Phone" required placeholder="Phone*" />
-            <select name="Industry" required><option value="">Industry*</option><option>Food and Beverage</option><option>Hospitality</option><option>Corporate</option><option>Healthcare</option><option>Industrial</option><option>Education</option><option>Aviation</option><option>Other</option></select>
-            
-            <input name="Address 1" required placeholder="Address 1*" />
-            <input name="Address 2" placeholder="Address 2 (Suite, Floor, etc.)" />
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-              <input name="City" required placeholder="City*" />
-              <input name="State" required placeholder="State / Province*" />
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-              <input name="Zip" required placeholder="Zip / Postal Code*" />
-              <input name="Country" required placeholder="Country*" />
-            </div>
-            
-            <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; text-transform: none; color: var(--ink); margin: 8px 0;">
-              <input type="checkbox" name="Billing same as shipping" value="Yes" checked style="width: 18px; min-height: 18px; padding: 0; margin: 0;" />
-              Billing address is the same as shipping address
-            </label>
-
-            <label style="margin-top: 10px;">Required delivery date*
-              <input name="Required delivery date" type="date" required />
-            </label>
-            
-            <label>Reference file (Logo, Tech Pack, etc.)
-              <input name="File Upload" type="file" accept=".pdf,.png,.jpg,.jpeg,.zip" style="padding: 9px;" />
-            </label>
-
-            <textarea name="Message" rows="5" required placeholder="Message / notes*"></textarea>
-            <button class="button primary" type="submit">Submit Quote Request</button>
-          </form>
-        </div>
-      </section>
-    </main>
-    
-    <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6;">
-      <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
-        <div>
-          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Fabric-8</h4>
-          <p>1234 Business Solutions LLC<br>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071</p>
-        </div>
-        <div>
-          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact</h4>
-          <p>+1 770-710-2286<br>+962 796 788 240<br><a href="mailto:hello@thefabric8.com" style="color: var(--green); text-decoration: none;">hello@thefabric8.com</a></p>
-        </div>
-        <div>
-          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
-          <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
-        </div>
+  <footer
+    style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6;">
+    <div
+      style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+          Fabric-8</h4>
+        <p>1234 Business Solutions LLC<br>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071</p>
       </div>
-      <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
-        &copy; 2026 1234 Business Solutions LLC. All rights reserved.
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+          Contact</h4>
+        <p>+1 770-710-2286<br>+962 796 788 240<br><a href="mailto:hello@thefabric8.com"
+            style="color: var(--green); text-decoration: none;">hello@thefabric8.com</a></p>
       </div>
-    </footer>
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
+          Legal</h4>
+        <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html"
+            style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
+      </div>
+    </div>
+    <div
+      style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
+      &copy; 2026 1234 Business Solutions LLC. All rights reserved.
+    </div>
+  </footer>
 
-        <!-- Firebase SDK -->
-    <script src="site.js"></script>
-  </body>
+  <!-- Firebase SDK -->
+  <script src="site.js"></script>
+</body>
+
 </html>

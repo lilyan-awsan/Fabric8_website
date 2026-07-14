@@ -210,48 +210,48 @@ window.nextImage = function(sku, direction) {
   }, 400);
 };
 
-window.openProductModal = function(sku) {
+function openProductModal(sku) {
   const selected = products.find(p => p.sku === sku);
   if (!selected) return;
   
   selectedProductSku = sku;
   if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
 
-  let mainImg = selected.image || 'White T-Shirt.png';
+  let mainImg = selected.image || 'White Polo Shirt.png';
   if (selected.images && selected.images.length > 0) mainImg = selected.images[0];
   const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
-  $("#sidebarProductImage").src = imgSrc;
+  $("#modalProductImage").src = imgSrc;
   
-  const thumbnailsContainer = $("#sidebarThumbnails");
+  const thumbnailsContainer = $("#modalThumbnails");
   if (thumbnailsContainer) {
     if (selected.images && selected.images.length > 1) {
       thumbnailsContainer.style.display = "flex";
       thumbnailsContainer.innerHTML = selected.images.map(img => {
-        return `<img src="${img}" alt="Thumbnail" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('sidebarProductImage').src='${img}'">`;
+        return `<img src="${img}" alt="Thumbnail" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('modalProductImage').src='${img}'">`;
       }).join("");
     } else {
       thumbnailsContainer.style.display = "none";
       thumbnailsContainer.innerHTML = "";
     }
   }
-  $("#sidebarProductName").textContent = selected.name;
-  $("#sidebarProductCategory").textContent = selected.category;
-  $("#sidebarProductSku").textContent = `SKU: ${selected.sku}`;
-  $("#sidebarProductDesc").textContent = selected.long || selected.short;
+  $("#modalProductName").textContent = selected.name;
+  $("#modalProductCategory").textContent = selected.category;
+  $("#modalProductSku").textContent = `SKU: ${selected.sku}`;
+  $("#modalProductDesc").textContent = selected.long || selected.short;
   
-  $("#sidebarProductFabric").textContent = selected.fabric || "N/A";
-  $("#sidebarProductGsm").textContent = selected.gsm || "N/A";
-  $("#sidebarProductMoq").textContent = selected.moq || "N/A";
-  $("#sidebarMinQtyLabel").textContent = selected.moq ? selected.moq.replace(/[^0-9]/g, '') || "50" : "50";
-  $("#sidebarProductQuantity").min = $("#sidebarMinQtyLabel").textContent;
-  $("#sidebarProductQuantity").value = $("#sidebarMinQtyLabel").textContent;
+  $("#modalProductFabric").textContent = selected.fabric || "N/A";
+  $("#modalProductGsm").textContent = selected.gsm || "N/A";
+  $("#modalProductMoq").textContent = selected.moq || "N/A";
+  $("#minQtyLabel").textContent = selected.moq ? selected.moq.replace(/[^0-9]/g, '') || "50" : "50";
+  $("#modalProductQuantity").min = $("#minQtyLabel").textContent;
+  $("#modalProductQuantity").value = $("#minQtyLabel").textContent;
 
-  $("#sidebarProductLeadTime").textContent = selected.leadTime || "N/A";
-  $("#sidebarProductAvailability").textContent = selected.availability || "N/A";
-  $("#sidebarProductSizesList").textContent = selected.sizes?.join(", ") || "N/A";
+  $("#modalProductLeadTime").textContent = selected.leadTime || "N/A";
+  $("#modalProductAvailability").textContent = selected.availability || "N/A";
+  $("#modalProductSizesList").textContent = selected.sizes?.join(", ") || "N/A";
 
   // Sizes
-  const sizeSelect = $("#sidebarSizeSelect");
+  const sizeSelect = $("#modalSizeSelect");
   sizeSelect.innerHTML = '<option value="">Select a size...</option>';
   if (selected.sizes && Array.isArray(selected.sizes)) {
     selected.sizes.forEach(size => {
@@ -260,13 +260,13 @@ window.openProductModal = function(sku) {
   }
 
   // Colors
-  const colorFilter = $("#sidebarColorFilter");
+  const colorFilter = $("#modalColorFilter");
   colorFilter.innerHTML = selected.colors.map(c => colorButton(c)).join("");
   const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
   if (activeBtn) activeBtn.classList.add("active");
 
   selectedCustomization = null;
-  const nextBtn = document.getElementById("sidebarAddBranding");
+  const nextBtn = document.getElementById("modalAddBranding");
   if (nextBtn) nextBtn.style.display = "none";
   document.querySelectorAll('input[name="customizationType"]').forEach(r => r.checked = false);
   document.querySelectorAll(".customization-card").forEach(card => {
@@ -274,18 +274,12 @@ window.openProductModal = function(sku) {
     card.style.backgroundColor = "transparent";
   });
 
-  $("#productSidebar")?.classList.add("open");
-  $("#sidebarBackdrop")?.classList.add("open");
+  $("#productModal").style.display = "flex";
 }
 
 document.addEventListener("click", (e) => {
-  if (e.target.id === "sidebarBackdrop" || e.target.id === "closeProductSidebar" || e.target.id === "closeStudioSidebar") {
-    $("#productSidebar")?.classList.remove("open");
-    $("#studioSidebar")?.classList.remove("open");
-    $("#sidebarBackdrop")?.classList.remove("open");
-  } else if (e.target.id === "backToProduct") {
-    $("#studioSidebar")?.classList.remove("open");
-    $("#productSidebar")?.classList.add("open");
+  if (e.target.id === "productModal" || e.target.id === "closeProductModal") {
+    $("#productModal").style.display = "none";
   }
 });
 
@@ -324,8 +318,8 @@ function renderCart() {
 
 function addToCart(sku) {
   const selectedProduct = products.find((p) => p.sku === sku);
-  const quantity = parseInt($("#sidebarProductQuantity")?.value || 50);
-  const selectedSize = $("#sidebarSizeSelect")?.value;
+  const quantity = parseInt($("#modalProductQuantity")?.value || 50);
+  const selectedSize = $("#modalSizeSelect")?.value;
 
   if (!selectedSize) {
     alert("Please select a size before adding to the cart.");
@@ -357,8 +351,8 @@ function addToCart(sku) {
   saveCart();
   renderCart();
   
-  $("#productSidebar")?.classList.remove("open");
-  $("#sidebarBackdrop")?.classList.remove("open");
+  const modal = $("#productModal");
+  if (modal) modal.style.display = "none";
   
   const quoteSection = $("#quote");
   if (quoteSection) {
@@ -484,8 +478,8 @@ function setupStudio() {
       return;
     }
     
-    const quantity = parseInt($("#sidebarProductQuantity")?.value || 50);
-    const selectedSize = $("#sidebarSizeSelect")?.value || "Standard";
+    const quantity = parseInt($("#modalProductQuantity")?.value || 50);
+    const selectedSize = $("#modalSizeSelect")?.value || "Standard";
     let placementText = $("#placementSelect").selectedOptions[0].textContent;
     if ($("#placementSelect").value === "custom") {
       const left = parseFloat($("#logoPreview").style.left).toFixed(1);
@@ -512,8 +506,6 @@ function setupStudio() {
     }
     saveCart();
     renderCart();
-    $("#studioSidebar")?.classList.remove("open");
-    $("#sidebarBackdrop")?.classList.remove("open");
     const quoteSection = $("#quote");
     if (quoteSection) {
       quoteSection.scrollIntoView({ behavior: "smooth" });
@@ -525,8 +517,8 @@ document.addEventListener("click", (event) => {
   const add = event.target.closest("[data-add]");
   const remove = event.target.closest("[data-remove]");
   const colorDot = event.target.closest(".color-dot");
-  const addSelected = event.target.closest("#sidebarAddBranding");
-  const addBlank = event.target.closest("#sidebarAddBlank");
+  const addSelected = event.target.closest("#modalAddBranding");
+  const addBlank = event.target.closest("#modalAddBlank");
   
   if (add) addToCart(add.dataset.add);
   if (addBlank) addToCart(selectedProductSku);
@@ -539,8 +531,8 @@ document.addEventListener("click", (event) => {
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
     if (!selectedProduct) return;
     
-    const quantity = parseInt($("#sidebarProductQuantity")?.value || 50);
-    const selectedSize = $("#sidebarSizeSelect")?.value;
+    const quantity = parseInt($("#modalProductQuantity")?.value || 50);
+    const selectedSize = $("#modalSizeSelect")?.value;
 
     if (!selectedSize) {
       alert("Please select a size before proceeding.");
@@ -564,19 +556,24 @@ document.addEventListener("click", (event) => {
     activeStudioColor = activeCatalogColor;
     const shirtImg = $("#studioShirt");
     if (shirtImg) {
+      shirtImg.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
       const colorImg = selectedProduct.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
       if (colorImg) {
          shirtImg.src = colorImg;
-         shirtImg.dataset.color = "";
       } else {
-         const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White T-Shirt.png';
+         const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
          shirtImg.src = imgSrc;
-         shirtImg.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
       }
     }
     
-    $("#productSidebar")?.classList.remove("open");
-    $("#studioSidebar")?.classList.add("open");
+    $("#productModal").style.display = "none";
+    const studioSection = $("#studio");
+    if (studioSection) {
+      studioSection.style.display = "block";
+      setTimeout(() => {
+        studioSection.scrollIntoView({ behavior: "smooth" });
+      }, 50); // slight delay to ensure display: block has rendered before scrolling
+    }
   }
   if (colorDot) {
     const parent = colorDot.parentElement;
@@ -586,14 +583,8 @@ document.addEventListener("click", (event) => {
       activeCatalogColor = colorDot.dataset.color;
       renderProducts();
     }
-    if (parent.id === "sidebarColorFilter" || parent.id === "modalColorFilter") {
+    if (parent.id === "modalColorFilter") {
       activeCatalogColor = colorDot.dataset.color;
-      const selectedProduct = products.find((p) => p.sku === selectedProductSku);
-      const colorImg = selectedProduct?.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
-      if (colorImg) {
-        const sidebarImg = $("#sidebarProductImage");
-        if (sidebarImg) sidebarImg.src = colorImg;
-      }
     }
     if (parent.id === "studioColorSwatches") {
       activeStudioColor = colorDot.dataset.color;
@@ -630,7 +621,7 @@ document.addEventListener("change", (e) => {
       activeCard.style.backgroundColor = "var(--bg-alt, #f5f5f5)";
     }
 
-    const nextBtn = document.getElementById("sidebarAddBranding");
+    const nextBtn = document.getElementById("modalAddBranding");
     if (nextBtn) {
       if (selectedCustomization === "upload_logo") {
         nextBtn.textContent = "NEXT: UPLOAD LOGO";
@@ -778,10 +769,13 @@ function openTextWizard() {
   const selectedProduct = products.find((p) => p.sku === selectedProductSku);
   if (!selectedProduct) return;
   
-  const quantity = parseInt(document.getElementById("sidebarProductQuantity")?.value || 50);
-  const selectedSize = document.getElementById("sidebarSizeSelect")?.value;
+  const quantityElement = document.getElementById("sidebarProductQuantity") || document.getElementById("modalProductQuantity");
+  const quantity = parseInt(quantityElement?.value || 50);
+  
+  const sizeElement = document.getElementById("sidebarSizeSelect") || document.getElementById("modalSizeSelect");
+  const selectedSize = sizeElement?.value;
 
-  if (!selectedSize || !activeCatalogColor) {
+  if (!selectedSize || !activeCatalogColor || activeCatalogColor === "all") {
     alert("Please select size and color before proceeding.");
     return;
   }
@@ -919,8 +913,12 @@ function renderSummary() {
 
 function addWizardToCart() {
   const selectedProduct = products.find((p) => p.sku === selectedProductSku);
-  const quantity = parseInt(document.getElementById("sidebarProductQuantity")?.value || 50);
-  const selectedSize = document.getElementById("sidebarSizeSelect")?.value || "Standard";
+  
+  const quantityElement = document.getElementById("sidebarProductQuantity") || document.getElementById("modalProductQuantity");
+  const quantity = parseInt(quantityElement?.value || 50);
+  
+  const sizeElement = document.getElementById("sidebarSizeSelect") || document.getElementById("modalSizeSelect");
+  const selectedSize = sizeElement?.value || "Standard";
   
   let linesText = [];
   for (let i = 1; i <= embroideryData.lineCount; i++) linesText.push(embroideryData.textLines[`line${i}`]);
