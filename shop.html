@@ -173,6 +173,151 @@
         </div>
       </section>
 
+      <!-- Text Wizard Modal -->
+      <div id="textWizardModal" class="wizard-modal" style="display: none;">
+        <div class="wizard-container">
+          <div class="wizard-header">
+            <h2 style="font-size: 18px; font-weight: 800; text-transform: uppercase; margin: 0;">Text Customization</h2>
+            <button class="sidebar-close" id="closeTextWizard">&times;</button>
+          </div>
+          <div class="wizard-body">
+            <!-- Left Column: Live Preview -->
+            <div class="wizard-preview">
+              <div class="wizard-stage">
+                <img id="wizardShirt" src="White T-Shirt.png" alt="Selected garment" />
+                <div id="wizardTextPreview" class="text-preview"></div>
+              </div>
+            </div>
+            
+            <!-- Right Column: Wizard Form -->
+            <div class="wizard-form">
+              <div class="wizard-product-name">
+                <p>Selected garment</p>
+                <h3 id="wizardProductName">Product Name</h3>
+                <span id="wizardProductColorDesc">Color / Size / Qty</span>
+              </div>
+
+              <div class="wizard-steps-container">
+                <!-- Step 1: Type Selection -->
+                <div class="wizard-step" id="wizardStep1">
+                  <h4 class="step-title">1. Embroidery Type</h4>
+                  <div class="card-grid">
+                    <label class="selection-card">
+                      <input type="radio" name="embroideryType" value="emblem">
+                      <div class="card-content">
+                        <span class="icon">🛡️</span>
+                        <span>Emblem (Patch)</span>
+                      </div>
+                    </label>
+                    <label class="selection-card">
+                      <input type="radio" name="embroideryType" value="direct">
+                      <div class="card-content">
+                        <span class="icon">🧵</span>
+                        <span>Direct Embroidery</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Step 2: Style, Font & Color Filters -->
+                <div class="wizard-step" id="wizardStep2" style="display: none;">
+                  <h4 class="step-title">2. Design Options</h4>
+                  <div class="filter-row">
+                    <div class="form-group">
+                      <label>Size</label>
+                      <select id="wizardSize">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Font Style</label>
+                      <select id="wizardFontStyle">
+                        <option value="block">Block (Sans-serif)</option>
+                        <option value="script">Script (Cursive)</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group" style="margin-top: 16px;">
+                    <label>Thread Color</label>
+                    <div class="color-swatches" id="wizardThreadColors">
+                      <!-- Swatches populated by JS -->
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-top: 16px;">
+                    <label>Number of Lines</label>
+                    <div class="segmented-control" id="wizardLineCount">
+                      <button type="button" data-lines="1" class="active">1</button>
+                      <button type="button" data-lines="2">2</button>
+                      <button type="button" data-lines="3">3</button>
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="margin-top: 24px;">
+                    <label>Template Style</label>
+                    <div class="template-grid" id="wizardTemplates">
+                      <label class="template-card">
+                        <input type="radio" name="templateStyle" value="Style QZ7312">
+                        <div class="card-content">Straight Text<br><small>Style QZ7312</small></div>
+                      </label>
+                      <label class="template-card">
+                        <input type="radio" name="templateStyle" value="Style AR8821">
+                        <div class="card-content">Arch Text<br><small>Style AR8821</small></div>
+                      </label>
+                      <label class="template-card">
+                        <input type="radio" name="templateStyle" value="Style EM1092">
+                        <div class="card-content">Rounded Emblem<br><small>Style EM1092</small></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3: Position Selection -->
+                <div class="wizard-step" id="wizardStep3" style="display: none;">
+                  <h4 class="step-title">3. Placement</h4>
+                  <div class="placement-grid">
+                    <label class="placement-card"><input type="radio" name="wizardPosition" value="left_chest"><span>Left Chest</span></label>
+                    <label class="placement-card"><input type="radio" name="wizardPosition" value="right_chest"><span>Right Chest</span></label>
+                    <label class="placement-card"><input type="radio" name="wizardPosition" value="center"><span>Center</span></label>
+                    <label class="placement-card"><input type="radio" name="wizardPosition" value="right_sleeve"><span>Right Sleeve</span></label>
+                    <label class="placement-card"><input type="radio" name="wizardPosition" value="left_sleeve"><span>Left Sleeve</span></label>
+                    <label class="placement-card"><input type="radio" name="wizardPosition" value="back"><span>Back</span></label>
+                  </div>
+                </div>
+
+                <!-- Step 4: Text Personalization -->
+                <div class="wizard-step" id="wizardStep4" style="display: none;">
+                  <h4 class="step-title">4. Text Input</h4>
+                  <div id="wizardTextInputsContainer">
+                    <!-- Text inputs generated dynamically -->
+                  </div>
+                </div>
+
+                <!-- Step 5: Summary -->
+                <div class="wizard-step" id="wizardStep5" style="display: none;">
+                  <h4 class="step-title">5. Summary</h4>
+                  <div class="summary-card">
+                    <ul id="wizardSummaryList" style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.6; color: var(--ink);">
+                      <!-- Summary items injected here -->
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="wizard-footer" style="display: flex; gap: 10px; padding: 20px; border-top: 1px solid var(--line);">
+            <button id="wizardBtnBack" class="button secondary" style="display: none; padding: 12px 24px;">Back</button>
+            <div style="flex: 1;"></div>
+            <button id="wizardBtnNext" class="button primary" style="padding: 12px 24px;">Next Step</button>
+            <button id="wizardBtnConfirm" class="button primary" style="display: none; padding: 12px 24px; background: var(--green); border-color: var(--green);">Confirm & Apply</button>
+          </div>
+        </div>
+      </div>
+
       <section id="quote" class="quote-page">
         <div class="section-head"><p>Quote Request</p><h2>Send your selected products to Fabric8.</h2></div>
         <div class="quote-wrap">

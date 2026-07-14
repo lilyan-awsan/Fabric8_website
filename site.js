@@ -25,6 +25,20 @@ let activeStudioColor = "White";
 let selectedProductSku = "F8-001";
 let selectedCustomization = null;
 
+let textWizardStep = 1;
+let embroideryData = {
+  type: '', size: 'medium', fontStyle: 'block', threadColor: 'Black',
+  lineCount: 1, selectedStyleSku: '', position: '',
+  textLines: { line1: '', line2: '', line3: '' }
+};
+const threadColors = [
+  { name: 'Red', hex: '#b7342b' },
+  { name: 'Blue', hex: '#2f6fb3' },
+  { name: 'Black', hex: '#111111' },
+  { name: 'White', hex: '#ffffff' },
+  { name: 'Gold', hex: '#ffd700' }
+];
+
 const colorMap = {
   Black: "#111111",
   White: "#ffffff",
@@ -511,7 +525,7 @@ document.addEventListener("click", (event) => {
   
   if (addSelected) {
     if (selectedCustomization === "text_embroidery") {
-      alert("Text customization wizard coming soon!");
+      openTextWizard();
       return;
     }
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
@@ -747,5 +761,269 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
+  }
+});
+
+// --- TEXT WIZARD LOGIC ---
+function openTextWizard() {
+  const selectedProduct = products.find((p) => p.sku === selectedProductSku);
+  if (!selectedProduct) return;
+  
+  const quantity = parseInt(document.getElementById("sidebarProductQuantity")?.value || 50);
+  const selectedSize = document.getElementById("sidebarSizeSelect")?.value;
+
+  if (!selectedSize || !activeCatalogColor) {
+    alert("Please select size and color before proceeding.");
+    return;
+  }
+  
+  document.getElementById("wizardProductName").textContent = selectedProduct.name;
+  document.getElementById("wizardProductColorDesc").textContent = `Color: ${activeCatalogColor} | Size: ${selectedSize} | Qty: ${quantity}`;
+  
+  const shirtImg = document.getElementById("wizardShirt");
+  if (shirtImg) {
+    const colorImg = selectedProduct.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+    if (colorImg) {
+       shirtImg.src = colorImg;
+    } else {
+       const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
+       shirtImg.src = imgSrc;
+    }
+  }
+
+  textWizardStep = 1;
+  embroideryData = {
+    type: '', size: 'medium', fontStyle: 'block', threadColor: threadColors[0].name,
+    lineCount: 1, selectedStyleSku: '', position: '',
+    textLines: { line1: '', line2: '', line3: '' }
+  };
+  
+  const colorContainer = document.getElementById("wizardThreadColors");
+  if (colorContainer) {
+    colorContainer.innerHTML = threadColors.map(c => 
+      `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-thread-color="${c.name}"></span>`
+    ).join("");
+  }
+  
+  document.querySelectorAll('.selection-card, .template-card, .placement-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('input[name="embroideryType"], input[name="templateStyle"], input[name="wizardPosition"]').forEach(r => r.checked = false);
+  document.querySelectorAll('#wizardLineCount button').forEach(b => b.classList.remove('active'));
+  document.querySelector('#wizardLineCount button[data-lines="1"]')?.classList.add('active');
+  document.getElementById("wizardSize").value = "medium";
+  document.getElementById("wizardFontStyle").value = "block";
+
+  renderTextInputs();
+  renderTextPreview();
+  updateWizardUI();
+
+  const productSidebar = document.getElementById("productSidebar");
+  if (productSidebar) productSidebar.classList.remove("open");
+  document.getElementById("textWizardModal").style.display = "flex";
+}
+
+function updateWizardUI() {
+  for (let i = 1; i <= 5; i++) {
+    const stepEl = document.getElementById(`wizardStep${i}`);
+    if (stepEl) stepEl.style.display = (i === textWizardStep) ? "block" : "none";
+  }
+  
+  const btnBack = document.getElementById("wizardBtnBack");
+  const btnNext = document.getElementById("wizardBtnNext");
+  const btnConfirm = document.getElementById("wizardBtnConfirm");
+  
+  if (textWizardStep === 1) {
+    btnBack.style.display = "none";
+  } else {
+    btnBack.style.display = "block";
+  }
+  
+  if (textWizardStep === 5) {
+    btnNext.style.display = "none";
+    btnConfirm.style.display = "block";
+    renderSummary();
+  } else {
+    btnNext.style.display = "block";
+    btnConfirm.style.display = "none";
+  }
+}
+
+function renderTextInputs() {
+  const container = document.getElementById("wizardTextInputsContainer");
+  if (!container) return;
+  let html = "";
+  for (let i = 1; i <= embroideryData.lineCount; i++) {
+    html += `
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label>Line ${i} Text</label>
+        <input type="text" class="wizard-text-input" data-line="${i}" maxlength="20" placeholder="Enter text..." value="${embroideryData.textLines[`line${i}`] || ''}" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px;">
+        <div id="counter-line${i}" style="text-align: right; font-size: 10px; color: var(--muted); margin-top: 4px;">${(embroideryData.textLines[`line${i}`] || '').length} / 20 characters</div>
+      </div>
+    `;
+  }
+  container.innerHTML = html;
+}
+
+function renderTextPreview() {
+  const preview = document.getElementById("wizardTextPreview");
+  if (!preview) return;
+  
+  let text = [];
+  for (let i = 1; i <= embroideryData.lineCount; i++) {
+    if (embroideryData.textLines[`line${i}`]) {
+      text.push(embroideryData.textLines[`line${i}`]);
+    }
+  }
+  preview.innerHTML = text.join("<br>");
+  
+  preview.style.fontFamily = embroideryData.fontStyle === "script" ? "cursive, 'Brush Script MT'" : "sans-serif";
+  
+  const colorObj = threadColors.find(c => c.name === embroideryData.threadColor);
+  preview.style.color = colorObj ? colorObj.hex : "#000";
+  
+  preview.style.left = "50%";
+  preview.style.top = "40%";
+  preview.style.transform = "translate(-50%, -50%)";
+  
+  const pos = embroideryData.position;
+  if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
+  else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
+  else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = "translate(-50%, -50%) rotate(-10deg)"; }
+  else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = "translate(-50%, -50%) rotate(10deg)"; }
+  else if (pos === "back") { preview.style.top = "30%"; }
+}
+
+function renderSummary() {
+  const list = document.getElementById("wizardSummaryList");
+  if (!list) return;
+  list.innerHTML = `
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--line);"><strong>Customization Type:</strong> ${embroideryData.type === 'emblem' ? 'Emblem (Patch)' : 'Direct Embroidery'}</li>
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--line);"><strong>Style:</strong> ${embroideryData.selectedStyleSku}</li>
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--line);"><strong>Design Options:</strong> Size ${embroideryData.size}, ${embroideryData.fontStyle} font, ${embroideryData.threadColor} thread</li>
+    <li style="padding: 8px 0; border-bottom: 1px solid var(--line);"><strong>Placement:</strong> ${embroideryData.position.replace('_', ' ')}</li>
+    <li style="padding: 8px 0;"><strong>Text:</strong><br>
+      ${embroideryData.lineCount >= 1 ? `Line 1: ${embroideryData.textLines.line1}<br>` : ''}
+      ${embroideryData.lineCount >= 2 ? `Line 2: ${embroideryData.textLines.line2}<br>` : ''}
+      ${embroideryData.lineCount >= 3 ? `Line 3: ${embroideryData.textLines.line3}` : ''}
+    </li>
+  `;
+}
+
+function addWizardToCart() {
+  const selectedProduct = products.find((p) => p.sku === selectedProductSku);
+  const quantity = parseInt(document.getElementById("sidebarProductQuantity")?.value || 50);
+  const selectedSize = document.getElementById("sidebarSizeSelect")?.value || "Standard";
+  
+  let linesText = [];
+  for (let i = 1; i <= embroideryData.lineCount; i++) linesText.push(embroideryData.textLines[`line${i}`]);
+  
+  const brandingString = `Text Embroidery (${embroideryData.type}), ${embroideryData.selectedStyleSku}, ${embroideryData.fontStyle} font, ${embroideryData.threadColor} thread, Pos: ${embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
+
+  const existing = cart.find(
+    (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize && item.branding === brandingString
+  );
+
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    cart.push({
+      ...selectedProduct,
+      quantity,
+      color: activeCatalogColor,
+      size: selectedSize,
+      branding: brandingString
+    });
+  }
+  saveCart();
+  renderCart();
+  document.getElementById("textWizardModal").style.display = "none";
+  const quoteSection = document.getElementById("quote");
+  if (quoteSection) {
+    quoteSection.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.id === "closeTextWizard") {
+    document.getElementById("textWizardModal").style.display = "none";
+    const productSidebar = document.getElementById("productSidebar");
+    if (productSidebar) productSidebar.classList.add("open");
+  }
+  
+  if (e.target.id === "wizardBtnNext") {
+    if (textWizardStep === 1 && !embroideryData.type) return alert("Select an embroidery type.");
+    if (textWizardStep === 2 && !embroideryData.selectedStyleSku) return alert("Select a template style.");
+    if (textWizardStep === 3 && !embroideryData.position) return alert("Select a placement.");
+    if (textWizardStep === 4) {
+      if (!embroideryData.textLines.line1) return alert("Please enter text for at least Line 1.");
+    }
+    if (textWizardStep < 5) {
+      textWizardStep++;
+      updateWizardUI();
+    }
+  }
+  
+  if (e.target.id === "wizardBtnBack") {
+    if (textWizardStep > 1) {
+      textWizardStep--;
+      updateWizardUI();
+    }
+  }
+
+  if (e.target.id === "wizardBtnConfirm") {
+    addWizardToCart();
+  }
+
+  const threadColorDot = e.target.closest("#wizardThreadColors .color-dot");
+  if (threadColorDot) {
+    document.querySelectorAll("#wizardThreadColors .color-dot").forEach(d => { d.classList.remove("active"); d.style.boxShadow = "none"; });
+    threadColorDot.classList.add("active");
+    threadColorDot.style.boxShadow = "0 0 0 2px #fff, 0 0 0 4px var(--ink)";
+    embroideryData.threadColor = threadColorDot.dataset.threadColor;
+    renderTextPreview();
+  }
+  
+  const lineBtn = e.target.closest("#wizardLineCount button");
+  if (lineBtn) {
+    document.querySelectorAll("#wizardLineCount button").forEach(b => b.classList.remove("active"));
+    lineBtn.classList.add("active");
+    embroideryData.lineCount = parseInt(lineBtn.dataset.lines);
+    renderTextInputs();
+    renderTextPreview();
+  }
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.name === "embroideryType") {
+    embroideryData.type = e.target.value;
+    document.querySelectorAll('input[name="embroideryType"]').forEach(r => r.closest('.selection-card').classList.remove('active'));
+    e.target.closest('.selection-card').classList.add('active');
+  }
+  if (e.target.name === "templateStyle") {
+    embroideryData.selectedStyleSku = e.target.value;
+    document.querySelectorAll('input[name="templateStyle"]').forEach(r => r.closest('.template-card').classList.remove('active'));
+    e.target.closest('.template-card').classList.add('active');
+  }
+  if (e.target.name === "wizardPosition") {
+    embroideryData.position = e.target.value;
+    document.querySelectorAll('input[name="wizardPosition"]').forEach(r => r.closest('.placement-card').classList.remove('active'));
+    e.target.closest('.placement-card').classList.add('active');
+    renderTextPreview();
+  }
+  if (e.target.id === "wizardSize") embroideryData.size = e.target.value;
+  if (e.target.id === "wizardFontStyle") {
+    embroideryData.fontStyle = e.target.value;
+    renderTextPreview();
+  }
+});
+
+document.addEventListener("input", (e) => {
+  if (e.target.classList.contains("wizard-text-input")) {
+    const lineNum = e.target.dataset.line;
+    embroideryData.textLines[`line${lineNum}`] = e.target.value;
+    
+    const counter = document.getElementById(`counter-line${lineNum}`);
+    if (counter) counter.textContent = `${e.target.value.length} / 20 characters`;
+    
+    renderTextPreview();
   }
 });

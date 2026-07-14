@@ -1044,3 +1044,209 @@ input.error, select.error, textarea.error {
   max-height: 90vh;
   overflow-y: auto;
 }
+
+/* --- TEXT WIZARD MODAL --- */
+.wizard-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.wizard-container {
+  background: #fff;
+  width: 100%;
+  max-width: 1100px;
+  height: 90vh;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.wizard-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+.wizard-preview {
+  flex: 1;
+  background: #f0f0f0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+}
+.wizard-stage {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wizard-stage img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.text-preview {
+  position: absolute;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.2;
+  text-align: center;
+  white-space: pre-line;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+.wizard-form {
+  width: 450px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.wizard-product-name {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+.wizard-product-name p {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+}
+.wizard-product-name h3 {
+  margin: 0 0 4px 0;
+  font-size: 20px;
+}
+.wizard-product-name span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.wizard-steps-container {
+  padding: 24px;
+  flex: 1;
+}
+.step-title {
+  margin: 0 0 16px 0;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.segmented-control {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.segmented-control button {
+  flex: 1;
+  background: #fff;
+  border: none;
+  border-right: 1px solid var(--line);
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.segmented-control button:last-child {
+  border-right: none;
+}
+.segmented-control button.active {
+  background: var(--ink);
+  color: #fff;
+}
+.template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.template-card {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 12px 8px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.template-card input {
+  display: none;
+}
+.template-card.active {
+  border-color: var(--ink);
+  background: var(--bg-alt, #f5f5f5);
+}
+.placement-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.placement-card {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 14px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.placement-card input {
+  display: none;
+}
+.placement-card.active {
+  border-color: var(--ink);
+  background: var(--bg-alt, #f5f5f5);
+}
+.summary-card {
+  background: #faf9f4;
+  border: 1px solid var(--line);
+  padding: 20px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .wizard-body {
+    flex-direction: column;
+  }
+  .wizard-preview {
+    flex: none;
+    height: 300px;
+  }
+  .wizard-form {
+    width: 100%;
+    flex: 1;
+  }
+}
