@@ -1184,7 +1184,7 @@ input.error, select.error, textarea.error {
   position: relative;
   background: var(--white, #fff);
   border: 2px solid var(--line);
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
@@ -1204,13 +1204,17 @@ input.error, select.error, textarea.error {
   justify-content: center;
   text-align: center;
   gap: 8px;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 13px;
-  color: var(--ink);
+  text-transform: uppercase;
+  color: #777;
 }
 .selection-card.active {
-  border-color: var(--ink);
-  background: var(--bg-alt, #f5f5f5);
+  border-color: var(--green);
+  background: rgba(47, 135, 61, 0.05);
+}
+.selection-card.active .card-content {
+  color: var(--ink);
 }
 .wizard-product-name {
   padding: 20px 24px;
