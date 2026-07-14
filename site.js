@@ -23,6 +23,7 @@ const $ = (selector) => document.querySelector(selector);
 let activeCatalogColor = "all";
 let activeStudioColor = "White";
 let selectedProductSku = "F8-001";
+let selectedCustomization = null;
 
 const colorMap = {
   Black: "#111111",
@@ -249,6 +250,15 @@ window.openProductModal = function(sku) {
   colorFilter.innerHTML = selected.colors.map(c => colorButton(c)).join("");
   const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
   if (activeBtn) activeBtn.classList.add("active");
+
+  selectedCustomization = null;
+  const nextBtn = document.getElementById("sidebarAddBranding");
+  if (nextBtn) nextBtn.style.display = "none";
+  document.querySelectorAll('input[name="customizationType"]').forEach(r => r.checked = false);
+  document.querySelectorAll(".customization-card").forEach(card => {
+    card.style.borderColor = "var(--line)";
+    card.style.backgroundColor = "transparent";
+  });
 
   $("#productSidebar")?.classList.add("open");
   $("#sidebarBackdrop")?.classList.add("open");
@@ -508,6 +518,10 @@ document.addEventListener("click", (event) => {
   if (addBlank) addToCart(selectedProductSku);
   
   if (addSelected) {
+    if (selectedCustomization === "text_embroidery") {
+      alert("Text customization wizard coming soon!");
+      return;
+    }
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
     if (!selectedProduct) return;
     
@@ -586,6 +600,35 @@ document.addEventListener("click", (event) => {
       renderProducts();
     });
   });
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.name === "customizationType") {
+    selectedCustomization = e.target.value;
+    
+    document.querySelectorAll(".customization-card").forEach(card => {
+      card.style.borderColor = "var(--line)";
+      card.style.backgroundColor = "transparent";
+    });
+    const activeCard = e.target.closest(".customization-card");
+    if (activeCard) {
+      activeCard.style.borderColor = "var(--ink)";
+      activeCard.style.backgroundColor = "var(--bg-alt, #f5f5f5)";
+    }
+
+    const nextBtn = document.getElementById("sidebarAddBranding");
+    if (nextBtn) {
+      if (selectedCustomization === "upload_logo") {
+        nextBtn.textContent = "NEXT: UPLOAD LOGO";
+        nextBtn.style.display = "block";
+      } else if (selectedCustomization === "text_embroidery") {
+        nextBtn.textContent = "NEXT: CUSTOMIZE TEXT";
+        nextBtn.style.display = "block";
+      } else {
+        nextBtn.style.display = "none";
+      }
+    }
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
