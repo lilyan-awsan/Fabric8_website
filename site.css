@@ -1119,6 +1119,11 @@ input.error, select.error, textarea.error {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.wizard-form::-webkit-scrollbar {
+  display: none;
 }
 .wizard-product-name {
   padding: 20px 24px;
