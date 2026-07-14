@@ -1119,10 +1119,12 @@ input.error, select.error, textarea.error {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+}
+.wizard-form, .product-modal-details {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.wizard-form::-webkit-scrollbar {
+.wizard-form::-webkit-scrollbar, .product-modal-details::-webkit-scrollbar {
   display: none;
 }
 .wizard-product-name {
