@@ -1190,7 +1190,7 @@ input.error, select.error, textarea.error {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 .selection-card {
   position: relative;
@@ -1202,7 +1202,7 @@ input.error, select.error, textarea.error {
   overflow: hidden;
   display: block;
   box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-  min-height: 110px;
+  min-height: 60px;
 }
 .selection-card input {
   display: none;
@@ -1213,7 +1213,6 @@ input.error, select.error, textarea.error {
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 8px;
   padding: 16px 10px;
   text-align: center;
   font-size: 13px;
@@ -1224,20 +1223,10 @@ input.error, select.error, textarea.error {
   transition: all 0.3s ease;
   word-break: normal;
 }
-.selection-card .icon {
-  font-size: 36px;
-  line-height: 1;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  filter: grayscale(100%) opacity(0.6);
-}
 .selection-card:hover {
   border-color: var(--ink);
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-}
-.selection-card:hover .icon {
-  transform: scale(1.1);
-  filter: grayscale(0%) opacity(1);
 }
 .selection-card.active {
   border-color: var(--green);
@@ -1246,10 +1235,6 @@ input.error, select.error, textarea.error {
 }
 .selection-card.active .card-content {
   color: var(--ink);
-}
-.selection-card.active .icon {
-  filter: grayscale(0%) opacity(1);
-  transform: scale(1.15);
 }
 .template-grid {
   display: grid;
