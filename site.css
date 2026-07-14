@@ -1202,7 +1202,7 @@ input.error, select.error, textarea.error {
   overflow: hidden;
   display: block;
   box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-  min-height: 60px;
+  min-height: 90px;
 }
 .selection-card input {
   display: none;
@@ -1213,9 +1213,9 @@ input.error, select.error, textarea.error {
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding: 16px 10px;
+  padding: 20px 10px;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--muted);
   text-transform: uppercase;
