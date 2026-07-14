@@ -818,21 +818,21 @@ function openTextWizard() {
   const colorContainer = document.getElementById("wizardThreadColors");
   if (colorContainer) {
     colorContainer.innerHTML = threadColors.map(c => 
-      `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-thread-color="${c.name}"></span>`
+      `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-thread-color="${c.name}"></span>`
     ).join("");
   }
 
   const bgContainer = document.getElementById("wizardBgColors");
   if (bgContainer) {
     bgContainer.innerHTML = threadColors.map(c => 
-      `<span class="bg-color-dot ${c.name === embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-bg-color="${c.name}"></span>`
+      `<span class="color-dot bg-color-dot ${c.name === embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-bg-color="${c.name}"></span>`
     ).join("");
   }
 
   const borderContainer = document.getElementById("wizardBorderColors");
   if (borderContainer) {
     borderContainer.innerHTML = threadColors.map(c => 
-      `<span class="border-color-dot ${c.name === embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-border-color="${c.name}"></span>`
+      `<span class="color-dot border-color-dot ${c.name === embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-border-color="${c.name}"></span>`
     ).join("");
   }
   
