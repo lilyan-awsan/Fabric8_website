@@ -351,7 +351,7 @@ function addToCart(sku) {
   }
 
   const existing = cart.find(
-    (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize
+    (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize && !item.branding
   );
 
   if (existing) {
@@ -362,6 +362,9 @@ function addToCart(sku) {
       quantity,
       color: activeCatalogColor,
       size: selectedSize,
+      customizationType: "none",
+      embroideryData: null,
+      logoData: null
     });
   }
   saveCart();
@@ -517,7 +520,14 @@ function setupStudio() {
         quantity,
         color: activeCatalogColor,
         size: selectedSize,
-        branding: brandingString
+        branding: brandingString,
+        customizationType: "upload_logo",
+        embroideryData: null,
+        logoData: { 
+          left: parseFloat($("#logoPreview").style.left).toFixed(1), 
+          top: parseFloat($("#logoPreview").style.top).toFixed(1),
+          size: parseFloat($("#logoPreview").style.getPropertyValue("--logo-size") || 13).toFixed(1)
+        }
       });
     }
     saveCart();
@@ -544,28 +554,8 @@ document.addEventListener("click", (event) => {
 
   if (edit) {
     const index = parseInt(edit.dataset.edit);
-    const item = cart[index];
-    
-    cart.splice(index, 1);
-    saveCart();
-    renderCart();
-    
-    if (typeof openProductModal === "function") {
-      openProductModal(item.sku);
-      
-      setTimeout(() => {
-        const sizeSelect = document.getElementById("sidebarSizeSelect");
-        if (sizeSelect && item.size) sizeSelect.value = item.size;
-        
-        const qtyInput = document.getElementById("sidebarProductQuantity");
-        if (qtyInput && item.quantity) qtyInput.value = item.quantity;
-        
-        const colorBtn = document.querySelector(`#sidebarColorFilter .color-dot[data-color="${item.color}"]`);
-        if (colorBtn) colorBtn.click();
-        
-        alert("Editing: " + item.name + "\n\nWe've pre-filled your size, color, and quantity. Please re-configure any custom branding and click Add to Quote.");
-      }, 500);
-    }
+    editingCartIndex = index;
+    renderEditOrderSummaryModal(index);
   }
   
   if (addSelected) {
@@ -1033,7 +1023,10 @@ function addWizardToCart() {
       quantity,
       color: activeCatalogColor,
       size: selectedSize,
-      branding: brandingString
+      branding: brandingString,
+      customizationType: "text_embroidery",
+      embroideryData: JSON.parse(JSON.stringify(embroideryData)),
+      logoData: null
     });
   }
   saveCart();
@@ -1152,5 +1145,242 @@ document.addEventListener("input", (e) => {
     if (counter) counter.textContent = `${e.target.value.length} / 20 characters`;
     
     renderTextPreview();
+  }
+});
+
+// --- ISOLATED EDIT MODALS LOGIC ---
+
+function renderEditOrderSummaryModal(index) {
+  const item = cart[index];
+  if (!item) return;
+  const content = document.getElementById("editOrderSummaryContent");
+  if (!content) return;
+
+  content.innerHTML = `
+    <div style="background: #f9f9f9; padding: 16px; border: 1px solid var(--line); border-radius: 4px;">
+      <h3 style="margin: 0 0 12px 0;">${item.name} <span style="font-weight: normal; font-size: 13px; color: var(--muted);">(${item.sku})</span></h3>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 8px 0;">
+        <span><strong>Size:</strong> ${item.size || "N/A"}</span>
+        <button type="button" onclick="openEditBasicDetails()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 8px 0;">
+        <span><strong>Color:</strong> ${item.color || "Standard"}</span>
+        <button type="button" onclick="openEditBasicDetails()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 8px 0;">
+        <span><strong>Quantity:</strong> ${item.quantity}</span>
+        <button type="button" onclick="openEditBasicDetails()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0;">
+        <span style="flex: 1;"><strong>Branding:</strong><br>${item.branding || "No branding selected"}</span>
+        <button type="button" onclick="openEditBranding()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("editOrderSummaryModal").style.display = "flex";
+}
+
+window.openEditBasicDetails = function() {
+  const item = cart[editingCartIndex];
+  if (!item) return;
+  const product = products.find(p => p.sku === item.sku);
+  
+  // Populate Sizes
+  const sizeSelect = document.getElementById("editBasicSize");
+  if (sizeSelect && product) {
+    sizeSelect.innerHTML = product.sizes.map(s => `<option value="${s}" ${s === item.size ? 'selected' : ''}>${s}</option>`).join("");
+  }
+  
+  // Populate Colors
+  const colorFilter = document.getElementById("editBasicColorFilter");
+  if (colorFilter && product) {
+    colorFilter.innerHTML = product.colors.map(c => colorButton(c)).join("");
+    const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(item.color)}"]`);
+    if (activeBtn) activeBtn.classList.add("active");
+  }
+  
+  // Populate Quantity
+  const qtyInput = document.getElementById("editBasicQty");
+  if (qtyInput) qtyInput.value = item.quantity;
+
+  document.getElementById("editOrderSummaryModal").style.display = "none";
+  document.getElementById("editBasicDetailsModal").style.display = "flex";
+}
+
+window.openEditBranding = function() {
+  const item = cart[editingCartIndex];
+  if (!item) return;
+  const product = products.find(p => p.sku === item.sku);
+  
+  document.getElementById("editOrderSummaryModal").style.display = "none";
+  
+  if (item.customizationType === "text_embroidery" && item.embroideryData) {
+    // Populate simplified text wizard
+    const shirtImg = document.getElementById("editTextShirt");
+    if (shirtImg && product) {
+      const colorImg = product.images?.find((img) => img.toLowerCase().includes(item.color.toLowerCase()));
+      shirtImg.src = colorImg || (product.image || 'White T-Shirt.png');
+    }
+    
+    // Set thread colors
+    const colorContainer = document.getElementById("editTextThreadColors");
+    if (colorContainer) {
+      colorContainer.innerHTML = threadColors.map(c => 
+        `<span class="color-dot ${c.name === item.embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-thread-color="${c.name}"></span>`
+      ).join("");
+    }
+    
+    // Set texts
+    const textContainer = document.getElementById("editTextsContainer");
+    if (textContainer) {
+      let html = "";
+      for (let i = 1; i <= item.embroideryData.lineCount; i++) {
+        html += `
+          <div>
+            <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Line ${i} Text</label>
+            <input type="text" class="edit-text-input" data-line="${i}" maxlength="20" value="${item.embroideryData.textLines[`line${i}`] || ''}" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px;">
+          </div>
+        `;
+      }
+      textContainer.innerHTML = html;
+    }
+    
+    // Set Preview Content
+    const previewContent = document.getElementById("editTextPreviewContent");
+    if (previewContent) {
+      let previewHtml = "";
+      for (let i = 1; i <= item.embroideryData.lineCount; i++) {
+        previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\\n";
+      }
+      previewContent.innerHTML = previewHtml.trim();
+      previewContent.style.color = threadColors.find(c => c.name === item.embroideryData.threadColor)?.hex || '#000';
+      previewContent.style.fontFamily = "inherit"; // Or parse item.embroideryData.fontStyle
+    }
+    
+    document.getElementById("editTextBrandingModal").style.display = "flex";
+    
+  } else if (item.customizationType === "upload_logo") {
+    const shirtImg = document.getElementById("editLogoShirt");
+    if (shirtImg && product) {
+      const colorImg = product.images?.find((img) => img.toLowerCase().includes(item.color.toLowerCase()));
+      shirtImg.src = colorImg || (product.image || 'White T-Shirt.png');
+    }
+    document.getElementById("editLogoBrandingModal").style.display = "flex";
+  } else {
+    // No branding, so we can't edit branding. Just alert.
+    alert("This item has no branding configured. If you wish to add branding, please remove this item and configure a new one.");
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+  }
+}
+
+// Event Listeners for Isolated Modals
+document.addEventListener("click", (e) => {
+  // Close buttons
+  if (e.target.id === "closeEditOrderSummary" || e.target.id === "finishEditOrderBtn") {
+    document.getElementById("editOrderSummaryModal").style.display = "none";
+    editingCartIndex = -1;
+  }
+  if (e.target.id === "closeEditBasicDetails") {
+    document.getElementById("editBasicDetailsModal").style.display = "none";
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+  }
+  if (e.target.id === "closeEditTextBranding") {
+    document.getElementById("editTextBrandingModal").style.display = "none";
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+  }
+  if (e.target.id === "closeEditLogoBranding") {
+    document.getElementById("editLogoBrandingModal").style.display = "none";
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+  }
+  
+  // Basic Details Color Selection
+  const editColorDot = e.target.closest("#editBasicColorFilter .color-dot");
+  if (editColorDot) {
+    const parent = editColorDot.parentElement;
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+    editColorDot.classList.add("active");
+  }
+  
+  // Text Embroidery Thread Color
+  const editThreadDot = e.target.closest("#editTextThreadColors .color-dot");
+  if (editThreadDot) {
+    const parent = editThreadDot.parentElement;
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+    editThreadDot.classList.add("active");
+    
+    // Live update preview color
+    const previewContent = document.getElementById("editTextPreviewContent");
+    if (previewContent) {
+      const colorName = editThreadDot.dataset.editThreadColor;
+      const hex = threadColors.find(c => c.name === colorName)?.hex || '#000';
+      previewContent.style.color = hex;
+    }
+  }
+
+  // Save Buttons
+  if (e.target.id === "saveEditBasicBtn") {
+    const item = cart[editingCartIndex];
+    if (item) {
+      item.size = document.getElementById("editBasicSize").value;
+      item.quantity = parseInt(document.getElementById("editBasicQty").value) || item.quantity;
+      const activeColorDot = document.querySelector("#editBasicColorFilter .color-dot.active");
+      if (activeColorDot) item.color = activeColorDot.dataset.color;
+      
+      saveCart();
+      renderCart();
+    }
+    document.getElementById("editBasicDetailsModal").style.display = "none";
+    renderEditOrderSummaryModal(editingCartIndex);
+  }
+  
+  if (e.target.id === "saveEditTextBtn") {
+    const item = cart[editingCartIndex];
+    if (item && item.customizationType === "text_embroidery") {
+      const activeThreadDot = document.querySelector("#editTextThreadColors .color-dot.active");
+      if (activeThreadDot) item.embroideryData.threadColor = activeThreadDot.dataset.editThreadColor;
+      
+      document.querySelectorAll(".edit-text-input").forEach(input => {
+        const lineNum = input.dataset.line;
+        item.embroideryData.textLines[`line${lineNum}`] = input.value;
+      });
+      
+      let linesText = [];
+      for (let i = 1; i <= item.embroideryData.lineCount; i++) linesText.push(item.embroideryData.textLines[`line${i}`]);
+      item.branding = \`Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread, Pos: ${item.embroideryData.position}, Texts: [\${linesText.join(' | ')}]\`;
+      
+      saveCart();
+      renderCart();
+    }
+    document.getElementById("editTextBrandingModal").style.display = "none";
+    renderEditOrderSummaryModal(editingCartIndex);
+  }
+
+  if (e.target.id === "saveEditLogoBtn") {
+    document.getElementById("editLogoBrandingModal").style.display = "none";
+    renderEditOrderSummaryModal(editingCartIndex);
+  }
+});
+
+// Update Preview text dynamically while typing
+document.addEventListener("input", (e) => {
+  if (e.target.classList.contains("edit-text-input")) {
+    const lineNum = e.target.dataset.line;
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.textLines[`line${lineNum}`] = e.target.value;
+      const previewContent = document.getElementById("editTextPreviewContent");
+      if (previewContent) {
+        let previewHtml = "";
+        for (let i = 1; i <= item.embroideryData.lineCount; i++) {
+          previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\\n";
+        }
+        previewContent.innerHTML = previewHtml.trim();
+      }
+    }
   }
 });
