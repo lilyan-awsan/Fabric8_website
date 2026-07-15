@@ -366,11 +366,12 @@ function addToCart(sku) {
   
   const modal = $("#productModal");
   if (modal) modal.style.display = "none";
-  
-  const quoteSection = $("#quote");
-  if (quoteSection) {
-    quoteSection.scrollIntoView({ behavior: "smooth" });
-  }
+  setTimeout(() => {
+    const quoteSection = $("#quote");
+    if (quoteSection) {
+      quoteSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, 100);
 }
 
 function setupStudio() {
@@ -461,10 +462,12 @@ function setupStudio() {
     }
     saveCart();
     renderCart();
-    const quoteSection = $("#quote");
-    if (quoteSection) {
-      quoteSection.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      const quoteSection = $("#quote");
+      if (quoteSection) {
+        quoteSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   });
 }
 
@@ -970,10 +973,12 @@ function addWizardToCart() {
   saveCart();
   renderCart();
   document.getElementById("textWizardModal").style.display = "none";
-  const quoteSection = document.getElementById("quote");
-  if (quoteSection) {
-    quoteSection.scrollIntoView({ behavior: "smooth" });
-  }
+  setTimeout(() => {
+    const quoteSection = document.getElementById("quote");
+    if (quoteSection) {
+      quoteSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, 100);
 }
 
 document.addEventListener("click", (e) => {
@@ -1471,10 +1476,12 @@ document.addEventListener("click", (e) => {
     document.getElementById("editOrderSummaryModal").style.display = "none";
     editingCartIndex = -1;
     if (e.target.id === "finishEditOrderBtn") {
-      const quoteSection = document.getElementById("quote");
-      if (quoteSection) {
-        quoteSection.scrollIntoView({ behavior: "smooth" });
-      }
+      setTimeout(() => {
+        const quoteSection = document.getElementById("quote");
+        if (quoteSection) {
+          quoteSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     }
   }
 
