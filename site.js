@@ -373,10 +373,12 @@ function addToCart(sku) {
   $("#productSidebar")?.classList.remove("open");
   $("#sidebarBackdrop")?.classList.remove("open");
   
-  const quoteSection = $("#quote");
-  if (quoteSection) {
-    quoteSection.scrollIntoView({ behavior: "smooth" });
-  }
+  setTimeout(() => {
+    const quoteSection = $("#quote");
+    if (quoteSection) {
+      quoteSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, 100);
 }
 
 function setupStudio() {
@@ -534,10 +536,12 @@ function setupStudio() {
     renderCart();
     $("#studioSidebar")?.classList.remove("open");
     $("#sidebarBackdrop")?.classList.remove("open");
-    const quoteSection = $("#quote");
-    if (quoteSection) {
-      quoteSection.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      const quoteSection = $("#quote");
+      if (quoteSection) {
+        quoteSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   });
 }
 
@@ -1037,10 +1041,12 @@ function addWizardToCart() {
   saveCart();
   renderCart();
   document.getElementById("textWizardModal").style.display = "none";
-  const quoteSection = document.getElementById("quote");
-  if (quoteSection) {
-    quoteSection.scrollIntoView({ behavior: "smooth" });
-  }
+  setTimeout(() => {
+    const quoteSection = document.getElementById("quote");
+    if (quoteSection) {
+      quoteSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, 100);
 }
 
 document.addEventListener("click", (e) => {
