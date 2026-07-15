@@ -1319,8 +1319,9 @@ window.openEditBranding = function() {
         if (item.logoData.imageSrc) {
           const img = document.createElement("img");
           img.src = item.logoData.imageSrc;
-          img.style.width = "100%";
-          img.style.height = "100%";
+          img.style.maxWidth = "150px";
+          img.style.maxHeight = "150px";
+          img.style.marginBottom = "20px";
           img.style.objectFit = "contain";
           previewBox.appendChild(img);
         }
@@ -1533,8 +1534,9 @@ document.addEventListener("change", (e) => {
             previewBox.innerHTML = '';
             const img = document.createElement("img");
             img.src = item.logoData.imageSrc;
-            img.style.width = "100%";
-            img.style.height = "100%";
+            img.style.maxWidth = "150px";
+            img.style.maxHeight = "150px";
+            img.style.marginBottom = "20px";
             img.style.objectFit = "contain";
             previewBox.appendChild(img);
           }
