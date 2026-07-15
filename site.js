@@ -1284,17 +1284,25 @@ window.openEditBranding = function() {
     }
     
     const previewBox = document.getElementById("editLogoPreview");
-    if (previewBox && item.logoData) {
-      previewBox.innerHTML = ''; // clear
-      previewBox.className = `logo-box ${item.logoData.placement}`;
-      if (item.logoData.imageSrc) {
-        const img = document.createElement("img");
-        img.src = item.logoData.imageSrc;
-        img.style.width = "100%";
-        img.style.height = "100%";
-        img.style.objectFit = "contain";
-        previewBox.appendChild(img);
+    if (item.logoData) {
+      if (previewBox) {
+        previewBox.innerHTML = ''; // clear
+        previewBox.className = `logo-box ${item.logoData.placement}`;
+        if (item.logoData.imageSrc) {
+          const img = document.createElement("img");
+          img.src = item.logoData.imageSrc;
+          img.style.width = "100%";
+          img.style.height = "100%";
+          img.style.objectFit = "contain";
+          previewBox.appendChild(img);
+        }
       }
+      const placementEl = document.getElementById("editLogoPlacement");
+      if (placementEl) placementEl.value = item.logoData.placement || "left-chest";
+      const sizeEl = document.getElementById("editLogoSize");
+      if (sizeEl) sizeEl.value = item.logoData.size || "4";
+      const finishEl = document.getElementById("editLogoFinish");
+      if (finishEl) finishEl.value = item.logoData.finish || "Embroidery";
     }
     document.getElementById("editLogoBrandingModal").style.display = "flex";
   } else {
@@ -1414,12 +1422,21 @@ document.addEventListener("click", (e) => {
   }
 
   if (e.target.id === "saveEditLogoBtn") {
+    const item = cart[editingCartIndex];
+    if (item && item.customizationType === "upload_logo") {
+      item.logoData.placement = document.getElementById("editLogoPlacement").value;
+      item.logoData.size = document.getElementById("editLogoSize").value;
+      item.logoData.finish = document.getElementById("editLogoFinish").value;
+      item.branding = `Upload Logo, Placement: ${item.logoData.placement}, Size: ${item.logoData.size}in, Finish: ${item.logoData.finish}`;
+      saveCart();
+      renderCart();
+    }
     document.getElementById("editLogoBrandingModal").style.display = "none";
     renderEditOrderSummaryModal(editingCartIndex);
   }
 });
 
-// Update Preview text dynamically while typing
+// Update Preview dynamically
 document.addEventListener("input", (e) => {
   if (e.target.classList.contains("edit-text-input")) {
     const lineNum = e.target.dataset.line;
@@ -1427,6 +1444,41 @@ document.addEventListener("input", (e) => {
     if (item && item.embroideryData) {
       item.embroideryData.textLines[`line${lineNum}`] = e.target.value;
       renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+    }
+  }
+  
+  if (e.target.id === "editLogoPlacement") {
+    const item = cart[editingCartIndex];
+    if (item && item.logoData) {
+      item.logoData.placement = e.target.value;
+      const previewBox = document.getElementById("editLogoPreview");
+      if (previewBox) previewBox.className = `logo-box ${e.target.value}`;
+    }
+  }
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.id === "editLogoUpload") {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const item = cart[editingCartIndex];
+        if (item && item.logoData) {
+          item.logoData.imageSrc = ev.target.result;
+          const previewBox = document.getElementById("editLogoPreview");
+          if (previewBox) {
+            previewBox.innerHTML = '';
+            const img = document.createElement("img");
+            img.src = item.logoData.imageSrc;
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "contain";
+            previewBox.appendChild(img);
+          }
+        }
+      };
+      reader.readAsDataURL(file);
     }
   }
 });

@@ -501,6 +501,30 @@
           </div>
         </div>
 
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+          <label style="font-size: 13px; font-weight: bold;">Update Logo Image
+            <input id="editLogoUpload" type="file" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 4px;" />
+          </label>
+          <label style="font-size: 13px; font-weight: bold;">Placement
+            <select id="editLogoPlacement" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 4px;">
+              <option value="left-chest">Left chest</option>
+              <option value="right-chest">Right chest</option>
+              <option value="center">Center of T-shirt</option>
+              <option value="sleeve">Sleeve</option>
+            </select>
+          </label>
+          <label style="font-size: 13px; font-weight: bold;">Logo size (width in inches)
+            <input id="editLogoSize" type="range" min="2" max="14" value="4" style="width: 100%; margin-top: 4px;" />
+          </label>
+          <label style="font-size: 13px; font-weight: bold;">Finish
+            <select id="editLogoFinish" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 4px;">
+              <option value="Embroidery">Embroidery</option>
+              <option value="Screen printing">Screen printing</option>
+              <option value="Heat transfer">Heat transfer</option>
+            </select>
+          </label>
+        </div>
+
         <button type="button" class="primary-btn" id="saveEditLogoBtn" style="width: 100%; padding: 14px;">Save Changes</button>
       </div>
     </div>
