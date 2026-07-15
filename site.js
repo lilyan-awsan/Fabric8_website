@@ -916,7 +916,7 @@ function renderTextInputs() {
   container.innerHTML = html;
 }
 
-function renderTextPreview(preview = document.getElementById("wizardTextPreview"), data = embroideryData) {
+function renderTextPreview(preview = document.getElementById("wizardTextPreview"), data = embroideryData, isIsolated = false) {
   if (!preview) return;
   
   let text = [];
