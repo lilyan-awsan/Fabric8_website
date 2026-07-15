@@ -324,7 +324,10 @@ function renderCart() {
         <strong>${item.name}</strong>
         <p>Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity} | ${item.branding || "No branding selected"}</p>
       </div>
-      <button type="button" data-remove="${index}">Remove</button>
+      <div style="display: flex; gap: 12px;">
+        <button type="button" data-edit="${index}" style="color: var(--ink); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;">Edit</button>
+        <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;">Remove</button>
+      </div>
     </div>
   `).join("");
 }
@@ -531,12 +534,39 @@ function setupStudio() {
 document.addEventListener("click", (event) => {
   const add = event.target.closest("[data-add]");
   const remove = event.target.closest("[data-remove]");
+  const edit = event.target.closest("[data-edit]");
   const colorDot = event.target.closest(".color-dot");
   const addSelected = event.target.closest("#sidebarAddBranding");
   const addBlank = event.target.closest("#sidebarAddBlank");
   
   if (add) addToCart(add.dataset.add);
   if (addBlank) addToCart(selectedProductSku);
+
+  if (edit) {
+    const index = parseInt(edit.dataset.edit);
+    const item = cart[index];
+    
+    cart.splice(index, 1);
+    saveCart();
+    renderCart();
+    
+    if (typeof openProductModal === "function") {
+      openProductModal(item.sku);
+      
+      setTimeout(() => {
+        const sizeSelect = document.getElementById("sidebarSizeSelect");
+        if (sizeSelect && item.size) sizeSelect.value = item.size;
+        
+        const qtyInput = document.getElementById("sidebarProductQuantity");
+        if (qtyInput && item.quantity) qtyInput.value = item.quantity;
+        
+        const colorBtn = document.querySelector(`#sidebarColorFilter .color-dot[data-color="${item.color}"]`);
+        if (colorBtn) colorBtn.click();
+        
+        alert("Editing: " + item.name + "\n\nWe've pre-filled your size, color, and quantity. Please re-configure any custom branding and click Add to Quote.");
+      }, 500);
+    }
+  }
   
   if (addSelected) {
     if (selectedCustomization === "text_embroidery") {
