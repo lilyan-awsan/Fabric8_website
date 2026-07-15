@@ -457,9 +457,7 @@
           <div style="background: #f5f5f5; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center;">
             <div style="position: relative; display: inline-block; max-width: 250px;">
               <img id="editTextShirt" src="White T-Shirt.png" style="width: 100%; height: auto;" />
-              <div id="editTextPreviewBox" style="position: absolute; border: 1px dashed var(--ink); display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none;">
-                <div id="editTextPreviewContent" style="white-space: pre-wrap; text-align: center;"></div>
-              </div>
+              <div id="editTextPreviewBox" style="position: absolute; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none; text-align: center; white-space: pre-wrap;"></div>
             </div>
           </div>
 
@@ -468,6 +466,16 @@
             <div>
               <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Thread Color</label>
               <div id="editTextThreadColors" class="color-filter"></div>
+            </div>
+            <div id="editEmblemColors" style="display: none; flex-direction: column; gap: 16px;">
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Background Color</label>
+                <div id="editTextBgColors" class="color-filter"></div>
+              </div>
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Border Color</label>
+                <div id="editTextBorderColors" class="color-filter"></div>
+              </div>
             </div>
             
             <div id="editTextsContainer" style="display: flex; flex-direction: column; gap: 10px;">

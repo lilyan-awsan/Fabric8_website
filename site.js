@@ -916,37 +916,36 @@ function renderTextInputs() {
   container.innerHTML = html;
 }
 
-function renderTextPreview() {
-  const preview = document.getElementById("wizardTextPreview");
+function renderTextPreview(preview = document.getElementById("wizardTextPreview"), data = embroideryData) {
   if (!preview) return;
   
   let text = [];
-  for (let i = 1; i <= embroideryData.lineCount; i++) {
-    if (embroideryData.textLines[`line${i}`]) {
-      text.push(embroideryData.textLines[`line${i}`]);
+  for (let i = 1; i <= data.lineCount; i++) {
+    if (data.textLines[`line${i}`]) {
+      text.push(data.textLines[`line${i}`]);
     }
   }
   preview.innerHTML = text.join("<br>");
   
   let fontFamily = "sans-serif";
-  if (embroideryData.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
-  else if (embroideryData.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
-  else if (embroideryData.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
-  else if (embroideryData.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
+  if (data.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
+  else if (data.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
+  else if (data.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
+  else if (data.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
   preview.style.fontFamily = fontFamily;
   
-  const threadColorObj = threadColors.find(c => c.name === embroideryData.threadColor);
+  const threadColorObj = threadColors.find(c => c.name === data.threadColor);
   preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
   
-  if (embroideryData.type === "emblem") {
-    const bgObj = threadColors.find(c => c.name === embroideryData.bgColor);
-    const borderObj = threadColors.find(c => c.name === embroideryData.borderColor);
+  if (data.type === "emblem") {
+    const bgObj = threadColors.find(c => c.name === data.bgColor);
+    const borderObj = threadColors.find(c => c.name === data.borderColor);
     
     preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
     preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
     preview.style.padding = "16px";
     
-    if (embroideryData.selectedStyleSku === "Style EM1092") {
+    if (data.selectedStyleSku === "Style EM1092") {
       preview.style.borderRadius = "50%";
       preview.style.aspectRatio = "1 / 1";
       preview.style.display = "flex";
@@ -968,8 +967,8 @@ function renderTextPreview() {
   }
 
   let scale = 1;
-  if (embroideryData.size === "small") scale = 0.7;
-  else if (embroideryData.size === "large") scale = 1.3;
+  if (data.size === "small") scale = 0.7;
+  else if (data.size === "large") scale = 1.3;
 
   let baseTransform = `translate(-50%, -50%) scale(${scale})`;
 
@@ -977,7 +976,7 @@ function renderTextPreview() {
   preview.style.top = "40%";
   preview.style.transform = baseTransform;
   
-  const pos = embroideryData.position;
+  const pos = data.position;
   if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
   else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
   else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
@@ -1228,11 +1227,33 @@ window.openEditBranding = function() {
     }
     
     // Set thread colors
-    const colorContainer = document.getElementById("editTextThreadColors");
-    if (colorContainer) {
-      colorContainer.innerHTML = threadColors.map(c => 
+    const threadContainer = document.getElementById("editTextThreadColors");
+    if (threadContainer) {
+      threadContainer.innerHTML = threadColors.map(c => 
         `<span class="color-dot ${c.name === item.embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-thread-color="${c.name}"></span>`
       ).join("");
+    }
+    
+    // Set Emblem Colors (if applicable)
+    const emblemColorsGroup = document.getElementById("editEmblemColors");
+    if (item.embroideryData.type === "emblem" && emblemColorsGroup) {
+      emblemColorsGroup.style.display = "flex";
+      
+      const bgContainer = document.getElementById("editTextBgColors");
+      if (bgContainer) {
+        bgContainer.innerHTML = threadColors.map(c => 
+          `<span class="bg-color-dot color-dot ${c.name === item.embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-bg-color="${c.name}"></span>`
+        ).join("");
+      }
+      
+      const borderContainer = document.getElementById("editTextBorderColors");
+      if (borderContainer) {
+        borderContainer.innerHTML = threadColors.map(c => 
+          `<span class="border-color-dot color-dot ${c.name === item.embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-border-color="${c.name}"></span>`
+        ).join("");
+      }
+    } else if (emblemColorsGroup) {
+      emblemColorsGroup.style.display = "none";
     }
     
     // Set texts
@@ -1251,16 +1272,7 @@ window.openEditBranding = function() {
     }
     
     // Set Preview Content
-    const previewContent = document.getElementById("editTextPreviewContent");
-    if (previewContent) {
-      let previewHtml = "";
-      for (let i = 1; i <= item.embroideryData.lineCount; i++) {
-        previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\n";
-      }
-      previewContent.innerHTML = previewHtml.trim();
-      previewContent.style.color = threadColors.find(c => c.name === item.embroideryData.threadColor)?.hex || '#000';
-      previewContent.style.fontFamily = "inherit"; // Or parse item.embroideryData.fontStyle
-    }
+    renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
     
     document.getElementById("editTextBrandingModal").style.display = "flex";
     
@@ -1327,12 +1339,38 @@ document.addEventListener("click", (e) => {
     parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
     editThreadDot.classList.add("active");
     
-    // Live update preview color
-    const previewContent = document.getElementById("editTextPreviewContent");
-    if (previewContent) {
-      const colorName = editThreadDot.dataset.editThreadColor;
-      const hex = threadColors.find(c => c.name === colorName)?.hex || '#000';
-      previewContent.style.color = hex;
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.threadColor = editThreadDot.dataset.editThreadColor;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+    }
+  }
+
+  // Emblem Bg Color
+  const editBgDot = e.target.closest("#editTextBgColors .color-dot");
+  if (editBgDot) {
+    const parent = editBgDot.parentElement;
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+    editBgDot.classList.add("active");
+    
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.bgColor = editBgDot.dataset.editBgColor;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+    }
+  }
+
+  // Emblem Border Color
+  const editBorderDot = e.target.closest("#editTextBorderColors .color-dot");
+  if (editBorderDot) {
+    const parent = editBorderDot.parentElement;
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+    editBorderDot.classList.add("active");
+    
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.borderColor = editBorderDot.dataset.editBorderColor;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
     }
   }
 
@@ -1365,7 +1403,8 @@ document.addEventListener("click", (e) => {
       
       let linesText = [];
       for (let i = 1; i <= item.embroideryData.lineCount; i++) linesText.push(item.embroideryData.textLines[`line${i}`]);
-      item.branding = `Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread, Pos: ${item.embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
+      const emblemColorsStr = item.embroideryData.type === "emblem" ? `, Bg: ${item.embroideryData.bgColor}, Border: ${item.embroideryData.borderColor}` : "";
+      item.branding = `Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread${emblemColorsStr}, Pos: ${item.embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
       
       saveCart();
       renderCart();
@@ -1387,14 +1426,7 @@ document.addEventListener("input", (e) => {
     const item = cart[editingCartIndex];
     if (item && item.embroideryData) {
       item.embroideryData.textLines[`line${lineNum}`] = e.target.value;
-      const previewContent = document.getElementById("editTextPreviewContent");
-      if (previewContent) {
-        let previewHtml = "";
-        for (let i = 1; i <= item.embroideryData.lineCount; i++) {
-          previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\n";
-        }
-        previewContent.innerHTML = previewHtml.trim();
-      }
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
     }
   }
 });
