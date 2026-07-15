@@ -1256,6 +1256,28 @@ window.openEditBranding = function() {
       emblemColorsGroup.style.display = "none";
     }
     
+    // Set details
+    const placementEl = document.getElementById("editTextPlacement");
+    if (placementEl) placementEl.value = item.embroideryData.position || "left_chest";
+    
+    const sizeEl = document.getElementById("editTextSize");
+    if (sizeEl) sizeEl.value = item.embroideryData.size || "medium";
+    
+    const fontStyleEl = document.getElementById("editTextFontStyle");
+    if (fontStyleEl) fontStyleEl.value = item.embroideryData.fontStyle || "block";
+    
+    const lineCountEl = document.getElementById("editTextLineCount");
+    if (lineCountEl) lineCountEl.value = item.embroideryData.lineCount || 1;
+    
+    const templateStyleGroup = document.getElementById("editTemplateStyleGroup");
+    const templateStyleEl = document.getElementById("editTextTemplateStyle");
+    if (item.embroideryData.type === "emblem") {
+      if (templateStyleGroup) templateStyleGroup.style.display = "flex";
+      if (templateStyleEl) templateStyleEl.value = item.embroideryData.selectedStyleSku || "Style EM1092";
+    } else {
+      if (templateStyleGroup) templateStyleGroup.style.display = "none";
+    }
+
     // Set texts
     const textContainer = document.getElementById("editTextsContainer");
     if (textContainer) {
@@ -1446,7 +1468,9 @@ document.addEventListener("input", (e) => {
       renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
     }
   }
-  
+});
+
+document.addEventListener("change", (e) => {
   if (e.target.id === "editLogoPlacement") {
     const item = cart[editingCartIndex];
     if (item && item.logoData) {
@@ -1455,9 +1479,41 @@ document.addEventListener("input", (e) => {
       if (previewBox) previewBox.className = `logo-box ${e.target.value}`;
     }
   }
-});
+  
+  if (["editTextPlacement", "editTextSize", "editTextFontStyle", "editTextTemplateStyle"].includes(e.target.id)) {
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      if (e.target.id === "editTextPlacement") item.embroideryData.position = e.target.value;
+      if (e.target.id === "editTextSize") item.embroideryData.size = e.target.value;
+      if (e.target.id === "editTextFontStyle") item.embroideryData.fontStyle = e.target.value;
+      if (e.target.id === "editTextTemplateStyle") item.embroideryData.selectedStyleSku = e.target.value;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+    }
+  }
+  if (e.target.id === "editTextLineCount") {
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.lineCount = parseInt(e.target.value);
+      
+      // Re-render text inputs
+      const textContainer = document.getElementById("editTextsContainer");
+      if (textContainer) {
+        let html = "";
+        for (let i = 1; i <= item.embroideryData.lineCount; i++) {
+          html += `
+            <div>
+              <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Line ${i} Text</label>
+              <input type="text" class="edit-text-input" data-line="${i}" maxlength="20" value="${item.embroideryData.textLines[`line${i}`] || ''}" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px;">
+            </div>
+          `;
+        }
+        textContainer.innerHTML = html;
+      }
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+    }
+  }
 
-document.addEventListener("change", (e) => {
+
   if (e.target.id === "editLogoUpload") {
     const file = e.target.files[0];
     if (file) {

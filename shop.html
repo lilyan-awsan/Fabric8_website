@@ -463,6 +463,57 @@
 
           <!-- Controls -->
           <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div id="editTemplateStyleGroup" style="display: none; flex-direction: column;">
+              <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Template Style</label>
+              <select id="editTextTemplateStyle" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                <option value="Style EM1092">Style EM1092 (Round)</option>
+                <option value="Style EM1185">Style EM1185 (Square)</option>
+                <option value="Style EM1093">Style EM1093 (Rectangle)</option>
+              </select>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Placement</label>
+                <select id="editTextPlacement" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="left_chest">Left Chest</option>
+                  <option value="right_chest">Right Chest</option>
+                  <option value="right_sleeve">Right Sleeve</option>
+                  <option value="left_sleeve">Left Sleeve</option>
+                  <option value="back">Back</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Size</label>
+                <select id="editTextSize" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="small">Small</option>
+                  <option value="medium">Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Font Style</label>
+                <select id="editTextFontStyle" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="block">Block (Sans-serif)</option>
+                  <option value="script">Script (Cursive)</option>
+                  <option value="serif">Classic (Serif)</option>
+                  <option value="athletic">Athletic</option>
+                  <option value="typewriter">Typewriter</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Number of Lines</label>
+                <select id="editTextLineCount" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="1">1 Line</option>
+                  <option value="2">2 Lines</option>
+                  <option value="3">3 Lines</option>
+                </select>
+              </div>
+            </div>
+            
             <div>
               <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Thread Color</label>
               <div id="editTextThreadColors" class="color-filter"></div>
