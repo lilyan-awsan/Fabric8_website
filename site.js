@@ -1270,6 +1270,20 @@ window.openEditBranding = function() {
       const colorImg = product.images?.find((img) => img.toLowerCase().includes(item.color.toLowerCase()));
       shirtImg.src = colorImg || (product.image || 'White T-Shirt.png');
     }
+    
+    const previewBox = document.getElementById("editLogoPreview");
+    if (previewBox && item.logoData) {
+      previewBox.innerHTML = ''; // clear
+      previewBox.className = `logo-box ${item.logoData.placement}`;
+      if (item.logoData.imageSrc) {
+        const img = document.createElement("img");
+        img.src = item.logoData.imageSrc;
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "contain";
+        previewBox.appendChild(img);
+      }
+    }
     document.getElementById("editLogoBrandingModal").style.display = "flex";
   } else {
     // No branding, so we can't edit branding. Just alert.
