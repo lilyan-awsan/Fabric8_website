@@ -947,15 +947,21 @@ function renderTextPreview() {
     preview.style.display = "block";
   }
 
+  let scale = 1;
+  if (embroideryData.size === "small") scale = 0.7;
+  else if (embroideryData.size === "large") scale = 1.3;
+
+  let baseTransform = `translate(-50%, -50%) scale(${scale})`;
+
   preview.style.left = "50%";
   preview.style.top = "40%";
-  preview.style.transform = "translate(-50%, -50%)";
+  preview.style.transform = baseTransform;
   
   const pos = embroideryData.position;
   if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
   else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
-  else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = "translate(-50%, -50%) rotate(-10deg)"; }
-  else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = "translate(-50%, -50%) rotate(10deg)"; }
+  else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
+  else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
   else if (pos === "back") { preview.style.top = "30%"; }
 }
 
@@ -1097,7 +1103,10 @@ document.addEventListener("change", (e) => {
     e.target.closest('.placement-card').classList.add('active');
     renderTextPreview();
   }
-  if (e.target.id === "wizardSize") embroideryData.size = e.target.value;
+  if (e.target.id === "wizardSize") {
+    embroideryData.size = e.target.value;
+    renderTextPreview();
+  }
   if (e.target.id === "wizardFontStyle") {
     embroideryData.fontStyle = e.target.value;
     renderTextPreview();
