@@ -907,6 +907,7 @@ input.error, select.error, textarea.error {
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .product-card:hover {
