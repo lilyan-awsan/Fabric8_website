@@ -1533,11 +1533,14 @@ document.addEventListener("click", (e) => {
   // Close buttons
 
   if (e.target.id === "closeEditOrderSummary" || e.target.id === "finishEditOrderBtn") {
-
     document.getElementById("editOrderSummaryModal").style.display = "none";
-
     editingCartIndex = -1;
-
+    if (e.target.id === "finishEditOrderBtn") {
+      const quoteSection = document.getElementById("quote");
+      if (quoteSection) {
+        quoteSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   }
 
   if (e.target.id === "closeEditBasicDetails") {
