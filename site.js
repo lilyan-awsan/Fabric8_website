@@ -462,6 +462,14 @@ function setupStudio() {
     }
     saveCart();
     renderCart();
+    
+    const productModal = document.getElementById("productModal");
+    if (productModal) productModal.style.display = "none";
+    const productSidebar = document.getElementById("productSidebar");
+    if (productSidebar) productSidebar.classList.remove("open");
+    const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+    if (sidebarBackdrop) sidebarBackdrop.classList.remove("open");
+
     setTimeout(() => {
       const quoteSection = $("#quote");
       if (quoteSection) {
@@ -973,6 +981,14 @@ function addWizardToCart() {
   saveCart();
   renderCart();
   document.getElementById("textWizardModal").style.display = "none";
+  
+  const productModal = document.getElementById("productModal");
+  if (productModal) productModal.style.display = "none";
+  const productSidebar = document.getElementById("productSidebar");
+  if (productSidebar) productSidebar.classList.remove("open");
+  const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+  if (sidebarBackdrop) sidebarBackdrop.classList.remove("open");
+  
   setTimeout(() => {
     const quoteSection = document.getElementById("quote");
     if (quoteSection) {
