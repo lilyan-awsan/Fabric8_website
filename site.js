@@ -317,6 +317,7 @@ function renderCart() {
       <div class="cart-item-info">
         <strong>${item.name}</strong>
         <p>Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity} | ${item.branding || "No branding selected"}</p>
+      </div>
       <div style="display: flex; gap: 12px;">
         <button type="button" data-edit="${index}" style="color: var(--ink); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;">Edit</button>
         <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;">Remove</button>
