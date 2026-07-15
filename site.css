@@ -576,13 +576,7 @@ input.error, select.error, textarea.error {
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
 }
-.product-card { background: #fff; border: 1px solid var(--line); transition: transform .22s ease, box-shadow .22s ease; }
-.product-card:hover { transform: translateY(-6px); box-shadow: 0 22px 55px rgba(0,0,0,.12); }
-.product-card img { width: 100%; aspect-ratio: 1 / 1.05; object-fit: cover; background: #efede7; }
-.product-card div { padding: 18px; }
-.product-card h3 { margin: 0 0 10px; text-transform: uppercase; }
-.product-card p { color: var(--muted); line-height: 1.55; }
-.product-card button { width: 100%; margin-top: 12px; }
+
 
 .section-head h2 { margin: 0; font-size: clamp(34px, 4vw, 64px); line-height: 1; text-transform: uppercase; }
 .studio {
