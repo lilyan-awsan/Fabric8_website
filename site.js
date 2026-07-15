@@ -1255,7 +1255,7 @@ window.openEditBranding = function() {
     if (previewContent) {
       let previewHtml = "";
       for (let i = 1; i <= item.embroideryData.lineCount; i++) {
-        previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\\n";
+        previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\n";
       }
       previewContent.innerHTML = previewHtml.trim();
       previewContent.style.color = threadColors.find(c => c.name === item.embroideryData.threadColor)?.hex || '#000';
@@ -1351,7 +1351,7 @@ document.addEventListener("click", (e) => {
       
       let linesText = [];
       for (let i = 1; i <= item.embroideryData.lineCount; i++) linesText.push(item.embroideryData.textLines[`line${i}`]);
-      item.branding = \`Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread, Pos: ${item.embroideryData.position}, Texts: [\${linesText.join(' | ')}]\`;
+      item.branding = `Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread, Pos: ${item.embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
       
       saveCart();
       renderCart();
@@ -1377,7 +1377,7 @@ document.addEventListener("input", (e) => {
       if (previewContent) {
         let previewHtml = "";
         for (let i = 1; i <= item.embroideryData.lineCount; i++) {
-          previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\\n";
+          previewHtml += (item.embroideryData.textLines[`line${i}`] || '') + "\n";
         }
         previewContent.innerHTML = previewHtml.trim();
       }
