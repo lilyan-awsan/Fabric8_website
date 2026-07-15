@@ -471,6 +471,178 @@
     </div>
   </footer>
 
+    <!-- ISOLATED EDIT MODALS -->
+
+    <!-- Edit Summary Modal -->
+    <div class="modal" id="editOrderSummaryModal" style="display: none;">
+      <div class="modal-content" style="max-width: 600px;">
+        <button type="button" class="modal-close" id="closeEditOrderSummary">??</button>
+        <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 24px;">Edit Item Summary</h2>
+        <div id="editOrderSummaryContent" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Content populated via JS -->
+        </div>
+        <button type="button" class="primary-btn" id="finishEditOrderBtn" style="width: 100%; margin-top: 24px; padding: 14px; font-weight: bold; background: var(--green); border-color: var(--green);">Finish Editing</button>
+      </div>
+    </div>
+
+    <!-- Edit Basic Details Modal -->
+    <div class="modal" id="editBasicDetailsModal" style="display: none;">
+      <div class="modal-content" style="max-width: 400px;">
+        <button type="button" class="modal-close" id="closeEditBasicDetails">??</button>
+        <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Edit Basic Details</h2>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Size</label>
+            <select id="editBasicSize" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 14px;"></select>
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Color</label>
+            <div id="editBasicColorFilter" class="color-filter"></div>
+          </div>
+          <div>
+            <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Quantity</label>
+            <input id="editBasicQty" type="number" min="1" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 14px;" />
+          </div>
+        </div>
+        <button type="button" class="primary-btn" id="saveEditBasicBtn" style="width: 100%; margin-top: 24px; padding: 14px;">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Edit Text Branding Modal -->
+    <div class="modal" id="editTextBrandingModal" style="display: none;">
+      <div class="modal-content" style="max-width: 600px; display: flex; flex-direction: column; height: 90vh;">
+        <button type="button" class="modal-close" id="closeEditTextBranding">??</button>
+        <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Edit Text Embroidery</h2>
+        
+        <div style="flex: 1; overflow-y: auto; padding-right: 10px;">
+          <!-- Shirt Preview Removed per user request -->
+          <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+            <div id="editTextPreviewBox" style="position: relative !important; left: auto !important; top: auto !important; transform: none !important; display: flex; align-items: center; justify-content: center; overflow: hidden; pointer-events: none; text-align: center; white-space: pre-wrap;"></div>
+          </div>
+
+          <!-- Controls -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div id="editTemplateStyleGroup" style="display: none; flex-direction: column;">
+              <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Template Style</label>
+              <select id="editTextTemplateStyle" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                <option value="Style EM1092">Style EM1092 (Round)</option>
+                <option value="Style EM1185">Style EM1185 (Square)</option>
+                <option value="Style EM1093">Style EM1093 (Rectangle)</option>
+              </select>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Placement</label>
+                <select id="editTextPlacement" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="left_chest">Left Chest</option>
+                  <option value="right_chest">Right Chest</option>
+                  <option value="right_sleeve">Right Sleeve</option>
+                  <option value="left_sleeve">Left Sleeve</option>
+                  <option value="back">Back</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Size</label>
+                <select id="editTextSize" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="small">Small</option>
+                  <option value="medium">Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Font Style</label>
+                <select id="editTextFontStyle" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="block">Block (Sans-serif)</option>
+                  <option value="script">Script (Cursive)</option>
+                  <option value="serif">Classic (Serif)</option>
+                  <option value="athletic">Athletic</option>
+                  <option value="typewriter">Typewriter</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Number of Lines</label>
+                <select id="editTextLineCount" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit;">
+                  <option value="1">1 Line</option>
+                  <option value="2">2 Lines</option>
+                  <option value="3">3 Lines</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Thread Color</label>
+              <div id="editTextThreadColors" class="color-filter"></div>
+            </div>
+            <div id="editEmblemColors" style="display: none; flex-direction: column; gap: 16px;">
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Background Color</label>
+                <div id="editTextBgColors" class="color-filter"></div>
+              </div>
+              <div>
+                <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Border Color</label>
+                <div id="editTextBorderColors" class="color-filter"></div>
+              </div>
+            </div>
+            
+            <div id="editTextsContainer" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Inputs populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="primary-btn" id="saveEditTextBtn" style="width: 100%; margin-top: 20px; padding: 14px;">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Edit Logo Branding Modal -->
+    <div class="modal" id="editLogoBrandingModal" style="display: none;">
+      <div class="modal-content" style="max-width: 600px;">
+        <button type="button" class="modal-close" id="closeEditLogoBranding">??</button>
+        <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Edit Logo Placement</h2>
+        
+        <!-- Shirt Preview Removed per user request -->
+        <div style="margin-bottom: 0px; display: flex; align-items: center; justify-content: center;">
+          <div id="editLogoPreview" style="position: relative !important; left: auto !important; top: auto !important; transform: none !important; margin: 0; display: flex; align-items: center; justify-content: center;"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+          <label style="font-size: 13px; font-weight: bold;">Update Logo Image
+            <input id="editLogoUpload" type="file" accept="image/*" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 4px;" />
+          </label>
+          <label style="font-size: 13px; font-weight: bold;">Placement
+            <select id="editLogoPlacement" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 4px;">
+              <option value="left-chest">Left chest</option>
+              <option value="right-chest">Right chest</option>
+              <option value="center">Center of T-shirt</option>
+              <option value="sleeve">Sleeve</option>
+            </select>
+          </label>
+          <label style="font-size: 13px; font-weight: bold;">Logo size (width in inches)
+            <input id="editLogoSize" type="range" min="2" max="14" value="4" style="width: 100%; margin-top: 4px;" />
+          </label>
+          <label style="font-size: 13px; font-weight: bold;">Finish
+            <select id="editLogoFinish" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 4px;">
+              <option value="Embroidery">Embroidery</option>
+              <option value="Screen printing">Screen printing</option>
+              <option value="Heat transfer">Heat transfer</option>
+            </select>
+          </label>
+        </div>
+
+        <button type="button" class="primary-btn" id="saveEditLogoBtn" style="width: 100%; padding: 14px;">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="site.js"></script>
+  </body>
+</html>
+
+
   <!-- Firebase SDK -->
   <script src="site.js"></script>
 </body>

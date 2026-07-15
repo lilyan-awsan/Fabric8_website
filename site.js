@@ -535,29 +535,8 @@ document.addEventListener("click", (event) => {
   if (addBlank) addToCart(selectedProductSku);
 
   if (edit) {
-    const index = parseInt(edit.dataset.edit);
-    const item = cart[index];
-    
-    cart.splice(index, 1);
-    saveCart();
-    renderCart();
-    
-    if (typeof openProductModal === "function") {
-      openProductModal(item.sku);
-      
-      setTimeout(() => {
-        const sizeSelect = document.getElementById("modalSizeSelect");
-        if (sizeSelect && item.size) sizeSelect.value = item.size;
-        
-        const qtyInput = document.getElementById("modalProductQuantity");
-        if (qtyInput && item.quantity) qtyInput.value = item.quantity;
-        
-        const colorBtn = document.querySelector(`#modalColorFilter .color-dot[data-color="${item.color}"]`);
-        if (colorBtn) colorBtn.click();
-        
-        alert("Editing: " + item.name + "\n\nWe've pre-filled your size, color, and quantity. Please re-configure any custom branding and click Add to Quote.");
-      }, 500);
-    }
+    editingCartIndex = Number(edit.dataset.edit);
+    renderEditOrderSummaryModal(editingCartIndex);
   }
   
   if (addSelected) {
@@ -921,73 +900,80 @@ function renderTextInputs() {
   container.innerHTML = html;
 }
 
-function renderTextPreview() {
-  const preview = document.getElementById("wizardTextPreview");
-  if (!preview) return;
-  
-  let text = [];
-  for (let i = 1; i <= embroideryData.lineCount; i++) {
-    if (embroideryData.textLines[`line${i}`]) {
-      text.push(embroideryData.textLines[`line${i}`]);
-    }
-  }
-  preview.innerHTML = text.join("<br>");
-  
-  let fontFamily = "sans-serif";
-  if (embroideryData.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
-  else if (embroideryData.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
-  else if (embroideryData.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
-  else if (embroideryData.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
-  preview.style.fontFamily = fontFamily;
-  
-  const threadColorObj = threadColors.find(c => c.name === embroideryData.threadColor);
-  preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
-  
-  if (embroideryData.type === "emblem") {
-    const bgObj = threadColors.find(c => c.name === embroideryData.bgColor);
-    const borderObj = threadColors.find(c => c.name === embroideryData.borderColor);
-    
-    preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
-    preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
-    preview.style.padding = "16px";
-    
-    if (embroideryData.selectedStyleSku === "Style EM1092") {
-      preview.style.borderRadius = "50%";
-      preview.style.aspectRatio = "1 / 1";
-      preview.style.display = "flex";
-      preview.style.flexDirection = "column";
-      preview.style.justifyContent = "center";
-      preview.style.alignItems = "center";
-    } else {
-      preview.style.borderRadius = "4px";
-      preview.style.aspectRatio = "auto";
-      preview.style.display = "block";
-    }
-  } else {
-    preview.style.backgroundColor = "transparent";
-    preview.style.border = "none";
-    preview.style.padding = "0";
-    preview.style.borderRadius = "0";
-  }
-  
-  let scale = 1;
-  if (embroideryData.size === "small") scale = 0.7;
-  else if (embroideryData.size === "large") scale = 1.3;
-
-  let baseTransform = `translate(-50%, -50%) scale(${scale})`;
-
-  preview.style.left = "50%";
-  preview.style.top = "40%";
-  preview.style.transform = baseTransform;
-  
-  const pos = embroideryData.position;
-  if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
-  else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
-  else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
-  else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
-  else if (pos === "back") { preview.style.top = "30%"; }
-}
-
+function renderTextPreview(preview = document.getElementById("wizardTextPreview"), data = embroideryData) {
+  if (!preview) return;
+  
+  let text = [];
+  for (let i = 1; i <= data.lineCount; i++) {
+    if (data.textLines[`line${i}`]) {
+      text.push(data.textLines[`line${i}`]);
+    }
+  }
+  preview.innerHTML = text.join("<br>");
+  
+  let fontFamily = "sans-serif";
+  if (data.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
+  else if (data.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
+  else if (data.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
+  else if (data.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
+  preview.style.fontFamily = fontFamily;
+  
+  const threadColorObj = threadColors.find(c => c.name === data.threadColor);
+  preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
+  
+  if (data.type === "emblem") {
+    const bgObj = threadColors.find(c => c.name === data.bgColor);
+    const borderObj = threadColors.find(c => c.name === data.borderColor);
+    
+    preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
+    preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
+    preview.style.padding = "16px";
+    
+    if (data.selectedStyleSku === "Style EM1092") {
+      preview.style.borderRadius = "50%";
+      preview.style.aspectRatio = "1 / 1";
+      preview.style.display = "flex";
+      preview.style.flexDirection = "column";
+      preview.style.justifyContent = "center";
+      preview.style.alignItems = "center";
+    } else {
+      preview.style.borderRadius = "4px";
+      preview.style.aspectRatio = "auto";
+      preview.style.display = "block";
+    }
+  } else {
+    preview.style.backgroundColor = "transparent";
+    preview.style.border = "none";
+    preview.style.padding = "0";
+    preview.style.borderRadius = "0";
+    preview.style.aspectRatio = "auto";
+    preview.style.display = "block";
+  }
+
+  let scale = 1;
+  if (data.size === "small") scale = 0.7;
+  else if (data.size === "large") scale = 1.3;
+
+  let baseTransform = isIsolated ? `scale(${scale})` : `translate(-50%, -50%) scale(${scale})`;
+
+  if (!isIsolated) {
+    preview.style.left = "50%";
+    preview.style.top = "40%";
+    preview.style.transform = baseTransform;
+    
+    const pos = data.position;
+    if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
+    else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
+    else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
+    else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
+    else if (pos === "back") { preview.style.top = "30%"; }
+  } else {
+    preview.style.transform = baseTransform;
+    preview.style.left = "auto";
+    preview.style.top = "auto";
+  }
+}
+
 function renderSummary() {
   const list = document.getElementById("wizardSummaryList");
   if (!list) return;
@@ -1150,3 +1136,790 @@ document.addEventListener("input", (e) => {
     renderTextPreview();
   }
 });
+
+
+// --- ISOLATED EDIT MODALS LOGIC ---
+let editingCartIndex = -1;
+
+function renderEditOrderSummaryModal(index) {
+
+  const item = cart[index];
+
+  if (!item) return;
+
+  const content = document.getElementById("editOrderSummaryContent");
+
+  if (!content) return;
+
+
+
+  content.innerHTML = `
+
+    <div style="background: #f9f9f9; padding: 16px; border: 1px solid var(--line); border-radius: 4px;">
+
+      <h3 style="margin: 0 0 12px 0;">${item.name} <span style="font-weight: normal; font-size: 13px; color: var(--muted);">(${item.sku})</span></h3>
+
+      
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 8px 0;">
+
+        <span><strong>Size:</strong> ${item.size || "N/A"}</span>
+
+        <button type="button" onclick="openEditBasicDetails()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+
+      </div>
+
+
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 8px 0;">
+
+        <span><strong>Color:</strong> ${item.color || "Standard"}</span>
+
+        <button type="button" onclick="openEditBasicDetails()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+
+      </div>
+
+
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding: 8px 0;">
+
+        <span><strong>Quantity:</strong> ${item.quantity}</span>
+
+        <button type="button" onclick="openEditBasicDetails()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+
+      </div>
+
+
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0;">
+
+        <span style="flex: 1;"><strong>Branding:</strong><br>${item.branding || "No branding selected"}</span>
+
+        <button type="button" onclick="openEditBranding()" style="color: var(--ink); font-weight: bold; background: none; border: none; cursor: pointer; text-decoration: underline;">Change</button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+
+  document.getElementById("editOrderSummaryModal").style.display = "flex";
+
+}
+
+
+
+window.openEditBasicDetails = function() {
+
+  const item = cart[editingCartIndex];
+
+  if (!item) return;
+
+  const product = products.find(p => p.sku === item.sku);
+
+  
+
+  // Populate Sizes
+
+  const sizeSelect = document.getElementById("editBasicSize");
+
+  if (sizeSelect && product) {
+
+    sizeSelect.innerHTML = product.sizes.map(s => `<option value="${s}" ${s === item.size ? 'selected' : ''}>${s}</option>`).join("");
+
+  }
+
+  
+
+  // Populate Colors
+
+  const colorFilter = document.getElementById("editBasicColorFilter");
+
+  if (colorFilter && product) {
+
+    colorFilter.innerHTML = product.colors.map(c => colorButton(c)).join("");
+
+    const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(item.color)}"]`);
+
+    if (activeBtn) activeBtn.classList.add("active");
+
+  }
+
+  
+
+  // Populate Quantity
+
+  const qtyInput = document.getElementById("editBasicQty");
+
+  if (qtyInput) qtyInput.value = item.quantity;
+
+
+
+  document.getElementById("editOrderSummaryModal").style.display = "none";
+
+  document.getElementById("editBasicDetailsModal").style.display = "flex";
+
+}
+
+
+
+window.openEditBranding = function() {
+
+  const item = cart[editingCartIndex];
+
+  if (!item) return;
+
+  const product = products.find(p => p.sku === item.sku);
+
+  
+
+  document.getElementById("editOrderSummaryModal").style.display = "none";
+
+  
+
+  if (item.customizationType === "text_embroidery" && item.embroideryData) {
+
+    // Populate simplified text wizard
+
+    const shirtImg = document.getElementById("editTextShirt");
+
+    if (shirtImg && product) {
+
+      const colorImg = product.images?.find((img) => img.toLowerCase().includes(item.color.toLowerCase()));
+
+      shirtImg.src = colorImg || (product.image || 'White T-Shirt.png');
+
+    }
+
+    
+
+    // Set thread colors
+
+    const threadContainer = document.getElementById("editTextThreadColors");
+
+    if (threadContainer) {
+
+      threadContainer.innerHTML = threadColors.map(c => 
+
+        `<span class="color-dot ${c.name === item.embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-thread-color="${c.name}"></span>`
+
+      ).join("");
+
+    }
+
+    
+
+    // Set Emblem Colors (if applicable)
+
+    const emblemColorsGroup = document.getElementById("editEmblemColors");
+
+    if (item.embroideryData.type === "emblem" && emblemColorsGroup) {
+
+      emblemColorsGroup.style.display = "flex";
+
+      
+
+      const bgContainer = document.getElementById("editTextBgColors");
+
+      if (bgContainer) {
+
+        bgContainer.innerHTML = threadColors.map(c => 
+
+          `<span class="bg-color-dot color-dot ${c.name === item.embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-bg-color="${c.name}"></span>`
+
+        ).join("");
+
+      }
+
+      
+
+      const borderContainer = document.getElementById("editTextBorderColors");
+
+      if (borderContainer) {
+
+        borderContainer.innerHTML = threadColors.map(c => 
+
+          `<span class="border-color-dot color-dot ${c.name === item.embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-border-color="${c.name}"></span>`
+
+        ).join("");
+
+      }
+
+    } else if (emblemColorsGroup) {
+
+      emblemColorsGroup.style.display = "none";
+
+    }
+
+    
+
+    // Set details
+
+    const placementEl = document.getElementById("editTextPlacement");
+
+    if (placementEl) placementEl.value = item.embroideryData.position || "left_chest";
+
+    
+
+    const sizeEl = document.getElementById("editTextSize");
+
+    if (sizeEl) sizeEl.value = item.embroideryData.size || "medium";
+
+    
+
+    const fontStyleEl = document.getElementById("editTextFontStyle");
+
+    if (fontStyleEl) fontStyleEl.value = item.embroideryData.fontStyle || "block";
+
+    
+
+    const lineCountEl = document.getElementById("editTextLineCount");
+
+    if (lineCountEl) lineCountEl.value = item.embroideryData.lineCount || 1;
+
+    
+
+    const templateStyleGroup = document.getElementById("editTemplateStyleGroup");
+
+    const templateStyleEl = document.getElementById("editTextTemplateStyle");
+
+    if (item.embroideryData.type === "emblem") {
+
+      if (templateStyleGroup) templateStyleGroup.style.display = "flex";
+
+      if (templateStyleEl) templateStyleEl.value = item.embroideryData.selectedStyleSku || "Style EM1092";
+
+    } else {
+
+      if (templateStyleGroup) templateStyleGroup.style.display = "none";
+
+    }
+
+
+
+    // Set texts
+
+    const textContainer = document.getElementById("editTextsContainer");
+
+    if (textContainer) {
+
+      let html = "";
+
+      for (let i = 1; i <= item.embroideryData.lineCount; i++) {
+
+        html += `
+
+          <div>
+
+            <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Line ${i} Text</label>
+
+            <input type="text" class="edit-text-input" data-line="${i}" maxlength="20" value="${item.embroideryData.textLines[`line${i}`] || ''}" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px;">
+
+          </div>
+
+        `;
+
+      }
+
+      textContainer.innerHTML = html;
+
+    }
+
+    
+
+    // Set Preview Content
+
+    renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    
+
+    document.getElementById("editTextBrandingModal").style.display = "flex";
+
+    
+
+  } else if (item.customizationType === "upload_logo") {
+
+    const shirtImg = document.getElementById("editLogoShirt");
+
+    if (shirtImg && product) {
+
+      const colorImg = product.images?.find((img) => img.toLowerCase().includes(item.color.toLowerCase()));
+
+      shirtImg.src = colorImg || (product.image || 'White T-Shirt.png');
+
+    }
+
+    
+
+    const previewBox = document.getElementById("editLogoPreview");
+
+    if (item.logoData) {
+
+      if (previewBox) {
+
+        previewBox.innerHTML = ''; // clear
+
+        previewBox.className = `logo-box ${item.logoData.placement}`;
+
+        if (item.logoData.imageSrc) {
+
+          const img = document.createElement("img");
+
+          img.src = item.logoData.imageSrc;
+
+          img.style.maxWidth = "150px";
+
+          img.style.maxHeight = "150px";
+
+          img.style.marginBottom = "20px";
+
+          img.style.objectFit = "contain";
+
+          previewBox.appendChild(img);
+
+        }
+
+      }
+
+      const placementEl = document.getElementById("editLogoPlacement");
+
+      if (placementEl) placementEl.value = item.logoData.placement || "left-chest";
+
+      const sizeEl = document.getElementById("editLogoSize");
+
+      if (sizeEl) sizeEl.value = item.logoData.size || "4";
+
+      const finishEl = document.getElementById("editLogoFinish");
+
+      if (finishEl) finishEl.value = item.logoData.finish || "Embroidery";
+
+    }
+
+    document.getElementById("editLogoBrandingModal").style.display = "flex";
+
+  } else {
+
+    // No branding, so we can't edit branding. Just alert.
+
+    alert("This item has no branding configured. If you wish to add branding, please remove this item and configure a new one.");
+
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+
+  }
+
+}
+
+
+
+// Event Listeners for Isolated Modals
+
+document.addEventListener("click", (e) => {
+
+  // Close buttons
+
+  if (e.target.id === "closeEditOrderSummary" || e.target.id === "finishEditOrderBtn") {
+
+    document.getElementById("editOrderSummaryModal").style.display = "none";
+
+    editingCartIndex = -1;
+
+  }
+
+  if (e.target.id === "closeEditBasicDetails") {
+
+    document.getElementById("editBasicDetailsModal").style.display = "none";
+
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+
+  }
+
+  if (e.target.id === "closeEditTextBranding") {
+
+    document.getElementById("editTextBrandingModal").style.display = "none";
+
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+
+  }
+
+  if (e.target.id === "closeEditLogoBranding") {
+
+    document.getElementById("editLogoBrandingModal").style.display = "none";
+
+    document.getElementById("editOrderSummaryModal").style.display = "flex";
+
+  }
+
+  
+
+  // Basic Details Color Selection
+
+  const editColorDot = e.target.closest("#editBasicColorFilter .color-dot");
+
+  if (editColorDot) {
+
+    const parent = editColorDot.parentElement;
+
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+
+    editColorDot.classList.add("active");
+
+  }
+
+  
+
+  // Text Embroidery Thread Color
+
+  const editThreadDot = e.target.closest("#editTextThreadColors .color-dot");
+
+  if (editThreadDot) {
+
+    const parent = editThreadDot.parentElement;
+
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+
+    editThreadDot.classList.add("active");
+
+    
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.embroideryData) {
+
+      item.embroideryData.threadColor = editThreadDot.dataset.editThreadColor;
+
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    }
+
+  }
+
+
+
+  // Emblem Bg Color
+
+  const editBgDot = e.target.closest("#editTextBgColors .color-dot");
+
+  if (editBgDot) {
+
+    const parent = editBgDot.parentElement;
+
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+
+    editBgDot.classList.add("active");
+
+    
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.embroideryData) {
+
+      item.embroideryData.bgColor = editBgDot.dataset.editBgColor;
+
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    }
+
+  }
+
+
+
+  // Emblem Border Color
+
+  const editBorderDot = e.target.closest("#editTextBorderColors .color-dot");
+
+  if (editBorderDot) {
+
+    const parent = editBorderDot.parentElement;
+
+    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
+
+    editBorderDot.classList.add("active");
+
+    
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.embroideryData) {
+
+      item.embroideryData.borderColor = editBorderDot.dataset.editBorderColor;
+
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    }
+
+  }
+
+
+
+  // Save Buttons
+
+  if (e.target.id === "saveEditBasicBtn") {
+
+    const item = cart[editingCartIndex];
+
+    if (item) {
+
+      item.size = document.getElementById("editBasicSize").value;
+
+      item.quantity = parseInt(document.getElementById("editBasicQty").value) || item.quantity;
+
+      const activeColorDot = document.querySelector("#editBasicColorFilter .color-dot.active");
+
+      if (activeColorDot) item.color = activeColorDot.dataset.color;
+
+      
+
+      saveCart();
+
+      renderCart();
+
+    }
+
+    document.getElementById("editBasicDetailsModal").style.display = "none";
+
+    renderEditOrderSummaryModal(editingCartIndex);
+
+  }
+
+  
+
+  if (e.target.id === "saveEditTextBtn") {
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.customizationType === "text_embroidery") {
+
+      const activeThreadDot = document.querySelector("#editTextThreadColors .color-dot.active");
+
+      if (activeThreadDot) item.embroideryData.threadColor = activeThreadDot.dataset.editThreadColor;
+
+      
+
+      document.querySelectorAll(".edit-text-input").forEach(input => {
+
+        const lineNum = input.dataset.line;
+
+        item.embroideryData.textLines[`line${lineNum}`] = input.value;
+
+      });
+
+      
+
+      let linesText = [];
+
+      for (let i = 1; i <= item.embroideryData.lineCount; i++) linesText.push(item.embroideryData.textLines[`line${i}`]);
+
+      const emblemColorsStr = item.embroideryData.type === "emblem" ? `, Bg: ${item.embroideryData.bgColor}, Border: ${item.embroideryData.borderColor}` : "";
+
+      item.branding = `Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread${emblemColorsStr}, Pos: ${item.embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
+
+      
+
+      saveCart();
+
+      renderCart();
+
+    }
+
+    document.getElementById("editTextBrandingModal").style.display = "none";
+
+    renderEditOrderSummaryModal(editingCartIndex);
+
+  }
+
+
+
+  if (e.target.id === "saveEditLogoBtn") {
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.customizationType === "upload_logo") {
+
+      item.logoData.placement = document.getElementById("editLogoPlacement").value;
+
+      item.logoData.size = document.getElementById("editLogoSize").value;
+
+      item.logoData.finish = document.getElementById("editLogoFinish").value;
+
+      item.branding = `Upload Logo, Placement: ${item.logoData.placement}, Size: ${item.logoData.size}in, Finish: ${item.logoData.finish}`;
+
+      saveCart();
+
+      renderCart();
+
+    }
+
+    document.getElementById("editLogoBrandingModal").style.display = "none";
+
+    renderEditOrderSummaryModal(editingCartIndex);
+
+  }
+
+});
+
+
+
+// Update Preview dynamically
+
+document.addEventListener("input", (e) => {
+
+  if (e.target.classList.contains("edit-text-input")) {
+
+    const lineNum = e.target.dataset.line;
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.embroideryData) {
+
+      item.embroideryData.textLines[`line${lineNum}`] = e.target.value;
+
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    }
+
+  }
+
+});
+
+
+
+document.addEventListener("change", (e) => {
+
+  if (e.target.id === "editLogoPlacement") {
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.logoData) {
+
+      item.logoData.placement = e.target.value;
+
+      const previewBox = document.getElementById("editLogoPreview");
+
+      if (previewBox) previewBox.className = `logo-box ${e.target.value}`;
+
+    }
+
+  }
+
+  
+
+  if (["editTextPlacement", "editTextSize", "editTextFontStyle", "editTextTemplateStyle"].includes(e.target.id)) {
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.embroideryData) {
+
+      if (e.target.id === "editTextPlacement") item.embroideryData.position = e.target.value;
+
+      if (e.target.id === "editTextSize") item.embroideryData.size = e.target.value;
+
+      if (e.target.id === "editTextFontStyle") item.embroideryData.fontStyle = e.target.value;
+
+      if (e.target.id === "editTextTemplateStyle") item.embroideryData.selectedStyleSku = e.target.value;
+
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    }
+
+  }
+
+  if (e.target.id === "editTextLineCount") {
+
+    const item = cart[editingCartIndex];
+
+    if (item && item.embroideryData) {
+
+      item.embroideryData.lineCount = parseInt(e.target.value);
+
+      
+
+      // Re-render text inputs
+
+      const textContainer = document.getElementById("editTextsContainer");
+
+      if (textContainer) {
+
+        let html = "";
+
+        for (let i = 1; i <= item.embroideryData.lineCount; i++) {
+
+          html += `
+
+            <div>
+
+              <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 6px;">Line ${i} Text</label>
+
+              <input type="text" class="edit-text-input" data-line="${i}" maxlength="20" value="${item.embroideryData.textLines[`line${i}`] || ''}" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px;">
+
+            </div>
+
+          `;
+
+        }
+
+        textContainer.innerHTML = html;
+
+      }
+
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+
+    }
+
+  }
+
+
+
+
+
+  if (e.target.id === "editLogoUpload") {
+
+    const file = e.target.files[0];
+
+    if (file) {
+
+      const reader = new FileReader();
+
+      reader.onload = (ev) => {
+
+        const item = cart[editingCartIndex];
+
+        if (item && item.logoData) {
+
+          item.logoData.imageSrc = ev.target.result;
+
+          const previewBox = document.getElementById("editLogoPreview");
+
+          if (previewBox) {
+
+            previewBox.innerHTML = '';
+
+            const img = document.createElement("img");
+
+            img.src = item.logoData.imageSrc;
+
+            img.style.maxWidth = "150px";
+
+            img.style.maxHeight = "150px";
+
+            img.style.marginBottom = "20px";
+
+            img.style.objectFit = "contain";
+
+            previewBox.appendChild(img);
+
+          }
+
+        }
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+
+  }
+
+});
+
