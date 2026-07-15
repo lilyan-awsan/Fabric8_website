@@ -356,6 +356,9 @@ function addToCart(sku) {
       quantity,
       color: activeCatalogColor,
       size: selectedSize,
+      customizationType: null,
+      embroideryData: null,
+      logoData: null
     });
   }
   saveCart();
@@ -511,7 +514,14 @@ function setupStudio() {
         quantity,
         color: activeCatalogColor,
         size: selectedSize,
-        branding: brandingString
+        branding: brandingString,
+        customizationType: "upload_logo",
+        embroideryData: null,
+        logoData: { 
+          left: parseFloat($("#logoPreview").style.left).toFixed(1), 
+          top: parseFloat($("#logoPreview").style.top).toFixed(1),
+          size: parseFloat($("#logoPreview").style.getPropertyValue("--logo-size") || 13).toFixed(1)
+        }
       });
     }
     saveCart();
@@ -1016,7 +1026,10 @@ function addWizardToCart() {
       quantity,
       color: activeCatalogColor,
       size: selectedSize,
-      branding: brandingString
+      branding: brandingString,
+      customizationType: "text_embroidery",
+      embroideryData: JSON.parse(JSON.stringify(embroideryData)),
+      logoData: null
     });
   }
   saveCart();
