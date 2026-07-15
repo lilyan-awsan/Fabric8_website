@@ -970,18 +970,24 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
   if (data.size === "small") scale = 0.7;
   else if (data.size === "large") scale = 1.3;
 
-  let baseTransform = `translate(-50%, -50%) scale(${scale})`;
+  let baseTransform = isIsolated ? `scale(${scale})` : `translate(-50%, -50%) scale(${scale})`;
 
-  preview.style.left = "50%";
-  preview.style.top = "40%";
-  preview.style.transform = baseTransform;
-  
-  const pos = data.position;
-  if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
-  else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
-  else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
-  else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
-  else if (pos === "back") { preview.style.top = "30%"; }
+  if (!isIsolated) {
+    preview.style.left = "50%";
+    preview.style.top = "40%";
+    preview.style.transform = baseTransform;
+    
+    const pos = data.position;
+    if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
+    else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
+    else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
+    else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
+    else if (pos === "back") { preview.style.top = "30%"; }
+  } else {
+    preview.style.transform = baseTransform;
+    preview.style.left = "auto";
+    preview.style.top = "auto";
+  }
 }
 
 function renderSummary() {
@@ -1294,7 +1300,7 @@ window.openEditBranding = function() {
     }
     
     // Set Preview Content
-    renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+    renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     
     document.getElementById("editTextBrandingModal").style.display = "flex";
     
@@ -1372,7 +1378,7 @@ document.addEventListener("click", (e) => {
     const item = cart[editingCartIndex];
     if (item && item.embroideryData) {
       item.embroideryData.threadColor = editThreadDot.dataset.editThreadColor;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     }
   }
 
@@ -1386,7 +1392,7 @@ document.addEventListener("click", (e) => {
     const item = cart[editingCartIndex];
     if (item && item.embroideryData) {
       item.embroideryData.bgColor = editBgDot.dataset.editBgColor;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     }
   }
 
@@ -1400,7 +1406,7 @@ document.addEventListener("click", (e) => {
     const item = cart[editingCartIndex];
     if (item && item.embroideryData) {
       item.embroideryData.borderColor = editBorderDot.dataset.editBorderColor;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     }
   }
 
@@ -1465,7 +1471,7 @@ document.addEventListener("input", (e) => {
     const item = cart[editingCartIndex];
     if (item && item.embroideryData) {
       item.embroideryData.textLines[`line${lineNum}`] = e.target.value;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     }
   }
 });
@@ -1487,7 +1493,7 @@ document.addEventListener("change", (e) => {
       if (e.target.id === "editTextSize") item.embroideryData.size = e.target.value;
       if (e.target.id === "editTextFontStyle") item.embroideryData.fontStyle = e.target.value;
       if (e.target.id === "editTextTemplateStyle") item.embroideryData.selectedStyleSku = e.target.value;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     }
   }
   if (e.target.id === "editTextLineCount") {
@@ -1509,7 +1515,7 @@ document.addEventListener("change", (e) => {
         }
         textContainer.innerHTML = html;
       }
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData);
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
     }
   }
 
