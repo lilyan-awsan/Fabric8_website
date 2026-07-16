@@ -627,6 +627,24 @@ $("#clearCart")?.addEventListener("click", () => {
   saveCart();
   renderCart();
 });
+function triggerMailtoFallback(customerInfo, cart) {
+  alert("The automatic email system is currently locked. Opening your email app to send a draft instead...");
+  let bodyText = `New Fabric-8 Quote Request\n\n`;
+  bodyText += `Customer Details:\n`;
+  for (const [key, value] of Object.entries(customerInfo || {})) {
+    bodyText += `- ${key}: ${value}\n`;
+  }
+  bodyText += `\nSelected Products:\n`;
+  if (!cart || cart.length === 0) {
+    bodyText += `- No products selected.\n`;
+  } else {
+    cart.forEach(item => {
+      bodyText += `- ${item.name} (${item.sku})\n  Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity}\n  Branding: ${item.branding || "None"}\n\n`;
+    });
+  }
+  const mailtoLink = `mailto:hello@thefabric8.com?subject=${encodeURIComponent('New Fabric8 Quote Request')}&body=${encodeURIComponent(bodyText)}`;
+  window.location.href = mailtoLink;
+}
 
 $("#quoteForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -680,10 +698,12 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       form.reset();
     } else {
       const errorData = await res.json();
-      alert("Error sending request: " + (errorData.message || "Unknown error"));
+      console.error("Resend error:", errorData);
+      triggerMailtoFallback(customerInfo, cart);
     }
   } catch (err) {
-    alert("Network error: Could not send quote request. Ensure you are running this on a web server.");
+    console.error("Network error:", err);
+    triggerMailtoFallback(customerInfo, cart);
   } finally {
     if (submitBtn) {
       submitBtn.textContent = originalBtnText;
