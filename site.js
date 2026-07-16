@@ -696,7 +696,6 @@ $("#clearCart")?.addEventListener("click", () => {
   renderCart();
 });
 function triggerMailtoFallback(customerInfo, cart) {
-  alert("The automatic email system is currently locked. Opening your email app to send a draft instead...");
   let bodyText = `New Fabric-8 Quote Request\n\n`;
   bodyText += `Customer Details:\n`;
   for (const [key, value] of Object.entries(customerInfo || {})) {
@@ -710,8 +709,27 @@ function triggerMailtoFallback(customerInfo, cart) {
       bodyText += `- ${item.name} (${item.sku})\n  Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity}\n  Branding: ${item.branding || "None"}\n\n`;
     });
   }
+  
+  // 1. Try to open the user's email client
   const mailtoLink = `mailto:hello@thefabric8.com?subject=${encodeURIComponent('New Fabric8 Quote Request')}&body=${encodeURIComponent(bodyText)}`;
   window.location.href = mailtoLink;
+
+  // 2. Also show a modal with the draft on screen just in case mailto fails
+  const modalHtml = `
+    <div id="emailDraftModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+      <div style="background: white; border-radius: 8px; width: 100%; max-width: 600px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; position: relative;">
+        <button onclick="document.getElementById('emailDraftModal').remove()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333;">&times;</button>
+        <h2 style="margin-top: 0; color: #111;">Email Draft</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">It looks like your browser isn't configured to open email apps automatically. You can review the draft below and copy it manually.</p>
+        <div style="background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 4px; white-space: pre-wrap; font-family: monospace; font-size: 13px; margin-bottom: 20px; max-height: 400px; overflow-y: auto; color: #333;" id="draftContent">${bodyText}</div>
+        <div style="display: flex; gap: 10px;">
+          <button onclick="navigator.clipboard.writeText(document.getElementById('draftContent').innerText).then(() => { const btn = this; const oldText = btn.innerText; btn.innerText = 'Copied!'; setTimeout(() => btn.innerText = oldText, 2000); })" style="padding: 10px 20px; background: #1a6f3b; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Copy to Clipboard</button>
+          <button onclick="document.getElementById('emailDraftModal').remove()" style="padding: 10px 20px; background: white; color: #111; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-weight: bold;">Close</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
 $("#quoteForm")?.addEventListener("submit", async (event) => {
