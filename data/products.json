@@ -416,9 +416,11 @@
     "availability": "In Stock"
   },
   {
+    "id": "F8-014",
     "sku": "F8-014",
     "name": "Full Apron",
     "category": "Accessories",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
     "short": "Classic full-coverage apron for kitchen and service staff.",
     "long": "A durable apron covering chest to knees, secured with adjustable neck and waist ties for a comfortable fit.",
@@ -436,15 +438,14 @@
       "Striped",
       "Custom Colors"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "moq": "0",
+    "images": [
+      "White Polo Shirt.png"
+    ],
+    "image": "White Polo Shirt.png"
   },
   {
     "sku": "F8-015",
