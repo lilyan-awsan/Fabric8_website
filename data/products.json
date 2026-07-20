@@ -103,9 +103,11 @@
     "availability": "In Stock"
   },
   {
+    "id": "F8-004",
     "sku": "F8-004",
     "name": "Chef Hat",
     "category": "Head Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Traditional toque for a professional kitchen image.",
     "long": "A classic pleated chef hat that keeps kitchen staff cool while signaling culinary professionalism.",
@@ -121,15 +123,14 @@
       "White",
       "Custom Colors"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
+    "leadTime": "",
     "moq": "50 pieces",
-    "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "images": [
+      "White Polo Shirt.png"
+    ],
+    "image": "White Polo Shirt.png"
   },
   {
     "sku": "F8-005",
