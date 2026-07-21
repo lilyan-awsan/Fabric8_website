@@ -317,13 +317,22 @@
     "leadTime": "",
     "moq": "5",
     "images": [
-      "assets/products/1784609032944_Cap Light Grey.png",
       "assets/products/1784609080849_Cap American Blue.jpg",
       "assets/products/1784609081750_Cap Black.jpg",
       "assets/products/1784609082519_Cap Brown.jpg",
-      "assets/products/1784609083342_Cap Burgundy.jpg"
+      "assets/products/1784609083342_Cap Burgundy.jpg",
+      "assets/products/1784609111613_Cap Charcoal.jpg",
+      "assets/products/1784609112524_Cap Green.jpg",
+      "assets/products/1784609113405_Cap Kiwi 2.jpg",
+      "assets/products/1784609114195_Cap Light Grey.jpg",
+      "assets/products/1784609114940_Cap Navy.jpg",
+      "assets/products/1784609115698_Cap Red.jpg",
+      "assets/products/1784609116537_Cap White Back.jpg",
+      "assets/products/1784609117299_Cap White Side.jpg",
+      "assets/products/1784609117950_Cap White.jpg",
+      "assets/products/1784609118717_Cap Yellow 2.jpg"
     ],
-    "image": "assets/products/1784609032944_Cap Light Grey.png"
+    "image": "assets/products/1784609080849_Cap American Blue.jpg"
   },
   {
     "sku": "F8-011",
