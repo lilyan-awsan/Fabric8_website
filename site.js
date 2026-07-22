@@ -2206,7 +2206,7 @@ function renderShowcase() {
           <p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase;">${p.category || 'Apparel'}</p>
         </div>
         <div class="product-card-overlay">
-          <span style="color: #fff; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px;">+ View Details</span>
+          <span class="product-card-overlay-text">+ View Details</span>
         </div>
       </a>
     </article>`;
