@@ -49,21 +49,22 @@
       <section style="max-width: 1200px; margin: 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 60px;">
         <div style="background: var(--paper); padding: 40px; border-radius: 12px;">
           <h2 style="font-size: 28px; color: var(--ink); margin-bottom: 25px;">Send an Inquiry</h2>
-          <form style="display: flex; flex-direction: column; gap: 20px;">
+          <form id="contactForm" style="display: flex; flex-direction: column; gap: 20px;">
             <div style="display: flex; gap: 20px;">
-              <input type="text" placeholder="First Name" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" required />
-              <input type="text" placeholder="Last Name" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" required />
+              <input type="text" name="firstName" placeholder="First Name" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" required />
+              <input type="text" name="lastName" placeholder="Last Name" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" required />
             </div>
-            <input type="email" placeholder="Email Address" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" required />
-            <input type="text" placeholder="Company Name" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" />
-            <select style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px; color: var(--muted);" required>
+            <input type="email" name="email" placeholder="Email Address" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" required />
+            <input type="text" name="company" placeholder="Company Name" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px;" />
+            <select name="type" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px; color: var(--muted);" required>
               <option value="" disabled selected>Select Inquiry Type</option>
               <option value="quote">Request a Quote</option>
               <option value="consultation">Book a Consultation</option>
               <option value="general">General Inquiry</option>
             </select>
-            <textarea placeholder="Tell us about your project or uniform needs..." rows="5" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px; resize: vertical;" required></textarea>
+            <textarea name="message" placeholder="Tell us about your project or uniform needs..." rows="5" style="padding: 14px; border-radius: 8px; border: 1px solid var(--line); font-family: inherit; font-size: 14px; resize: vertical;" required></textarea>
             <button type="submit" class="button primary" style="border-radius: 8px; padding: 16px; font-size: 16px; width: 100%;">Submit Inquiry</button>
+            <div id="contactFormStatus" style="font-size: 14px; font-weight: bold; display: none;"></div>
           </form>
         </div>
 

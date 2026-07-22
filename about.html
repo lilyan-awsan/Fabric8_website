@@ -66,10 +66,11 @@
   <section class="contact-panel" style="background: #111; color: #fff; padding: 60px 20px; text-align: center; border-radius: 12px; max-width: 800px; margin: 40px auto 80px;">
     <h2 style="font-size: 28px; margin-bottom: 15px;">Inquire Today</h2>
     <p style="color: #aaa; margin-bottom: 30px;">Let us help you build a uniform program that represents your brand.</p>
-    <form style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
-      <input type="email" placeholder="Your Email Address" style="padding: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; font-family: inherit;" required>
-      <textarea placeholder="How can we help?" rows="4" style="padding: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; font-family: inherit; resize: vertical;" required></textarea>
+    <form id="aboutForm" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+      <input type="email" name="email" placeholder="Your Email Address" style="padding: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; font-family: inherit;" required>
+      <textarea name="message" placeholder="How can we help?" rows="4" style="padding: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; font-family: inherit; resize: vertical;" required></textarea>
       <button type="submit" class="button primary" style="border-radius: 8px; background: var(--yellow); color: #111; border: none; font-weight: 900;">Send Inquiry</button>
+      <div id="aboutFormStatus" style="font-size: 14px; font-weight: bold; display: none;"></div>
     </form>
   </section>
 </main>

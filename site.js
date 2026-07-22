@@ -2212,3 +2212,56 @@ function renderShowcase() {
     </article>`;
   }).join('');
 }
+
+// Generic Contact Form Handlers
+function setupContactForm(formId, sourceName) {
+  const form = document.getElementById(formId);
+  if (!form) return;
+  
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    const statusDiv = document.getElementById(formId + 'Status');
+    const originalBtnText = btn.innerText;
+    
+    btn.innerText = 'Sending...';
+    btn.disabled = true;
+    if(statusDiv) statusDiv.style.display = 'none';
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data.source = sourceName;
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      if (!response.ok) throw new Error('Failed to send');
+      
+      form.reset();
+      if(statusDiv) {
+        statusDiv.innerText = 'Message sent successfully! We will be in touch soon.';
+        statusDiv.style.color = 'var(--green, #2f873d)';
+        statusDiv.style.display = 'block';
+      }
+    } catch (err) {
+      console.error(err);
+      if(statusDiv) {
+        statusDiv.innerText = 'Failed to send message. Please try again later.';
+        statusDiv.style.color = '#b7342b';
+        statusDiv.style.display = 'block';
+      }
+    } finally {
+      btn.innerText = originalBtnText;
+      btn.disabled = false;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupContactForm('aboutForm', 'About Us Page');
+  setupContactForm('contactForm', 'Contact Us Page');
+});
