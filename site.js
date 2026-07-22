@@ -78,55 +78,75 @@ function saveCart() {
 }
 
 
+let activeSectorFilter = "All";
 let activeCategoryFilter = "All";
 let activeSearchTerm = "";
 let activeSortTerm = "featured";
 
 function renderFilters() {
-  const order = ["Top Wear", "Bottom Wear", "Outerwear", "Headwear", "Accessories", "Healthcare"];
-  const categories = [...new Set(products.map((p) => p.category))].sort((a, b) => {
-    let ia = order.indexOf(a), ib = order.indexOf(b);
-    if (ia === -1) ia = 999;
-    if (ib === -1) ib = 999;
-    return ia - ib || a.localeCompare(b);
-  });
-  const container = $("#categoryFilterContainer");
-  if (!container) return;
-  
-  let html = `<button type="button" class="category-btn ${activeCategoryFilter === 'All' ? 'active' : ''}" data-cat="All">All Categories</button>`;
-  categories.forEach(cat => {
-    html += `<button type="button" class="category-btn ${activeCategoryFilter === cat ? 'active' : ''}" data-cat="${cat}">${cat}</button>`;
-  });
-  container.innerHTML = html;
-  
-  container.querySelectorAll('.category-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      activeCategoryFilter = e.target.dataset.cat;
-      renderFilters(); // re-render to update active class
-      renderProducts();
+  const allowedSectors = ["Food and beverage", "Hospitality", "Corporate", "Healthcare", "Industrial"];
+  const sectorContainer = document.getElementById("sectorFilterContainer");
+  if (sectorContainer) {
+    let sHtml = `<button type="button" class="category-btn ${activeSectorFilter === 'All' ? 'active' : ''}" data-sec="All">All Sectors</button>`;
+    allowedSectors.forEach(sec => {
+      sHtml += `<button type="button" class="category-btn ${activeSectorFilter === sec ? 'active' : ''}" data-sec="${sec}">${sec}</button>`;
     });
-  });
+    sectorContainer.innerHTML = sHtml;
+    sectorContainer.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        activeSectorFilter = e.target.dataset.sec;
+        renderFilters();
+        renderProducts();
+      });
+    });
+  }
+
+  const allowedCategories = ["Head Wear", "Top Wear", "Bottom Wear", "Outer Wear", "Accessories"];
+  const categoryContainer = document.getElementById("categoryFilterContainer");
+  if (categoryContainer) {
+    let cHtml = `<button type="button" class="category-btn ${activeCategoryFilter === 'All' ? 'active' : ''}" data-cat="All">All Categories</button>`;
+    allowedCategories.forEach(cat => {
+      cHtml += `<button type="button" class="category-btn ${activeCategoryFilter === cat ? 'active' : ''}" data-cat="${cat}">${cat}</button>`;
+    });
+    categoryContainer.innerHTML = cHtml;
+    categoryContainer.querySelectorAll('.category-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        activeCategoryFilter = e.target.dataset.cat;
+        renderFilters();
+        renderProducts();
+      });
+    });
+  }
 }
 
 function renderProducts() {
   renderFilters();
-  const grid = $("#productGrid");
+  const grid = document.getElementById("productGrid");
   if (!grid) return;
 
-  activeSearchTerm = $("#productSearch")?.value.toLowerCase() || "";
-  activeSortTerm = $("#sortFilter")?.value || "featured";
+  activeSearchTerm = document.getElementById("productSearch")?.value.toLowerCase() || "";
+  activeSortTerm = document.getElementById("sortFilter")?.value || "featured";
 
   let filtered = products;
 
+  if (activeSectorFilter !== "All") {
+    filtered = filtered.filter(p => p.sectors && p.sectors.toLowerCase().includes(activeSectorFilter.toLowerCase()));
+  }
+
   if (activeCategoryFilter !== "All") {
-    filtered = filtered.filter(p => p.category === activeCategoryFilter);
+    // Some JSON products have "Outerwear" instead of "Outer Wear", let's handle lowercase matching
+    filtered = filtered.filter(p => p.category && p.category.toLowerCase().replace(/\s/g, '') === activeCategoryFilter.toLowerCase().replace(/\s/g, ''));
   }
 
   if (activeSearchTerm) {
     filtered = filtered.filter(p => 
-      p.name.toLowerCase().includes(activeSearchTerm) || 
-      p.sku.toLowerCase().includes(activeSearchTerm) ||
-      (p.description && p.description.toLowerCase().includes(activeSearchTerm))
+      (p.name && p.name.toLowerCase().includes(activeSearchTerm)) || 
+      (p.sku && p.sku.toLowerCase().includes(activeSearchTerm)) ||
+      (p.description && p.description.toLowerCase().includes(activeSearchTerm)) ||
+      (p.short && p.short.toLowerCase().includes(activeSearchTerm)) ||
+      (p.long && p.long.toLowerCase().includes(activeSearchTerm)) ||
+      (p.category && p.category.toLowerCase().includes(activeSearchTerm)) ||
+      (p.sectors && p.sectors.toLowerCase().includes(activeSearchTerm))
     );
   }
 
@@ -148,17 +168,16 @@ function renderProducts() {
     
     let imagesHtml = '';
     if (p.images && p.images.length > 1) {
-      imagesHtml = `
-        <img id="img-main-${p.sku}" data-index="0" src="${p.images[0]}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover;">
-        <img id="img-next-${p.sku}" src="${p.images[1]}" alt="${p.name}" style="position: absolute; left: 100%; top: 0; width: 100%; height: 100%; object-fit: cover;">
-      `;
+      imagesHtml = p.images.map((img, idx) => 
+        `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; opacity: ${idx === 0 ? 1 : 0}; transition: opacity 0.6s ease-in-out;">`
+      ).join('');
     } else {
       imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover;">`;
     }
 
     return `
       <div class="product-card" onclick="window.location.href='product.html?sku=${p.sku}'">
-        <div class="product-card-img" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
+        <div class="product-card-img" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}', ${p.images.length})" onmouseleave="window.stopSlideshow('${p.sku}', ${p.images.length})"` : ''}>
           ${imagesHtml}
         </div>
         <div class="product-card-info">
@@ -174,59 +193,39 @@ function renderProducts() {
 }
 
 window.slideshowTimers = {};
+window.slideshowIndices = {};
 
-window.startSlideshow = function(sku) {
+window.startSlideshow = function(sku, maxIdx) {
   if (window.slideshowTimers[sku]) clearInterval(window.slideshowTimers[sku]);
-  window.nextImage(sku, 1); // Instantly change to the next image on hover
+  window.slideshowIndices[sku] = window.slideshowIndices[sku] || 0;
+  window.nextImage(sku, maxIdx);
   window.slideshowTimers[sku] = setInterval(() => {
-    window.nextImage(sku, 1);
-  }, 800); // Change image every 0.8 seconds
+    window.nextImage(sku, maxIdx);
+  }, 1200); // 1.2s allows time to see the view
 };
 
-window.stopSlideshow = function(sku) {
+window.stopSlideshow = function(sku, maxIdx) {
   if (window.slideshowTimers[sku]) {
     clearInterval(window.slideshowTimers[sku]);
     window.slideshowTimers[sku] = null;
   }
-  const p = products.find(x => x.sku === sku);
-  const mainImg = document.getElementById(`img-main-${sku}`);
-  if (p && mainImg && p.images && p.images.length > 0) {
-    mainImg.style.transition = 'none';
-    mainImg.src = p.images[0];
-    mainImg.style.left = '0';
-    mainImg.dataset.index = "0";
+  window.slideshowIndices[sku] = 0;
+  for (let i = 0; i < maxIdx; i++) {
+    const img = document.getElementById(`img-${sku}-${i}`);
+    if (img) img.style.opacity = i === 0 ? "1" : "0";
   }
 };
 
-window.nextImage = function(sku, direction) {
-  const p = products.find(x => x.sku === sku);
-  if (!p || !p.images || p.images.length <= 1) return;
-  const mainImg = document.getElementById(`img-main-${sku}`);
-  const nextImg = document.getElementById(`img-next-${sku}`);
-  if (!mainImg || !nextImg) return;
-  
-  let currentIndex = parseInt(mainImg.dataset.index || "0");
-  currentIndex += direction;
-  if (currentIndex >= p.images.length) currentIndex = 0;
-  if (currentIndex < 0) currentIndex = p.images.length - 1;
-  
-  nextImg.src = p.images[currentIndex];
-  nextImg.style.transition = 'none';
-  nextImg.style.left = '100%';
-  
-  void nextImg.offsetWidth; // Force reflow
-  
-  mainImg.style.transition = 'left 0.4s ease-in-out';
-  nextImg.style.transition = 'left 0.4s ease-in-out';
-  mainImg.style.left = '-100%';
-  nextImg.style.left = '0';
-  
-  setTimeout(() => {
-    mainImg.src = p.images[currentIndex];
-    mainImg.dataset.index = currentIndex;
-    mainImg.style.transition = 'none';
-    mainImg.style.left = '0';
-  }, 400);
+window.nextImage = function(sku, maxIdx) {
+  let curr = window.slideshowIndices[sku];
+  let next = curr + 1;
+  if (next >= maxIdx) next = 0;
+  window.slideshowIndices[sku] = next;
+
+  for (let i = 0; i < maxIdx; i++) {
+    const img = document.getElementById(`img-${sku}-${i}`);
+    if (img) img.style.opacity = i === next ? "1" : "0";
+  }
 };
 
 function openProductModal(sku) {
@@ -820,13 +819,16 @@ function initProductPage(sku) {
   document.getElementById('productName').textContent = p.name;
   document.getElementById('productCategory').textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
-  document.getElementById('productDesc').textContent = p.long || p.short || "";
+  document.getElementById('productDesc').innerHTML = 
+    (p.short ? '<p style="font-weight: 600; margin-bottom: 8px;">' + p.short + '</p>' : '') + 
+    (p.long ? '<p>' + p.long + '</p>' : '');
+  
   document.getElementById('productFabric').textContent = p.fabric || "N/A";
   document.getElementById('productGsm').textContent = p.gsm || "N/A";
   if (document.getElementById('productCare')) {
     document.getElementById('productCare').textContent = p.care || "Machine wash cold, tumble dry low.";
   }
-  document.getElementById('productAvailability').textContent = p.availability || "Made to Order";
+  document.getElementById('productAvailability').textContent = "Made to Order";
   
   const sketchAcc = document.getElementById('sketchAccordion');
   const sketchImg = document.getElementById('productSketch');
@@ -861,7 +863,10 @@ function initProductPage(sku) {
   if (minQtyLabel) minQtyLabel.textContent = moqVal;
   
   if (matrix) {
-    matrix.innerHTML = (p.sizes || ["Standard"]).map(size => `
+    const isOneSize = ["Caps", "Full Apron", "Full Apron With Pocket", "Half Apron", "Half Apron With Pocket", "Chef Bandana", "Chef Hat", "Chef Beret"].includes(p.name);
+    let displaySizes = isOneSize ? ["OS"] : (p.sizes || ["Standard"]);
+    
+    matrix.innerHTML = displaySizes.map(size => `
       <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 8px; border: 1px solid var(--line); border-radius: 8px;">
         <div style="flex: 1; padding: 10px; background: #f9f9f9; border: 1px solid var(--line); border-radius: 4px; font-weight: 800; font-size: 13px;">${size}</div>
         <input type="number" min="0" placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 10px; text-align: center; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 14px;" />

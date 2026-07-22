@@ -923,12 +923,12 @@ input.error, select.error, textarea.error {
 }
 
 .catalog-sidebar .category-btn:hover {
-  background: rgba(17,17,17,0.03);
-  color: var(--ink);
+  background: var(--green);
+  color: #fff;
 }
 
 .catalog-sidebar .category-btn.active {
-  background: var(--ink);
+  background: var(--green);
   color: #fff;
   font-weight: bold;
 }
