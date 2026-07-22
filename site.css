@@ -958,12 +958,12 @@ input.error, select.error, textarea.error {
 }
 
 .product-card-info {
-  padding: 24px 16px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  text-align: center;
-  align-items: center;
+  text-align: left;
+  align-items: flex-start;
 }
 
 .product-card-category {

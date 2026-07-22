@@ -184,8 +184,8 @@ function renderProducts() {
           </div>
         </div>
         <div class="product-card-info">
-          <p>${p.sku}</p>
-          <h3>${p.name}</h3>
+          <p class="product-card-category">${p.category} | ${p.sku}</p>
+          <h3 class="product-card-title">${p.name}</h3>
         </div>
       </div>
     `;
