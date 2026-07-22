@@ -103,9 +103,11 @@
     "availability": "In Stock"
   },
   {
+    "id": "F8-004",
     "sku": "F8-004",
     "name": "Chef Hat",
     "category": "Head Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Traditional toque for a professional kitchen image.",
     "long": "A classic pleated chef hat that keeps kitchen staff cool while signaling culinary professionalism.",
@@ -121,15 +123,14 @@
       "White",
       "Custom Colors"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
+    "leadTime": "",
     "moq": "50 pieces",
-    "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "images": [
+      "White Polo Shirt.png"
+    ],
+    "image": "White Polo Shirt.png"
   },
   {
     "sku": "F8-005",
@@ -313,13 +314,25 @@
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "leadTime": "",
+    "moq": "5",
     "images": [
-      "assets/products/1783795615435_polo_shirt1.png",
-      "assets/products/1783882682687_Black Polo Shirt.jpg"
+      "assets/products/1784609080849_Cap American Blue.jpg",
+      "assets/products/1784609081750_Cap Black.jpg",
+      "assets/products/1784609082519_Cap Brown.jpg",
+      "assets/products/1784609083342_Cap Burgundy.jpg",
+      "assets/products/1784609111613_Cap Charcoal.jpg",
+      "assets/products/1784609112524_Cap Green.jpg",
+      "assets/products/1784609113405_Cap Kiwi 2.jpg",
+      "assets/products/1784609114195_Cap Light Grey.jpg",
+      "assets/products/1784609114940_Cap Navy.jpg",
+      "assets/products/1784609115698_Cap Red.jpg",
+      "assets/products/1784609116537_Cap White Back.jpg",
+      "assets/products/1784609117299_Cap White Side.jpg",
+      "assets/products/1784609117950_Cap White.jpg",
+      "assets/products/1784609118717_Cap Yellow 2.jpg"
     ],
-    "image": "assets/products/1783795615435_polo_shirt1.png"
+    "image": "assets/products/1784609080849_Cap American Blue.jpg"
   },
   {
     "sku": "F8-011",
@@ -416,9 +429,11 @@
     "availability": "In Stock"
   },
   {
+    "id": "F8-014",
     "sku": "F8-014",
     "name": "Full Apron",
     "category": "Accessories",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
     "short": "Classic full-coverage apron for kitchen and service staff.",
     "long": "A durable apron covering chest to knees, secured with adjustable neck and waist ties for a comfortable fit.",
@@ -436,15 +451,14 @@
       "Striped",
       "Custom Colors"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "moq": "0",
+    "images": [
+      "White Polo Shirt.png"
+    ],
+    "image": "White Polo Shirt.png"
   },
   {
     "sku": "F8-015",
