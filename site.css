@@ -245,7 +245,9 @@ input, select, textarea, button { font: inherit; }
   z-index: 50;
   display: grid;
   place-items: center;
-  background: #050706;
+  background: rgba(5, 7, 6, 0.4);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   pointer-events: none;
   animation: introOut .65s ease 3s forwards;
 }
@@ -254,7 +256,8 @@ input, select, textarea, button { font: inherit; }
   top: 0;
   bottom: 0;
   width: 51%;
-  background: url('assets/pattern.png') center / cover;
+  background: url('assets/pattern.png') center / 300px;
+  opacity: 0.8;
   box-shadow: inset 0 0 90px rgba(0,0,0,.18);
   animation-duration: 1.8s;
   animation-delay: 1s;
