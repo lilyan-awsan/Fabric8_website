@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fabric8 | Checkout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
+  <header class="header">
+      <a class="logo" href="index.html"><h2 style="color: #fff; margin: 0; font-size: 22px; font-weight: 900;">Fabric 8</h2></a>
+      <nav>
+        <a href="services.html">Services</a>
+        <a href="method.html">The Fabric 8 Method</a>
+        <a href="sectors.html">Sectors</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About Us</a>
+      </nav>
+      <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
+        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;">
+          <option value="US">USA</option>
+          <option value="JO">Jordan</option>
+          <option value="INT">International</option>
+        </select>
+        <div class="search-box" style="position: relative;">
+          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 12px; font-size: 12px; border-radius: 20px; border: 1px solid var(--line);" />
+        </div>
+        <a class="quote-link" href="shop.html#quote" aria-label="View Cart">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+          <span id="cartCount" style="font-weight: 900; font-size: 14px;">0</span>
+        </a>
+      </div>
+    </header>
+
+  <main style="padding: 40px 5vw; max-width: 1400px; margin: 0 auto; min-height: calc(100vh - 400px);">
+    <section id="quote" class="quote-page" style="padding: 0;">
+      <div class="section-head" style="margin-bottom: 40px;">
+        <p>Checkout</p>
+        <h1 style="margin: 0; font-size: clamp(34px, 4vw, 64px); line-height: 1; text-transform: uppercase;">Review your items and request quote.</h1>
+      </div>
+      <div class="quote-wrap" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;">
+        <div>
+          <h3 style="margin: 0 0 20px 0; font-size: 24px; text-transform: uppercase;">Cart Contents</h3>
+          <div id="cartItems" class="cart-items" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
+          <button id="clearCart" class="button dark" type="button" style="width: 100%;">Clear Cart</button>
+        </div>
+        <form id="quoteForm" class="quote-form" style="background: #fff; padding: 30px; border-radius: 12px; border: 1px solid var(--line); display: flex; flex-direction: column; gap: 16px;">
+          <h3 style="margin: 0 0 10px 0; font-size: 20px; text-transform: uppercase;">Contact & Shipping Details</h3>
+          
+          <input name="Full name" required placeholder="Full name*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input name="Job Title" required placeholder="Job Title*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input name="Company name" required placeholder="Company name*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input name="Email" type="email" required placeholder="Email*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input name="Phone" required placeholder="Phone*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          
+          <select name="Industry" required style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;">
+            <option value="">Industry*</option>
+            <option>Food and Beverage</option>
+            <option>Hospitality</option>
+            <option>Corporate</option>
+            <option>Healthcare</option>
+            <option>Industrial</option>
+            <option>Education</option>
+            <option>Aviation</option>
+            <option>Other</option>
+          </select>
+
+          <input name="Address 1" required placeholder="Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input name="Address 2" placeholder="Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <input name="City" required placeholder="City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <input name="State" required placeholder="State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <input name="Zip" required placeholder="Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <input name="Country" required placeholder="Country*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          </div>
+
+          <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink); margin: 8px 0;">
+            <input type="checkbox" name="Billing same as shipping" value="Yes" checked style="width: 18px; min-height: 18px; padding: 0; margin: 0;" />
+            Billing address is the same as shipping address
+          </label>
+
+          <label style="font-size: 13px; font-weight: bold;">Required delivery date*
+            <input name="Required delivery date" type="date" required style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 6px; margin-top: 6px;" />
+          </label>
+
+          <label style="font-size: 13px; font-weight: bold;">Reference file (Logo, Tech Pack, etc.)
+            <input name="File Upload" type="file" accept=".pdf,.png,.jpg,.jpeg,.zip" style="width: 100%; padding: 9px; margin-top: 6px; border: 1px solid var(--line); border-radius: 6px;" />
+          </label>
+
+          <textarea name="Message" rows="5" required placeholder="Message / notes*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; resize: vertical;"></textarea>
+          
+          <button class="button primary" type="submit" style="width: 100%; padding: 16px; font-size: 14px; margin-top: 10px;">Submit Quote Request</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6;">
+      <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Fabric-8</h4>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Overview</h4>
+          <p style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
+            <a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
+            <a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
+            <a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
+            <a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a>
+          </p>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
+          <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
+          <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <!-- Social Placeholders -->
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">In</a>
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">Fb</a>
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">Ig</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
+          <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
+        </div>
+      </div>
+      <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
+        &copy; 2026 Fabric8. All rights reserved.
+      </div>
+    </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

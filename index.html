@@ -14,23 +14,34 @@
       <div class="door door-left"></div>
       <div class="door door-right"></div>
       <div class="door-logo">
-        <img src="assets/fabric8-logo-white.webp" alt="" />
-        <p>Uniforms, Solved.</p>
-        <span>Fashion-grade uniform programs for modern teams</span>
+        <h1 style="margin: 0; font-size: clamp(48px, 6vw, 84px); font-weight: 900; letter-spacing: 0.05em; line-height: 1;">Fabric 8</h1>
+        <p style="margin: 10px 0 0; font-size: clamp(28px, 4vw, 56px); font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;">Uniforms, Solved.</p>
       </div>
     </div>
-    <div class="topline"><a href="shop.html">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
+    <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
     <header class="header">
-      <a class="logo" href="home.html"><img src="assets/fabric8-logo-white.webp" alt="Fabric8" /></a>
+      <a class="logo" href="index.html"><h2 style="color: #fff; margin: 0; font-size: 22px; font-weight: 900;">Fabric 8</h2></a>
       <nav>
-        <a href="home.html">Home</a>
-        <a href="shop.html">Shop</a>
         <a href="services.html">Services</a>
+        <a href="method.html">The Fabric 8 Method</a>
         <a href="sectors.html">Sectors</a>
-        <a href="method.html">Method</a>
-        <a href="about.html">About</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About Us</a>
       </nav>
-      <a class="quote-link" href="shop.html#quote">Get Quote</a>
+      <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
+        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;">
+          <option value="US">USA</option>
+          <option value="JO">Jordan</option>
+          <option value="INT">International</option>
+        </select>
+        <div class="search-box" style="position: relative;">
+          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 12px; font-size: 12px; border-radius: 20px; border: 1px solid var(--line);" />
+        </div>
+        <a class="quote-link" href="shop.html#quote" aria-label="View Cart">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+          <span id="cartCount" style="font-weight: 900; font-size: 14px;">0</span>
+        </a>
+      </div>
     </header>
 
     <main>
@@ -42,7 +53,7 @@
           <p>Corporate couture for working teams</p>
           <h1>Uniforms, Solved.</h1>
           <span>Built to perform. Styled to represent. Fabric8 delivers tailored uniform solutions for organizations that need more than a catalog.</span>
-          <a class="button primary" href="shop.html#quote">Get Quote</a>
+          <a class="button primary" href="shop.html" style="border-radius: 8px;">Shop</a>
         </div>
       </section>
 
@@ -60,17 +71,77 @@
           <div><p>Branding</p><h2>Embroidery and print placement preview.</h2><a href="shop.html#studio">Design Logo</a></div>
         </article>
       </section>
+
+      <section class="capability-belt" style="padding: 60px 5vw; background: #fff; text-align: center; border-top: 1px solid var(--line);">
+        <h2 style="font-size: clamp(24px, 3vw, 36px); text-transform: uppercase; margin-bottom: 30px;">Explore Our Sector Capabilities</h2>
+        <div style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory;">
+          <!-- Capability Icons -->
+          <a href="sectors.html#food" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🍽️</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Food & Bev</span>
+          </a>
+          <a href="sectors.html#hospitality" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🏨</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Hospitality</span>
+          </a>
+          <a href="sectors.html#corporate" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">💼</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Corporate</span>
+          </a>
+          <a href="sectors.html#healthcare" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">⚕️</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Healthcare</span>
+          </a>
+          <a href="sectors.html#industrial" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🏭</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Industrial</span>
+          </a>
+          <a href="sectors.html#education" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🎓</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Education</span>
+          </a>
+          <a href="sectors.html#aviation" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">✈️</div>
+            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Aviation</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="brands-trust" style="padding: 60px 5vw; background: var(--paper); text-align: center; border-top: 1px solid var(--line);">
+        <p style="font-size: 12px; font-weight: 900; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px;">Brands That Trust Us</p>
+        <div style="display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; align-items: center; opacity: 0.5;">
+          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+        </div>
+      </section>
     </main>
     
     <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6;">
       <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
         <div>
           <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Fabric-8</h4>
-          <p>1234 Business Solutions LLC<br>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071</p>
         </div>
         <div>
-          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact</h4>
-          <p>+1 770-710-2286<br>+962 796 788 240<br><a href="mailto:hello@thefabric8.com" style="color: var(--green); text-decoration: none;">hello@thefabric8.com</a></p>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Overview</h4>
+          <p style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
+            <a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
+            <a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
+            <a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
+            <a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a>
+          </p>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
+          <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
+          <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <!-- Social Placeholders -->
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">In</a>
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">Fb</a>
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">Ig</a>
+          </div>
         </div>
         <div>
           <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
@@ -78,7 +149,7 @@
         </div>
       </div>
       <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
-        &copy; 2026 1234 Business Solutions LLC. All rights reserved.
+        &copy; 2026 Fabric8. All rights reserved.
       </div>
     </footer>
 

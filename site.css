@@ -83,13 +83,29 @@ input, select, textarea, button { font: inherit; }
   letter-spacing: .06em;
   text-transform: uppercase;
 }
+.header nav a { padding-bottom: 4px; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
+.header nav a:hover,
+.header nav a.active { border-bottom-color: var(--yellow, #ffd700); }
 .quote-link {
-  border: 1px solid #111;
-  padding: 12px 17px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--green);
+  color: var(--green);
+  padding: 0 15px;
+  min-height: 36px;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: .06em;
   text-transform: uppercase;
+  border-radius: 8px;
+  background: transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.quote-link:hover {
+  background: var(--green);
+  color: #fff;
 }
 
 .button {
@@ -104,8 +120,11 @@ input, select, textarea, button { font: inherit; }
   letter-spacing: .09em;
   text-transform: uppercase;
   cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 .button.primary { background: var(--green); border-color: var(--green); color: #fff; }
+.button.primary:hover { background: #256b30; }
 .button.light { color: #fff; }
 .button.dark { background: #111; color: #fff; }
 
@@ -205,21 +224,15 @@ input, select, textarea, button { font: inherit; }
   top: 0;
   bottom: 0;
   width: 51%;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(255,236,190,.2), transparent 14%),
-    linear-gradient(90deg, transparent 0 18%, rgba(255,229,174,.18) 19%, transparent 20% 80%, rgba(255,229,174,.16) 81%, transparent 82%),
-    linear-gradient(0deg, transparent 0 16%, rgba(255,229,174,.16) 17%, transparent 18% 82%, rgba(255,229,174,.14) 83%, transparent 84%),
-    radial-gradient(circle at 50% 35%, rgba(255,221,153,.25), transparent 26%),
-    repeating-linear-gradient(90deg, rgba(255,235,180,.12) 0 2px, transparent 2px 48px),
-    linear-gradient(135deg, #2b1c12, #73502a 45%, #120f0c);
-  box-shadow: inset 0 0 90px rgba(0,0,0,.68);
+  background: var(--paper); /* Replaced with solid paper color temporarily until brand pattern is available */
+  box-shadow: inset 0 0 90px rgba(0,0,0,.18);
   animation-duration: 1.8s;
   animation-delay: 1s;
   animation-fill-mode: forwards;
   animation-timing-function: cubic-bezier(.78,0,.16,1);
 }
-.door-left { left: 0; border-right: 1px solid rgba(255,229,174,.55); animation-name: doorLeft; }
-.door-right { right: 0; border-left: 1px solid rgba(255,229,174,.55); animation-name: doorRight; }
+.door-left { left: 0; border-right: 1px solid var(--line); animation-name: doorLeft; }
+.door-right { right: 0; border-left: 1px solid var(--line); animation-name: doorRight; }
 .door-logo {
   position: relative;
   z-index: 2;
@@ -235,7 +248,7 @@ input, select, textarea, button { font: inherit; }
   width: min(360px, 58vw);
   max-height: 130px;
   object-fit: contain;
-  filter: drop-shadow(0 18px 30px rgba(0,0,0,.42));
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.22));
 }
 
 .door-logo p {
@@ -401,7 +414,9 @@ input, select, textarea, button { font: inherit; }
 .sector-cards article,
 .method-list article {
   background: #fff;
-  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 .editorial-grid img { width: 100%; aspect-ratio: 1 / 1.08; object-fit: cover; background: #efede7; }
 .editorial-grid div,

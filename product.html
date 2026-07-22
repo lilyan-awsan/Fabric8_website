@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fabric8 | Product</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
+  <header class="header">
+      <a class="logo" href="index.html"><h2 style="color: #fff; margin: 0; font-size: 22px; font-weight: 900;">Fabric 8</h2></a>
+      <nav>
+        <a href="services.html">Services</a>
+        <a href="method.html">The Fabric 8 Method</a>
+        <a href="sectors.html">Sectors</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About Us</a>
+      </nav>
+      <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
+        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;">
+          <option value="US">USA</option>
+          <option value="JO">Jordan</option>
+          <option value="INT">International</option>
+        </select>
+        <div class="search-box" style="position: relative;">
+          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 12px; font-size: 12px; border-radius: 20px; border: 1px solid var(--line);" />
+        </div>
+        <a class="quote-link" href="shop.html#quote" aria-label="View Cart">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+          <span id="cartCount" style="font-weight: 900; font-size: 14px;">0</span>
+        </a>
+      </div>
+    </header>
+
+  <main style="padding: 40px 5vw; max-width: 1400px; margin: 0 auto; min-height: calc(100vh - 400px);">
+    <div class="product-page-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <!-- Product Images -->
+      <div class="product-gallery" style="position: relative;">
+        <div class="main-image-container" style="background: #f0f0f0; min-height: 500px; display: grid; place-items: center; border-radius: 12px; overflow: hidden; position: relative;">
+          <img id="productMainImage" src="" alt="Product" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+        </div>
+        <div id="productThumbnails" style="display: flex; gap: 12px; margin-top: 16px; overflow-x: auto;">
+          <!-- Thumbnails injected via JS -->
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="product-info" style="display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <span id="productCategory" style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--green);">Category</span>
+          <h1 id="productName" style="margin: 8px 0; font-size: clamp(28px, 4vw, 42px); font-weight: 900; line-height: 1.1; text-transform: uppercase;">Product Name</h1>
+          <span id="productSku" style="color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.05em;">SKU: XXX-XXX</span>
+        </div>
+        
+        <div class="price-availability" style="display: flex; gap: 16px; align-items: center;">
+          <span id="productAvailability" style="padding: 6px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase;">Made to Order</span>
+        </div>
+
+        <!-- Accordions for Details -->
+        <div class="product-accordions" style="border-top: 1px solid var(--line);">
+          <!-- Product Details -->
+          <details class="accordion" style="border-bottom: 1px solid var(--line);">
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between;">Product Details <span>+</span></summary>
+            <div style="padding-bottom: 16px; font-size: 14px; line-height: 1.6; color: var(--ink);">
+              <p id="productDesc"></p>
+            </div>
+          </details>
+          <!-- Material Details -->
+          <details class="accordion" style="border-bottom: 1px solid var(--line);">
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between;">Material Details <span>+</span></summary>
+            <div style="padding-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--ink);">
+              <p><strong>Material:</strong> <span id="productFabric"></span></p>
+              <p><strong>GSM:</strong> <span id="productGsm"></span></p>
+              <p><strong>Care Instructions:</strong> <span id="productCare">Machine wash cold, tumble dry low.</span></p>
+            </div>
+          </details>
+          <!-- Technical Sketch -->
+          <details class="accordion" style="border-bottom: 1px solid var(--line);">
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between;">Technical Sketch <span>+</span></summary>
+            <div style="padding-bottom: 16px; display: grid; place-items: center; background: #fafafa; border-radius: 8px;">
+              <img id="productSketch" src="" alt="Technical Sketch" style="max-height: 300px; mix-blend-mode: multiply;" onerror="this.style.display='none'" />
+            </div>
+          </details>
+        </div>
+
+        <!-- Configuration -->
+        <div class="product-config" style="background: #faf9f4; padding: 24px; border-radius: 12px; border: 1px solid var(--line); margin-top: 10px;">
+          
+          <div style="margin-bottom: 24px;">
+            <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 12px;">Select Color*</label>
+            <div id="productColorFilter" class="color-filter"></div>
+          </div>
+
+          <div style="margin-bottom: 24px;" id="sizeQtyMatrixContainer">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;">Sizes & Quantities*</label>
+              <span style="font-size: 11px; font-weight: 700; color: var(--muted);">Min. QTY: <span id="minQtyLabel">50</span></span>
+            </div>
+            <!-- Vertical matrix generated via JS -->
+            <div id="sizeQtyMatrix" style="display: flex; flex-direction: column; gap: 8px;">
+              <!-- Example item:
+              <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 8px; border: 1px solid var(--line); border-radius: 8px;">
+                <button style="flex: 1; padding: 10px; background: transparent; border: 1px solid var(--line); border-radius: 4px; font-weight: 800;">S</button>
+                <input type="number" min="0" placeholder="QTY" style="width: 80px; padding: 10px; text-align: center;" />
+              </div>
+              -->
+            </div>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 12px;">CUSTOMIZATION</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <label class="customization-card" style="border: 1px solid var(--green); background: rgba(47,135,61,0.05); border-radius: 8px; padding: 16px; text-align: center; cursor: pointer;">
+                <input type="radio" name="customizationType" value="upload_logo" style="display: none;">
+                <span style="font-size: 13px; font-weight: 800; color: var(--green);">Upload Logo</span>
+              </label>
+              <label class="customization-card" style="border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 16px; text-align: center; cursor: pointer;">
+                <input type="radio" name="customizationType" value="text_embroidery" style="display: none;">
+                <span style="font-size: 13px; font-weight: 800;">Text Embroidery</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="customizationSettings" style="display: none; margin-bottom: 24px; padding: 16px; border: 1px dashed var(--line); border-radius: 8px; background: #fff;">
+            <!-- Upload Logo Settings -->
+            <div id="logoSettings" style="display: none; flex-direction: column; gap: 12px;">
+              <h4 style="margin: 0; font-size: 13px; font-weight: 800; text-transform: uppercase;">Logo Details</h4>
+              <input type="file" id="pageLogoUpload" accept="image/*" style="width: 100%; font-size: 12px;" />
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Placement</label>
+                  <select id="pageLogoPlacement" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
+                    <option value="left-chest">Left chest</option>
+                    <option value="right-chest">Right chest</option>
+                    <option value="center">Center</option>
+                    <option value="sleeve">Sleeve</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Finish</label>
+                  <select id="pageLogoFinish" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
+                    <option value="Embroidery">Embroidery</option>
+                    <option value="DTF">Direct To Fabric (DTF)</option>
+                  </select>
+                </div>
+              </div>
+              <p id="finishHelperText" style="margin: 0; font-size: 11px; color: var(--muted);"></p>
+            </div>
+
+            <!-- Text Settings -->
+            <div id="textSettings" style="display: none; flex-direction: column; gap: 12px;">
+              <h4 style="margin: 0; font-size: 13px; font-weight: 800; text-transform: uppercase;">Text Embroidery Details</h4>
+              
+              <div>
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Text Input (Line 1)</label>
+                <input type="text" id="pageTextInput1" placeholder="Enter text..." style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;" />
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Placement</label>
+                  <select id="pageTextPlacement" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
+                    <option value="left-chest">Left chest</option>
+                    <option value="right-chest">Right chest</option>
+                    <option value="center">Center</option>
+                    <option value="sleeve">Sleeve</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Font Style</label>
+                  <select id="pageTextFont" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
+                    <option value="block">Block</option>
+                    <option value="script">Script</option>
+                    <option value="serif">Serif</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 8px;">Thread Color</label>
+                <div id="pageTextThreadColors" class="color-filter"></div>
+              </div>
+            </div>
+
+            <p style="margin: 12px 0 0 0; font-size: 11px; color: #a55;">Mockup previews are approximate. Final thread colors and print dimensions will be scaled to match your chosen garment size specifications.</p>
+          </div>
+
+          <button id="pageAddToCart" class="button primary" style="width: 100%; padding: 16px; font-size: 14px;">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6;">
+      <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Fabric-8</h4>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Overview</h4>
+          <p style="display: flex; flex-direction: column; gap: 8px;">
+            <a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
+            <a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
+            <a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
+            <a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
+            <a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a>
+          </p>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
+          <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
+          <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <!-- Social Placeholders -->
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">In</a>
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">Fb</a>
+            <a href="#" style="display: inline-block; width: 32px; height: 32px; background: #333; border-radius: 50%; text-align: center; line-height: 32px; color: #fff;">Ig</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
+          <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
+        </div>
+      </div>
+      <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
+        &copy; 2026 Fabric8. All rights reserved.
+      </div>
+    </footer>
+
+  <script src="site.js"></script>
+</body>
+</html>
