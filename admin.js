@@ -548,3 +548,93 @@ document.getElementById("bulkDeleteBtn")?.addEventListener("click", async () => 
     }
   }
 });
+
+// --- Tab Switching Logic ---
+const tabProducts = document.getElementById("tabProducts");
+const tabSettings = document.getElementById("tabSettings");
+const productsSection = document.getElementById("productsSection");
+const settingsSection = document.getElementById("settingsSection");
+
+if (tabProducts && tabSettings) {
+  tabProducts.addEventListener("click", () => {
+    tabProducts.classList.add("active");
+    tabProducts.style.background = "var(--green)";
+    tabProducts.style.color = "white";
+    tabSettings.classList.remove("active");
+    tabSettings.style.background = "white";
+    tabSettings.style.color = "var(--ink)";
+    productsSection.style.display = "block";
+    settingsSection.style.display = "none";
+  });
+  
+  tabSettings.addEventListener("click", () => {
+    tabSettings.classList.add("active");
+    tabSettings.style.background = "var(--green)";
+    tabSettings.style.color = "white";
+    tabProducts.classList.remove("active");
+    tabProducts.style.background = "white";
+    tabProducts.style.color = "var(--ink)";
+    settingsSection.style.display = "block";
+    productsSection.style.display = "none";
+    fetchSettings();
+  });
+}
+
+// --- Settings CMS Logic ---
+async function fetchSettings() {
+  try {
+    const res = await fetch('data/admin_settings.json?t=' + Date.now());
+    if (res.ok) {
+      const settings = await res.json();
+      document.getElementById("settingPromoBanner").value = settings.promoBanner || "";
+      document.getElementById("settingFooterLegal").value = settings.footerLegal || "";
+      document.getElementById("settingSectors").value = (settings.visibleSectors || []).join(", ");
+      document.getElementById("settingCategories").value = (settings.visibleCategories || []).join(", ");
+      document.getElementById("settingLogoScale").value = settings.logoMaxScale || "15";
+      document.getElementById("settingLockPositions").value = settings.lockPositions ? "true" : "false";
+    }
+  } catch (err) {
+    console.error("No existing settings found.");
+  }
+}
+
+document.getElementById("saveSettingsBtn")?.addEventListener("click", async () => {
+  const btn = document.getElementById("saveSettingsBtn");
+  const originalText = btn.textContent;
+  btn.textContent = "Saving to GitHub...";
+  btn.disabled = true;
+
+  const settingsPayload = {
+    promoBanner: document.getElementById("settingPromoBanner").value,
+    footerLegal: document.getElementById("settingFooterLegal").value,
+    visibleSectors: document.getElementById("settingSectors").value.split(",").map(s => s.trim()).filter(Boolean),
+    visibleCategories: document.getElementById("settingCategories").value.split(",").map(c => c.trim()).filter(Boolean),
+    logoMaxScale: parseInt(document.getElementById("settingLogoScale").value || 15),
+    lockPositions: document.getElementById("settingLockPositions").value === "true"
+  };
+
+  try {
+    const res = await fetch('/api/githubSync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: authToken,
+        action: "save_settings",
+        product: settingsPayload
+      })
+    });
+    
+    const data = await res.json();
+    if (data.success) {
+      alert(`Success! Site Settings saved to GitHub.\nNOTE: Vercel takes ~45 seconds to rebuild the website. Your changes will be live shortly.`);
+    } else {
+      alert("Error saving settings: " + data.message);
+    }
+  } catch (error) {
+    alert("Network error. Ensure you are on Vercel.");
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+});
+

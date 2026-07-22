@@ -1,6 +1,28 @@
 let products = [];
+let siteSettings = {};
+
+function applySiteSettings() {
+  if (siteSettings.promoBanner) {
+    const banner = document.querySelector('.promo-banner p');
+    if (banner) banner.textContent = siteSettings.promoBanner;
+  }
+  if (siteSettings.footerLegal) {
+    const footer = document.querySelector('.site-footer-bottom p');
+    if (footer) footer.textContent = siteSettings.footerLegal;
+  }
+}
 
 async function loadProducts() {
+  try {
+    const settingsRes = await fetch('data/admin_settings.json?t=' + Date.now());
+    if (settingsRes.ok) {
+      siteSettings = await settingsRes.json();
+      applySiteSettings();
+    }
+  } catch (err) {
+    console.warn("Could not load admin settings.");
+  }
+
   try {
     const res = await fetch('data/products.json');
     if (!res.ok) throw new Error("Failed to load products");
@@ -84,7 +106,7 @@ let activeSearchTerm = "";
 let activeSortTerm = "featured";
 
 function renderFilters() {
-  const allowedSectors = ["Food and beverage", "Hospitality", "Corporate", "Healthcare", "Industrial"];
+  const allowedSectors = (siteSettings.visibleSectors && siteSettings.visibleSectors.length > 0) ? siteSettings.visibleSectors : ["Food and beverage", "Hospitality", "Corporate", "Healthcare", "Industrial"];
   const sectorContainer = document.getElementById("sectorFilterContainer");
   if (sectorContainer) {
     let sHtml = `<button type="button" class="category-btn ${activeSectorFilter === 'All' ? 'active' : ''}" data-sec="All">All Sectors</button>`;
@@ -101,7 +123,7 @@ function renderFilters() {
     });
   }
 
-  const allowedCategories = ["Head Wear", "Top Wear", "Bottom Wear", "Outer Wear", "Accessories"];
+  const allowedCategories = (siteSettings.visibleCategories && siteSettings.visibleCategories.length > 0) ? siteSettings.visibleCategories : ["Head Wear", "Top Wear", "Bottom Wear", "Outer Wear", "Accessories"];
   const categoryContainer = document.getElementById("categoryFilterContainer");
   if (categoryContainer) {
     let cHtml = `<button type="button" class="category-btn ${activeCategoryFilter === 'All' ? 'active' : ''}" data-cat="All">All Categories</button>`;
@@ -403,11 +425,25 @@ function setupStudio() {
     }
   });
   $("#logoSize").addEventListener("input", (event) => {
-    $("#logoPreview").style.setProperty("--logo-size", `${event.target.value}%`);
+    let val = parseFloat(event.target.value);
+    const maxScale = siteSettings.logoMaxScale || 15;
+    if (val > maxScale) {
+       val = maxScale;
+       event.target.value = maxScale;
+    }
+    $("#logoPreview").style.setProperty("--logo-size", `${val}%`);
   });
 
   const logoPreview = $("#logoPreview");
   const placementSelect = $("#placementSelect");
+  if (siteSettings.lockPositions && placementSelect) {
+    Array.from(placementSelect.options).forEach(opt => {
+      if (opt.value === "custom") {
+        opt.disabled = true;
+        opt.textContent = "Custom Position (Locked by Admin)";
+      }
+    });
+  }
   const studioStage = document.querySelector(".studio-stage");
   let initLeft, initTop;
   $("#logoUpload").addEventListener("change", (event) => {
@@ -735,6 +771,13 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     attachments.push({ filename: fileName, content: base64File });
   }
 
+  // Attach auto-transparent logos from the cart
+  cart.forEach((item, index) => {
+    if (item.logoData) {
+      attachments.push({ filename: `${item.sku}_Logo_${index + 1}.png`, content: item.logoData });
+    }
+  });
+
   // Generate Excel
   try {
     const excelBase64 = await generateExcelBase64(customerInfo, cart);
@@ -935,6 +978,64 @@ function initProductPage(sku) {
     });
   }
 
+  // Handle Customization Radio Buttons
+  document.querySelectorAll('.radio-btn input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const container = e.target.closest('.radio-btn').parentElement;
+      container.querySelectorAll('.radio-btn').forEach(lbl => {
+        lbl.classList.remove('active');
+        lbl.style.borderColor = 'var(--line)';
+        lbl.style.background = '#fff';
+        const span = lbl.querySelector('span');
+        if(span) span.style.color = '';
+      });
+      const activeLbl = e.target.closest('.radio-btn');
+      activeLbl.classList.add('active');
+      activeLbl.style.borderColor = 'var(--green)';
+      activeLbl.style.background = 'rgba(47,135,61,0.05)';
+      const activeSpan = activeLbl.querySelector('span');
+      if(activeSpan) activeSpan.style.color = 'var(--green)';
+    });
+  });
+
+  let uploadedLogoBase64 = null;
+  const logoUploadInput = document.getElementById("pageLogoUpload");
+  if (logoUploadInput) {
+    logoUploadInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+          
+          // Auto-transparency: convert near-white to transparent
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            if (r > 240 && g > 240 && b > 240) {
+              data[i + 3] = 0; // Alpha to 0
+            }
+          }
+          
+          ctx.putImageData(imageData, 0, 0);
+          uploadedLogoBase64 = canvas.toDataURL('image/png').split(',')[1];
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   // Add to Cart
   document.getElementById("pageAddToCart")?.addEventListener("click", () => {
     let totalQty = 0;
@@ -956,24 +1057,27 @@ function initProductPage(sku) {
     const custType = document.querySelector('input[name="customizationType"]:checked')?.value;
     let brandingDesc = "Blank";
     if (custType === 'upload_logo') {
-      const place = document.getElementById("pageLogoPlacement").selectedOptions[0].text;
-      const finish = document.getElementById("pageLogoFinish").selectedOptions[0].text;
+      const place = document.querySelector('input[name="pageLogoPlacement"]:checked')?.nextElementSibling.textContent || "Left Chest";
+      const finish = document.querySelector('input[name="pageLogoFinish"]:checked')?.nextElementSibling.textContent || "Embroidery";
       const fileInput = document.getElementById("pageLogoUpload");
-      if (!fileInput.files.length) {
-        alert("Please upload a logo image.");
+      if (!fileInput.files.length || !uploadedLogoBase64) {
+        alert("Please upload a logo image and wait a moment for processing.");
         return;
       }
       brandingDesc = `Logo (${finish}) on ${place}`;
     } else if (custType === 'text_embroidery') {
-      const text = document.getElementById("pageTextInput1").value;
-      if (!text) {
-        alert("Please enter text for embroidery.");
+      const text1 = document.getElementById("pageTextInput1").value;
+      const text2 = document.getElementById("pageTextInput2")?.value || "";
+      const text3 = document.getElementById("pageTextInput3")?.value || "";
+      if (!text1) {
+        alert("Please enter text for at least Line 1.");
         return;
       }
-      const place = document.getElementById("pageTextPlacement").selectedOptions[0].text;
-      const font = document.getElementById("pageTextFont").selectedOptions[0].text;
+      const allText = [text1, text2, text3].filter(t => t.trim() !== "").join(" | ");
+      const place = document.querySelector('input[name="pageTextPlacement"]:checked')?.nextElementSibling.textContent || "Left Chest";
+      const font = document.querySelector('input[name="pageTextFont"]:checked')?.nextElementSibling.textContent || "Block";
       const tColor = document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.color || "Black";
-      brandingDesc = `Text "${text}" (${font}, ${tColor}) on ${place}`;
+      brandingDesc = `Text "${allText}" (${font}, ${tColor}) on ${place}`;
     }
     
     // Add items for each size
@@ -984,7 +1088,8 @@ function initProductPage(sku) {
         color: activeCatalogColor,
         size: size,
         branding: brandingDesc,
-        customizationType: custType || null
+        customizationType: custType || null,
+        logoData: custType === 'upload_logo' ? uploadedLogoBase64 : null
       });
     }
     

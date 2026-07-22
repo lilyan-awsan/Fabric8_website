@@ -41,8 +41,18 @@
     </header>
 
     <main class="admin-main">
-      <div class="admin-topbar">
-        <h1>Products</h1>
+      <div class="admin-topbar" style="justify-content: flex-start; gap: 20px;">
+        <h1 style="margin: 0;">Admin Dashboard</h1>
+        <div class="admin-tabs" style="display: flex; gap: 10px; margin-left: 20px;">
+          <button id="tabProducts" class="tab-btn active" style="padding: 8px 16px; border: none; background: var(--green); color: white; border-radius: 4px; cursor: pointer; font-weight: bold;">Products</button>
+          <button id="tabSettings" class="tab-btn" style="padding: 8px 16px; border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 4px; cursor: pointer; font-weight: bold;">Site Settings</button>
+        </div>
+      </div>
+      
+      <!-- PRODUCTS TAB -->
+      <div id="productsSection">
+        <div class="admin-topbar" style="margin-top: 20px;">
+          <h2 style="margin: 0; font-size: 18px;">Product Catalog</h2>
         
         <div class="admin-filters">
           <input type="text" id="searchBox" class="filter-input" placeholder="Search by SKU or Name...">
@@ -75,6 +85,61 @@
           </tbody>
         </table>
       </div>
+      </div> <!-- End Products Tab -->
+
+      <!-- SETTINGS TAB -->
+      <div id="settingsSection" style="display: none; margin-top: 20px;">
+        <div style="background: white; padding: 24px; border-radius: 8px; border: 1px solid var(--line); max-width: 800px;">
+          <h2 style="margin-top: 0;">Global Site Settings</h2>
+          
+          <div class="form-grid" style="margin-top: 20px;">
+            <div class="input-group full-width">
+              <label>Global Promo Banner Text</label>
+              <input type="text" id="settingPromoBanner" placeholder="e.g. Free shipping on orders over $500">
+            </div>
+            
+            <div class="input-group full-width">
+              <label>Footer Legal Text</label>
+              <textarea id="settingFooterLegal" rows="2" placeholder="e.g. © 2026 Fabric-8. All rights reserved."></textarea>
+            </div>
+            
+            <div class="input-group full-width">
+              <label>Visible Sectors (comma separated)</label>
+              <input type="text" id="settingSectors" placeholder="e.g. Corporate, Healthcare, Hospitality">
+              <span style="font-size: 11px; color: var(--muted); margin-top: 4px; display: block;">Controls the sector filter buttons on the shop page.</span>
+            </div>
+            
+            <div class="input-group full-width">
+              <label>Visible Categories (comma separated)</label>
+              <input type="text" id="settingCategories" placeholder="e.g. Top Wear, Bottom Wear, Accessories">
+              <span style="font-size: 11px; color: var(--muted); margin-top: 4px; display: block;">Controls the category filter buttons on the shop page.</span>
+            </div>
+            
+            <div class="input-group full-width" style="margin-top: 20px;">
+              <h3 style="margin-bottom: 12px;">Studio Branding Settings</h3>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                  <label>Logo Default Max Scaling (%)</label>
+                  <input type="number" id="settingLogoScale" placeholder="e.g. 15">
+                </div>
+                <div>
+                  <label>Lock Studio Positions?</label>
+                  <select id="settingLockPositions">
+                    <option value="false">No - Allow free drag & drop</option>
+                    <option value="true">Yes - Snap to left/right chest</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); text-align: right;">
+            <button id="saveSettingsBtn" class="button primary">Save Settings</button>
+          </div>
+        </div>
+      </div> <!-- End Settings Tab -->
+
     </main>
   </div>
 

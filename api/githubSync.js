@@ -58,7 +58,41 @@ export default async function handler(req, res) {
     let productsList = JSON.parse(contentStr);
 
     // 3. Apply the action
-    if (action === "save") {
+    if (action === "save_settings") {
+      const settingsPath = "data/admin_settings.json";
+      let currentSettingsSha = null;
+      try {
+        const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+          headers: { 'Authorization': `Bearer ${githubToken}` }
+        });
+        if (fileRes.ok) {
+          const fileData = await fileRes.json();
+          currentSettingsSha = fileData.sha;
+        }
+      } catch (e) {}
+
+      const newContentStr = JSON.stringify(product, null, 2); // 'product' holds settings payload here
+      const newContentBase64 = Buffer.from(newContentStr).toString('base64');
+      const bodyPayload = {
+        message: 'Update admin settings',
+        content: newContentBase64
+      };
+      if (currentSettingsSha) bodyPayload.sha = currentSettingsSha;
+
+      const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodyPayload)
+      });
+      if (!updateRes.ok) {
+        const err = await updateRes.json();
+        throw new Error("Failed to save settings to GitHub: " + err.message);
+      }
+      return res.status(200).json({ success: true, message: 'Settings saved successfully' });
+    } else if (action === "save") {
       delete product.existingImages;
       const newProduct = { 
         ...product, 
@@ -77,28 +111,30 @@ export default async function handler(req, res) {
     }
 
     // 4. Save the updated products.json back to GitHub
-    const newContentStr = JSON.stringify(productsList, null, 2);
-    const newContentBase64 = Buffer.from(newContentStr).toString('base64');
+    if (action === "save" || action === "delete") {
+      const newContentStr = JSON.stringify(productsList, null, 2);
+      const newContentBase64 = Buffer.from(newContentStr).toString('base64');
 
-    const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${jsonPath}`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${githubToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: `${action === 'delete' ? 'Delete' : 'Save'} product ${product.sku || product.id}`,
-        content: newContentBase64,
-        sha: currentSha
-      })
-    });
+      const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${jsonPath}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `${action === 'delete' ? 'Delete' : 'Save'} product ${product.sku || product.id}`,
+          content: newContentBase64,
+          sha: currentSha
+        })
+      });
 
-    if (!updateRes.ok) {
-      const err = await updateRes.json();
-      throw new Error("Failed to save products.json to GitHub: " + err.message);
+      if (!updateRes.ok) {
+        const err = await updateRes.json();
+        throw new Error("Failed to save products.json to GitHub: " + err.message);
+      }
+
+      return res.status(200).json({ success: true, message: 'Saved successfully', products: productsList });
     }
-
-    return res.status(200).json({ success: true, message: 'Saved successfully', products: productsList });
 
   } catch (error) {
     console.error("GitHub Sync Error:", error);

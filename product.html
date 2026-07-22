@@ -130,22 +130,40 @@
               <h4 style="margin: 0; font-size: 13px; font-weight: 800; text-transform: uppercase;">Logo Details</h4>
               <input type="file" id="pageLogoUpload" accept="image/*" style="width: 100%; font-size: 12px;" />
               
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 16px;">
                 <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Placement</label>
-                  <select id="pageLogoPlacement" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
-                    <option value="left-chest">Left chest</option>
-                    <option value="right-chest">Right chest</option>
-                    <option value="center">Center</option>
-                    <option value="sleeve">Sleeve</option>
-                  </select>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Placement</label>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="pageLogoPlacementContainer">
+                    <label class="radio-btn active" style="border: 1px solid var(--green); background: rgba(47,135,61,0.05); border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageLogoPlacement" value="left-chest" checked style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800; color: var(--green);">Left Chest</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageLogoPlacement" value="right-chest" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Right Chest</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageLogoPlacement" value="center" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Center</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageLogoPlacement" value="sleeve" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Sleeve</span>
+                    </label>
+                  </div>
                 </div>
                 <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Finish</label>
-                  <select id="pageLogoFinish" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
-                    <option value="Embroidery">Embroidery</option>
-                    <option value="DTF">Direct To Fabric (DTF)</option>
-                  </select>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Finish</label>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="pageLogoFinishContainer">
+                    <label class="radio-btn active" style="border: 1px solid var(--green); background: rgba(47,135,61,0.05); border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageLogoFinish" value="Embroidery" checked style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800; color: var(--green);">Embroidery</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageLogoFinish" value="DTF" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Direct To Fabric (DTF)</span>
+                    </label>
+                  </div>
                 </div>
               </div>
               <p id="finishHelperText" style="margin: 0; font-size: 11px; color: var(--muted);"></p>
@@ -156,27 +174,56 @@
               <h4 style="margin: 0; font-size: 13px; font-weight: 800; text-transform: uppercase;">Text Embroidery Details</h4>
               
               <div>
-                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Text Input (Line 1)</label>
-                <input type="text" id="pageTextInput1" placeholder="Enter text..." style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;" />
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Text Input (Line 1 - 14px)</label>
+                <input type="text" id="pageTextInput1" placeholder="Enter text for Line 1..." style="width: 100%; padding: 8px; font-size: 14px; margin-top: 4px;" />
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Text Input (Line 2 - 12px)</label>
+                <input type="text" id="pageTextInput2" placeholder="Optional Line 2..." style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;" />
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Text Input (Line 3 - 12px)</label>
+                <input type="text" id="pageTextInput3" placeholder="Optional Line 3..." style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;" />
               </div>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 16px;">
                 <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Placement</label>
-                  <select id="pageTextPlacement" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
-                    <option value="left-chest">Left chest</option>
-                    <option value="right-chest">Right chest</option>
-                    <option value="center">Center</option>
-                    <option value="sleeve">Sleeve</option>
-                  </select>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Placement</label>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="pageTextPlacementContainer">
+                    <label class="radio-btn active" style="border: 1px solid var(--green); background: rgba(47,135,61,0.05); border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextPlacement" value="left-chest" checked style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800; color: var(--green);">Left Chest</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextPlacement" value="right-chest" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Right Chest</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextPlacement" value="center" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Center</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextPlacement" value="sleeve" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Sleeve</span>
+                    </label>
+                  </div>
                 </div>
                 <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase;">Font Style</label>
-                  <select id="pageTextFont" style="width: 100%; padding: 8px; font-size: 12px; margin-top: 4px;">
-                    <option value="block">Block</option>
-                    <option value="script">Script</option>
-                    <option value="serif">Serif</option>
-                  </select>
+                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Font Style</label>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;" id="pageTextFontContainer">
+                    <label class="radio-btn active" style="border: 1px solid var(--green); background: rgba(47,135,61,0.05); border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextFont" value="block" checked style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800; color: var(--green);">Block</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextFont" value="script" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Script</span>
+                    </label>
+                    <label class="radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+                      <input type="radio" name="pageTextFont" value="serif" style="display: none;">
+                      <span style="font-size: 11px; font-weight: 800;">Serif</span>
+                    </label>
+                  </div>
                 </div>
               </div>
               
