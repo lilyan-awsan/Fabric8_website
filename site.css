@@ -102,6 +102,7 @@ input, select, textarea, button { font: inherit; }
 .logo img {
   max-height: 28px;
   object-fit: contain;
+  mix-blend-mode: multiply;
 }
 .logo h2 { color: #111 !important; transition: color 0.3s ease; }
 .header nav {
