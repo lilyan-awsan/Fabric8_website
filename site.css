@@ -933,30 +933,19 @@ input.error, select.error, textarea.error {
 
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
-
-.product-card {
-  background: #fff;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  overflow: hidden;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+@media (max-width: 1024px) {
+  .catalog-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .catalog-grid { grid-template-columns: 1fr; }
 }
 
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-  border-color: var(--ink);
-}
-
-.product-card-img {
-  width: 100%;
   aspect-ratio: 4/5;
   object-fit: cover;
   background: #f0f0f0;
