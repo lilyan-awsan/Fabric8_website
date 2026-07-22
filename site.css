@@ -1427,6 +1427,7 @@ input.error, select.error, textarea.error {
   padding: 30px;
   opacity: 0; 
   transition: opacity 0.4s ease; 
+  pointer-events: none; /* Let clicks pass through to the card */
 }
 .product-card:hover .product-card-overlay { opacity: 1; }
 .product-card-overlay-text {

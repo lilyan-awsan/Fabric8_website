@@ -179,13 +179,13 @@ function renderProducts() {
       <div class="product-card" onclick="window.location.href='product.html?sku=${p.sku}'">
         <div class="product-card-img" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}', ${p.images.length})" onmouseleave="window.stopSlideshow('${p.sku}', ${p.images.length})"` : ''}>
           ${imagesHtml}
+          <div class="product-card-overlay">
+            <div class="product-card-overlay-text">+ View Details</div>
+          </div>
         </div>
         <div class="product-card-info">
           <p>${p.sku}</p>
           <h3>${p.name}</h3>
-        </div>
-        <div class="product-card-overlay">
-          <div class="product-card-overlay-text">+ View Details</div>
         </div>
       </div>
     `;
