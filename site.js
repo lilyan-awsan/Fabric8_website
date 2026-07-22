@@ -827,6 +827,17 @@ function initProductPage(sku) {
   }
   document.getElementById('productAvailability').textContent = p.availability || "Made to Order";
   
+  const sketchAcc = document.getElementById('sketchAccordion');
+  const sketchImg = document.getElementById('productSketch');
+  if (sketchAcc && sketchImg) {
+    if (p.sketch) {
+      sketchImg.src = p.sketch;
+      sketchAcc.style.display = 'block';
+    } else {
+      sketchAcc.style.display = 'none';
+    }
+  }
+
   const thumbnailsContainer = document.getElementById("productThumbnails");
   if (thumbnailsContainer && p.images && p.images.length > 1) {
     thumbnailsContainer.innerHTML = p.images.map(img => {
