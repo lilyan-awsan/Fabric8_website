@@ -147,7 +147,7 @@ function renderProducts() {
     }
 
     return `
-      <div class="product-card" onclick="openProductModal('${p.sku}')">
+      <div class="product-card" onclick="window.location.href='product.html?sku=${p.sku}'">
         <div class="product-card-img" style="position: relative; overflow: hidden; padding: 0; margin: 0; border-radius: 4px 4px 0 0;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
           ${imagesHtml}
         </div>
@@ -663,6 +663,33 @@ function triggerMailtoFallback(customerInfo, cart) {
   `;
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
+async function generateExcelBase64(customerInfo, cart) {
+  if (typeof XLSX === 'undefined') return null;
+  
+  const wb = XLSX.utils.book_new();
+  
+  const cartData = cart.map((item, index) => ({
+    "Item No": index + 1,
+    "SKU": item.sku,
+    "Product Name": item.name,
+    "Category": item.category,
+    "Size": item.size || "N/A",
+    "Color": item.color || "Standard",
+    "Quantity": item.quantity,
+    "Branding": item.branding || "None"
+  }));
+  const wsCart = XLSX.utils.json_to_sheet(cartData);
+  XLSX.utils.book_append_sheet(wb, wsCart, "Selected Products");
+
+  const customerData = Object.entries(customerInfo).map(([key, value]) => ({
+    "Field": key,
+    "Value": value
+  }));
+  const wsCustomer = XLSX.utils.json_to_sheet(customerData);
+  XLSX.utils.book_append_sheet(wb, wsCustomer, "Customer Details");
+
+  return XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+}
 
 $("#quoteForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -695,10 +722,25 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     }
   }
 
+  const attachments = [];
+  if (base64File) {
+    attachments.push({ filename: fileName, content: base64File });
+  }
+
+  // Generate Excel
+  try {
+    const excelBase64 = await generateExcelBase64(customerInfo, cart);
+    if (excelBase64) {
+      attachments.push({ filename: "Fabric8_Quote_Request.xlsx", content: excelBase64 });
+    }
+  } catch(err) {
+    console.error("Failed to generate Excel:", err);
+  }
+
   const payload = {
     customerInfo,
     cart,
-    attachment: base64File ? { filename: fileName, content: base64File } : null
+    attachments: attachments
   };
 
   try {
@@ -731,17 +773,199 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
 });
 
 function initSite() {
-  if (typeof renderProducts === 'function') renderProducts();
-  if (typeof renderCart === 'function') renderCart();
-  if (typeof setupStudio === 'function') setupStudio();
+  const path = window.location.pathname.toLowerCase();
   
-  // Check for SKU in URL to auto-open product modal (from Admin panel link)
-  const urlParams = new URLSearchParams(window.location.search);
-  const sku = urlParams.get('sku');
-  if (sku && typeof openProductModal === 'function') {
-    // Small delay to ensure DOM is ready and grid is painted
-    setTimeout(() => openProductModal(sku), 100);
+  if (path.includes('product.html')) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sku = urlParams.get('sku');
+    if (sku) {
+      initProductPage(sku);
+    }
+  } else if (path.includes('checkout.html')) {
+    if (typeof renderCart === 'function') renderCart();
+  } else {
+    // For shop.html and others
+    if (typeof renderProducts === 'function') renderProducts();
+    if (typeof renderCart === 'function') renderCart();
+    if (typeof setupStudio === 'function') setupStudio();
   }
+}
+
+let productPageData = { sizeQtys: {} };
+
+function initProductPage(sku) {
+  const p = products.find(x => x.sku === sku);
+  if (!p) return;
+  
+  selectedProductSku = sku;
+  if (!p.colors.includes(activeCatalogColor)) activeCatalogColor = p.colors[0];
+  
+  const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'White Polo Shirt.png');
+  const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
+  
+  document.getElementById('productMainImage').src = imgSrc;
+  document.getElementById('productName').textContent = p.name;
+  document.getElementById('productCategory').textContent = p.category;
+  document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
+  document.getElementById('productDesc').textContent = p.long || p.short || "";
+  document.getElementById('productFabric').textContent = p.fabric || "N/A";
+  document.getElementById('productGsm').textContent = p.gsm || "N/A";
+  if (document.getElementById('productCare')) {
+    document.getElementById('productCare').textContent = p.care || "Machine wash cold, tumble dry low.";
+  }
+  document.getElementById('productAvailability').textContent = p.availability || "Made to Order";
+  
+  const thumbnailsContainer = document.getElementById("productThumbnails");
+  if (thumbnailsContainer && p.images && p.images.length > 1) {
+    thumbnailsContainer.innerHTML = p.images.map(img => {
+      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`;
+    }).join("");
+  }
+  
+  // Colors
+  const colorFilter = document.getElementById("productColorFilter");
+  if (colorFilter) {
+    colorFilter.innerHTML = p.colors.map(c => colorButton(c)).join("");
+    const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
+    if (activeBtn) activeBtn.classList.add("active");
+  }
+
+  // Size / Qty Matrix
+  const matrix = document.getElementById("sizeQtyMatrix");
+  const minQtyLabel = document.getElementById("minQtyLabel");
+  const moqVal = p.moq ? p.moq.replace(/[^0-9]/g, '') || "50" : "50";
+  if (minQtyLabel) minQtyLabel.textContent = moqVal;
+  
+  if (matrix) {
+    matrix.innerHTML = (p.sizes || ["Standard"]).map(size => `
+      <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 8px; border: 1px solid var(--line); border-radius: 8px;">
+        <div style="flex: 1; padding: 10px; background: #f9f9f9; border: 1px solid var(--line); border-radius: 4px; font-weight: 800; font-size: 13px;">${size}</div>
+        <input type="number" min="0" placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 10px; text-align: center; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 14px;" />
+      </div>
+    `).join("");
+  }
+
+  // Bind color clicks for product page
+  colorFilter.querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      colorFilter.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
+      const btn = e.target.closest('.color-dot');
+      btn.classList.add("active");
+      activeCatalogColor = btn.dataset.color;
+    });
+  });
+
+  // Accordions logic
+  document.querySelectorAll('details.accordion summary').forEach(summary => {
+    summary.addEventListener('click', (e) => {
+      const details = summary.parentElement;
+      const span = summary.querySelector('span');
+      if (span) {
+        span.textContent = details.open ? '+' : '−';
+      }
+    });
+  });
+  
+  // Customization Type Toggle
+  document.querySelectorAll('input[name="customizationType"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      document.querySelectorAll(".customization-card").forEach(card => {
+        card.style.borderColor = "var(--line)";
+        card.style.backgroundColor = "#fff";
+      });
+      const activeCard = e.target.closest(".customization-card");
+      if (activeCard) {
+        activeCard.style.borderColor = "var(--green)";
+        activeCard.style.backgroundColor = "rgba(47,135,61,0.05)";
+      }
+      
+      const settings = document.getElementById("customizationSettings");
+      const logoSet = document.getElementById("logoSettings");
+      const textSet = document.getElementById("textSettings");
+      
+      if (settings) settings.style.display = "block";
+      if (e.target.value === 'upload_logo') {
+        if (logoSet) logoSet.style.display = "flex";
+        if (textSet) textSet.style.display = "none";
+      } else {
+        if (logoSet) logoSet.style.display = "none";
+        if (textSet) textSet.style.display = "flex";
+      }
+    });
+  });
+  
+  // Initialize text thread colors
+  const threadColorDiv = document.getElementById("pageTextThreadColors");
+  if (threadColorDiv) {
+    threadColorDiv.innerHTML = threadColors.map(c => colorButton(c.name)).join("");
+    const defaultColorBtn = threadColorDiv.querySelector(`[data-color="Black"]`);
+    if(defaultColorBtn) defaultColorBtn.classList.add('active');
+    
+    threadColorDiv.querySelectorAll('.color-dot').forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        threadColorDiv.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
+        e.target.closest('.color-dot').classList.add("active");
+      });
+    });
+  }
+
+  // Add to Cart
+  document.getElementById("pageAddToCart")?.addEventListener("click", () => {
+    let totalQty = 0;
+    const sizes = {};
+    document.querySelectorAll(".matrix-qty-input").forEach(input => {
+      const q = parseInt(input.value);
+      if (q && q > 0) {
+        sizes[input.dataset.size] = q;
+        totalQty += q;
+      }
+    });
+    
+    if (totalQty === 0) {
+      alert("Please enter a quantity for at least one size.");
+      return;
+    }
+    
+    // Check customization
+    const custType = document.querySelector('input[name="customizationType"]:checked')?.value;
+    let brandingDesc = "Blank";
+    if (custType === 'upload_logo') {
+      const place = document.getElementById("pageLogoPlacement").selectedOptions[0].text;
+      const finish = document.getElementById("pageLogoFinish").selectedOptions[0].text;
+      const fileInput = document.getElementById("pageLogoUpload");
+      if (!fileInput.files.length) {
+        alert("Please upload a logo image.");
+        return;
+      }
+      brandingDesc = `Logo (${finish}) on ${place}`;
+    } else if (custType === 'text_embroidery') {
+      const text = document.getElementById("pageTextInput1").value;
+      if (!text) {
+        alert("Please enter text for embroidery.");
+        return;
+      }
+      const place = document.getElementById("pageTextPlacement").selectedOptions[0].text;
+      const font = document.getElementById("pageTextFont").selectedOptions[0].text;
+      const tColor = document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.color || "Black";
+      brandingDesc = `Text "${text}" (${font}, ${tColor}) on ${place}`;
+    }
+    
+    // Add items for each size
+    for (const [size, qty] of Object.entries(sizes)) {
+      cart.push({
+        ...p,
+        quantity: qty,
+        color: activeCatalogColor,
+        size: size,
+        branding: brandingDesc,
+        customizationType: custType || null
+      });
+    }
+    
+    saveCart();
+    alert("Added to cart successfully!");
+    window.location.href = "checkout.html";
+  });
 }
 
 // Form Validation UI
@@ -1935,3 +2159,25 @@ document.addEventListener("change", (e) => {
 
 });
 
+
+// Dynamic Homepage Showcase
+document.addEventListener('DOMContentLoaded', async () => {
+  const showcase = document.getElementById('dynamicShowcase');
+  if (showcase) {
+    try {
+      const response = await fetch('data/products.json');
+      const products = await response.json();
+      const shuffled = products.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 4);
+      showcase.innerHTML = selected.map(p => `
+        <article class="product-card" style="text-align: left;">
+          <a href="product.html?id=${p.id}">
+            <img src="${p.image}" alt="${p.name}" style="width: 100%; border-radius: 8px; margin-bottom: 15px; background: #f4f4f4; object-fit: contain; aspect-ratio: 4/5;" />
+            <p style="font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; margin: 0;">${p.category || 'Apparel'}</p>
+            <h3 style="margin: 5px 0; font-size: 16px; font-weight: 800; color: var(--ink);">${p.name}</h3>
+          </a>
+        </article>
+      `).join('');
+    } catch (e) { console.error('Error loading showcase:', e); }
+  }
+});

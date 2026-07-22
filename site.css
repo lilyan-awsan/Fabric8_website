@@ -94,10 +94,16 @@ input, select, textarea, button { font: inherit; }
   place-items: center;
   width: 126px;
   height: 44px;
-  background: #111;
+  background: #fff;
+  color: #111;
   padding: 9px 12px;
+  transition: all 0.3s ease;
+}
+.logo:hover {
+  transform: scale(1.05);
 }
 .logo img { max-height: 28px; object-fit: contain; }
+.logo h2 { color: #111 !important; transition: color 0.3s ease; }
 .header nav {
   display: flex;
   justify-content: center;
