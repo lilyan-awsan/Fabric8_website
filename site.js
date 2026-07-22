@@ -800,6 +800,7 @@ function initSite() {
     if (typeof renderProducts === 'function') renderProducts();
     if (typeof renderCart === 'function') renderCart();
     if (typeof setupStudio === 'function') setupStudio();
+    if (typeof renderShowcase === 'function') renderShowcase();
   }
 }
 
@@ -2184,23 +2185,30 @@ document.addEventListener("change", (e) => {
 
 
 // Dynamic Homepage Showcase
-document.addEventListener('DOMContentLoaded', async () => {
+function renderShowcase() {
   const showcase = document.getElementById('dynamicShowcase');
-  if (showcase) {
-    try {
-      const response = await fetch('data/products.json');
-      const products = await response.json();
-      const shuffled = products.sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, 4);
-      showcase.innerHTML = selected.map(p => `
-        <article class="product-card" style="text-align: left;">
-          <a href="product.html?id=${p.id}">
-            <img src="${p.image}" alt="${p.name}" style="width: 100%; border-radius: 8px; margin-bottom: 15px; background: #f4f4f4; object-fit: contain; aspect-ratio: 4/5;" />
-            <p style="font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; margin: 0;">${p.category || 'Apparel'}</p>
-            <h3 style="margin: 5px 0; font-size: 16px; font-weight: 800; color: var(--ink);">${p.name}</h3>
-          </a>
-        </article>
-      `).join('');
-    } catch (e) { console.error('Error loading showcase:', e); }
-  }
-});
+  if (!showcase || !products || products.length === 0) return;
+
+  const shuffled = [...products].sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0, 4);
+  
+  showcase.innerHTML = selected.map(p => {
+    const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'White Polo Shirt.png');
+    const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
+    
+    return `<article class="product-card">
+      <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: block; height: 100%; position: relative;">
+        <div style="background: #fff; padding: 24px; display: grid; place-items: center; border-bottom: 1px solid var(--line); aspect-ratio: 4/5;">
+          <img src="${imgSrc}" alt="${p.name}" style="max-height: 100%; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
+        </div>
+        <div class="product-card-info" style="padding: 16px;">
+          <h3 style="margin: 0; font-size: 14px; font-weight: 900; line-height: 1.3;">${p.name || 'Product'}</h3>
+          <p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase;">${p.category || 'Apparel'}</p>
+        </div>
+        <div class="product-card-overlay">
+          <span style="color: #fff; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; font-size: 13px;">+ View Details</span>
+        </div>
+      </a>
+    </article>`;
+  }).join('');
+}
