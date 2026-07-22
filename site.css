@@ -256,7 +256,7 @@ input, select, textarea, button { font: inherit; }
   top: 0;
   bottom: 0;
   width: 51%;
-  background: url('assets/pattern.png') center / 300px;
+  background: url('assets/pattern.png') center / cover no-repeat fixed;
   opacity: 0.8;
   box-shadow: inset 0 0 90px rgba(0,0,0,.18);
   animation-duration: 1.8s;
