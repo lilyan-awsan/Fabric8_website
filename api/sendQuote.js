@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     const options = {
       from: 'Fabric8 Testing <onboarding@resend.dev>',
-      to: [process.env.RESEND_TO_EMAIL || 'hello@thefabric8.com'],
+      to: ['lilyanawsan@gmail.com'],
       reply_to: data.customerInfo['Email'],
       subject: 'New Fabric8 Quote Request from ' + (data.customerInfo['Full name'] || 'Website'),
       html: emailHtml,
