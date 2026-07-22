@@ -9,14 +9,38 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+@font-face {
+  font-family: 'Acumin Variable Concept';
+  src: url('assets/fonts/heading.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('assets/fonts/body.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('assets/fonts/body-bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 body {
   margin: 0;
-  font-family: "Montserrat", system-ui, sans-serif;
+  font-family: "Century Gothic", "Montserrat", system-ui, sans-serif;
   background: var(--paper);
   color: var(--ink);
   opacity: 0;
   transition: opacity .45s ease;
 }
+
+h1, h2, h3, h4, h5, h6, .door-logo h1 {
+  font-family: "Acumin Variable Concept", "Montserrat", sans-serif;
+}
+
 body.page-ready,
 body.landing-body { opacity: 1; }
 body::after {
