@@ -41,10 +41,20 @@
       <div class="product-gallery" style="position: relative;">
         <div class="main-image-container" style="background: #f0f0f0; min-height: 500px; display: grid; place-items: center; border-radius: 12px; overflow: hidden; position: relative;">
           <img id="productMainImage" src="" alt="Product" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;" />
+          
+          <!-- Customization Previews -->
+          <div id="pageLogoPreview" class="logo-preview" style="display: none; position: absolute; z-index: 10; top: 30%; left: 60%; width: 15%; cursor: move; border: 1px dashed rgba(255,255,255,0.5);">
+            <img id="pageLogoPreviewImg" src="" style="width: 100%; display: block;" />
+          </div>
+          
+          <div id="pageTextPreview" class="text-preview" style="display: none; position: absolute; z-index: 10; top: 30%; left: 60%; cursor: move; border: 1px dashed rgba(255,255,255,0.5); padding: 4px; color: #111; font-weight: 800; font-size: 14px; text-shadow: 0 1px 2px rgba(255,255,255,0.8);">
+            <span id="pageTextPreviewContent"></span>
+          </div>
         </div>
         <div id="productThumbnails" style="display: flex; gap: 12px; margin-top: 16px; overflow-x: auto;">
           <!-- Thumbnails injected via JS -->
         </div>
+        <p class="mockup-disclaimer" style="margin: 16px 0 0 0; font-size: 11px; color: #a55;">Mockup previews are approximations. Final thread colors and print dimensions will be scaled to match your chosen garment size specifications.</p>
       </div>
 
       <!-- Product Details -->
@@ -232,8 +242,6 @@
                 <div id="pageTextThreadColors" class="color-filter"></div>
               </div>
             </div>
-
-            <p style="margin: 12px 0 0 0; font-size: 11px; color: #a55;">Mockup previews are approximate. Final thread colors and print dimensions will be scaled to match your chosen garment size specifications.</p>
           </div>
 
           <button id="pageAddToCart" class="button primary" style="width: 100%; padding: 16px; font-size: 14px;">ADD TO CART</button>

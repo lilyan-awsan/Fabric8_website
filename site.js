@@ -903,7 +903,7 @@ function initProductPage(sku) {
   if (minQtyLabel) minQtyLabel.textContent = moqVal;
   
   if (matrix) {
-    const isOneSize = ["Caps", "Full Apron", "Full Apron With Pocket", "Half Apron", "Half Apron With Pocket", "Chef Bandana", "Chef Hat", "Chef Beret"].includes(p.name);
+    const isOneSize = p.category === "Head Wear" || p.name.toLowerCase().includes("apron");
     let displaySizes = isOneSize ? ["OS"] : (p.sizes || ["Standard"]);
     
     matrix.innerHTML = displaySizes.map(size => `
@@ -1029,6 +1029,61 @@ function initProductPage(sku) {
           
           ctx.putImageData(imageData, 0, 0);
           uploadedLogoBase64 = canvas.toDataURL('image/png').split(',')[1];
+          
+          const previewWrap = document.getElementById("pageLogoPreview");
+          const previewImg = document.getElementById("pageLogoPreviewImg");
+          if (previewWrap && previewImg) {
+            previewImg.src = canvas.toDataURL('image/png');
+            previewWrap.style.display = "block";
+            
+            // Apply dimension constraints based on placement
+            const place = document.querySelector('input[name="pageLogoPlacement"]:checked')?.value || "left-chest";
+            if (place.includes("chest") || place.includes("sleeve")) {
+               previewWrap.style.width = "15%"; // Approx 4 inches max
+            } else if (place === "center-chest") {
+               previewWrap.style.width = "25%"; // Approx 8 inches max
+            } else {
+               previewWrap.style.width = "35%"; // Full Back approx 12 inches max
+            }
+            
+            // Simple drag logic
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            previewWrap.onmousedown = dragStart;
+            document.onmouseup = dragEnd;
+            document.onmousemove = drag;
+
+            function dragStart(e) {
+              initialX = e.clientX - xOffset;
+              initialY = e.clientY - yOffset;
+              if (e.target === previewWrap || e.target === previewImg) {
+                isDragging = true;
+              }
+            }
+
+            function dragEnd(e) {
+              initialX = currentX;
+              initialY = currentY;
+              isDragging = false;
+            }
+
+            function drag(e) {
+              if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                previewWrap.style.transform = `translate(${currentX}px, ${currentY}px)`;
+              }
+            }
+          }
         };
         img.src = event.target.result;
       };

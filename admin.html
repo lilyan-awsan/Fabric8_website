@@ -270,7 +270,26 @@
             <label>MOQ</label>
             <input type="text" id="moq" placeholder="e.g. 50 Pieces">
           </div>
-          
+          <div class="input-group">
+            <label>Allowed Branding</label>
+            <div class="multi-select">
+              <div class="select-box">
+                <span class="selected-text" id="brandingText">Select Branding</span>
+                <span class="arrow">▼</span>
+              </div>
+              <div class="dropdown-menu" style="display: none;">
+                <div class="checkbox-group column" id="brandingGroup">
+                  <label><input type="checkbox" value="Embroidery"> Embroidery</label>
+                  <label><input type="checkbox" value="DTF"> DTF</label>
+                  <label><input type="checkbox" value="None"> None</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="input-group full-width">
+            <label>Technical Sketch (Image URL)</label>
+            <input type="text" id="sketch" placeholder="e.g. assets/sketch.png">
+          </div>
           <div class="input-group full-width image-upload-group">
             <label>Product Images</label>
             <div id="imagePreviewContainer" class="image-preview-grid" style="display:flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">

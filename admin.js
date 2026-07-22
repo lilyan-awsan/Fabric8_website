@@ -175,6 +175,7 @@ function renderTable() {
           document.getElementById("leadTime").value = productToDuplicate.leadTime || "";
           document.getElementById("moq").value = productToDuplicate.moq || "";
           document.getElementById("care").value = productToDuplicate.care || "";
+          document.getElementById("sketch").value = productToDuplicate.sketch || "";
           
           // Note: We don't copy the image automatically to avoid collision, or we can just leave it empty.
         }, 100);
@@ -256,11 +257,14 @@ function openModal(docId = null) {
   document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => cb.checked = false);
   document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => cb.checked = false);
   document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => cb.checked = false);
+  document.querySelectorAll("#brandingGroup input[type='checkbox']").forEach(cb => cb.checked = false);
   document.getElementById("otherSizes").value = "";
   document.getElementById("otherColors").value = "";
+  document.getElementById("sketch").value = "";
   updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
   updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
   updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors');
+  updateMultiSelectText('brandingGroup', 'brandingText', 'Select Branding');
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
@@ -314,6 +318,13 @@ function openModal(docId = null) {
       document.getElementById("leadTime").value = p.leadTime || "";
       document.getElementById("moq").value = p.moq || "";
       document.getElementById("care").value = p.care || "";
+      document.getElementById("sketch").value = p.sketch || "";
+
+      const pBranding = p.branding || [];
+      document.querySelectorAll("#brandingGroup input[type='checkbox']").forEach(cb => {
+        cb.checked = pBranding.includes(cb.value);
+      });
+      updateMultiSelectText('brandingGroup', 'brandingText', 'Select Branding');
       
       if (p.images && p.images.length > 0) {
         existingImages = [...p.images];
@@ -363,6 +374,8 @@ productForm.addEventListener("submit", async (e) => {
     leadTime: document.getElementById("leadTime").value,
     moq: document.getElementById("moq").value,
     care: document.getElementById("care").value,
+    sketch: document.getElementById("sketch").value,
+    branding: Array.from(document.querySelectorAll("#brandingGroup input[type='checkbox']:checked")).map(cb => cb.value),
     existingImages: existingImages
   };
 
