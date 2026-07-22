@@ -39,8 +39,8 @@ export default async function handler(req, res) {
       html: emailHtml,
     };
 
-    if (data.attachment) {
-      options.attachments = [data.attachment];
+    if (data.attachments && data.attachments.length > 0) {
+      options.attachments = data.attachments;
     }
 
     const { data: responseData, error } = await resend.emails.send(options);

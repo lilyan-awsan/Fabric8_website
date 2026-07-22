@@ -174,6 +174,7 @@ function renderTable() {
           document.getElementById("gsm").value = productToDuplicate.gsm || "";
           document.getElementById("leadTime").value = productToDuplicate.leadTime || "";
           document.getElementById("moq").value = productToDuplicate.moq || "";
+          document.getElementById("care").value = productToDuplicate.care || "";
           
           // Note: We don't copy the image automatically to avoid collision, or we can just leave it empty.
         }, 100);
@@ -312,6 +313,7 @@ function openModal(docId = null) {
       document.getElementById("gsm").value = p.gsm || "";
       document.getElementById("leadTime").value = p.leadTime || "";
       document.getElementById("moq").value = p.moq || "";
+      document.getElementById("care").value = p.care || "";
       
       if (p.images && p.images.length > 0) {
         existingImages = [...p.images];
@@ -360,6 +362,7 @@ productForm.addEventListener("submit", async (e) => {
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
     moq: document.getElementById("moq").value,
+    care: document.getElementById("care").value,
     existingImages: existingImages
   };
 

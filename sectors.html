@@ -39,14 +39,69 @@
 
     <main>
       <section class="page-hero sectors-hero"><div><p>Sectors Served</p><h1>Uniform programs for every business environment.</h1><span>Sector capabilities from the Fabric8 company profile, now paired with your official sector logo set.</span></div></section>
-      <section class="sector-cards logo-sector-cards">
-        <article style="--accent:#d3d116"><img src="assets/sector-logos/food-beverage.webp" alt="Food and Beverage logo" /><h2>Food & Beverage</h2><p>Restaurants, cafes, catering, quick service, and culinary teams.</p><a href="shop.html#quote">Get Quote</a></article>
-        <article style="--accent:#2f873d"><img src="assets/sector-logos/hospitality.webp" alt="Hospitality logo" /><h2>Hospitality</h2><p>Hotels, resorts, dining outlets, front-of-house, and guest-facing teams.</p><a href="shop.html#quote">Get Quote</a></article>
-        <article style="--accent:#75aee0"><img src="assets/sector-logos/corporate.webp" alt="Corporate logo" /><h2>Corporate</h2><p>Office, retail, sales, and customer-facing teams.</p><a href="shop.html#quote">Get Quote</a></article>
-        <article style="--accent:#e79aa3"><img src="assets/sector-logos/healthcare.webp" alt="Healthcare logo" /><h2>Healthcare</h2><p>Hospitals, clinics, laboratories, and medical facilities.</p><a href="shop.html#quote">Get Quote</a></article>
-        <article style="--accent:#bb3526"><img src="assets/sector-logos/industrial.webp" alt="Industrial logo" /><h2>Industrial</h2><p>Manufacturing, construction, logistics, warehouse, and field teams.</p><a href="shop.html#quote">Get Quote</a></article>
-        <article style="--accent:#4a0f28"><img src="assets/sector-logos/aviation.webp" alt="Aviation logo" /><h2>Aviation</h2><p>Airlines, ground handling, travel operations, and service crews.</p><a href="shop.html#quote">Get Quote</a></article>
-        <article style="--accent:#66736a"><img src="assets/sector-logos/education.webp" alt="Education logo" /><h2>Education</h2><p>Schools, academic institutions, campus programs, and event teams.</p><a href="shop.html#quote">Get Quote</a></article>
+      <section style="max-width: 1400px; margin: 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; grid-auto-rows: 250px;">
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/food-beverage.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Food & Beverage</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Restaurants, cafes, catering, quick service, and culinary teams.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
+
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; grid-row: span 2;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/hospitality.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Hospitality</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Hotels, resorts, dining outlets, front-of-house, and guest-facing teams.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
+
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/corporate.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Corporate</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Office, retail, sales, and customer-facing teams.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
+
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px; grid-row: span 2;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/healthcare.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Healthcare</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Hospitals, clinics, laboratories, and medical facilities.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
+
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/industrial.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Industrial</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Manufacturing, construction, logistics, warehouse, and field teams.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
+
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/aviation.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Aviation</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Airlines, ground handling, travel operations, and service crews.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
+
+        <article style="position: relative; overflow: hidden; border-radius: 12px; background: #f4f4f4; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px;">
+          <div style="position: absolute; inset: 0; background: url('assets/sector-logos/education.webp') center / cover; opacity: 0.2; transition: opacity 0.3s ease;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h2 style="font-size: 24px; color: var(--ink); margin-bottom: 8px;">Education</h2>
+            <p style="font-size: 14px; color: var(--muted); margin-bottom: 15px;">Schools, academic institutions, campus programs, and event teams.</p>
+            <a href="contact.html" style="font-size: 13px; font-weight: 800; color: var(--yellow); text-transform: uppercase; text-decoration: none;">Inquire Now &rarr;</a>
+          </div>
+        </article>
       </section>
     </main>
     
