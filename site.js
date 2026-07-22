@@ -83,7 +83,13 @@ let activeSearchTerm = "";
 let activeSortTerm = "featured";
 
 function renderFilters() {
-  const categories = [...new Set(products.map((p) => p.category))].sort();
+  const order = ["Top Wear", "Bottom Wear", "Outerwear", "Headwear", "Accessories", "Healthcare"];
+  const categories = [...new Set(products.map((p) => p.category))].sort((a, b) => {
+    let ia = order.indexOf(a), ib = order.indexOf(b);
+    if (ia === -1) ia = 999;
+    if (ib === -1) ib = 999;
+    return ia - ib || a.localeCompare(b);
+  });
   const container = $("#categoryFilterContainer");
   if (!container) return;
   
@@ -117,7 +123,11 @@ function renderProducts() {
   }
 
   if (activeSearchTerm) {
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(activeSearchTerm) || p.sku.toLowerCase().includes(activeSearchTerm));
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(activeSearchTerm) || 
+      p.sku.toLowerCase().includes(activeSearchTerm) ||
+      (p.description && p.description.toLowerCase().includes(activeSearchTerm))
+    );
   }
 
   if (activeSortTerm === "A-Z") {
@@ -148,13 +158,15 @@ function renderProducts() {
 
     return `
       <div class="product-card" onclick="window.location.href='product.html?sku=${p.sku}'">
-        <div class="product-card-img" style="position: relative; overflow: hidden; padding: 0; margin: 0; border-radius: 4px 4px 0 0;" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
+        <div class="product-card-img" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}')" onmouseleave="window.stopSlideshow('${p.sku}')"` : ''}>
           ${imagesHtml}
         </div>
         <div class="product-card-info">
-          <span class="product-card-category">${p.category}</span>
-          <h3 class="product-card-title">${p.name}</h3>
-          <button class="product-card-btn" type="button">View Details</button>
+          <p>${p.sku}</p>
+          <h3>${p.name}</h3>
+        </div>
+        <div class="product-card-overlay">
+          <div class="product-card-overlay-text">+ View Details</div>
         </div>
       </div>
     `;
