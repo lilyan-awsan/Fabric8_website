@@ -948,9 +948,13 @@ input.error, select.error, textarea.error {
   .catalog-grid { grid-template-columns: 1fr; }
 }
 
+.product-card-img {
+  position: relative;
+  width: 100%;
   aspect-ratio: 4/5;
   object-fit: cover;
   background: #f0f0f0;
+  overflow: hidden;
 }
 
 .product-card-info {
