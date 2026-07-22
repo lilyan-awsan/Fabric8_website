@@ -1419,7 +1419,7 @@ input.error, select.error, textarea.error {
 .product-card-overlay { 
   position: absolute; 
   inset: 0; 
-  background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%); 
+  background: linear-gradient(to top, rgba(47,135,61,0.7) 0%, transparent 70%); 
   z-index: 3; 
   display: flex; 
   align-items: flex-end; 
