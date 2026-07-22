@@ -12,20 +12,16 @@ html { scroll-behavior: smooth; }
 @font-face {
   font-family: 'Acumin Variable Concept';
   src: url('assets/fonts/heading.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
 }
 @font-face {
   font-family: 'Century Gothic';
   src: url('assets/fonts/body.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;
 }
 @font-face {
   font-family: 'Century Gothic';
   src: url('assets/fonts/body-bold.ttf') format('truetype');
   font-weight: bold;
-  font-style: normal;
 }
 
 body {
