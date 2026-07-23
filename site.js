@@ -711,26 +711,45 @@ async function generateExcelBase64(customerInfo, cart) {
   if (typeof XLSX === 'undefined') return null;
   
   const wb = XLSX.utils.book_new();
+  const aoa = [];
   
-  const cartData = cart.map((item, index) => ({
-    "Item No": index + 1,
-    "SKU": item.sku,
-    "Product Name": item.name,
-    "Category": item.category,
-    "Size": item.size || "N/A",
-    "Color": item.color || "Standard",
-    "Quantity": item.quantity,
-    "Branding": item.branding || "None"
-  }));
-  const wsCart = XLSX.utils.json_to_sheet(cartData);
-  XLSX.utils.book_append_sheet(wb, wsCart, "Selected Products");
-
-  const customerData = Object.entries(customerInfo).map(([key, value]) => ({
-    "Field": key,
-    "Value": value
-  }));
-  const wsCustomer = XLSX.utils.json_to_sheet(customerData);
-  XLSX.utils.book_append_sheet(wb, wsCustomer, "Customer Details");
+  // 1. Client/User Information at the top
+  aoa.push(["CLIENT / USER INFORMATION"]);
+  for (const [key, value] of Object.entries(customerInfo)) {
+    aoa.push([key, value]);
+  }
+  
+  // Spacer
+  aoa.push([]);
+  aoa.push([]);
+  
+  // 2. Order Details Table Headers
+  aoa.push(["ORDER DETAILS"]);
+  const headers = ["#", "Photo", "Product SKU", "Product Name", "QTY", "Size", "Color", "Product Price", "Total"];
+  aoa.push(headers);
+  
+  // 3. Cart Items
+  cart.forEach((item, index) => {
+    let productName = item.name;
+    if (item.branding && item.branding !== "None") {
+      productName += ` (Branding: ${item.branding})`;
+    }
+    
+    aoa.push([
+      index + 1,               // #
+      "",                      // Photo (left empty for them to fill/paste)
+      item.sku,                // Product SKU
+      productName,             // Product Name
+      item.quantity,           // QTY
+      item.size || "N/A",      // Size
+      item.color || "Standard",// Color
+      "",                      // Product Price (empty)
+      ""                       // Total (empty)
+    ]);
+  });
+  
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  XLSX.utils.book_append_sheet(wb, ws, "Fabric8 Quote Request");
 
   return XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
 }
