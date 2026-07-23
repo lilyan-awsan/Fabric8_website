@@ -599,12 +599,31 @@ document.addEventListener("click", (event) => {
       activeCatalogColor = colorDot.dataset.color;
       renderProducts();
     }
+    if (parent.id === "productColorFilter") {
+      activeCatalogColor = colorDot.dataset.color;
+      const p = products.find(x => x.sku === selectedProductSku);
+      if (p) {
+        const colorImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+        if (colorImages && colorImages.length > 0) {
+          document.getElementById('productMainImage').src = colorImages[0];
+          const thumbs = document.getElementById('productThumbnails');
+          if (thumbs) {
+            if (colorImages.length > 1) {
+              thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`).join("");
+            } else {
+              thumbs.innerHTML = "";
+            }
+          }
+        }
+      }
+    }
     if (parent.id === "modalColorFilter") {
       activeCatalogColor = colorDot.dataset.color;
     }
     if (parent.id === "studioColorSwatches") {
       activeStudioColor = colorDot.dataset.color;
-      $("#studioShirt").dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
+      const shirt = document.getElementById("studioShirt");
+      if (shirt) shirt.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
     }
   }
   if (remove) {
@@ -901,10 +920,13 @@ function initProductPage(sku) {
   }
 
   const thumbnailsContainer = document.getElementById("productThumbnails");
-  if (thumbnailsContainer && p.images && p.images.length > 1) {
-    thumbnailsContainer.innerHTML = p.images.map(img => {
+  const initImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase())) || [];
+  if (thumbnailsContainer && initImages.length > 1) {
+    thumbnailsContainer.innerHTML = initImages.map(img => {
       return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`;
     }).join("");
+  } else if (thumbnailsContainer) {
+    thumbnailsContainer.innerHTML = "";
   }
   
   // Colors
