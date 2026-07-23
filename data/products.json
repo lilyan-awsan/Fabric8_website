@@ -33,14 +33,81 @@
       "Purple"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Polo American Blue 3.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Polo White Side.jpg",
+      "assets/products/Polo White Side.png",
+      "assets/products/Polo White Back.jpg",
+      "assets/products/Polo White Back.png",
+      "assets/products/Polo American Blue 3.jpg",
+      "assets/products/Polo American Blue 3.png",
+      "assets/products/Polo Army Green 3.jpg",
+      "assets/products/Polo Army Green 3.png",
+      "assets/products/Polo Beige 2.jpg",
+      "assets/products/Polo Beige 2.png",
+      "assets/products/Polo Black 3.jpg",
+      "assets/products/Polo Black 3.png",
+      "assets/products/Polo blue 4.jpg",
+      "assets/products/Polo blue 4.png",
+      "assets/products/Polo Brown 3.jpg",
+      "assets/products/Polo Brown 3.png",
+      "assets/products/Polo Burgundy 2.jpg",
+      "assets/products/Polo Burgundy 2.png",
+      "assets/products/Polo Charcoal 2.jpg",
+      "assets/products/Polo Charcoal 2.png",
+      "assets/products/Polo Dark Green 2.jpg",
+      "assets/products/Polo Dark Green 2.png",
+      "assets/products/Polo Green 3.jpg",
+      "assets/products/Polo Green 3.png",
+      "assets/products/Polo Kiwi 4.jpg",
+      "assets/products/Polo Kiwi 4.png",
+      "assets/products/Polo Light Blue 2 (2).jpg",
+      "assets/products/Polo Light Blue 2 (2).png",
+      "assets/products/Polo Light grey (2).jpg",
+      "assets/products/Polo Light grey (2).png",
+      "assets/products/Polo Light Yellow.jpg",
+      "assets/products/Polo Light Yellow.png",
+      "assets/products/Polo Navy 3.jpg",
+      "assets/products/Polo Navy 3.png",
+      "assets/products/Polo Olive Green 2.jpg",
+      "assets/products/Polo Olive Green 2.png",
+      "assets/products/Polo Orange 4.jpg",
+      "assets/products/Polo Orange 4.png",
+      "assets/products/Polo Pink 2.jpg",
+      "assets/products/Polo Pink 2.png",
+      "assets/products/Polo Puple Blue 2.jpg",
+      "assets/products/Polo Puple Blue 2.png",
+      "assets/products/Polo Purple 3.jpg",
+      "assets/products/Polo Purple 3.png",
+      "assets/products/Polo Red 2.jpg",
+      "assets/products/Polo Red 2.png",
+      "assets/products/Polo Turquoise blue 1-2.jpg",
+      "assets/products/Polo Turquoise blue 1-2.png",
+      "assets/products/Polo Turquoise blue 2-3.jpg",
+      "assets/products/Polo Turquoise blue 2-3.png",
+      "assets/products/Polo White Front.jpg",
+      "assets/products/Polo White Front.png",
+      "assets/products/Polo Yellow 4.jpg",
+      "assets/products/Polo Yellow 4.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Left Sleeve",
+      "Upper Right Sleeve"
+    ]
   },
   {
     "sku": "F8-002",
@@ -63,14 +130,31 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Vest Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Vest White Back.jpg",
+      "assets/products/Vest White Back.png",
+      "assets/products/Vest Black.jpg",
+      "assets/products/Vest Black.png",
+      "assets/products/Vest Grey.jpg",
+      "assets/products/Vest Grey.png",
+      "assets/products/Vest White.jpg",
+      "assets/products/Vest White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Full Back"
+    ]
   },
   {
     "sku": "F8-003",
@@ -93,14 +177,36 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Cargo Vest Army Green.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Cargo Vest Beige Side.jpg",
+      "assets/products/Cargo Vest Beige Side.png",
+      "assets/products/Cargo Vest Beige Back 1.png",
+      "assets/products/Cargo Vest Beige Back.jpg",
+      "assets/products/Cargo Vest Army Green.jpg",
+      "assets/products/Cargo Vest Army Green.png",
+      "assets/products/Cargo Vest Beige Back.png",
+      "assets/products/Cargo Vest Beige.jpg",
+      "assets/products/Cargo Vest Beige.png",
+      "assets/products/Cargo Vest Black.jpg",
+      "assets/products/Cargo Vest Black.png",
+      "assets/products/Cargo Vest Navy.jpg",
+      "assets/products/Cargo Vest Navy.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Full Back",
+      "Front Left Chest Pocket"
+    ]
   },
   {
     "id": "F8-004",
@@ -128,9 +234,15 @@
     "leadTime": "",
     "moq": "50 pieces",
     "images": [
-      "White Polo Shirt.png"
+      "White Polo Shirt.png",
+      "assets/products/Chef Hat Grey -.jpg",
+      "assets/products/Chef Hat Grey -.png",
+      "assets/products/Chef Hat white -.jpg",
+      "assets/products/Chef Hat white -.png"
     ],
-    "image": "White Polo Shirt.png"
+    "image": "assets/products/Chef Hat Grey -.jpg",
+    "supportedFinishes": [],
+    "supportedPlacements": []
   },
   {
     "sku": "F8-005",
@@ -152,14 +264,32 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Beret Hat Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Beret Hat Black.jpg",
+      "assets/products/Beret Hat Black.png",
+      "assets/products/Beret Hat Grey 1.jpg",
+      "assets/products/Beret Hat Grey 1.png",
+      "assets/products/Beret Hat Grey Side.jpg",
+      "assets/products/Beret Hat Grey Side.png",
+      "assets/products/Beret Hat White 1.jpg",
+      "assets/products/Beret Hat White 1.png",
+      "assets/products/Beret Hat White Side.jpg",
+      "assets/products/Beret Hat White Side.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Front Center"
+    ]
   },
   {
     "sku": "F8-006",
@@ -182,14 +312,31 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Chef Bandana Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Chef Bandana White Side.png",
+      "assets/products/Chef Bandana Black.jpg",
+      "assets/products/Chef Bandana Black.png",
+      "assets/products/Chef Bandana Grey.jpg",
+      "assets/products/Chef Bandana Grey.png",
+      "assets/products/Chef Bandana White Front.jpg",
+      "assets/products/Chef Bandana White Front.png",
+      "assets/products/Chef Bandana White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Front Center"
+    ]
   },
   {
     "sku": "F8-007",
@@ -211,14 +358,30 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Lab Coat grey.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Lab Coat White Side.jpg",
+      "assets/products/Lab Coat White Side.png",
+      "assets/products/Lab Coat White Back.jpg",
+      "assets/products/Lab Coat White Back.png",
+      "assets/products/Lab Coat grey.jpg",
+      "assets/products/Lab Coat grey.png",
+      "assets/products/Lab Coat White.jpg",
+      "assets/products/Lab Coat White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Left Chest"
+    ]
   },
   {
     "sku": "F8-008",
@@ -242,14 +405,35 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Cargo Beige trousers Back.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Cargo Beige trousers Side.jpg",
+      "assets/products/Cargo Beige trousers Side.png",
+      "assets/products/Cargo Beige trousers Back.jpg",
+      "assets/products/Cargo Beige trousers Back.png",
+      "assets/products/Cargo Beige trousers.jpg",
+      "assets/products/Cargo Beige trousers.png",
+      "assets/products/Cargo Black trousers.jpg",
+      "assets/products/Cargo Black trousers.png",
+      "assets/products/Cargo Charcoal trousers.jpg",
+      "assets/products/Cargo Charcoal trousers.png",
+      "assets/products/Cargo Navy trousers.jpg",
+      "assets/products/Cargo Navy trousers.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Right Thigh Pocket",
+      "Left Thigh Pocket"
+    ]
   },
   {
     "sku": "F8-009",
@@ -273,14 +457,28 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Trousers Beige.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Trousers Black back.jpg",
+      "assets/products/Trousers Black back.png",
+      "assets/products/Trousers Beige.jpg",
+      "assets/products/Trousers Beige.png",
+      "assets/products/Trousers Black.jpg",
+      "assets/products/Trousers Black.png",
+      "assets/products/Trousers Charcoal.jpg",
+      "assets/products/Trousers Charcoal.png",
+      "assets/products/Trousers Navy Front.jpg",
+      "assets/products/Trousers Navy Front.png"
+    ],
+    "supportedFinishes": [],
+    "supportedPlacements": []
   },
   {
     "id": "F8-010",
@@ -330,9 +528,45 @@
       "assets/products/1784609116537_Cap White Back.jpg",
       "assets/products/1784609117299_Cap White Side.jpg",
       "assets/products/1784609117950_Cap White.jpg",
-      "assets/products/1784609118717_Cap Yellow 2.jpg"
+      "assets/products/1784609118717_Cap Yellow 2.jpg",
+      "assets/products/Cap White Side.jpg",
+      "assets/products/Cap White Side.png",
+      "assets/products/Cap White Back.jpg",
+      "assets/products/Cap White Back.png",
+      "assets/products/Cap American Blue.jpg",
+      "assets/products/Cap American Blue.png",
+      "assets/products/Cap Black.jpg",
+      "assets/products/Cap Black.png",
+      "assets/products/Cap Brown.jpg",
+      "assets/products/Cap Brown.png",
+      "assets/products/Cap Burgundy.jpg",
+      "assets/products/Cap Burgundy.png",
+      "assets/products/Cap Charcoal.jpg",
+      "assets/products/Cap Charcoal.png",
+      "assets/products/Cap Green.jpg",
+      "assets/products/Cap Green.png",
+      "assets/products/Cap Kiwi 2.jpg",
+      "assets/products/Cap Kiwi 2.png",
+      "assets/products/Cap Light Grey.jpg",
+      "assets/products/Cap Light Grey.png",
+      "assets/products/Cap Navy.jpg",
+      "assets/products/Cap Navy.png",
+      "assets/products/Cap Red.jpg",
+      "assets/products/Cap Red.png",
+      "assets/products/Cap White.jpg",
+      "assets/products/Cap White.png",
+      "assets/products/Cap Yellow 2.jpg",
+      "assets/products/Cap Yellow 2.png"
     ],
-    "image": "assets/products/1784609080849_Cap American Blue.jpg"
+    "image": "assets/products/1784609080849_Cap American Blue.jpg",
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ]
   },
   {
     "sku": "F8-011",
@@ -354,14 +588,34 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Chef Jacket Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Chef Jacket White Side.jpg",
+      "assets/products/Chef Jacket White Side.png",
+      "assets/products/Chef Jacket White Back.jpg",
+      "assets/products/Chef Jacket White Back.png",
+      "assets/products/Chef Jacket Black.jpg",
+      "assets/products/Chef Jacket Black.png",
+      "assets/products/Chef Jacket Grey 3.jpg",
+      "assets/products/Chef Jacket Grey 3.png",
+      "assets/products/Chef jacket white.jpg",
+      "assets/products/Chef jacket white.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Upper Left Sleeve"
+    ]
   },
   {
     "sku": "F8-012",
@@ -389,14 +643,180 @@
       "Olive Green"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Scrub Beige  Trousers 1.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Scrub Beige Female Side.jpg",
+      "assets/products/Scrub Beige Female Side.png",
+      "assets/products/Scrub Beige Side.jpg",
+      "assets/products/Scrub Beige Side.png",
+      "assets/products/Scrub Beige Trousers Side.jpg",
+      "assets/products/Scrub Beige Trousers Side.png",
+      "assets/products/Scrub White Female Side.jpg",
+      "assets/products/Scrub White Female Side.png",
+      "assets/products/Scrub White Side.jpg",
+      "assets/products/Scrub White Side.png",
+      "assets/products/Scrub White Trousers Side.jpg",
+      "assets/products/Scrub White Trousers Side.png",
+      "assets/products/Scrub Beige Back.jpg",
+      "assets/products/Scrub Beige Back.png",
+      "assets/products/Scrub Beige Female Back.jpg",
+      "assets/products/Scrub Beige Female Back.png",
+      "assets/products/Scrub Beige Trousers Back.jpg",
+      "assets/products/Scrub Beige Trousers Back.png",
+      "assets/products/Scrub White Back.jpg",
+      "assets/products/Scrub White Back.png",
+      "assets/products/Scrub White Trousers Back.jpg",
+      "assets/products/Scrub White Trousers Back.png",
+      "assets/products/Scrub Beige  Trousers 1.jpg",
+      "assets/products/Scrub Beige  Trousers 1.png",
+      "assets/products/Scrub Beige Female Front Full Sleeve.jpg",
+      "assets/products/Scrub Beige Female Front Full Sleeve.png",
+      "assets/products/Scrub Beige Female Front.jpg",
+      "assets/products/Scrub Beige Female Front.png",
+      "assets/products/Scrub Beige Female Full Sleeve.jpg",
+      "assets/products/Scrub Beige Female Full Sleeve.png",
+      "assets/products/Scrub Beige Female Set.jpg",
+      "assets/products/Scrub Beige Female Set.png",
+      "assets/products/Scrub Beige Set.jpg",
+      "assets/products/Scrub Beige Set.png",
+      "assets/products/Scrub Beige.jpg",
+      "assets/products/Scrub Beige.png",
+      "assets/products/Scrub Black Female Front Full Sleeve.jpg",
+      "assets/products/Scrub Black Female Front Full Sleeve.png",
+      "assets/products/Scrub Black Female Front.jpg",
+      "assets/products/Scrub Black Female Front.png",
+      "assets/products/Scrub Black Female Full Sleeve.jpg",
+      "assets/products/Scrub Black Female Full Sleeve.png",
+      "assets/products/Scrub Black Female Set.jpg",
+      "assets/products/Scrub Black Female Set.png",
+      "assets/products/Scrub Black Set.jpg",
+      "assets/products/Scrub Black Set.png",
+      "assets/products/Scrub Black Trousers.jpg",
+      "assets/products/Scrub Black Trousers.png",
+      "assets/products/Scrub Black.jpg",
+      "assets/products/Scrub Black.png",
+      "assets/products/Scrub Burgundy Female Front.jpg",
+      "assets/products/Scrub Burgundy Female Front.png",
+      "assets/products/Scrub Burgundy Female Full Sleeve.jpg",
+      "assets/products/Scrub Burgundy Female Full Sleeve.png",
+      "assets/products/Scrub Burgundy Female Set.jpg",
+      "assets/products/Scrub Burgundy Female Set.png",
+      "assets/products/Scrub Burgundy Set Female Full Sleeve.jpg",
+      "assets/products/Scrub Burgundy Set Female Full Sleeve.png",
+      "assets/products/Scrub Burgundy Set.jpg",
+      "assets/products/Scrub Burgundy Set.png",
+      "assets/products/Scrub Burgundy Trousers 1.jpg",
+      "assets/products/Scrub Burgundy Trousers 1.png",
+      "assets/products/Scrub Burgundy.jpg",
+      "assets/products/Scrub Burgundy.png",
+      "assets/products/Scrub Charcoal  Female Set.jpg",
+      "assets/products/Scrub Charcoal  Female Set.png",
+      "assets/products/Scrub Charcoal Female Front.jpg",
+      "assets/products/Scrub Charcoal Female Front.png",
+      "assets/products/Scrub Charcoal Female Full Sleeve Set.jpg",
+      "assets/products/Scrub Charcoal Female Full Sleeve Set.png",
+      "assets/products/Scrub Charcoal Female Full Sleeve.jpg",
+      "assets/products/Scrub Charcoal Female Full Sleeve.png",
+      "assets/products/Scrub Charcoal Set.jpg",
+      "assets/products/Scrub Charcoal Set.png",
+      "assets/products/Scrub Charcoal Trousers.jpg",
+      "assets/products/Scrub Charcoal Trousers.png",
+      "assets/products/Scrub Charcoal.jpg",
+      "assets/products/Scrub Charcoal.png",
+      "assets/products/Scrub Green Female Front.jpg",
+      "assets/products/Scrub Green Female Front.png",
+      "assets/products/Scrub Green Female Full Sleeve.jpg",
+      "assets/products/Scrub Green Female Full Sleeve.png",
+      "assets/products/Scrub Green Female Set Full Sleeve.jpg",
+      "assets/products/Scrub Green Female Set Full Sleeve.png",
+      "assets/products/Scrub Green Female Set.jpg",
+      "assets/products/Scrub Green Female Set.png",
+      "assets/products/Scrub Green Set.jpg",
+      "assets/products/Scrub Green Set.png",
+      "assets/products/Scrub Green Trousers  1.jpg",
+      "assets/products/Scrub Green Trousers  1.png",
+      "assets/products/Scrub Green.jpg",
+      "assets/products/Scrub Green.png",
+      "assets/products/Scrub Light Blue Female Front.jpg",
+      "assets/products/Scrub Light Blue Female Front.png",
+      "assets/products/Scrub Light Blue Female Full Sleeve.jpg",
+      "assets/products/Scrub Light Blue Female Full Sleeve.png",
+      "assets/products/Scrub Light Blue Female Set Full Sleeve.jpg",
+      "assets/products/Scrub Light Blue Female Set Full Sleeve.png",
+      "assets/products/Scrub Light Blue Female Set.jpg",
+      "assets/products/Scrub Light Blue Female Set.png",
+      "assets/products/Scrub Light Blue Set.jpg",
+      "assets/products/Scrub Light Blue Set.png",
+      "assets/products/Scrub Light Blue Trousers.jpg",
+      "assets/products/Scrub Light Blue Trousers.png",
+      "assets/products/Scrub Light blue.jpg",
+      "assets/products/Scrub Light blue.png",
+      "assets/products/Scrub Navy Female Front.jpg",
+      "assets/products/Scrub Navy Female Front.png",
+      "assets/products/Scrub Navy Female Full Sleeve.jpg",
+      "assets/products/Scrub Navy Female Full Sleeve.png",
+      "assets/products/Scrub Navy Female Set Full Sleeve.jpg",
+      "assets/products/Scrub Navy Female Set Full Sleeve.png",
+      "assets/products/Scrub Navy Female Set.jpg",
+      "assets/products/Scrub Navy Female Set.png",
+      "assets/products/Scrub Navy Set.jpg",
+      "assets/products/Scrub Navy Set.png",
+      "assets/products/Scrub Navy Trousers.jpg",
+      "assets/products/Scrub Navy Trousers.png",
+      "assets/products/Scrub Navy.jpg",
+      "assets/products/Scrub Navy.png",
+      "assets/products/Scrub Ocean Blue Female front.jpg",
+      "assets/products/Scrub Ocean Blue Female front.png",
+      "assets/products/Scrub Ocean Blue Female Full Sleeve.jpg",
+      "assets/products/Scrub Ocean Blue Female Full Sleeve.png",
+      "assets/products/Scrub Ocean Blue Female Set Full Sleeve.jpg",
+      "assets/products/Scrub Ocean Blue Female Set Full Sleeve.png",
+      "assets/products/Scrub Ocean Blue Female Set.jpg",
+      "assets/products/Scrub Ocean Blue Female Set.png",
+      "assets/products/Scrub Ocean Blue final.jpg",
+      "assets/products/Scrub Ocean Blue final.png",
+      "assets/products/Scrub Ocean Blue Set.jpg",
+      "assets/products/Scrub Ocean Blue set.png",
+      "assets/products/Scrub Ocean Blue Trousers final.jpg",
+      "assets/products/Scrub Ocean Blue Trousers final.png",
+      "assets/products/Scrub Olive Green  Set.jpg",
+      "assets/products/Scrub Olive Green  Set.png",
+      "assets/products/Scrub Olive Green Female Front.jpg",
+      "assets/products/Scrub Olive Green Female Front.png",
+      "assets/products/Scrub Olive Green Female Full Sleeve.jpg",
+      "assets/products/Scrub Olive Green Female Full Sleeve.png",
+      "assets/products/Scrub Olive Green Female Set Full Sleeve.jpg",
+      "assets/products/Scrub Olive Green Female Set Full Sleeve.png",
+      "assets/products/Scrub Olive Green Female Set.jpg",
+      "assets/products/Scrub Olive Green Female Set.png",
+      "assets/products/Scrub Olive Green Trousers.jpg",
+      "assets/products/Scrub Olive Green Trousers.png",
+      "assets/products/Scrub Olive Green.jpg",
+      "assets/products/Scrub Olive Green.png",
+      "assets/products/Scrub White Female Front.jpg",
+      "assets/products/Scrub White Female Front.png",
+      "assets/products/Scrub White Set.jpg",
+      "assets/products/Scrub White Set.png",
+      "assets/products/Scrub White Trousers.jpg",
+      "assets/products/Scrub White Trousers.png",
+      "assets/products/Scrub White.jpg",
+      "assets/products/Scrub White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Upper Left Sleeve"
+    ]
   },
   {
     "sku": "F8-013",
@@ -419,14 +839,24 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Chef Trousers black strips.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Chef Trousers black strips.jpg",
+      "assets/products/Chef Trousers black strips.png",
+      "assets/products/Chef Trousers black.jpg",
+      "assets/products/Chef Trousers black.png",
+      "assets/products/Chef Trousers Grey.jpg",
+      "assets/products/Chef Trousers Grey.png"
+    ],
+    "supportedFinishes": [],
+    "supportedPlacements": []
   },
   {
     "id": "F8-014",
@@ -456,9 +886,29 @@
     "leadTime": "14-21 Business Days",
     "moq": "0",
     "images": [
-      "White Polo Shirt.png"
+      "White Polo Shirt.png",
+      "assets/products/Full Apron White Side.jpg",
+      "assets/products/Full Apron White Side.png",
+      "assets/products/Full Apron White Back.jpg",
+      "assets/products/Full Apron White Back.png",
+      "assets/products/Full Apron Black.jpg",
+      "assets/products/Full Apron Black.png",
+      "assets/products/Full Apron Grey.jpg",
+      "assets/products/Full Apron Grey.png",
+      "assets/products/Full Apron Striped Black.jpg",
+      "assets/products/Full Apron Striped Black.png",
+      "assets/products/Full Apron White.jpg",
+      "assets/products/Full Apron White.png"
     ],
-    "image": "White Polo Shirt.png"
+    "image": "assets/products/Full Apron Black.jpg",
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ]
   },
   {
     "sku": "F8-015",
@@ -482,14 +932,32 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Full Apron W pocket Grey.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Full Apron W pocket Grey.jpg",
+      "assets/products/Full Apron W pocket Grey.png",
+      "assets/products/Full Apron W pocket White.jpg",
+      "assets/products/Full Apron W pocket White.png",
+      "assets/products/Full W pocket Apron Black.jpg",
+      "assets/products/Full W pocket Apron Black.png",
+      "assets/products/Full W pocket Striped Black.jpg",
+      "assets/products/Full W pocket Striped Black.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Center Pocket",
+      "Bottom Left/Right Corner"
+    ]
   },
   {
     "sku": "F8-016",
@@ -513,14 +981,32 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Half Apron Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Half Apron White Back.jpg",
+      "assets/products/Half Apron White Back.png",
+      "assets/products/Half Apron Black.jpg",
+      "assets/products/Half Apron Black.png",
+      "assets/products/Half Apron Grey.jpg",
+      "assets/products/Half Apron Grey.png",
+      "assets/products/Half Apron White.jpg",
+      "assets/products/Half Apron White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Corner",
+      "Right Corner"
+    ]
   },
   {
     "sku": "F8-017",
@@ -544,14 +1030,33 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Half Apron W Pocket Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Half Apron W Pocket Black.jpg",
+      "assets/products/Half Apron W Pocket Black.png",
+      "assets/products/Half Apron W Pocket Grey.jpg",
+      "assets/products/Half Apron W Pocket Grey.png",
+      "assets/products/Half Apron W Pocket Striped Black.jpg",
+      "assets/products/Half Apron W Pocket Striped Black.png",
+      "assets/products/Half Apron W Pocket White.jpg",
+      "assets/products/Half Apron W Pocket White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Center Pocket",
+      "Left Corner",
+      "Right Corner"
+    ]
   },
   {
     "sku": "F8-018",
@@ -579,14 +1084,46 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/T-shirt American Blue.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/T-shirt White Side.jpg",
+      "assets/products/T-shirt White Side.png",
+      "assets/products/T-shirt White Back.jpg",
+      "assets/products/T-shirt White Back.png",
+      "assets/products/T-shirt American Blue.jpg",
+      "assets/products/T-shirt American Blue.png",
+      "assets/products/T-shirt Army Green.jpg",
+      "assets/products/T-shirt Army Green.png",
+      "assets/products/T-shirt Black.jpg",
+      "assets/products/T-shirt Black.png",
+      "assets/products/T-shirt Burgundy.jpg",
+      "assets/products/T-shirt Burgundy.png",
+      "assets/products/T-shirt Charcoal.jpg",
+      "assets/products/T-shirt Charcoal.png",
+      "assets/products/T-shirt Light Blue.jpg",
+      "assets/products/T-shirt Light Blue.png",
+      "assets/products/T-shirt Navy.jpg",
+      "assets/products/T-shirt Navy.png",
+      "assets/products/T-shirt White.jpg",
+      "assets/products/T-shirt White.png"
+    ],
+    "supportedFinishes": [
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Front",
+      "Full Back",
+      "Sleeve"
+    ]
   },
   {
     "sku": "F8-019",
@@ -609,14 +1146,35 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Oversize Tshirt Black 1.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Oversize Tshirt White Side.jpg",
+      "assets/products/Oversize Tshirt White Side.png",
+      "assets/products/Oversize Tshirt White Back.jpg",
+      "assets/products/Oversize Tshirt White Back.png",
+      "assets/products/Oversize Tshirt Black 1.jpg",
+      "assets/products/Oversize Tshirt Black 1.png",
+      "assets/products/Oversize Tshirt Grey 1.jpg",
+      "assets/products/Oversize Tshirt Grey 1.png",
+      "assets/products/Oversize Tshirt White 1.jpg",
+      "assets/products/Oversize Tshirt White 1.png"
+    ],
+    "supportedFinishes": [
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Full Front",
+      "Full Back",
+      "Sleeve"
+    ]
   },
   {
     "sku": "F8-020",
@@ -644,14 +1202,45 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Dri Fit Tshirt Baby Blue.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Dri Fit Tshirt White Side.jpg",
+      "assets/products/Dri Fit Tshirt White Side.png",
+      "assets/products/Dri Fit Tshirt White Back.jpg",
+      "assets/products/Dri Fit Tshirt White Back.png",
+      "assets/products/Dri Fit Tshirt Baby Blue.jpg",
+      "assets/products/Dri Fit Tshirt Baby Blue.png",
+      "assets/products/Dri Fit Tshirt Black 2.jpg",
+      "assets/products/Dri Fit Tshirt Black 2.png",
+      "assets/products/Dri Fit Tshirt Blue 2.jpg",
+      "assets/products/Dri Fit Tshirt Blue 2.png",
+      "assets/products/Dri Fit Tshirt Green 1.jpg",
+      "assets/products/Dri Fit Tshirt Green 1.png",
+      "assets/products/Dri Fit Tshirt Grey 2.jpg",
+      "assets/products/Dri Fit Tshirt Grey 2.png",
+      "assets/products/Dri Fit Tshirt Red.jpg",
+      "assets/products/Dri Fit Tshirt Red.png",
+      "assets/products/Dri Fit Tshirt White.jpg",
+      "assets/products/Dri Fit Tshirt White.png",
+      "assets/products/Dri Fit Tshirt Yellow.jpg",
+      "assets/products/Dri Fit Tshirt Yellow.png"
+    ],
+    "supportedFinishes": [
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Sleeve"
+    ]
   },
   {
     "sku": "F8-021",
@@ -686,7 +1275,39 @@
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Dri Fit Polo White Side.jpg",
+      "assets/products/Dri Fit Polo White Side.png",
+      "assets/products/Dri Fit Polo White Back.jpg",
+      "assets/products/Dri Fit Polo White Back.png",
+      "assets/products/Dri Fit Black Polo.jpg",
+      "assets/products/Dri Fit Black Polo.png",
+      "assets/products/Dri Fit Blue Polo 2.jpg",
+      "assets/products/Dri Fit Blue Polo 2.png",
+      "assets/products/Dri Fit Green Polo (2).jpg",
+      "assets/products/Dri Fit Green Polo (2).png",
+      "assets/products/Dri Fit Green Polo.jpg",
+      "assets/products/Dri Fit Green Polo.png",
+      "assets/products/Dri Fit Light Blue Polo 1.jpg",
+      "assets/products/Dri Fit Light Blue Polo 1.png",
+      "assets/products/Dri Fit polo Red 3.jpg",
+      "assets/products/Dri Fit polo Red 3.png",
+      "assets/products/Dri Fit Polo White.jpg",
+      "assets/products/Dri Fit Polo White.png",
+      "assets/products/Dri Fit Polo Yellow 3.jpg",
+      "assets/products/Dri Fit Polo Yellow 3.png"
+    ],
+    "supportedFinishes": [
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Sleeve",
+      "Collar"
+    ]
   },
   {
     "sku": "F8-022",
@@ -718,7 +1339,32 @@
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Shirt White Side.jpg",
+      "assets/products/Shirt White Side.png",
+      "assets/products/Shirt White Back.jpg",
+      "assets/products/Shirt White Back.png",
+      "assets/products/Shirt Black.jpg",
+      "assets/products/Shirt Black.png",
+      "assets/products/Shirt grey.jpg",
+      "assets/products/Shirt grey.png",
+      "assets/products/Shirt Light blue.jpg",
+      "assets/products/Shirt Light blue.png",
+      "assets/products/Shirt Navy.jpg",
+      "assets/products/Shirt Navy.png",
+      "assets/products/Shirt White.jpg",
+      "assets/products/Shirt White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Sleeve"
+    ]
   },
   {
     "sku": "F8-023",
@@ -743,14 +1389,41 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Hoodie Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Hoodie White Side.jpg",
+      "assets/products/Hoodie White Side.png",
+      "assets/products/Hoodie White Back.jpg",
+      "assets/products/Hoodie White Back.png",
+      "assets/products/Hoodie Black.jpg",
+      "assets/products/Hoodie Black.png",
+      "assets/products/Hoodie grey.jpg",
+      "assets/products/Hoodie grey.png",
+      "assets/products/Hoodie Navy.jpg",
+      "assets/products/Hoodie Navy.png",
+      "assets/products/Hoodie White Front.jpg",
+      "assets/products/Hoodie White Front.png",
+      "assets/products/Hoodie White.jpg",
+      "assets/products/Hoodie White.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Full Front",
+      "Full Back",
+      "Sleeve",
+      "Hood"
+    ]
   },
   {
     "sku": "F8-024",
@@ -775,14 +1448,41 @@
       "Custom Colors"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Zip up Black -.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Zip up white Side.jpg",
+      "assets/products/Zip up white Side.png",
+      "assets/products/Zip up white Back.jpg",
+      "assets/products/Zip up white Back.png",
+      "assets/products/Zip up Black -.jpg",
+      "assets/products/Zip up Black -.png",
+      "assets/products/Zip Up Charcoal.jpg",
+      "assets/products/Zip Up Charcoal.png",
+      "assets/products/Zip up Light Grey-.jpg",
+      "assets/products/Zip up Light Grey-.png",
+      "assets/products/Zip up Navy-.jpg",
+      "assets/products/Zip up Navy-.png",
+      "assets/products/Zip up white-.jpg",
+      "assets/products/Zip up white-.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Sleeve",
+      "Hood"
+    ]
   },
   {
     "sku": "F8-025",
@@ -803,13 +1503,33 @@
       "Black"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "White Polo Shirt.png",
+    "image": "assets/products/Puff Jacket Black Back.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
     "care": "Machine wash cold, do not bleach.",
     "branding": "Embroidery, Screen Print, Heat Transfer",
-    "availability": "In Stock"
+    "availability": "In Stock",
+    "images": [
+      "assets/products/Puff Jacket Black Side.jpg",
+      "assets/products/Puff Jacket Black Side.png",
+      "assets/products/Puff Jacket Black Back.jpg",
+      "assets/products/Puff Jacket Black Back.png",
+      "assets/products/Puff Jacket Black.jpg",
+      "assets/products/Puff Jacket Black.png",
+      "assets/products/Puff Jacket Navy.jpg",
+      "assets/products/Puff Jacket Navy.png"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "DTF"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Sleeve"
+    ]
   }
 ]

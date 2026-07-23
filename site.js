@@ -955,6 +955,34 @@ function initProductPage(sku) {
     `).join("");
   }
 
+  // Dynamic Customization Configuration
+  const customizationSection = document.getElementById("productCustomizationSection");
+  if (customizationSection) {
+    if (!p.supportedFinishes || p.supportedFinishes.length === 0) {
+      customizationSection.style.display = "none";
+    } else {
+      customizationSection.style.display = "block";
+      
+      const renderRadioGroup = (name, options) => {
+        return options.map((opt, idx) => `
+          <label class="radio-btn ${idx === 0 ? 'active' : ''}" style="border: 1px solid ${idx === 0 ? 'var(--green)' : 'var(--line)'}; background: ${idx === 0 ? 'rgba(47,135,61,0.05)' : '#fff'}; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+            <input type="radio" name="${name}" value="${opt}" ${idx === 0 ? 'checked' : ''} style="display: none;">
+            <span style="font-size: 11px; font-weight: 800; ${idx === 0 ? 'color: var(--green);' : ''}">${opt}</span>
+          </label>
+        `).join("");
+      };
+
+      const logoPlacement = document.getElementById("pageLogoPlacementContainer");
+      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || []);
+
+      const textPlacement = document.getElementById("pageTextPlacementContainer");
+      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || []);
+
+      const logoFinish = document.getElementById("pageLogoFinishContainer");
+      if (logoFinish) logoFinish.innerHTML = renderRadioGroup("pageLogoFinish", p.supportedFinishes || []);
+    }
+  }
+
   // Bind color clicks for product page
   colorFilter.querySelectorAll('.color-dot').forEach(dot => {
     dot.addEventListener('click', (e) => {
