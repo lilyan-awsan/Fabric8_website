@@ -13,7 +13,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background-color: #e5e5e5; /* darker backdrop for ultra-wides */
+}
 @font-face {
   font-family: 'Acumin Variable Concept';
   src: url('assets/fonts/heading.otf') format('opentype');
@@ -30,12 +33,16 @@ html { scroll-behavior: smooth; }
 }
 
 body {
-  margin: 0;
+  margin: 0 auto;
+  max-width: 1600px; /* Enforces consistent max scale across monitors */
+  min-height: 100vh;
+  box-shadow: 0 0 40px rgba(0,0,0,0.05); /* visually separates from html backdrop on huge screens */
   font-family: "Century Gothic", "Montserrat", system-ui, sans-serif;
   background: var(--paper);
   color: var(--ink);
   opacity: 0;
   transition: opacity .45s ease;
+  position: relative;
 }
 
 h1, h2, h3, h4, h5, h6, .door-logo h1 {
