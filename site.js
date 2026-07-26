@@ -605,11 +605,15 @@ document.addEventListener("click", (event) => {
       if (p) {
         const colorImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
         if (colorImages && colorImages.length > 0) {
-          document.getElementById('productMainImage').src = colorImages[0];
+          if (typeof window.updateMainImageSmooth === 'function') {
+            window.updateMainImageSmooth(colorImages[0]);
+          } else {
+            document.getElementById('productMainImage').src = colorImages[0];
+          }
           const thumbs = document.getElementById('productThumbnails');
           if (thumbs) {
             if (colorImages.length > 1) {
-              thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`).join("");
+              thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="window.updateMainImageSmooth('${img}')">`).join("");
             } else {
               thumbs.innerHTML = "";
             }
@@ -845,6 +849,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       saveCart();
       renderCart();
       form.reset();
+      if (typeof initClientDetailsPersistence === 'function') initClientDetailsPersistence();
     } else {
       const errorData = await res.json();
       console.error("Resend error:", errorData);
@@ -861,6 +866,50 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   }
 });
 
+function initClientDetailsPersistence() {
+  const form = document.getElementById("quoteForm");
+  if (!form) return;
+
+  try {
+    const saved = localStorage.getItem("fabric8_client_details");
+    if (saved) {
+      const data = JSON.parse(saved);
+      for (const [key, val] of Object.entries(data)) {
+        const input = form.elements[key];
+        if (input && input.type !== "file") {
+          if (input.type === "checkbox" || input.type === "radio") {
+            input.checked = (input.value === val || val === true || val === "Yes");
+          } else {
+            input.value = val;
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to restore client details", e);
+  }
+
+  const saveDetails = () => {
+    try {
+      const data = {};
+      const formData = new FormData(form);
+      for (const [key, value] of formData.entries()) {
+        if (!(value instanceof File) && key !== "Message") {
+          data[key] = value;
+        }
+      }
+      localStorage.setItem("fabric8_client_details", JSON.stringify(data));
+    } catch (e) {
+      console.warn("Failed to save client details", e);
+    }
+  };
+
+  form.querySelectorAll("input:not([type='file']), select").forEach(el => {
+    el.addEventListener("input", saveDetails);
+    el.addEventListener("change", saveDetails);
+  });
+}
+
 function initSite() {
   const path = window.location.pathname.toLowerCase();
   
@@ -870,9 +919,11 @@ function initSite() {
     if (sku) {
       initProductPage(sku);
     }
-  } else if (path.includes('checkout.html')) {
+  } else if (path.includes('checkout.html') || path.includes('quote.html')) {
     if (typeof renderCart === 'function') renderCart();
+    initClientDetailsPersistence();
   } else {
+    initClientDetailsPersistence();
     // For shop.html and others
     if (typeof renderProducts === 'function') renderProducts();
     if (typeof renderCart === 'function') renderCart();
@@ -882,6 +933,19 @@ function initSite() {
 }
 
 let productPageData = { sizeQtys: {} };
+
+window.updateMainImageSmooth = function(newSrc) {
+  const mainImg = document.getElementById('productMainImage');
+  if (!mainImg || mainImg.src.endsWith(newSrc)) return;
+  mainImg.style.transition = 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+  mainImg.style.opacity = '0';
+  setTimeout(() => {
+    mainImg.src = newSrc;
+    mainImg.onload = () => { mainImg.style.opacity = '1'; };
+    mainImg.onerror = () => { mainImg.style.opacity = '1'; };
+    setTimeout(() => { mainImg.style.opacity = '1'; }, 150);
+  }, 250);
+};
 
 function initProductPage(sku) {
   const p = products.find(x => x.sku === sku);
@@ -897,25 +961,31 @@ function initProductPage(sku) {
   document.getElementById('productName').textContent = p.name;
   document.getElementById('productCategory').textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
-  document.getElementById('productDesc').innerHTML = 
-    (p.short ? '<p style="font-weight: 600; margin-bottom: 8px;">' + p.short + '</p>' : '') + 
-    (p.long ? '<p>' + p.long + '</p>' : '');
+  
+  const shortDescEl = document.getElementById('productShortDesc');
+  if (shortDescEl) shortDescEl.textContent = p.short || p.description || "";
+  
+  document.getElementById('productDesc').textContent = p.long || p.description || "Detailed tailoring characteristics, construction notes, and ergonomic design elements engineered for intensive daily use.";
   
   document.getElementById('productFabric').textContent = p.fabric || "N/A";
   document.getElementById('productGsm').textContent = p.gsm || "N/A";
   if (document.getElementById('productCare')) {
-    document.getElementById('productCare').textContent = p.care || "Machine wash cold, tumble dry low.";
+    document.getElementById('productCare').textContent = p.care || "Machine wash cold, tumble dry low. Do not bleach.";
   }
   document.getElementById('productAvailability').textContent = "Made to Order";
   
   const sketchAcc = document.getElementById('sketchAccordion');
   const sketchImg = document.getElementById('productSketch');
+  const noSketchMsg = document.getElementById('noSketchMsg');
   if (sketchAcc && sketchImg) {
+    sketchAcc.style.display = 'block';
     if (p.sketch) {
       sketchImg.src = p.sketch;
-      sketchAcc.style.display = 'block';
+      sketchImg.style.display = 'inline-block';
+      if (noSketchMsg) noSketchMsg.style.display = 'none';
     } else {
-      sketchAcc.style.display = 'none';
+      sketchImg.style.display = 'none';
+      if (noSketchMsg) noSketchMsg.style.display = 'block';
     }
   }
 
@@ -923,7 +993,7 @@ function initProductPage(sku) {
   const initImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase())) || [];
   if (thumbnailsContainer && initImages.length > 1) {
     thumbnailsContainer.innerHTML = initImages.map(img => {
-      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`;
+      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line); transition: transform 0.2s ease;" onclick="window.updateMainImageSmooth('${img}')">`;
     }).join("");
   } else if (thumbnailsContainer) {
     thumbnailsContainer.innerHTML = "";
@@ -945,14 +1015,59 @@ function initProductPage(sku) {
   
   if (matrix) {
     const isOneSize = p.category === "Head Wear" || p.name.toLowerCase().includes("apron");
-    let displaySizes = isOneSize ? ["OS"] : (p.sizes || ["Standard"]);
+    let displaySizes = isOneSize ? ["ONE SIZE"] : (p.sizes || ["S", "M", "L", "XL", "2XL"]);
     
     matrix.innerHTML = displaySizes.map(size => `
-      <div style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 8px; border: 1px solid var(--line); border-radius: 8px;">
-        <div style="flex: 1; padding: 10px; background: #f9f9f9; border: 1px solid var(--line); border-radius: 4px; font-weight: 800; font-size: 13px;">${size}</div>
-        <input type="number" min="0" placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 10px; text-align: center; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; font-size: 14px;" />
+      <div class="size-row" style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; transition: all 0.25s ease;">
+        <button type="button" class="size-select-btn" data-size="${size}" style="flex: 1; padding: 10px 14px; background: transparent; border: 1px solid var(--line); border-radius: 6px; font-weight: 800; font-size: 13px; text-align: left; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center; color: var(--ink);">
+          <span>${size}</span>
+          <span class="chk-indicator" style="font-size: 11px; color: var(--muted);">○</span>
+        </button>
+        <input type="number" min="0" placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 8px; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-family: inherit; font-size: 14px; transition: all 0.2s ease;" />
       </div>
     `).join("");
+
+    matrix.querySelectorAll(".size-row").forEach(row => {
+      const btn = row.querySelector(".size-select-btn");
+      const input = row.querySelector(".matrix-qty-input");
+      const chk = row.querySelector(".chk-indicator");
+
+      const updateHighlight = () => {
+        const val = parseInt(input.value);
+        if ((val && val > 0) || btn.classList.contains("selected")) {
+          btn.style.borderColor = "var(--ink)";
+          btn.style.background = "#f4f3ef";
+          chk.textContent = "●";
+          chk.style.color = "var(--ink)";
+          row.style.borderColor = "var(--ink)";
+          row.style.boxShadow = "0 2px 10px rgba(0,0,0,0.04)";
+        } else {
+          btn.style.borderColor = "var(--line)";
+          btn.style.background = "transparent";
+          chk.textContent = "○";
+          chk.style.color = "var(--muted)";
+          row.style.borderColor = "var(--line)";
+          row.style.boxShadow = "none";
+        }
+      };
+
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("selected");
+        if (btn.classList.contains("selected") && !input.value) {
+          input.focus();
+        }
+        updateHighlight();
+      });
+
+      input.addEventListener("input", () => {
+        if (parseInt(input.value) > 0) {
+          btn.classList.add("selected");
+        } else {
+          btn.classList.remove("selected");
+        }
+        updateHighlight();
+      });
+    });
   }
 
   // Dynamic Customization Configuration
@@ -983,23 +1098,38 @@ function initProductPage(sku) {
     }
   }
 
-  // Bind color clicks for product page
+  // Bind color clicks and hovers for product page with cinematic transitions
   colorFilter.querySelectorAll('.color-dot').forEach(dot => {
-    dot.addEventListener('click', (e) => {
+    const triggerColorSwitch = () => {
       colorFilter.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
-      const btn = e.target.closest('.color-dot');
-      btn.classList.add("active");
-      activeCatalogColor = btn.dataset.color;
-    });
+      dot.classList.add("active");
+      activeCatalogColor = dot.dataset.color;
+      const colorImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+      if (colorImages && colorImages.length > 0) {
+        window.updateMainImageSmooth(colorImages[0]);
+        const thumbs = document.getElementById('productThumbnails');
+        if (thumbs) {
+          if (colorImages.length > 1) {
+            thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line); transition: transform 0.2s ease;" onclick="window.updateMainImageSmooth('${img}')">`).join("");
+          } else {
+            thumbs.innerHTML = "";
+          }
+        }
+      }
+    };
+    dot.addEventListener('click', triggerColorSwitch);
+    dot.addEventListener('mouseenter', triggerColorSwitch);
   });
 
-  // Accordions logic
+  // Accordions logic with symbols only
   document.querySelectorAll('details.accordion summary').forEach(summary => {
     summary.addEventListener('click', (e) => {
       const details = summary.parentElement;
-      const span = summary.querySelector('span');
+      const span = summary.querySelector('.acc-icon');
       if (span) {
-        span.textContent = details.open ? '+' : '−';
+        setTimeout(() => {
+          span.textContent = details.open ? '−' : '+';
+        }, 20);
       }
     });
   });

@@ -62,36 +62,38 @@
         <div>
           <span id="productCategory" style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--green);">Category</span>
           <h1 id="productName" style="margin: 8px 0; font-size: clamp(28px, 4vw, 42px); font-weight: 900; line-height: 1.1; text-transform: uppercase;">Product Name</h1>
-          <span id="productSku" style="color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.05em;">SKU: XXX-XXX</span>
+          <span id="productSku" style="color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; display: block; margin-bottom: 12px;">SKU: XXX-XXX</span>
+          <p id="productShortDesc" style="margin: 8px 0 0 0; font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.6;"></p>
         </div>
         
         <div class="price-availability" style="display: flex; gap: 16px; align-items: center;">
-          <span id="productAvailability" style="padding: 6px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase;">Made to Order</span>
+          <span id="productAvailability" style="padding: 6px 14px; background: #f8f8f6; border: 1px solid var(--line); border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase;">Made to Order</span>
         </div>
 
         <!-- Accordions for Details -->
         <div class="product-accordions" style="border-top: 1px solid var(--line);">
           <!-- Product Details -->
           <details class="accordion" style="border-bottom: 1px solid var(--line);">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between;">Product Details <span>+</span></summary>
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Product Details</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
             <div style="padding-bottom: 16px; font-size: 14px; line-height: 1.6; color: var(--ink);">
-              <p id="productDesc"></p>
+              <p id="productDesc" style="margin: 0;"></p>
             </div>
           </details>
           <!-- Material Details -->
           <details class="accordion" style="border-bottom: 1px solid var(--line);">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between;">Material Details <span>+</span></summary>
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Material Details</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
             <div style="padding-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--ink);">
-              <p><strong>Material:</strong> <span id="productFabric"></span></p>
-              <p><strong>GSM:</strong> <span id="productGsm"></span></p>
-              <p><strong>Care Instructions:</strong> <span id="productCare">Machine wash cold, tumble dry low.</span></p>
+              <p style="margin: 0 0 8px 0;"><strong>Material:</strong> <span id="productFabric"></span></p>
+              <p style="margin: 0 0 8px 0;"><strong>GSM:</strong> <span id="productGsm"></span></p>
+              <p style="margin: 0;"><strong>Care Instructions:</strong> <span id="productCare">Machine wash cold, tumble dry low. Do not bleach.</span></p>
             </div>
           </details>
           <!-- Technical Sketch -->
-          <details id="sketchAccordion" class="accordion" style="border-bottom: 1px solid var(--line); display: none;">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between;">Technical Sketch <span>+</span></summary>
-            <div style="padding-bottom: 16px; display: grid; place-items: center; background: #fafafa; border-radius: 8px; padding-top: 16px;">
-              <img id="productSketch" src="" alt="Technical Sketch" style="max-height: 300px; mix-blend-mode: multiply;" onerror="this.style.display='none'" />
+          <details id="sketchAccordion" class="accordion" style="border-bottom: 1px solid var(--line); display: block;">
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Technical Sketch</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
+            <div style="padding-bottom: 16px; display: grid; place-items: center; background: #fafafa; border-radius: 8px; padding: 16px; text-align: center;">
+              <p id="noSketchMsg" style="display: none; font-size: 12px; color: var(--muted); margin: 0;">Technical CAD sketch available upon quote confirmation.</p>
+              <img id="productSketch" src="" alt="Technical Sketch" style="max-height: 300px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;" />
             </div>
           </details>
         </div>
