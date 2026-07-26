@@ -198,7 +198,6 @@
     "moq": "50 pieces",
     "images": [
       "assets/products/Chef Hat Grey -.jpg",
-      "White Polo Shirt.png",
       "assets/products/Chef Hat white -.jpg"
     ],
     "image": "assets/products/Chef Hat Grey -.jpg",
@@ -726,7 +725,6 @@
     "moq": "0",
     "images": [
       "assets/products/Full Apron Black.jpg",
-      "White Polo Shirt.png",
       "assets/products/Full Apron Grey.jpg",
       "assets/products/Full Apron Striped Black.jpg",
       "assets/products/Full Apron White.jpg",
