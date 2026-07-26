@@ -15,22 +15,30 @@
       "2XL"
     ],
     "colors": [
-      "Black",
+      "American Blue",
       "White",
-      "Navy",
-      "Grey",
-      "Turquoise Blue",
-      "Pink",
+      "Army Green",
+      "Beige",
+      "Black",
+      "Blue",
       "Brown",
-      "Baby Blue",
+      "Burgundy",
+      "Charcoal",
+      "Dark Green",
+      "Green",
+      "Kiwi",
+      "Light Blue",
+      "Light Grey",
+      "Light Yellow",
+      "Navy",
       "Olive Green",
       "Orange",
-      "Yellow",
-      "Green",
+      "Pink",
+      "Purple Blue",
+      "Purple",
       "Red",
-      "Charcoal",
-      "Blue",
-      "Purple"
+      "Turquoise Blue",
+      "Yellow"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Polo American Blue 3.jpg",
@@ -100,7 +108,7 @@
     "colors": [
       "Black",
       "White",
-      "Custom Colors"
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Vest Black.jpg",
@@ -141,8 +149,9 @@
       "2XL"
     ],
     "colors": [
-      "Black",
+      "Army Green",
       "Beige",
+      "Black",
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
@@ -189,8 +198,8 @@
       "2XL"
     ],
     "colors": [
-      "White",
-      "Custom Colors"
+      "Grey",
+      "White"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -220,8 +229,9 @@
       "2XL"
     ],
     "colors": [
-      "White",
-      "Custom Colors"
+      "Black",
+      "Grey",
+      "White"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Beret Hat Black.jpg",
@@ -262,9 +272,9 @@
       "2XL"
     ],
     "colors": [
-      "White",
       "Black",
-      "Custom Colors"
+      "White",
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Chef Bandana Black.jpg",
@@ -306,8 +316,8 @@
       "2XL"
     ],
     "colors": [
-      "White",
-      "Custom Colors"
+      "Grey",
+      "White"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Lab Coat grey.jpg",
@@ -347,9 +357,9 @@
       "2XL"
     ],
     "colors": [
+      "Beige",
       "Black",
       "Charcoal",
-      "Beige",
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
@@ -393,10 +403,10 @@
       "2XL"
     ],
     "colors": [
-      "Black",
-      "Charcoal",
       "Beige",
-      "Navy"
+      "Black",
+      "Navy",
+      "Charcoal"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Trousers Beige.jpg",
@@ -436,16 +446,18 @@
       "5XL"
     ],
     "colors": [
-      "Black",
+      "American Blue",
       "White",
-      "Red",
-      "Navy",
-      "Green",
+      "Black",
+      "Brown",
       "Burgundy",
-      "Light Grey",
       "Charcoal",
-      "Yellow",
-      "Brown"
+      "Green",
+      "Kiwi",
+      "Light Grey",
+      "Navy",
+      "Red",
+      "Yellow"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -493,8 +505,9 @@
       "2XL"
     ],
     "colors": [
+      "Black",
       "White",
-      "Custom Colors"
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Chef Jacket Black.jpg",
@@ -537,13 +550,15 @@
       "2XL"
     ],
     "colors": [
+      "Beige",
+      "White",
       "Black",
-      "Navy",
       "Burgundy",
       "Charcoal",
+      "Green",
+      "Light Blue",
+      "Navy",
       "Ocean Blue",
-      "White",
-      "Baby Blue",
       "Olive Green"
     ],
     "gender": "Men / Women / Unisex",
@@ -660,9 +675,9 @@
       "2XL"
     ],
     "colors": [
+      "Black Striped",
       "Black",
-      "Striped",
-      "Custom Colors"
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Chef Trousers black strips.jpg",
@@ -701,8 +716,8 @@
     "colors": [
       "Black",
       "White",
-      "Striped",
-      "Custom Colors"
+      "Grey",
+      "Black Striped"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -742,10 +757,10 @@
       "2XL"
     ],
     "colors": [
-      "Black",
+      "Grey",
       "White",
-      "Striped",
-      "Custom Colors"
+      "Black",
+      "Black Striped"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Full Apron W pocket Grey.jpg",
@@ -789,8 +804,7 @@
     "colors": [
       "Black",
       "White",
-      "Striped",
-      "Custom Colors"
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Half Apron Black.jpg",
@@ -833,9 +847,9 @@
     ],
     "colors": [
       "Black",
-      "White",
-      "Striped",
-      "Custom Colors"
+      "Grey",
+      "Black Striped",
+      "White"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Half Apron W Pocket Black.jpg",
@@ -878,14 +892,14 @@
       "2XL"
     ],
     "colors": [
-      "Black",
-      "White",
-      "Navy",
-      "Burgundy",
-      "Baby Blue",
       "American Blue",
+      "White",
       "Army Green",
-      "Custom Colors"
+      "Black",
+      "Burgundy",
+      "Charcoal",
+      "Light Blue",
+      "Navy"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/T-shirt American Blue.jpg",
@@ -937,7 +951,7 @@
     "colors": [
       "Black",
       "White",
-      "Custom Colors"
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Oversize Tshirt Black 1.jpg",
@@ -981,14 +995,14 @@
       "2XL"
     ],
     "colors": [
-      "Black",
-      "White",
-      "Blue",
       "Baby Blue",
-      "Yellow",
+      "White",
+      "Black",
+      "Blue",
       "Green",
+      "Grey",
       "Red",
-      "Custom Colors"
+      "Yellow"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Dri Fit Tshirt Baby Blue.jpg",
@@ -1040,11 +1054,10 @@
       "Black",
       "White",
       "Blue",
-      "Baby Blue",
-      "Yellow",
       "Green",
+      "Light Blue",
       "Red",
-      "Custom Colors"
+      "Yellow"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Dri Fit Black Polo.jpg",
@@ -1097,8 +1110,8 @@
       "Black",
       "White",
       "Grey",
-      "Navy",
-      "Baby Blue"
+      "Light Blue",
+      "Navy"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Shirt Black.jpg",
@@ -1146,9 +1159,8 @@
     "colors": [
       "Black",
       "White",
-      "Navy",
-      "Charcoal",
-      "Custom Colors"
+      "Grey",
+      "Navy"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Hoodie Black.jpg",
@@ -1198,9 +1210,9 @@
     "colors": [
       "Black",
       "White",
-      "Navy",
       "Charcoal",
-      "Custom Colors"
+      "Light Grey",
+      "Navy"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Zip up Black -.jpg",
@@ -1248,7 +1260,8 @@
       "2XL"
     ],
     "colors": [
-      "Black"
+      "Black",
+      "Navy"
     ],
     "gender": "Men / Women / Unisex",
     "image": "assets/products/Puff Jacket Black.jpg",
