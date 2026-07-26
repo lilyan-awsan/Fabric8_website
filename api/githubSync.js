@@ -17,13 +17,13 @@ export default async function handler(req, res) {
   const jsonPath = "data/products.json";
 
   try {
-    // 1. If there are new images, upload them to GitHub first
+    // 1. If there are new images or sketch attachments, upload them to GitHub first
     let finalImages = product?.existingImages || [];
     
     if (newImages && Array.isArray(newImages) && newImages.length > 0) {
       for (const img of newImages) {
         if (img.base64 && img.name) {
-          const imgPath = `assets/products/${Date.now()}_${img.name.replace(/\\s+/g, '_')}`;
+          const imgPath = `assets/products/${Date.now()}_${img.name.replace(/\s+/g, '_')}`;
           const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
             method: 'PUT',
             headers: {
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
               message: `Upload image for ${product.sku}`,
-              content: img.base64.split(',')[1] // Remove 'data:image/png;base64,' prefix
+              content: img.base64.split(',')[1]
             })
           });
           if (!imgRes.ok) {
@@ -43,6 +43,27 @@ export default async function handler(req, res) {
         }
       }
     }
+
+    if (product?.sketchBase64 && product?.sketchName) {
+      const sketchPath = `assets/products/${Date.now()}_sketch_${product.sketchName.replace(/\s+/g, '_')}`;
+      const skRes = await fetch(`https://api.github.com/repos/${repo}/contents/${sketchPath}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Upload technical sketch for ${product.sku || 'SKU'}`,
+          content: product.sketchBase64.split(',')[1]
+        })
+      });
+      if (skRes.ok) {
+        product.sketch = sketchPath;
+      }
+      delete product.sketchBase64;
+      delete product.sketchName;
+    }
+
 
     // 2. Fetch the current products.json to get its SHA and content
     const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${jsonPath}`, {

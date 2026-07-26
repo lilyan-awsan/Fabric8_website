@@ -247,6 +247,103 @@ async function syncWithGithub(action, product) {
 }
 
 // --- Modal & Form ---
+// Dynamic Tag Managers & Sector Engine
+let activeSizes = ["S", "M", "L", "XL"];
+let activeColors = ["Black", "Navy", "White"];
+let activeSectors = [];
+let pendingSketchFile = null;
+
+function renderSizesTags() {
+  const container = document.getElementById("sizesTagsContainer");
+  if (!container) return;
+  container.innerHTML = activeSizes.map((size, idx) => `
+    <span style="background: #f0eee9; color: var(--ink); padding: 4px 10px; border-radius: 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);">
+      ${size}
+      <button type="button" onclick="window.removeSizeTag(${idx})" style="background: none; border: none; font-size: 15px; cursor: pointer; color: #888; line-height: 1; padding: 0;">&times;</button>
+    </span>
+  `).join("");
+}
+
+function renderColorsTags() {
+  const container = document.getElementById("colorsTagsContainer");
+  if (!container) return;
+  container.innerHTML = activeColors.map((col, idx) => `
+    <span style="background: #f0eee9; color: var(--ink); padding: 4px 10px; border-radius: 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);">
+      ${col}
+      <button type="button" onclick="window.removeColorTag(${idx})" style="background: none; border: none; font-size: 15px; cursor: pointer; color: #888; line-height: 1; padding: 0;">&times;</button>
+    </span>
+  `).join("");
+  renderImagePreviews();
+}
+
+window.removeSizeTag = function(index) {
+  activeSizes.splice(index, 1);
+  renderSizesTags();
+};
+
+window.removeColorTag = function(index) {
+  activeColors.splice(index, 1);
+  renderColorsTags();
+};
+
+document.getElementById("addSizeTagBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("newSizeInput");
+  const val = input?.value.trim();
+  if (val && !activeSizes.includes(val)) {
+    activeSizes.push(val);
+    input.value = "";
+    renderSizesTags();
+  }
+});
+
+document.getElementById("addColorTagBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("newColorInput");
+  const val = input?.value.trim();
+  if (val && !activeColors.includes(val)) {
+    activeColors.push(val);
+    input.value = "";
+    renderColorsTags();
+  }
+});
+
+function renderSectorButtons() {
+  const container = document.getElementById("productSectorsButtons");
+  if (!container) return;
+  const sectors = ["Food & beverage", "Hospitality", "Corporate", "Healthcare", "Industrial", "Education", "Aviation"];
+  container.innerHTML = sectors.map(sec => {
+    const isSelected = activeSectors.some(s => s.toLowerCase() === sec.toLowerCase());
+    return `
+      <button type="button" class="sector-btn ${isSelected ? 'active' : ''}" data-sector="${sec}" onclick="window.toggleSectorSelection('${sec}')" style="padding: 8px 16px; border-radius: 20px; border: 1px solid ${isSelected ? 'var(--ink)' : 'var(--line)'}; background: ${isSelected ? 'var(--ink)' : '#fff'}; color: ${isSelected ? '#fff' : 'var(--ink)'}; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">
+        ${sec} ${isSelected ? '✓' : ''}
+      </button>
+    `;
+  }).join("");
+  const input = document.getElementById("sectors");
+  if (input) input.value = activeSectors.join(", ");
+}
+
+window.toggleSectorSelection = function(sectorName) {
+  const idx = activeSectors.findIndex(s => s.toLowerCase() === sectorName.toLowerCase());
+  if (idx >= 0) {
+    activeSectors.splice(idx, 1);
+  } else {
+    activeSectors.push(sectorName);
+  }
+  renderSectorButtons();
+};
+
+document.getElementById("sketchUpload")?.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    pendingSketchFile = { base64: evt.target.result, name: file.name };
+    const input = document.getElementById("sketch");
+    if (input) input.value = `[Pending Upload: ${file.name}]`;
+  };
+  reader.readAsDataURL(file);
+});
+
 function openModal(docId = null) {
   productForm.reset();
   imagePreviewContainer.style.display = "none";
@@ -255,17 +352,9 @@ function openModal(docId = null) {
   uploadStatus.textContent = "";
   pendingImages = [];
   existingImages = [];
+  pendingSketchFile = null;
   document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => cb.checked = false);
-  document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => cb.checked = false);
-  document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => cb.checked = false);
-  document.querySelectorAll("#brandingGroup input[type='checkbox']").forEach(cb => cb.checked = false);
-  document.getElementById("otherSizes").value = "";
-  document.getElementById("otherColors").value = "";
-  document.getElementById("sketch").value = "";
   updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
-  updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
-  updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors');
-  updateMultiSelectText('brandingGroup', 'brandingText', 'Select Branding');
 
   if (docId) {
     modalTitle.textContent = "Edit Product";
@@ -280,39 +369,18 @@ function openModal(docId = null) {
       document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => {
         cb.checked = pGender.includes(cb.value);
       });
+      updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
       
-      document.getElementById("sectors").value = p.sectors || "";
+      activeSectors = p.sectors ? p.sectors.split(",").map(s => s.trim()).filter(Boolean) : [];
+      renderSectorButtons();
+
       document.getElementById("short").value = p.short || "";
       document.getElementById("long").value = p.long || "";
-      // Populate Sizes
-      const pSizes = p.sizes || [];
-      const otherSizesArr = [];
-      document.querySelectorAll("#sizesGroup input[type='checkbox']").forEach(cb => {
-        cb.checked = pSizes.includes(cb.value);
-      });
-      pSizes.forEach(s => {
-        if (!document.querySelector(`#sizesGroup input[type='checkbox'][value='${s}']`)) {
-          otherSizesArr.push(s);
-        }
-      });
-      document.getElementById("otherSizes").value = otherSizesArr.join(", ");
-
-      // Populate Colors
-      const pColors = p.colors || [];
-      const otherColorsArr = [];
-      document.querySelectorAll("#colorsGroup input[type='checkbox']").forEach(cb => {
-        cb.checked = pColors.includes(cb.value);
-      });
-      pColors.forEach(c => {
-        if (!document.querySelector(`#colorsGroup input[type='checkbox'][value='${c}']`)) {
-          otherColorsArr.push(c);
-        }
-      });
-      document.getElementById("otherColors").value = otherColorsArr.join(", ");
-
-      updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
-      updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
-      updateMultiSelectText('colorsGroup', 'colorsText', 'Select Colors');
+      
+      activeSizes = p.sizes && p.sizes.length > 0 ? [...p.sizes] : ["S", "M", "L", "XL"];
+      activeColors = p.colors && p.colors.length > 0 ? [...p.colors] : ["Black", "White", "Navy"];
+      renderSizesTags();
+      renderColorsTags();
 
       document.getElementById("fabric").value = p.fabric || "";
       document.getElementById("gsm").value = p.gsm || "";
@@ -321,14 +389,22 @@ function openModal(docId = null) {
       document.getElementById("availability").value = p.availability || "";
       document.getElementById("care").value = p.care || "";
       document.getElementById("sketch").value = p.sketch || "";
+      document.getElementById("sketchDescription").value = p.sketchDescription || "";
       document.getElementById("supportedPlacements").value = (p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]).join(", ");
 
-      const pBranding = p.branding || p.supportedFinishes || [];
-      document.querySelectorAll("#brandingGroup input[type='checkbox']").forEach(cb => {
-        cb.checked = pBranding.some(val => val && val.toLowerCase().includes(cb.value.toLowerCase()));
-      });
-      updateMultiSelectText('brandingGroup', 'brandingText', 'Select Branding');
-      
+      const custCap = p.customizationCapability || "both";
+      const radio = document.querySelector(`input[name="customizationCapability"][value="${custCap}"]`);
+      if (radio) {
+        radio.checked = true;
+        document.querySelectorAll('input[name="customizationCapability"]').forEach(r => {
+          const lbl = r.closest('label');
+          if (lbl) {
+            lbl.style.background = r.checked ? '#f2f1ed' : '#fff';
+            lbl.style.borderColor = r.checked ? 'var(--ink)' : 'var(--line)';
+          }
+        });
+      }
+
       if (p.images && p.images.length > 0) {
         existingImages = [...p.images];
       } else if (p.image) {
@@ -339,6 +415,12 @@ function openModal(docId = null) {
   } else {
     modalTitle.textContent = "Add Product";
     document.getElementById("docId").value = "";
+    activeSectors = ["Corporate", "Hospitality"];
+    activeSizes = ["S", "M", "L", "XL", "2XL"];
+    activeColors = ["Black", "White", "Navy", "Grey"];
+    renderSectorButtons();
+    renderSizesTags();
+    renderColorsTags();
     document.getElementById("supportedPlacements").value = "Left Chest, Right Chest, Center Back, Upper Sleeve";
   }
   
@@ -353,6 +435,19 @@ addProductBtn.addEventListener("click", () => openModal());
 closeModalBtn.addEventListener("click", closeModal);
 cancelModalBtn.addEventListener("click", closeModal);
 
+// Handle Customization Capability Radio clicks in Modal
+document.querySelectorAll('input[name="customizationCapability"]').forEach(r => {
+  r.addEventListener('change', (e) => {
+    document.querySelectorAll('input[name="customizationCapability"]').forEach(radio => {
+      const lbl = radio.closest('label');
+      if (lbl) {
+        lbl.style.background = radio.checked ? '#f2f1ed' : '#fff';
+        lbl.style.borderColor = radio.checked ? 'var(--ink)' : 'var(--line)';
+      }
+    });
+  });
+});
+
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   
@@ -361,11 +456,10 @@ productForm.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
 
   const docId = document.getElementById("docId").value || document.getElementById("sku").value;
-  const brandingSelected = Array.from(document.querySelectorAll("#brandingGroup input[type='checkbox']:checked")).map(cb => cb.value);
-  let custCap = "both";
-  if (brandingSelected.includes("None") || brandingSelected.length === 0) custCap = "none";
-  else if (brandingSelected.length === 1 && brandingSelected[0] === "DTF") custCap = "dtf_only";
-  else if (brandingSelected.length === 1 && brandingSelected[0] === "Embroidery") custCap = "embroidery_only";
+  const custCap = document.querySelector('input[name="customizationCapability"]:checked')?.value || "both";
+  const supportedFinishes = custCap === "dtf_only" ? ["Direct To Fabric (DTF) Printing"] :
+                            custCap === "embroidery_only" ? ["Embroidery"] :
+                            custCap === "none" ? [] : ["Embroidery", "Direct To Fabric (DTF) Printing"];
   
   const productData = {
     id: docId,
@@ -373,24 +467,29 @@ productForm.addEventListener("submit", async (e) => {
     name: document.getElementById("name").value,
     category: document.getElementById("category").value,
     gender: Array.from(document.querySelectorAll("#genderGroup input[type='checkbox']:checked")).map(cb => cb.value).join(" / ") || "Unisex",
-    sectors: document.getElementById("sectors").value,
+    sectors: activeSectors.join(", "),
     short: document.getElementById("short").value,
     long: document.getElementById("long").value,
-    sizes: [...new Set([...Array.from(document.querySelectorAll("#sizesGroup input[type='checkbox']:checked")).map(cb => cb.value), ...document.getElementById("otherSizes").value.split(",").map(s => s.trim()).filter(Boolean)])],
-    colors: [...new Set([...Array.from(document.querySelectorAll("#colorsGroup input[type='checkbox']:checked")).map(cb => cb.value), ...document.getElementById("otherColors").value.split(",").map(c => c.trim()).filter(Boolean)])],
+    sizes: activeSizes,
+    colors: activeColors,
     fabric: document.getElementById("fabric").value,
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
     moq: document.getElementById("moq").value,
     availability: document.getElementById("availability").value,
     care: document.getElementById("care").value,
-    sketch: document.getElementById("sketch").value,
+    sketch: pendingSketchFile ? "PENDING_UPLOAD" : document.getElementById("sketch").value,
+    sketchDescription: document.getElementById("sketchDescription")?.value || "",
     supportedPlacements: document.getElementById("supportedPlacements")?.value.split(",").map(p => p.trim()).filter(Boolean) || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"],
-    supportedFinishes: brandingSelected.includes("DTF") ? (brandingSelected.includes("Embroidery") ? ["Embroidery", "Direct To Fabric (DTF) Printing"] : ["Direct To Fabric (DTF) Printing"]) : ["Embroidery"],
+    supportedFinishes: supportedFinishes,
     customizationCapability: custCap,
-    branding: brandingSelected,
     existingImages: existingImages
   };
+
+  if (pendingSketchFile) {
+    productData.sketchBase64 = pendingSketchFile.base64;
+    productData.sketchName = pendingSketchFile.name;
+  }
 
   const success = await syncWithGithub("save", productData);
   if (success) closeModal();
@@ -399,7 +498,7 @@ productForm.addEventListener("submit", async (e) => {
   submitBtn.disabled = false;
 });
 
-// --- Image Preview (Base64) ---
+// --- Image Preview (Base64) with Color Swatch Association ---
 function renderImagePreviews() {
   imagePreviewContainer.innerHTML = "";
   
@@ -410,12 +509,28 @@ function renderImagePreviews() {
   
   imagePreviewContainer.style.display = "flex";
   
+  const colorOptions = activeColors && activeColors.length > 0 ? activeColors : ["Default"];
+  
   existingImages.forEach((imgUrl, index) => {
     const div = document.createElement("div");
     div.className = "preview-item";
+    div.style.display = "flex";
+    div.style.flexDirection = "column";
+    div.style.alignItems = "center";
+    div.style.gap = "6px";
+    div.style.padding = "6px";
+    div.style.border = "1px solid var(--line)";
+    div.style.borderRadius = "8px";
+    div.style.background = "#fff";
     div.innerHTML = `
-      <img src="${imgUrl}" alt="Existing">
-      <button type="button" class="remove-btn" onclick="removeExistingImage(${index})">&times;</button>
+      <div style="position: relative;">
+        <img src="${imgUrl}" alt="Existing" style="width: 80px; height: 80px; object-fit: contain; border-radius: 4px; background: #f9f8f5;">
+        <button type="button" class="remove-btn" onclick="removeExistingImage(${index})" style="position: absolute; top: -6px; right: -6px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold;">&times;</button>
+      </div>
+      <select onchange="window.updateImageColorMatch('existing', ${index}, this.value)" style="font-size: 11px; padding: 2px 4px; border-radius: 4px; width: 100%; border: 1px solid var(--line);">
+        <option value="">Match Color</option>
+        ${colorOptions.map(col => `<option value="${col}" ${imgUrl.toLowerCase().includes(col.toLowerCase()) ? 'selected' : ''}>${col}</option>`).join("")}
+      </select>
     `;
     imagePreviewContainer.appendChild(div);
   });
@@ -423,13 +538,35 @@ function renderImagePreviews() {
   pendingImages.forEach((img, index) => {
     const div = document.createElement("div");
     div.className = "preview-item";
+    div.style.display = "flex";
+    div.style.flexDirection = "column";
+    div.style.alignItems = "center";
+    div.style.gap = "6px";
+    div.style.padding = "6px";
+    div.style.border = "1px solid var(--line)";
+    div.style.borderRadius = "8px";
+    div.style.background = "#fff";
     div.innerHTML = `
-      <img src="${img.base64}" alt="Pending">
-      <button type="button" class="remove-btn" onclick="removePendingImage(${index})">&times;</button>
+      <div style="position: relative;">
+        <img src="${img.base64}" alt="Pending" style="width: 80px; height: 80px; object-fit: contain; border-radius: 4px; background: #f9f8f5;">
+        <button type="button" class="remove-btn" onclick="removePendingImage(${index})" style="position: absolute; top: -6px; right: -6px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold;">&times;</button>
+      </div>
+      <select onchange="window.updateImageColorMatch('pending', ${index}, this.value)" style="font-size: 11px; padding: 2px 4px; border-radius: 4px; width: 100%; border: 1px solid var(--line);">
+        <option value="">Match Color</option>
+        ${colorOptions.map(col => `<option value="${col}" ${img.name && img.name.toLowerCase().includes(col.toLowerCase()) ? 'selected' : ''}>${col}</option>`).join("")}
+      </select>
     `;
     imagePreviewContainer.appendChild(div);
   });
 }
+
+window.updateImageColorMatch = function(type, index, colorName) {
+  if (type === 'pending' && pendingImages[index]) {
+    const origName = pendingImages[index].name || "image.png";
+    const cleanName = origName.replace(/^([a-zA-Z0-9]+)_/, "");
+    pendingImages[index].name = colorName ? `${colorName}_${cleanName}` : cleanName;
+  }
+};
 
 window.removeExistingImage = function(index) {
   existingImages.splice(index, 1);
@@ -440,6 +577,7 @@ window.removePendingImage = function(index) {
   pendingImages.splice(index, 1);
   renderImagePreviews();
 };
+
 
 imageUpload.addEventListener("change", async (e) => {
   const files = e.target.files;
@@ -606,37 +744,154 @@ if (tabProducts && tabSettings) {
   });
 }
 
-// --- Settings CMS Logic ---
+// --- Settings CMS & Category Engine Logic ---
+let categories1stLayer = [
+  { name: "Food & beverage", enabled: true },
+  { name: "Hospitality", enabled: true },
+  { name: "Corporate", enabled: true },
+  { name: "Healthcare", enabled: true },
+  { name: "Industrial", enabled: true },
+  { name: "Education", enabled: false },
+  { name: "Aviation", enabled: false }
+];
+let categories2ndLayer = [
+  { name: "HEAD WEAR", enabled: true },
+  { name: "TOP WEAR", enabled: true },
+  { name: "BOTTOM WEAR", enabled: true },
+  { name: "OUTER WEAR", enabled: true },
+  { name: "ACCESSORIES", enabled: true }
+];
+
+function renderCmsCategoryLists() {
+  const list1 = document.getElementById("cms1stLayerList");
+  if (list1) {
+    list1.innerHTML = categories1stLayer.map((cat, idx) => `
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: ${cat.enabled ? '#fff' : '#f5f4ef'}; border: 1px solid var(--line); border-radius: 6px; opacity: ${cat.enabled ? '1' : '0.65'};">
+        <span style="font-size: 13px; font-weight: ${cat.enabled ? '700' : '500'}; color: var(--ink);">${cat.name} ${!cat.enabled ? '<span style="font-size: 10px; background: #ddd; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">OFF</span>' : ''}</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="display: inline-flex; align-items: center; cursor: pointer; font-size: 12px; color: var(--muted);">
+            <input type="checkbox" onchange="window.toggleCmsCat('1st', ${idx}, this.checked)" ${cat.enabled ? 'checked' : ''}> Enable
+          </label>
+          <button type="button" onclick="window.removeCmsCat('1st', ${idx})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px; font-weight: bold; line-height: 1;">&times;</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  const list2 = document.getElementById("cms2ndLayerList");
+  if (list2) {
+    list2.innerHTML = categories2ndLayer.map((cat, idx) => `
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: ${cat.enabled ? '#fff' : '#f5f4ef'}; border: 1px solid var(--line); border-radius: 6px; opacity: ${cat.enabled ? '1' : '0.65'};">
+        <span style="font-size: 13px; font-weight: ${cat.enabled ? '700' : '500'}; color: var(--ink);">${cat.name} ${!cat.enabled ? '<span style="font-size: 10px; background: #ddd; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">OFF</span>' : ''}</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label style="display: inline-flex; align-items: center; cursor: pointer; font-size: 12px; color: var(--muted);">
+            <input type="checkbox" onchange="window.toggleCmsCat('2nd', ${idx}, this.checked)" ${cat.enabled ? 'checked' : ''}> Enable
+          </label>
+          <button type="button" onclick="window.removeCmsCat('2nd', ${idx})" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px; font-weight: bold; line-height: 1;">&times;</button>
+        </div>
+      </div>
+    `).join("");
+  }
+}
+
+window.toggleCmsCat = function(layer, index, status) {
+  if (layer === '1st' && categories1stLayer[index]) categories1stLayer[index].enabled = status;
+  if (layer === '2nd' && categories2ndLayer[index]) categories2ndLayer[index].enabled = status;
+  renderCmsCategoryLists();
+};
+
+window.removeCmsCat = function(layer, index) {
+  if (confirm("Are you sure you want to delete this category?")) {
+    if (layer === '1st') categories1stLayer.splice(index, 1);
+    if (layer === '2nd') categories2ndLayer.splice(index, 1);
+    renderCmsCategoryLists();
+  }
+};
+
+document.getElementById("add1stLayerBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("new1stLayerInput");
+  const val = input?.value.trim();
+  if (val) {
+    categories1stLayer.push({ name: val, enabled: true });
+    input.value = "";
+    renderCmsCategoryLists();
+  }
+});
+
+document.getElementById("add2ndLayerBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("new2ndLayerInput");
+  const val = input?.value.trim();
+  if (val) {
+    categories2ndLayer.push({ name: val, enabled: true });
+    input.value = "";
+    renderCmsCategoryLists();
+  }
+});
+
 async function fetchSettings() {
   try {
     const res = await fetch('data/admin_settings.json?t=' + Date.now());
     if (res.ok) {
       const settings = await res.json();
+      if (settings.categories1stLayer) categories1stLayer = settings.categories1stLayer;
+      if (settings.categories2ndLayer) categories2ndLayer = settings.categories2ndLayer;
+      renderCmsCategoryLists();
+
       document.getElementById("settingPromoBanner").value = settings.promoBanner || "";
       document.getElementById("settingFooterLegal").value = settings.footerLegal || "";
-      document.getElementById("settingSectors").value = (settings.visibleSectors || []).join(", ");
-      document.getElementById("settingCategories").value = (settings.visibleCategories || []).join(", ");
-      document.getElementById("settingLogoScale").value = settings.logoMaxScale || "15";
-      document.getElementById("settingLockPositions").value = settings.lockPositions ? "true" : "false";
+
+      const sc = settings.siteContent || {};
+      if (document.getElementById("settingHomeTitle")) document.getElementById("settingHomeTitle").value = sc.homeHeroTitle || "Engineered for Comfort, Designed to Inspire";
+      if (document.getElementById("settingHomeBtn")) document.getElementById("settingHomeBtn").value = sc.homeHeroBtnText || "EXPLORE THE COLLECTION";
+      if (document.getElementById("settingHomeSub")) document.getElementById("settingHomeSub").value = sc.homeHeroSubtitle || "High-performance industrial uniforms & corporate fashion designed for modern teams.";
+      if (document.getElementById("settingAboutText")) document.getElementById("settingAboutText").value = sc.aboutText || "We partner with leading corporate enterprises, healthcare groups, and industrial sectors...";
+
+      const lc = settings.legalContent || {};
+      if (document.getElementById("settingTermsText")) document.getElementById("settingTermsText").value = lc.termsText || "";
+      if (document.getElementById("settingPrivacyText")) document.getElementById("settingPrivacyText").value = lc.privacyText || "";
+
+      const bc = settings.brandingSettings || {};
+      if (document.getElementById("settingDefaultPlacements")) document.getElementById("settingDefaultPlacements").value = (bc.defaultPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]).join(", ");
+      if (document.getElementById("settingDtfNote")) document.getElementById("settingDtfNote").value = bc.dtfHelperNote || "";
+      if (document.getElementById("settingEmbroideryNote")) document.getElementById("settingEmbroideryNote").value = bc.embroideryHelperNote || "";
+    } else {
+      renderCmsCategoryLists();
     }
   } catch (err) {
     console.error("No existing settings found.");
+    renderCmsCategoryLists();
   }
 }
 
 document.getElementById("saveSettingsBtn")?.addEventListener("click", async () => {
   const btn = document.getElementById("saveSettingsBtn");
+  const statusSpan = document.getElementById("cmsSaveStatus");
   const originalText = btn.textContent;
-  btn.textContent = "Saving to GitHub...";
+  btn.textContent = "Saving CMS to GitHub...";
   btn.disabled = true;
+  if (statusSpan) statusSpan.style.display = "none";
 
   const settingsPayload = {
-    promoBanner: document.getElementById("settingPromoBanner").value,
-    footerLegal: document.getElementById("settingFooterLegal").value,
-    visibleSectors: document.getElementById("settingSectors").value.split(",").map(s => s.trim()).filter(Boolean),
-    visibleCategories: document.getElementById("settingCategories").value.split(",").map(c => c.trim()).filter(Boolean),
-    logoMaxScale: parseInt(document.getElementById("settingLogoScale").value || 15),
-    lockPositions: document.getElementById("settingLockPositions").value === "true"
+    promoBanner: document.getElementById("settingPromoBanner")?.value || "",
+    footerLegal: document.getElementById("settingFooterLegal")?.value || "",
+    categories1stLayer: categories1stLayer,
+    categories2ndLayer: categories2ndLayer,
+    siteContent: {
+      homeHeroTitle: document.getElementById("settingHomeTitle")?.value || "Engineered for Comfort, Designed to Inspire",
+      homeHeroBtnText: document.getElementById("settingHomeBtn")?.value || "EXPLORE THE COLLECTION",
+      homeHeroSubtitle: document.getElementById("settingHomeSub")?.value || "",
+      aboutText: document.getElementById("settingAboutText")?.value || "",
+      methodLeafletUrl: "assets/needs/Product Data General Sheet (1).xlsx"
+    },
+    legalContent: {
+      termsText: document.getElementById("settingTermsText")?.value || "",
+      privacyText: document.getElementById("settingPrivacyText")?.value || ""
+    },
+    brandingSettings: {
+      defaultPlacements: document.getElementById("settingDefaultPlacements")?.value.split(",").map(p => p.trim()).filter(Boolean) || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"],
+      dtfHelperNote: document.getElementById("settingDtfNote")?.value || "",
+      embroideryHelperNote: document.getElementById("settingEmbroideryNote")?.value || ""
+    }
   };
 
   try {
@@ -652,7 +907,11 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
     
     const data = await res.json();
     if (data.success) {
-      alert(`Success! Site Settings saved to GitHub.\nNOTE: Vercel takes ~45 seconds to rebuild the website. Your changes will be live shortly.`);
+      if (statusSpan) {
+        statusSpan.style.display = "inline";
+        setTimeout(() => { statusSpan.style.display = "none"; }, 5000);
+      }
+      alert(`Success! Master CMS Content and Category states saved to GitHub.\nNOTE: Vercel takes ~45 seconds to rebuild the website.`);
     } else {
       alert("Error saving settings: " + data.message);
     }
@@ -663,4 +922,5 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
     btn.disabled = false;
   }
 });
+
 

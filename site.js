@@ -10,7 +10,36 @@ function applySiteSettings() {
     const footer = document.querySelector('.site-footer-bottom p');
     if (footer) footer.textContent = siteSettings.footerLegal;
   }
+  
+  const sc = siteSettings.siteContent || {};
+  if (sc.homeHeroTitle) {
+    const heroTitle = document.getElementById('cmsHomeHeroTitle');
+    if (heroTitle) heroTitle.textContent = sc.homeHeroTitle;
+  }
+  if (sc.homeHeroSubtitle) {
+    const heroSub = document.getElementById('cmsHomeHeroSub');
+    if (heroSub) heroSub.textContent = sc.homeHeroSubtitle;
+  }
+  if (sc.homeHeroBtnText) {
+    const heroBtn = document.getElementById('cmsHomeHeroBtn');
+    if (heroBtn) heroBtn.textContent = sc.homeHeroBtnText;
+  }
+  if (sc.aboutText) {
+    const aboutBox = document.getElementById('cmsAboutText');
+    if (aboutBox) aboutBox.textContent = sc.aboutText;
+  }
+
+  const lc = siteSettings.legalContent || {};
+  if (lc.termsText) {
+    const termsEl = document.getElementById('cmsTermsContent');
+    if (termsEl) termsEl.innerText = lc.termsText;
+  }
+  if (lc.privacyText) {
+    const privacyEl = document.getElementById('cmsPrivacyContent');
+    if (privacyEl) privacyEl.innerText = lc.privacyText;
+  }
 }
+
 
 async function loadProducts() {
   try {
@@ -106,7 +135,13 @@ let activeSearchTerm = "";
 let activeSortTerm = "featured";
 
 function renderFilters() {
-  const allowedSectors = (siteSettings.visibleSectors && siteSettings.visibleSectors.length > 0) ? siteSettings.visibleSectors : ["Food and beverage", "Hospitality", "Corporate", "Healthcare", "Industrial"];
+  let allowedSectors = ["Food & beverage", "Hospitality", "Corporate", "Healthcare", "Industrial"];
+  if (siteSettings.categories1stLayer && Array.isArray(siteSettings.categories1stLayer)) {
+    allowedSectors = siteSettings.categories1stLayer.filter(c => c.enabled !== false).map(c => c.name);
+  } else if (siteSettings.visibleSectors && siteSettings.visibleSectors.length > 0) {
+    allowedSectors = siteSettings.visibleSectors;
+  }
+
   const sectorContainer = document.getElementById("sectorFilterContainer");
   if (sectorContainer) {
     let sHtml = `<button type="button" class="category-btn ${activeSectorFilter === 'All' ? 'active' : ''}" data-sec="All">All Sectors</button>`;
@@ -123,7 +158,13 @@ function renderFilters() {
     });
   }
 
-  const allowedCategories = (siteSettings.visibleCategories && siteSettings.visibleCategories.length > 0) ? siteSettings.visibleCategories : ["Head Wear", "Top Wear", "Bottom Wear", "Outer Wear", "Accessories"];
+  let allowedCategories = ["Head Wear", "Top Wear", "Bottom Wear", "Outer Wear", "Accessories"];
+  if (siteSettings.categories2ndLayer && Array.isArray(siteSettings.categories2ndLayer)) {
+    allowedCategories = siteSettings.categories2ndLayer.filter(c => c.enabled !== false).map(c => c.name);
+  } else if (siteSettings.visibleCategories && siteSettings.visibleCategories.length > 0) {
+    allowedCategories = siteSettings.visibleCategories;
+  }
+
   const categoryContainer = document.getElementById("categoryFilterContainer");
   if (categoryContainer) {
     let cHtml = `<button type="button" class="category-btn ${activeCategoryFilter === 'All' ? 'active' : ''}" data-cat="All">All Categories</button>`;
@@ -156,7 +197,6 @@ function renderProducts() {
   }
 
   if (activeCategoryFilter !== "All") {
-    // Some JSON products have "Outerwear" instead of "Outer Wear", let's handle lowercase matching
     filtered = filtered.filter(p => p.category && p.category.toLowerCase().replace(/\s/g, '') === activeCategoryFilter.toLowerCase().replace(/\s/g, ''));
   }
 
@@ -203,13 +243,17 @@ function renderProducts() {
           ${imagesHtml}
         </div>
         <div class="product-card-info">
-          <p class="product-card-category">${p.category} | ${p.sku}</p>
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: space-between;">
+            <span>${p.category} | ${p.sku}</span>
+            ${p.gender ? `<span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">${p.gender}</span>` : ''}
+          </p>
           <h3 class="product-card-title">${p.name}</h3>
         </div>
       </div>
     `;
   }).join("");
 }
+
 
 window.slideshowTimers = {};
 window.slideshowIndices = {};
@@ -603,20 +647,12 @@ document.addEventListener("click", (event) => {
       activeCatalogColor = colorDot.dataset.color;
       const p = products.find(x => x.sku === selectedProductSku);
       if (p) {
-        const colorImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
-        if (colorImages && colorImages.length > 0) {
+        let targetIdx = currentCarouselImages.findIndex(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+        if (targetIdx !== -1) {
           if (typeof window.updateMainImageSmooth === 'function') {
-            window.updateMainImageSmooth(colorImages[0]);
+            window.updateMainImageSmooth(currentCarouselImages[targetIdx], targetIdx);
           } else {
-            document.getElementById('productMainImage').src = colorImages[0];
-          }
-          const thumbs = document.getElementById('productThumbnails');
-          if (thumbs) {
-            if (colorImages.length > 1) {
-              thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="window.updateMainImageSmooth('${img}')">`).join("");
-            } else {
-              thumbs.innerHTML = "";
-            }
+            document.getElementById('productMainImage').src = currentCarouselImages[targetIdx];
           }
         }
       }
@@ -934,17 +970,44 @@ function initSite() {
 
 let productPageData = { sizeQtys: {} };
 
-window.updateMainImageSmooth = function(newSrc) {
+let currentCarouselImages = [];
+let activeCarouselIdx = 0;
+
+window.updateMainImageSmooth = function(newSrc, newIdx = -1) {
   const mainImg = document.getElementById('productMainImage');
   if (!mainImg || mainImg.src.endsWith(newSrc)) return;
-  mainImg.style.transition = 'opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+  
+  if (newIdx !== -1) {
+    activeCarouselIdx = newIdx;
+  } else {
+    const idx = currentCarouselImages.indexOf(newSrc);
+    if (idx !== -1) activeCarouselIdx = idx;
+  }
+  
+  mainImg.style.transition = 'opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
   mainImg.style.opacity = '0';
   setTimeout(() => {
     mainImg.src = newSrc;
     mainImg.onload = () => { mainImg.style.opacity = '1'; };
     mainImg.onerror = () => { mainImg.style.opacity = '1'; };
     setTimeout(() => { mainImg.style.opacity = '1'; }, 150);
-  }, 250);
+    window.highlightActiveThumbnail();
+  }, 200);
+};
+
+window.highlightActiveThumbnail = function() {
+  const thumbs = document.querySelectorAll('#productThumbnails img');
+  thumbs.forEach((th, idx) => {
+    if (idx === activeCarouselIdx) {
+      th.style.borderColor = 'var(--ink)';
+      th.style.borderWidth = '2px';
+      th.style.transform = 'scale(1.04)';
+    } else {
+      th.style.borderColor = 'var(--line)';
+      th.style.borderWidth = '1px';
+      th.style.transform = 'scale(1)';
+    }
+  });
 };
 
 function initProductPage(sku) {
@@ -954,7 +1017,10 @@ function initProductPage(sku) {
   selectedProductSku = sku;
   if (!p.colors.includes(activeCatalogColor)) activeCatalogColor = p.colors[0];
   
-  const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'White Polo Shirt.png');
+  currentCarouselImages = (p.images && p.images.length > 0) ? [...p.images] : [p.image || 'White Polo Shirt.png'];
+  activeCarouselIdx = 0;
+  
+  const mainImg = currentCarouselImages[0];
   const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
   
   document.getElementById('productMainImage').src = imgSrc;
@@ -962,6 +1028,14 @@ function initProductPage(sku) {
   document.getElementById('productCategory').textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
   
+  const genderBadge = document.getElementById('productGenderBadge');
+  if (genderBadge && p.gender) {
+    genderBadge.textContent = p.gender;
+    genderBadge.style.display = 'inline-block';
+  } else if (genderBadge) {
+    genderBadge.style.display = 'none';
+  }
+
   const shortDescEl = document.getElementById('productShortDesc');
   if (shortDescEl) shortDescEl.textContent = p.short || p.description || "";
   
@@ -972,11 +1046,16 @@ function initProductPage(sku) {
   if (document.getElementById('productCare')) {
     document.getElementById('productCare').textContent = p.care || "Machine wash cold, tumble dry low. Do not bleach.";
   }
+  const careFull = document.getElementById('productCareFull');
+  if (careFull) {
+    careFull.textContent = p.care || "Machine wash cold, tumble dry low. Do not bleach.";
+  }
   document.getElementById('productAvailability').textContent = "Made to Order";
   
   const sketchAcc = document.getElementById('sketchAccordion');
   const sketchImg = document.getElementById('productSketch');
   const noSketchMsg = document.getElementById('noSketchMsg');
+  const sketchDesc = document.getElementById('productSketchDesc');
   if (sketchAcc && sketchImg) {
     sketchAcc.style.display = 'block';
     if (p.sketch) {
@@ -987,21 +1066,47 @@ function initProductPage(sku) {
       sketchImg.style.display = 'none';
       if (noSketchMsg) noSketchMsg.style.display = 'block';
     }
+    if (sketchDesc && p.sketchDescription) {
+      sketchDesc.textContent = p.sketchDescription;
+      sketchDesc.style.display = 'block';
+    } else if (sketchDesc) {
+      sketchDesc.style.display = 'none';
+    }
   }
 
+  const prevBtn = document.getElementById('carouselPrevBtn');
+  const nextBtn = document.getElementById('carouselNextBtn');
   const thumbnailsContainer = document.getElementById("productThumbnails");
-  const initImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase())) || [];
-  if (thumbnailsContainer && initImages.length > 1) {
-    thumbnailsContainer.innerHTML = initImages.map(img => {
-      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line); transition: transform 0.2s ease;" onclick="window.updateMainImageSmooth('${img}')">`;
-    }).join("");
-  } else if (thumbnailsContainer) {
-    thumbnailsContainer.innerHTML = "";
+  
+  if (currentCarouselImages.length > 1) {
+    if (prevBtn) {
+      prevBtn.style.display = 'grid';
+      prevBtn.onclick = () => {
+        activeCarouselIdx = (activeCarouselIdx - 1 + currentCarouselImages.length) % currentCarouselImages.length;
+        window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
+      };
+    }
+    if (nextBtn) {
+      nextBtn.style.display = 'grid';
+      nextBtn.onclick = () => {
+        activeCarouselIdx = (activeCarouselIdx + 1) % currentCarouselImages.length;
+        window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
+      };
+    }
+    if (thumbnailsContainer) {
+      thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
+        return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === 0 ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === 0 ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
+      }).join("");
+    }
+  } else {
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+    if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
   }
   
   // Colors
   const colorFilter = document.getElementById("productColorFilter");
-  if (colorFilter) {
+  if (colorFilter && p.colors) {
     colorFilter.innerHTML = p.colors.map(c => colorButton(c)).join("");
     const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
     if (activeBtn) activeBtn.classList.add("active");

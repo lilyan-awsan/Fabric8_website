@@ -88,55 +88,117 @@
       </div>
       </div> <!-- End Products Tab -->
 
-      <!-- SETTINGS TAB -->
+      <!-- SETTINGS & SITE CMS TAB -->
       <div id="settingsSection" style="display: none; margin-top: 20px;">
-        <div style="background: white; padding: 24px; border-radius: 8px; border: 1px solid var(--line); max-width: 800px;">
-          <h2 style="margin-top: 0;">Global Site Settings</h2>
+        <div style="background: white; padding: 32px; border-radius: 12px; border: 1px solid var(--line); max-width: 960px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+          <h2 style="margin-top: 0; font-size: 24px; border-bottom: 2px solid var(--line); padding-bottom: 12px; margin-bottom: 24px;">Complete Website CMS & Category Manager</h2>
           
-          <div class="form-grid" style="margin-top: 20px;">
-            <div class="input-group full-width">
-              <label>Global Promo Banner Text</label>
-              <input type="text" id="settingPromoBanner" placeholder="e.g. Free shipping on orders over $500">
-            </div>
+          <!-- Section 1: Category & Sector Enable/Disable Engine -->
+          <div style="margin-bottom: 36px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">1st-Layer Sectors & 2nd-Layer Categories</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Enable or disable any category at any time, or add/remove categories as needed. Disabled categories remain stored in the dashboard ready to be reactivated.</p>
             
-            <div class="input-group full-width">
-              <label>Footer Legal Text</label>
-              <textarea id="settingFooterLegal" rows="2" placeholder="e.g. © 2026 Fabric-8. All rights reserved."></textarea>
-            </div>
-            
-            <div class="input-group full-width">
-              <label>Visible Sectors (comma separated)</label>
-              <input type="text" id="settingSectors" placeholder="e.g. Corporate, Healthcare, Hospitality">
-              <span style="font-size: 11px; color: var(--muted); margin-top: 4px; display: block;">Controls the sector filter buttons on the shop page.</span>
-            </div>
-            
-            <div class="input-group full-width">
-              <label>Visible Categories (comma separated)</label>
-              <input type="text" id="settingCategories" placeholder="e.g. Top Wear, Bottom Wear, Accessories">
-              <span style="font-size: 11px; color: var(--muted); margin-top: 4px; display: block;">Controls the category filter buttons on the shop page.</span>
-            </div>
-            
-            <div class="input-group full-width" style="margin-top: 20px;">
-              <h3 style="margin-bottom: 12px;">Studio Branding Settings</h3>
-              
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                <div>
-                  <label>Logo Default Max Scaling (%)</label>
-                  <input type="number" id="settingLogoScale" placeholder="e.g. 15">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <!-- 1st Layer -->
+              <div>
+                <h4 style="font-size: 14px; margin-bottom: 10px; color: var(--ink);">1st Layer: Sectors</h4>
+                <div id="cms1stLayerList" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 6px;">
+                  <!-- Injected via JS -->
                 </div>
-                <div>
-                  <label>Lock Studio Positions?</label>
-                  <select id="settingLockPositions">
-                    <option value="false">No - Allow free drag & drop</option>
-                    <option value="true">Yes - Snap to left/right chest</option>
-                  </select>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                  <input type="text" id="new1stLayerInput" placeholder="Add new sector..." style="flex: 1; padding: 8px; font-size: 13px;">
+                  <button type="button" id="add1stLayerBtn" class="button outline" style="padding: 6px 12px; font-size: 12px;">+ Add</button>
+                </div>
+              </div>
+              
+              <!-- 2nd Layer -->
+              <div>
+                <h4 style="font-size: 14px; margin-bottom: 10px; color: var(--ink);">2nd Layer: Categories</h4>
+                <div id="cms2ndLayerList" style="display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 6px;">
+                  <!-- Injected via JS -->
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                  <input type="text" id="new2ndLayerInput" placeholder="Add new category..." style="flex: 1; padding: 8px; font-size: 13px;">
+                  <button type="button" id="add2ndLayerBtn" class="button outline" style="padding: 6px 12px; font-size: 12px;">+ Add</button>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Section 2: General Website Content (Titles, Text & Buttons) -->
+          <div style="margin-bottom: 36px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">General Website Content (Text, Titles & Buttons)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Directly modify headings, call-to-action button texts, and corporate descriptions across the whole website.</p>
+            
+            <div class="form-grid">
+              <div class="input-group full-width">
+                <label>Global Promo Banner Text</label>
+                <input type="text" id="settingPromoBanner" placeholder="e.g. Elevating Workplace Appearance & Performance">
+              </div>
+              <div class="input-group">
+                <label>Home Hero Title</label>
+                <input type="text" id="settingHomeTitle" placeholder="Engineered for Comfort, Designed to Inspire">
+              </div>
+              <div class="input-group">
+                <label>Home Hero Call-to-Action Button Text</label>
+                <input type="text" id="settingHomeBtn" placeholder="EXPLORE THE COLLECTION">
+              </div>
+              <div class="input-group full-width">
+                <label>Home Hero Subtitle / Description</label>
+                <textarea id="settingHomeSub" rows="2" placeholder="High-performance industrial uniforms & corporate fashion designed for modern teams."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>About Us Company Profile Text</label>
+                <textarea id="settingAboutText" rows="3" placeholder="We partner with leading corporate enterprises..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Legal & Terms -->
+          <div style="margin-bottom: 36px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">Legal Documents, Privacy & Terms</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Manage official policy agreements displayed on the Terms and Conditions and Privacy Policy pages.</p>
+            
+            <div class="form-grid">
+              <div class="input-group full-width">
+                <label>Terms & Conditions Content</label>
+                <textarea id="settingTermsText" rows="4" placeholder="By accessing and using the Fabric8 website..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>Privacy Policy Content</label>
+                <textarea id="settingPrivacyText" rows="4" placeholder="We rigorously respect corporate client privacy..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>Footer Legal Text</label>
+                <input type="text" id="settingFooterLegal" placeholder="© 2026 Fabric8 Workwear. All rights reserved.">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Branding Atelier Guidance & Placements -->
+          <div style="margin-bottom: 24px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">Branding Tool General Editing & Guidance</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Customize standard placement choices and advisory notes shown to customers during online custom finishing.</p>
+            
+            <div class="form-grid">
+              <div class="input-group full-width">
+                <label>Global Default Placements (comma separated)</label>
+                <input type="text" id="settingDefaultPlacements" placeholder="Left Chest, Right Chest, Center Back, Upper Sleeve">
+              </div>
+              <div class="input-group full-width">
+                <label>Direct-to-Fabric (DTF) Helper Note</label>
+                <textarea id="settingDtfNote" rows="2" placeholder="Direct-to-fabric (DTF) printing is recommended for larger..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>Embroidery Helper Note</label>
+                <textarea id="settingEmbroideryNote" rows="2" placeholder="Embroidery is recommended for structured, smaller logos..."></textarea>
+              </div>
+            </div>
+          </div>
           
-          <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); text-align: right;">
-            <button id="saveSettingsBtn" class="button primary">Save Settings</button>
+          <div style="margin-top: 28px; padding-top: 24px; border-top: 2px solid var(--line); display: flex; justify-content: flex-end; align-items: center; gap: 16px;">
+            <span id="cmsSaveStatus" style="font-size: 13px; font-weight: 600; color: var(--green); display: none;">✓ All CMS Content Saved Successfully!</span>
+            <button id="saveSettingsBtn" class="button primary" style="padding: 12px 32px; font-size: 15px; font-weight: 700;">Save Website CMS & Settings</button>
           </div>
         </div>
       </div> <!-- End Settings Tab -->
@@ -190,8 +252,11 @@
             </div>
           </div>
           <div class="input-group full-width">
-            <label>Sectors (comma separated)</label>
-            <input type="text" id="sectors" placeholder="e.g. Corporate, Healthcare">
+            <label style="margin-bottom: 8px; display: block;">Sectors (Click all that apply)</label>
+            <div id="productSectorsButtons" style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <!-- Dynamically populated from active 1st-Layer categories -->
+            </div>
+            <input type="hidden" id="sectors">
           </div>
           <div class="input-group full-width">
             <label>Short Description</label>
@@ -202,53 +267,23 @@
             <textarea id="long" rows="3" required></textarea>
           </div>
           <div class="input-group full-width">
-            <label>Sizes</label>
-            <div class="multi-select">
-              <div class="select-box">
-                <span class="selected-text" id="sizesText">Select Sizes</span>
-                <span class="arrow">▼</span>
-              </div>
-              <div class="dropdown-menu" style="display: none;">
-                <div class="dropdown-header">
-                  <a href="#" id="selectAllSizes" class="select-all">Select All</a>
-                </div>
-                <div class="checkbox-group column" id="sizesGroup">
-                  <label><input type="checkbox" value="XS"> XS</label>
-                  <label><input type="checkbox" value="S"> S</label>
-                  <label><input type="checkbox" value="M"> M</label>
-                  <label><input type="checkbox" value="L"> L</label>
-                  <label><input type="checkbox" value="XL"> XL</label>
-                  <label><input type="checkbox" value="2XL"> 2XL</label>
-                  <label><input type="checkbox" value="3XL"> 3XL</label>
-                  <label><input type="checkbox" value="4XL"> 4XL</label>
-                  <input type="text" id="otherSizes" placeholder="Other sizes (comma separated)" style="width: 100%; margin-top: 10px; padding: 6px;">
-                </div>
-              </div>
+            <label style="margin-bottom: 6px; display: block;">Sizes (Add any alphanumeric or numeric sizes, e.g. S, M, L or 30, 32, 34)</label>
+            <div id="sizesTagsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: #fff; border: 1px solid var(--line); border-radius: 6px; min-height: 44px; margin-bottom: 8px;">
+              <!-- Chips injected by JS -->
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="newSizeInput" placeholder="Type custom size (e.g. 32 or 2XL)..." style="flex: 1; padding: 8px; font-size: 13px;">
+              <button type="button" id="addSizeTagBtn" class="button outline" style="padding: 6px 16px; font-size: 13px; font-weight: 600;">+ Add Size</button>
             </div>
           </div>
           <div class="input-group full-width">
-            <label>Colors</label>
-            <div class="multi-select">
-              <div class="select-box">
-                <span class="selected-text" id="colorsText">Select Colors</span>
-                <span class="arrow">▼</span>
-              </div>
-              <div class="dropdown-menu" style="display: none;">
-                <div class="dropdown-header">
-                  <a href="#" id="selectAllColors" class="select-all">Select All</a>
-                </div>
-                <div class="checkbox-group column" id="colorsGroup">
-                  <label><input type="checkbox" value="Black"> Black</label>
-                  <label><input type="checkbox" value="White"> White</label>
-                  <label><input type="checkbox" value="Red"> Red</label>
-                  <label><input type="checkbox" value="Navy"> Navy</label>
-                  <label><input type="checkbox" value="Green"> Green</label>
-                  <label><input type="checkbox" value="Burgundy"> Burgundy</label>
-                  <label><input type="checkbox" value="Light Grey"> Light Grey</label>
-                  <label><input type="checkbox" value="Dark Grey"> Dark Grey</label>
-                  <input type="text" id="otherColors" placeholder="Other colors (comma separated)" style="width: 100%; margin-top: 10px; padding: 6px;">
-                </div>
-              </div>
+            <label style="margin-bottom: 6px; display: block;">Colors (Add or remove seasonal colors freely)</label>
+            <div id="colorsTagsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: #fff; border: 1px solid var(--line); border-radius: 6px; min-height: 44px; margin-bottom: 8px;">
+              <!-- Chips injected by JS -->
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="newColorInput" placeholder="Type color name (e.g. Forest Green or Navy)..." style="flex: 1; padding: 8px; font-size: 13px;">
+              <button type="button" id="addColorTagBtn" class="button outline" style="padding: 6px 16px; font-size: 13px; font-weight: 600;">+ Add Color</button>
             </div>
           </div>
           <div class="input-group">
@@ -264,7 +299,7 @@
             <input type="text" id="leadTime" placeholder="e.g. 2-3 Weeks">
           </div>
           <div class="input-group">
-            <label>Care Instructions</label>
+            <label>Care Instructions (Displays in expandable "+" tab)</label>
             <input type="text" id="care" placeholder="e.g. Machine wash cold, tumble dry low.">
           </div>
           <div class="input-group">
@@ -275,20 +310,25 @@
             <label>Availability</label>
             <input type="text" id="availability" placeholder="e.g. In Stock, Made to Order">
           </div>
-          <div class="input-group">
-            <label>Allowed Branding</label>
-            <div class="multi-select">
-              <div class="select-box">
-                <span class="selected-text" id="brandingText">Select Branding</span>
-                <span class="arrow">▼</span>
-              </div>
-              <div class="dropdown-menu" style="display: none;">
-                <div class="checkbox-group column" id="brandingGroup">
-                  <label><input type="checkbox" value="Embroidery"> Embroidery</label>
-                  <label><input type="checkbox" value="DTF"> DTF</label>
-                  <label><input type="checkbox" value="None"> None</label>
-                </div>
-              </div>
+          <div class="input-group full-width">
+            <label style="margin-bottom: 8px; display: block;">Garment Customization Capability</label>
+            <div id="customizationCapabilityOptions" style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <label class="radio-btn active" style="flex: 1; min-width: 180px; border: 1px solid var(--ink); background: #f2f1ed; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; font-weight: 800;">
+                <input type="radio" name="customizationCapability" value="both" checked style="display: none;">
+                <span style="font-size: 12px; color: var(--ink);">Both Options (DTF & Embroidery)</span>
+              </label>
+              <label class="radio-btn" style="flex: 1; min-width: 160px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; font-weight: 800;">
+                <input type="radio" name="customizationCapability" value="embroidery_only" style="display: none;">
+                <span style="font-size: 12px;">Embroidery Only</span>
+              </label>
+              <label class="radio-btn" style="flex: 1; min-width: 160px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; font-weight: 800;">
+                <input type="radio" name="customizationCapability" value="dtf_only" style="display: none;">
+                <span style="font-size: 12px;">DTF Printing Only</span>
+              </label>
+              <label class="radio-btn" style="flex: 1; min-width: 160px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; font-weight: 800;">
+                <input type="radio" name="customizationCapability" value="none" style="display: none;">
+                <span style="font-size: 12px;">No Customization</span>
+              </label>
             </div>
           </div>
           <div class="input-group full-width">
@@ -296,13 +336,19 @@
             <input type="text" id="supportedPlacements" placeholder="e.g. Left Chest, Right Chest, Center Back, Upper Sleeve">
           </div>
           <div class="input-group full-width">
-            <label>Technical Sketch (Image URL)</label>
-            <input type="text" id="sketch" placeholder="e.g. assets/sketch.png">
+            <label>Technical Sketch Image (URL or File Upload)</label>
+            <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+              <input type="text" id="sketch" placeholder="e.g. assets/sketch.png or upload below..." style="flex: 1;">
+              <input type="file" id="sketchUpload" accept="image/png, image/jpeg, image/webp" style="padding: 6px; font-size: 12px; max-width: 260px;">
+            </div>
+            <label style="margin-top: 8px;">Technical Sketch Description & Notes</label>
+            <textarea id="sketchDescription" rows="2" placeholder="e.g. Ergonomic paneling with reinforced safety stitch along seam contours."></textarea>
           </div>
           <div class="input-group full-width image-upload-group">
-            <label>Product Images</label>
-            <div id="imagePreviewContainer" class="image-preview-grid" style="display:flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
-              <!-- Thumbnails injected here -->
+            <label style="margin-bottom: 6px; display: block;">Product Images & Color Sample Association</label>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 0; margin-bottom: 10px;">Select the matching color swatch for each uploaded photo so users can easily browse images by color in the shop carousel.</p>
+            <div id="imagePreviewContainer" class="image-preview-grid" style="display:flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px;">
+              <!-- Thumbnails + Color Selectors injected here -->
             </div>
             <input type="file" id="imageUpload" accept="image/png, image/jpeg, image/webp" multiple>
             <input type="hidden" id="imageUrl">
