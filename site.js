@@ -2721,24 +2721,25 @@ function renderShowcase() {
   if (!showcase || !products || products.length === 0) return;
 
   const shuffled = [...products].sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, 5);
+  const selected = shuffled.slice(0, 4);
   
   showcase.style.display = 'grid';
-  showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
-  showcase.style.gap = '36px';
+  showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
+  showcase.style.gap = '32px';
+  showcase.style.alignItems = 'stretch';
   
   showcase.innerHTML = selected.map(p => {
     const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'White Polo Shirt.png');
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
-    return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+    return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column;">
       <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; position: relative;">
-        <div style="background: transparent; padding: 12px 10px; display: grid; place-items: center; aspect-ratio: 4/5; border: none !important;">
-          <img src="${imgSrc}" alt="${p.name}" style="max-height: 100%; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
+        <div style="background: transparent; height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: none !important; padding: 10px;">
+          <img src="${imgSrc}" alt="${p.name}" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
         </div>
-        <div class="product-card-info" style="padding: 16px 4px 4px; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: flex-start;">
-          <p style="margin: 0 0 6px; font-size: 11px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>
-          <h3 style="margin: 0; font-size: 17px; font-weight: 900; line-height: 1.25; color: var(--ink);">${p.name || 'Product'}</h3>
+        <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: flex-start;">
+          <p style="margin: 0 0 6px; font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 900; line-height: 1.25; color: var(--ink);">${p.name || 'Product'}</h3>
         </div>
       </a>
     </article>`;

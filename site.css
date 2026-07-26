@@ -62,33 +62,40 @@ body { opacity: 1 !important; }
 /* Logo Crossfade Animation (Req #1 & #2) */
 .logo-wrapper {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  background: #ffffff;
-  padding: 6px 14px;
-  border-radius: 12px;
+  justify-content: flex-start;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
   text-decoration: none !important;
-  color: #000000 !important;
-  font-weight: 900 !important;
-  font-size: 20px !important;
-  letter-spacing: 0.04em;
+  cursor: pointer;
+  min-width: 220px;
+  height: 75px;
 }
 .logo-wrapper .logo-icon-default {
-  height: 48px;
-  width: auto;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 70px !important;
+  width: auto !important;
+  max-width: 260px !important;
   object-fit: contain;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   opacity: 1;
 }
 .logo-wrapper .logo-icon-hover {
   position: absolute;
-  left: 14px;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
-  height: 48px;
-  width: auto;
+  height: 70px !important;
+  width: auto !important;
+  max-width: 260px !important;
   object-fit: contain;
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   opacity: 0;
 }
 .logo-wrapper:hover .logo-icon-default {
@@ -120,12 +127,12 @@ input, select, textarea, button { font: inherit; }
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: 150px 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 24px;
-  min-height: 84px;
+  gap: 36px;
+  min-height: 96px;
   padding: 0 5vw;
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.96);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(16px);
 }
