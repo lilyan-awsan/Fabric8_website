@@ -191,10 +191,10 @@ function renderProducts() {
     let imagesHtml = '';
     if (p.images && p.images.length > 1) {
       imagesHtml = p.images.map((img, idx) => 
-        `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; opacity: ${idx === 0 ? 1 : 0}; transition: opacity 0.6s ease-in-out;">`
+        `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 12px; opacity: ${idx === 0 ? 1 : 0}; transition: opacity 0.6s ease-in-out;">`
       ).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 12px;">`;
     }
 
     return `
@@ -264,7 +264,7 @@ function openProductModal(sku) {
     if (selected.images && selected.images.length > 1) {
       thumbnailsContainer.style.display = "flex";
       thumbnailsContainer.innerHTML = selected.images.map(img => {
-        return `<img src="${img}" alt="Thumbnail" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('modalProductImage').src='${img}'">`;
+        return `<img src="${img}" alt="Thumbnail" style="width: 60px; height: 60px; object-fit: contain; padding: 2px; background: #f0f0f0; border-radius: 4px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('modalProductImage').src='${img}'">`;
       }).join("");
     } else {
       thumbnailsContainer.style.display = "none";
@@ -609,7 +609,7 @@ document.addEventListener("click", (event) => {
           const thumbs = document.getElementById('productThumbnails');
           if (thumbs) {
             if (colorImages.length > 1) {
-              thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`).join("");
+              thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`).join("");
             } else {
               thumbs.innerHTML = "";
             }
@@ -923,7 +923,7 @@ function initProductPage(sku) {
   const initImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase())) || [];
   if (thumbnailsContainer && initImages.length > 1) {
     thumbnailsContainer.innerHTML = initImages.map(img => {
-      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`;
+      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('productMainImage').src='${img}'">`;
     }).join("");
   } else if (thumbnailsContainer) {
     thumbnailsContainer.innerHTML = "";
