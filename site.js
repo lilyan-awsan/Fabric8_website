@@ -191,10 +191,10 @@ function renderProducts() {
     let imagesHtml = '';
     if (p.images && p.images.length > 1) {
       imagesHtml = p.images.map((img, idx) => 
-        `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 12px; opacity: ${idx === 0 ? 1 : 0}; transition: opacity 0.6s ease-in-out;">`
+        `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: ${idx === 0 ? 1 : 0}; transition: opacity 0.6s ease-in-out;">`
       ).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 12px;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px;">`;
     }
 
     return `

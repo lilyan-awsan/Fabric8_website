@@ -43,6 +43,8 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Polo American Blue 3.jpg",
+      "assets/products/Polo White Side.jpg",
+      "assets/products/Polo White Back.jpg",
       "assets/products/Polo White Front.jpg",
       "assets/products/Polo Army Green 3.jpg",
       "assets/products/Polo Beige 2.jpg",
@@ -66,9 +68,7 @@
       "assets/products/Polo Red 2.jpg",
       "assets/products/Polo Turquoise blue 1-2.jpg",
       "assets/products/Polo Turquoise blue 2-3.jpg",
-      "assets/products/Polo Yellow 4.jpg",
-      "assets/products/Polo White Side.jpg",
-      "assets/products/Polo White Back.jpg"
+      "assets/products/Polo Yellow 4.jpg"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -113,9 +113,9 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Vest Black.jpg",
+      "assets/products/Vest White Back.jpg",
       "assets/products/Vest Grey.jpg",
-      "assets/products/Vest White.jpg",
-      "assets/products/Vest White Back.jpg"
+      "assets/products/Vest White.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -156,12 +156,12 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Cargo Vest Army Green.jpg",
+      "assets/products/Cargo Vest Beige Side.jpg",
+      "assets/products/Cargo Vest Beige Back.jpg",
+      "assets/products/Cargo Vest Beige Back 1.png",
       "assets/products/Cargo Vest Beige.jpg",
       "assets/products/Cargo Vest Black.jpg",
-      "assets/products/Cargo Vest Navy.jpg",
-      "assets/products/Cargo Vest Beige Side.jpg",
-      "assets/products/Cargo Vest Beige Back 1.png",
-      "assets/products/Cargo Vest Beige Back.jpg"
+      "assets/products/Cargo Vest Navy.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -234,10 +234,10 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Beret Hat Black.jpg",
-      "assets/products/Beret Hat Grey 1.jpg",
-      "assets/products/Beret Hat White 1.jpg",
       "assets/products/Beret Hat Grey Side.jpg",
-      "assets/products/Beret Hat White Side.jpg"
+      "assets/products/Beret Hat White Side.jpg",
+      "assets/products/Beret Hat Grey 1.jpg",
+      "assets/products/Beret Hat White 1.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -277,10 +277,10 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Chef Bandana Black.jpg",
+      "assets/products/Chef Bandana White Side.png",
       "assets/products/Chef Bandana White Front.jpg",
       "assets/products/Chef Bandana Grey.jpg",
-      "assets/products/Chef Bandana White.png",
-      "assets/products/Chef Bandana White Side.png"
+      "assets/products/Chef Bandana White.png"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -320,9 +320,9 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Lab Coat grey.jpg",
-      "assets/products/Lab Coat White.jpg",
       "assets/products/Lab Coat White Side.jpg",
-      "assets/products/Lab Coat White Back.jpg"
+      "assets/products/Lab Coat White Back.jpg",
+      "assets/products/Lab Coat White.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -363,11 +363,11 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Cargo Beige trousers.jpg",
+      "assets/products/Cargo Beige trousers Side.jpg",
+      "assets/products/Cargo Beige trousers Back.jpg",
       "assets/products/Cargo Black trousers.jpg",
       "assets/products/Cargo Charcoal trousers.jpg",
-      "assets/products/Cargo Navy trousers.jpg",
-      "assets/products/Cargo Beige trousers Side.jpg",
-      "assets/products/Cargo Beige trousers Back.jpg"
+      "assets/products/Cargo Navy trousers.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -409,10 +409,10 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Trousers Beige.jpg",
+      "assets/products/Trousers Black back.jpg",
       "assets/products/Trousers Navy Front.jpg",
       "assets/products/Trousers Black.jpg",
-      "assets/products/Trousers Charcoal.jpg",
-      "assets/products/Trousers Black back.jpg"
+      "assets/products/Trousers Charcoal.jpg"
     ],
     "supportedFinishes": [],
     "supportedPlacements": []
@@ -453,6 +453,8 @@
     "moq": "5",
     "images": [
       "assets/products/Cap American Blue.jpg",
+      "assets/products/Cap White Side.jpg",
+      "assets/products/Cap White Back.jpg",
       "assets/products/Cap Black.jpg",
       "assets/products/Cap Brown.jpg",
       "assets/products/Cap Burgundy.jpg",
@@ -463,9 +465,7 @@
       "assets/products/Cap Navy.jpg",
       "assets/products/Cap Red.jpg",
       "assets/products/Cap White.jpg",
-      "assets/products/Cap Yellow 2.jpg",
-      "assets/products/Cap White Back.jpg",
-      "assets/products/Cap White Side.jpg"
+      "assets/products/Cap Yellow 2.jpg"
     ],
     "image": "assets/products/Cap American Blue.jpg",
     "supportedFinishes": [
@@ -507,10 +507,10 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Chef Jacket Black.jpg",
-      "assets/products/Chef Jacket Grey 3.jpg",
-      "assets/products/Chef jacket white.jpg",
       "assets/products/Chef Jacket White Side.jpg",
-      "assets/products/Chef Jacket White Back.jpg"
+      "assets/products/Chef Jacket White Back.jpg",
+      "assets/products/Chef Jacket Grey 3.jpg",
+      "assets/products/Chef jacket white.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -557,6 +557,17 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Scrub Beige  Trousers 1.jpg",
+      "assets/products/Scrub Beige Side.jpg",
+      "assets/products/Scrub Beige Female Side.jpg",
+      "assets/products/Scrub Beige Trousers Side.jpg",
+      "assets/products/Scrub White Side.jpg",
+      "assets/products/Scrub White Female Side.jpg",
+      "assets/products/Scrub White Trousers Side.jpg",
+      "assets/products/Scrub Beige Back.jpg",
+      "assets/products/Scrub Beige Female Back.jpg",
+      "assets/products/Scrub Beige Trousers Back.jpg",
+      "assets/products/Scrub White Back.jpg",
+      "assets/products/Scrub White Trousers Back.jpg",
       "assets/products/Scrub Beige Female Front Full Sleeve.jpg",
       "assets/products/Scrub Beige Female Front.jpg",
       "assets/products/Scrub Black Female Front Full Sleeve.jpg",
@@ -622,18 +633,7 @@
       "assets/products/Scrub Olive Green.jpg",
       "assets/products/Scrub White Set.jpg",
       "assets/products/Scrub White Trousers.jpg",
-      "assets/products/Scrub White.jpg",
-      "assets/products/Scrub Beige Female Side.jpg",
-      "assets/products/Scrub Beige Side.jpg",
-      "assets/products/Scrub Beige Trousers Side.jpg",
-      "assets/products/Scrub White Female Side.jpg",
-      "assets/products/Scrub White Side.jpg",
-      "assets/products/Scrub White Trousers Side.jpg",
-      "assets/products/Scrub Beige Back.jpg",
-      "assets/products/Scrub Beige Female Back.jpg",
-      "assets/products/Scrub Beige Trousers Back.jpg",
-      "assets/products/Scrub White Back.jpg",
-      "assets/products/Scrub White Trousers Back.jpg"
+      "assets/products/Scrub White.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -710,11 +710,11 @@
     "moq": "0",
     "images": [
       "assets/products/Full Apron Black.jpg",
+      "assets/products/Full Apron White Side.jpg",
+      "assets/products/Full Apron White Back.jpg",
       "assets/products/Full Apron Grey.jpg",
       "assets/products/Full Apron Striped Black.jpg",
-      "assets/products/Full Apron White.jpg",
-      "assets/products/Full Apron White Side.jpg",
-      "assets/products/Full Apron White Back.jpg"
+      "assets/products/Full Apron White.jpg"
     ],
     "image": "assets/products/Full Apron Black.jpg",
     "supportedFinishes": [
@@ -803,9 +803,9 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Half Apron Black.jpg",
+      "assets/products/Half Apron White Back.jpg",
       "assets/products/Half Apron Grey.jpg",
-      "assets/products/Half Apron White.jpg",
-      "assets/products/Half Apron White Back.jpg"
+      "assets/products/Half Apron White.jpg"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -898,15 +898,15 @@
     "availability": "In Stock",
     "images": [
       "assets/products/T-shirt American Blue.jpg",
+      "assets/products/T-shirt White Side.jpg",
+      "assets/products/T-shirt White Back.jpg",
       "assets/products/T-shirt Army Green.jpg",
       "assets/products/T-shirt Black.jpg",
       "assets/products/T-shirt Burgundy.jpg",
       "assets/products/T-shirt Charcoal.jpg",
       "assets/products/T-shirt Light Blue.jpg",
       "assets/products/T-shirt Navy.jpg",
-      "assets/products/T-shirt White.jpg",
-      "assets/products/T-shirt White Side.jpg",
-      "assets/products/T-shirt White Back.jpg"
+      "assets/products/T-shirt White.jpg"
     ],
     "supportedFinishes": [
       "DTF"
@@ -950,10 +950,10 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Oversize Tshirt Black 1.jpg",
-      "assets/products/Oversize Tshirt Grey 1.jpg",
-      "assets/products/Oversize Tshirt White 1.jpg",
       "assets/products/Oversize Tshirt White Side.jpg",
-      "assets/products/Oversize Tshirt White Back.jpg"
+      "assets/products/Oversize Tshirt White Back.jpg",
+      "assets/products/Oversize Tshirt Grey 1.jpg",
+      "assets/products/Oversize Tshirt White 1.jpg"
     ],
     "supportedFinishes": [
       "DTF"
@@ -1001,15 +1001,15 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Dri Fit Tshirt Baby Blue.jpg",
+      "assets/products/Dri Fit Tshirt White Side.jpg",
+      "assets/products/Dri Fit Tshirt White Back.jpg",
       "assets/products/Dri Fit Tshirt Black 2.jpg",
       "assets/products/Dri Fit Tshirt Blue 2.jpg",
       "assets/products/Dri Fit Tshirt Green 1.jpg",
       "assets/products/Dri Fit Tshirt Grey 2.jpg",
       "assets/products/Dri Fit Tshirt Red.jpg",
       "assets/products/Dri Fit Tshirt White.jpg",
-      "assets/products/Dri Fit Tshirt Yellow.jpg",
-      "assets/products/Dri Fit Tshirt White Side.jpg",
-      "assets/products/Dri Fit Tshirt White Back.jpg"
+      "assets/products/Dri Fit Tshirt Yellow.jpg"
     ],
     "supportedFinishes": [
       "DTF"
@@ -1057,15 +1057,15 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Dri Fit Black Polo.jpg",
+      "assets/products/Dri Fit Polo White Side.jpg",
+      "assets/products/Dri Fit Polo White Back.jpg",
       "assets/products/Dri Fit Blue Polo 2.jpg",
       "assets/products/Dri Fit Green Polo (2).jpg",
       "assets/products/Dri Fit Green Polo.jpg",
       "assets/products/Dri Fit Light Blue Polo 1.jpg",
       "assets/products/Dri Fit polo Red 3.jpg",
       "assets/products/Dri Fit Polo White.jpg",
-      "assets/products/Dri Fit Polo Yellow 3.jpg",
-      "assets/products/Dri Fit Polo White Side.jpg",
-      "assets/products/Dri Fit Polo White Back.jpg"
+      "assets/products/Dri Fit Polo Yellow 3.jpg"
     ],
     "supportedFinishes": [
       "DTF"
@@ -1111,12 +1111,12 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Shirt Black.jpg",
+      "assets/products/Shirt White Side.jpg",
+      "assets/products/Shirt White Back.jpg",
       "assets/products/Shirt grey.jpg",
       "assets/products/Shirt Light blue.jpg",
       "assets/products/Shirt Navy.jpg",
-      "assets/products/Shirt White.jpg",
-      "assets/products/Shirt White Side.jpg",
-      "assets/products/Shirt White Back.jpg"
+      "assets/products/Shirt White.jpg"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -1161,12 +1161,12 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Hoodie Black.jpg",
+      "assets/products/Hoodie White Side.jpg",
+      "assets/products/Hoodie White Back.jpg",
       "assets/products/Hoodie White Front.jpg",
       "assets/products/Hoodie grey.jpg",
       "assets/products/Hoodie Navy.jpg",
-      "assets/products/Hoodie White.jpg",
-      "assets/products/Hoodie White Side.jpg",
-      "assets/products/Hoodie White Back.jpg"
+      "assets/products/Hoodie White.jpg"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -1213,12 +1213,12 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Zip up Black -.jpg",
+      "assets/products/Zip up white Side.jpg",
+      "assets/products/Zip up white Back.jpg",
       "assets/products/Zip Up Charcoal.jpg",
       "assets/products/Zip up Light Grey-.jpg",
       "assets/products/Zip up Navy-.jpg",
-      "assets/products/Zip up white-.jpg",
-      "assets/products/Zip up white Side.jpg",
-      "assets/products/Zip up white Back.jpg"
+      "assets/products/Zip up white-.jpg"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -1261,9 +1261,9 @@
     "availability": "In Stock",
     "images": [
       "assets/products/Puff Jacket Black.jpg",
-      "assets/products/Puff Jacket Navy.jpg",
       "assets/products/Puff Jacket Black Side.jpg",
-      "assets/products/Puff Jacket Black Back.jpg"
+      "assets/products/Puff Jacket Black Back.jpg",
+      "assets/products/Puff Jacket Navy.jpg"
     ],
     "supportedFinishes": [
       "Embroidery",

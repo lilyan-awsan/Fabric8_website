@@ -1031,7 +1031,7 @@ input.error, select.error, textarea.error {
 }
 .product-card-img img {
   object-fit: contain !important;
-  padding: 12px !important;
+  padding: 20px !important;
 }
 
 .product-card-info {
