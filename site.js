@@ -2715,30 +2715,123 @@ document.addEventListener("change", (e) => {
 });
 
 
-// Dynamic Homepage Showcase
+// Dynamic Homepage Showcase (Req #5 & #7: Borderless luxury aesthetic, 5 random rotating items)
 function renderShowcase() {
   const showcase = document.getElementById('dynamicShowcase');
   if (!showcase || !products || products.length === 0) return;
 
   const shuffled = [...products].sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, 4);
+  const selected = shuffled.slice(0, 5);
+  
+  showcase.style.display = 'grid';
+  showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
+  showcase.style.gap = '36px';
   
   showcase.innerHTML = selected.map(p => {
     const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'White Polo Shirt.png');
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
-    return `<article class="product-card">
-      <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: block; height: 100%; position: relative;">
-        <div style="background: #fff; padding: 24px; display: grid; place-items: center; border-bottom: 1px solid var(--line); aspect-ratio: 4/5;">
-          <img src="${imgSrc}" alt="${p.name}" style="max-height: 100%; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;">
+    return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important;">
+      <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; position: relative;">
+        <div style="background: transparent; padding: 12px 10px; display: grid; place-items: center; aspect-ratio: 4/5; border: none !important;">
+          <img src="${imgSrc}" alt="${p.name}" style="max-height: 100%; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
         </div>
-        <div class="product-card-info" style="padding: 16px;">
-          <h3 style="margin: 0; font-size: 14px; font-weight: 900; line-height: 1.3;">${p.name || 'Product'}</h3>
-          <p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase;">${p.category || 'Apparel'}</p>
+        <div class="product-card-info" style="padding: 16px 4px 4px; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: flex-start;">
+          <p style="margin: 0 0 6px; font-size: 11px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 900; line-height: 1.25; color: var(--ink);">${p.name || 'Product'}</h3>
         </div>
       </a>
     </article>`;
   }).join('');
+}
+
+// Capability Belt Interactive Carousel Row (Req #7)
+function initCapabilityBelt() {
+  const row = document.getElementById('capabilityBeltRow');
+  const capTitle = document.getElementById('capTitle');
+  const capLink = document.getElementById('capLink');
+  const capDesc = document.getElementById('capDesc');
+  const capHighlight1 = document.getElementById('capHighlight1');
+  const capHighlight2 = document.getElementById('capHighlight2');
+  const capHighlight3 = document.getElementById('capHighlight3');
+  const expBox = document.getElementById('capabilityExpansionBox');
+  
+  if (!row || !capTitle || !expBox) return;
+
+  const sectorSpecs = {
+    food: {
+      title: "🍽️ Food & Beverage Uniform Engineering",
+      desc: "Engineered to endure kitchen heat, grease splashes, and intense industrial washing cycles while delivering exceptional front-of-house elegance. Featuring advanced thermal breathability, stain-release coatings, and ergonomic seam articulation for executive chefs and dining room professionals.",
+      link: "sectors.html#food",
+      h1: "✦ Stain-Release Thermal Cotton", h2: "✦ MOQ: 50 Pieces Custom-Tailored", h3: "✦ Custom Emblem & Text Embroidery"
+    },
+    hospitality: {
+      title: "🏨 Hospitality & Luxury Hotel Couture",
+      desc: "Impeccable uniform choreography tailored for concierge desks, executive reception teams, and house management. Our hospitality garments merge fine suit tailoring with durable daily stretch fibers to uphold five-star brand authority.",
+      link: "sectors.html#hospitality",
+      h1: "✦ Wrinkle-Resistant Luxury Wool Stretch", h2: "✦ Tailored Cut & Ergonomic Fit", h3: "✦ Gold & Silver Thread Cresting"
+    },
+    corporate: {
+      title: "💼 Corporate Workplace Fashion & Apparel",
+      desc: "Modernizing professional business wear with sleek, tailored silhouettes designed for corporate headquarters, banks, and enterprise enterprises. Combining sophisticated executive styling with everyday all-day mobility.",
+      link: "sectors.html#corporate",
+      h1: "✦ Premium Executive Suiting & Polos", h2: "✦ Bespoke Color Palette Synchronization", h3: "✦ High-Definition Subtle Branding"
+    },
+    healthcare: {
+      title: "⚕️ Healthcare, Medical & Clinical Uniforms",
+      desc: "High-performance antimicrobial scrubs and physician coats built for intensive medical laboratory and hospital environments. Crafted with soft, fluids-repellent stretch textiles that withstand stringent autoclave sanitization.",
+      link: "sectors.html#healthcare",
+      h1: "✦ Antimicrobial 4-Way Stretch Fiber", h2: "✦ Fluid-Resistant Protective Barriers", h3: "✦ Ergonomic Utility Tool Pocketing"
+    },
+    industrial: {
+      title: "🏭 Industrial & Safety Workwear Solutions",
+      desc: "Heavy-duty flame-resistant and high-visibility industrial garments structured for factories, engineering sites, and logistical operations. Reinforced with ripstop weaving and industrial bar-tack stitching at high-stress junctions.",
+      link: "sectors.html#industrial",
+      h1: "✦ Certified Flame-Resistant & Ripstop", h2: "✦ Industrial Wash & Abrasion Resistance", h3: "✦ Reinforced Safety Utility Construction"
+    },
+    education: {
+      title: "🎓 Educational & Academic Institution Attire",
+      desc: "Cohesive collegiate blazer collections, faculty apparel, and administrative uniform wardrobes designed for private schools and universities. Built for long-term comfort, seasonal climate resilience, and distinguished academic heritage.",
+      link: "sectors.html#education",
+      h1: "✦ Durable Anti-Pilling Fabrics", h2: "✦ Institutional Emblem Weaving", h3: "✦ Complete Size Customization & Trim"
+    },
+    aviation: {
+      title: "✈️ Aviation, Flight Crew & Ground Operations",
+      desc: "Precision-engineered flight attendant tunics, pilot trench suiting, and terminal logistical wear designed for global airlines. Offering high wrinkle-resilience and cabin-climate thermal adaptation for long-haul duty.",
+      link: "sectors.html#aviation",
+      h1: "✦ Cabin-Tested Thermal Regulation", h2: "✦ Flawless Post-Flight Wrinkle Resistance", h3: "✦ Integrated Epaulette & Wing Mounting"
+    }
+  };
+
+  const buttons = row.querySelectorAll('.capability-icon-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => {
+        b.style.border = '1px solid var(--line)';
+        b.classList.remove('active');
+      });
+      btn.style.border = '2px solid var(--ink)';
+      btn.classList.add('active');
+      
+      const sec = btn.getAttribute('data-sector') || 'food';
+      const spec = sectorSpecs[sec] || sectorSpecs.food;
+      
+      expBox.style.opacity = '0';
+      expBox.style.transform = 'translateY(6px)';
+      
+      setTimeout(() => {
+        capTitle.innerText = spec.title;
+        capDesc.innerText = spec.desc;
+        capLink.href = spec.link;
+        if(capHighlight1) capHighlight1.innerText = spec.h1;
+        if(capHighlight2) capHighlight2.innerText = spec.h2;
+        if(capHighlight3) capHighlight3.innerText = spec.h3;
+        
+        expBox.style.opacity = '1';
+        expBox.style.transform = 'translateY(0)';
+      }, 150);
+    });
+  });
 }
 
 // Generic Contact Form Handlers
@@ -2792,4 +2885,5 @@ function setupContactForm(formId, sourceName) {
 document.addEventListener('DOMContentLoaded', () => {
   setupContactForm('aboutForm', 'About Us Page');
   setupContactForm('contactForm', 'Contact Us Page');
+  initCapabilityBelt();
 });

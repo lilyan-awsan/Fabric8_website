@@ -19,7 +19,10 @@
     </div>
     <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
     <header class="header">
-      <a class="logo" href="index.html"><img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo" style="height: 36px; filter: invert(1);" /></a>
+      <a class="logo-wrapper" href="index.html" title="Fabric 8 Home">
+        <img src="assets/needs/Fabric 8_logo_NoNeedle-08.png" alt="Fabric8 Logo No Needle" class="logo-icon-default" />
+        <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);" />
+      </a>
       <nav>
         <a href="services.html">Services</a>
         <a href="method.html">The Fabric 8 Method</a>
@@ -28,13 +31,13 @@
         <a href="about.html">About Us</a>
       </nav>
       <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
-        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;">
+        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 9999px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;">
           <option value="US">USA</option>
           <option value="JO">Jordan</option>
           <option value="INT">International</option>
         </select>
         <div class="search-box" style="position: relative;">
-          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 16px; font-size: 13px; font-weight: 300; border-radius: 20px; border: 2px solid var(--ink); background: transparent; outline: none; color: var(--ink);" />
+          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 16px; font-size: 13px; font-weight: 300; border-radius: 9999px; border: 2px solid var(--ink); background: transparent; outline: none; color: var(--ink);" />
         </div>
         <a class="quote-link" href="checkout.html" aria-label="View Cart">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -47,59 +50,76 @@
       <section class="page-hero" style="background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url('assets/fabric8-service-people.webp') center / cover;">
         <div>
           <p>Corporate couture for working teams</p>
-          <h1>UNIFORMS, SOLVED.</h1>
-          <span>Built to perform. Styled to represent. Fabric8 delivers tailored uniform solutions for organizations that need more than a catalog.</span>
+          <h1 id="cmsHomeHeroTitle">UNIFORMS, SOLVED.</h1>
+          <span id="cmsHomeHeroSub">Built to perform. Styled to represent. Fabric8 delivers tailored uniform solutions for organizations that need more than a catalog.</span>
           <br>
-          <a class="button primary" href="shop.html" style="margin-top: 24px; background: var(--green); border-color: var(--green); box-shadow: 0 10px 20px rgba(47, 135, 61, 0.3);">Shop</a>
+          <a id="cmsHomeHeroBtn" class="button primary" href="shop.html" style="margin-top: 28px; background: var(--green); border-color: var(--green); border-radius: 9999px !important; font-size: 14px; font-weight: 900; padding: 0 38px; min-height: 52px; box-shadow: 0 12px 28px rgba(47, 135, 61, 0.35); text-transform: uppercase;">Shop</a>
         </div>
       </section>
 
       <section id="dynamicShowcase" class="catalog-grid" style="padding: 60px 5vw; max-width: 1400px; margin: 0 auto;">
-        <!-- Dynamic products will be injected here via site.js?v=5 -->
+        <!-- Dynamic borderless products injected via site.js -->
       </section>
 
-      <section class="capability-belt" style="padding: 60px 5vw; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-top: 1px solid var(--line);">
-        <h2 style="font-size: clamp(24px, 3vw, 36px); text-transform: uppercase; margin-bottom: 30px; width: 100%; text-align: center;">Explore Our Sector Capabilities</h2>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; padding-bottom: 20px; width: 100%; max-width: 1200px; margin: 0 auto;">
-          <!-- Capability Icons -->
-          <a href="sectors.html#food" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🍽️</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Food & Bev</span>
-          </a>
-          <a href="sectors.html#hospitality" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🏨</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Hospitality</span>
-          </a>
-          <a href="sectors.html#corporate" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">💼</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Corporate</span>
-          </a>
-          <a href="sectors.html#healthcare" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">⚕️</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Healthcare</span>
-          </a>
-          <a href="sectors.html#industrial" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🏭</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Industrial</span>
-          </a>
-          <a href="sectors.html#education" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">🎓</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Education</span>
-          </a>
-          <a href="sectors.html#aviation" style="flex: 0 0 auto; width: 120px; text-align: center; scroll-snap-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; background: #eef0ea; display: grid; place-items: center; font-size: 24px;">✈️</div>
-            <span style="font-size: 12px; font-weight: 800; text-transform: uppercase;">Aviation</span>
-          </a>
+      <section class="capability-belt-section" style="padding: 60px 5vw; background: #fff; text-align: center;">
+        <h2 style="font-size: clamp(24px, 3vw, 36px); text-transform: uppercase; margin-bottom: 24px; color: var(--ink);">Explore Our Sector Capabilities</h2>
+        <p style="font-size: 14px; color: var(--muted); max-width: 650px; margin: 0 auto 36px;">Select any specialized industry sector below to instantly expand our tailored construction characteristics and uniform engineering protocols.</p>
+        
+        <!-- Horizontal Scrollable Capability Belt -->
+        <div id="capabilityBeltRow" style="display: flex; overflow-x: auto; gap: 24px; padding: 10px 10px 24px; max-width: 1100px; margin: 0 auto; scroll-snap-type: x mandatory; justify-content: flex-start; scrollbar-width: thin;">
+          <button type="button" class="capability-icon-btn active" data-sector="food" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 2px solid var(--ink); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">🍽️</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Food & Bev</span>
+          </button>
+          <button type="button" class="capability-icon-btn" data-sector="hospitality" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 1px solid var(--line); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">🏨</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Hospitality</span>
+          </button>
+          <button type="button" class="capability-icon-btn" data-sector="corporate" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 1px solid var(--line); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">💼</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Corporate</span>
+          </button>
+          <button type="button" class="capability-icon-btn" data-sector="healthcare" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 1px solid var(--line); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">⚕️</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Healthcare</span>
+          </button>
+          <button type="button" class="capability-icon-btn" data-sector="industrial" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 1px solid var(--line); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">🏭</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Industrial</span>
+          </button>
+          <button type="button" class="capability-icon-btn" data-sector="education" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 1px solid var(--line); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">🎓</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Education</span>
+          </button>
+          <button type="button" class="capability-icon-btn" data-sector="aviation" style="flex: 0 0 auto; width: 130px; padding: 16px 12px; border-radius: 24px; background: #f9f8f5; border: 1px solid var(--line); cursor: pointer; transition: all 0.25s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; scroll-snap-align: center;">
+            <span style="font-size: 32px; margin-bottom: 10px;">✈️</span>
+            <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">Aviation</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Expandable Description Box underneath the capability belt -->
+        <div id="capabilityExpansionBox" style="background: #f9f8f5; border-radius: 28px; padding: 40px 48px; max-width: 960px; margin: 16px auto 0; text-align: left; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 15px 35px rgba(0,0,0,0.02); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+            <h3 id="capTitle" style="font-size: 26px; margin: 0; text-transform: uppercase; color: var(--ink);">🍽️ Food & Beverage Uniform Engineering</h3>
+            <a id="capLink" href="sectors.html#food" class="button outline" style="border-radius: 9999px; min-height: 38px; padding: 0 22px; font-size: 11px;">View Full Sector Specifications →</a>
+          </div>
+          <p id="capDesc" style="font-size: 15px; color: #444; line-height: 1.7; margin: 0 0 20px 0;">Engineered to endure kitchen heat, grease splashes, and intense industrial washing cycles while delivering exceptional front-of-house elegance. Featuring advanced thermal breathability, stain-release coatings, and ergonomic seam articulation for executive chefs and dining room professionals.</p>
+          <div style="display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 18px;">
+            <span id="capHighlight1" style="font-size: 12px; font-weight: 800; color: var(--green);">✦ Stain-Release Thermal Cotton</span>
+            <span id="capHighlight2" style="font-size: 12px; font-weight: 800; color: var(--green);">✦ MOQ: 50 Pieces Custom-Tailored</span>
+            <span id="capHighlight3" style="font-size: 12px; font-weight: 800; color: var(--green);">✦ Custom Emblem & Text Embroidery</span>
+          </div>
         </div>
       </section>
 
-      <section class="brands-trust" style="padding: 60px 5vw; background: var(--paper); text-align: center; border-top: 1px solid var(--line);">
-        <p style="font-size: 12px; font-weight: 900; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px;">Brands That Trust Us</p>
-        <div style="display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; align-items: center; opacity: 0.5;">
-          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
-          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
-          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
-          <div style="width: 120px; height: 40px; background: #ddd; border-radius: 4px;"></div>
+      <section class="brands-trust" style="padding: 70px 5vw; background: #ffffff; text-align: center;">
+        <p style="font-size: 13px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 36px;">Brands That Trust Us</p>
+        <div style="display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; align-items: center; max-width: 1200px; margin: 0 auto;">
+          <div style="padding: 16px 36px; background: #f9f8f5; border: 1px solid rgba(0,0,0,0.06); border-radius: 9999px; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; color: #444;">THE RITZ-CARLTON</div>
+          <div style="padding: 16px 36px; background: #f9f8f5; border: 1px solid rgba(0,0,0,0.06); border-radius: 9999px; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; color: #444;">FOUR SEASONS</div>
+          <div style="padding: 16px 36px; background: #f9f8f5; border: 1px solid rgba(0,0,0,0.06); border-radius: 9999px; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; color: #444;">EMIRATES GROUP</div>
+          <div style="padding: 16px 36px; background: #f9f8f5; border: 1px solid rgba(0,0,0,0.06); border-radius: 9999px; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; color: #444;">MARRIOTT INT.</div>
+          <div style="padding: 16px 36px; background: #f9f8f5; border: 1px solid rgba(0,0,0,0.06); border-radius: 9999px; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; color: #444;">CLEVELAND CLINIC</div>
         </div>
       </section>
     </main>
