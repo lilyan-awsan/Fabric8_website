@@ -321,10 +321,11 @@ function openModal(docId = null) {
       document.getElementById("availability").value = p.availability || "";
       document.getElementById("care").value = p.care || "";
       document.getElementById("sketch").value = p.sketch || "";
+      document.getElementById("supportedPlacements").value = (p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]).join(", ");
 
-      const pBranding = p.branding || [];
+      const pBranding = p.branding || p.supportedFinishes || [];
       document.querySelectorAll("#brandingGroup input[type='checkbox']").forEach(cb => {
-        cb.checked = pBranding.includes(cb.value);
+        cb.checked = pBranding.some(val => val && val.toLowerCase().includes(cb.value.toLowerCase()));
       });
       updateMultiSelectText('brandingGroup', 'brandingText', 'Select Branding');
       
@@ -338,6 +339,7 @@ function openModal(docId = null) {
   } else {
     modalTitle.textContent = "Add Product";
     document.getElementById("docId").value = "";
+    document.getElementById("supportedPlacements").value = "Left Chest, Right Chest, Center Back, Upper Sleeve";
   }
   
   productModal.style.display = "flex";
@@ -359,6 +361,11 @@ productForm.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
 
   const docId = document.getElementById("docId").value || document.getElementById("sku").value;
+  const brandingSelected = Array.from(document.querySelectorAll("#brandingGroup input[type='checkbox']:checked")).map(cb => cb.value);
+  let custCap = "both";
+  if (brandingSelected.includes("None") || brandingSelected.length === 0) custCap = "none";
+  else if (brandingSelected.length === 1 && brandingSelected[0] === "DTF") custCap = "dtf_only";
+  else if (brandingSelected.length === 1 && brandingSelected[0] === "Embroidery") custCap = "embroidery_only";
   
   const productData = {
     id: docId,
@@ -378,7 +385,10 @@ productForm.addEventListener("submit", async (e) => {
     availability: document.getElementById("availability").value,
     care: document.getElementById("care").value,
     sketch: document.getElementById("sketch").value,
-    branding: Array.from(document.querySelectorAll("#brandingGroup input[type='checkbox']:checked")).map(cb => cb.value),
+    supportedPlacements: document.getElementById("supportedPlacements")?.value.split(",").map(p => p.trim()).filter(Boolean) || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"],
+    supportedFinishes: brandingSelected.includes("DTF") ? (brandingSelected.includes("Embroidery") ? ["Embroidery", "Direct To Fabric (DTF) Printing"] : ["Direct To Fabric (DTF) Printing"]) : ["Embroidery"],
+    customizationCapability: custCap,
+    branding: brandingSelected,
     existingImages: existingImages
   };
 

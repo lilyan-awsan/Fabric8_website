@@ -1070,31 +1070,76 @@ function initProductPage(sku) {
     });
   }
 
-  // Dynamic Customization Configuration
+  // Dynamic Customization Configuration & Toggling
   const customizationSection = document.getElementById("productCustomizationSection");
+  const toggleHeader = document.getElementById("customizationToggleHeader");
+  const typeContainer = document.getElementById("customizationTypeContainer");
+  const toggleIcon = document.getElementById("customizationToggleIcon");
+  
+  if (toggleHeader && typeContainer) {
+    toggleHeader.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isOpen = typeContainer.style.display !== "none";
+      typeContainer.style.display = isOpen ? "none" : "grid";
+      if (toggleIcon) toggleIcon.textContent = isOpen ? "+ Add Logo or Embroidery" : "− Close Customization";
+    });
+  }
+
+  const updateFinishHelper = () => {
+    const finishVal = document.querySelector('input[name="pageLogoFinish"]:checked')?.value || "";
+    const helper = document.getElementById("finishHelperText");
+    if (!helper) return;
+    if (finishVal.toLowerCase().includes("dtf") || finishVal.toLowerCase().includes("direct")) {
+      helper.textContent = "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
+      helper.style.display = "block";
+    } else if (finishVal.toLowerCase().includes("embroidery") || finishVal.toLowerCase().includes("embroider")) {
+      helper.textContent = "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
+      helper.style.display = "block";
+    } else {
+      helper.style.display = "none";
+    }
+  };
+
   if (customizationSection) {
-    if (!p.supportedFinishes || p.supportedFinishes.length === 0) {
+    const custType = p.customizationCapability || p.customization || "both";
+    const finishes = (p.supportedFinishes && p.supportedFinishes.length > 0) ? p.supportedFinishes : ["Embroidery", "Direct To Fabric (DTF) Printing"];
+    
+    if (custType === "none") {
       customizationSection.style.display = "none";
     } else {
       customizationSection.style.display = "block";
+      const cardLogo = document.getElementById("cardUploadLogo");
+      const cardText = document.getElementById("cardTextEmbroidery");
+      if (custType === "dtf_only" && cardText) {
+        cardText.style.display = "none";
+      } else if (custType === "embroidery_only" && cardLogo) {
+        // Logo still supports embroidery finish, just restrict finish options
+      }
+      
+      const allowedFinishes = custType === "dtf_only" ? ["Direct To Fabric (DTF) Printing"] : 
+                              custType === "embroidery_only" ? ["Embroidery"] : 
+                              ["Embroidery", "Direct To Fabric (DTF) Printing"];
       
       const renderRadioGroup = (name, options) => {
         return options.map((opt, idx) => `
-          <label class="radio-btn ${idx === 0 ? 'active' : ''}" style="border: 1px solid ${idx === 0 ? 'var(--green)' : 'var(--line)'}; background: ${idx === 0 ? 'rgba(47,135,61,0.05)' : '#fff'}; border-radius: 4px; padding: 10px; cursor: pointer; text-align: center;">
+          <label class="radio-btn ${idx === 0 ? 'active' : ''}" style="border: 1px solid ${idx === 0 ? 'var(--ink)' : 'var(--line)'}; background: ${idx === 0 ? '#f2f1ed' : '#fff'}; border-radius: 6px; padding: 12px; cursor: pointer; text-align: center; transition: all 0.2s ease; display: block; font-weight: 800;">
             <input type="radio" name="${name}" value="${opt}" ${idx === 0 ? 'checked' : ''} style="display: none;">
-            <span style="font-size: 11px; font-weight: 800; ${idx === 0 ? 'color: var(--green);' : ''}">${opt}</span>
+            <span style="font-size: 12px; font-weight: 800; ${idx === 0 ? 'color: var(--ink);' : ''}">${opt}</span>
           </label>
         `).join("");
       };
 
       const logoPlacement = document.getElementById("pageLogoPlacementContainer");
-      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || []);
+      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]);
 
       const textPlacement = document.getElementById("pageTextPlacementContainer");
-      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || []);
+      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]);
 
       const logoFinish = document.getElementById("pageLogoFinishContainer");
-      if (logoFinish) logoFinish.innerHTML = renderRadioGroup("pageLogoFinish", p.supportedFinishes || []);
+      if (logoFinish) {
+        logoFinish.innerHTML = renderRadioGroup("pageLogoFinish", allowedFinishes);
+        setTimeout(updateFinishHelper, 10);
+      }
     }
   }
 
@@ -1134,7 +1179,7 @@ function initProductPage(sku) {
     });
   });
   
-  // Customization Type Toggle
+  // Customization Type Toggle & Disclaimer Banner
   document.querySelectorAll('input[name="customizationType"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
       document.querySelectorAll(".customization-card").forEach(card => {
@@ -1143,15 +1188,18 @@ function initProductPage(sku) {
       });
       const activeCard = e.target.closest(".customization-card");
       if (activeCard) {
-        activeCard.style.borderColor = "var(--green)";
-        activeCard.style.backgroundColor = "rgba(47,135,61,0.05)";
+        activeCard.style.borderColor = "var(--ink)";
+        activeCard.style.backgroundColor = "#f4f3ef";
       }
       
       const settings = document.getElementById("customizationSettings");
+      const disclaimer = document.getElementById("brandingDisclaimer");
       const logoSet = document.getElementById("logoSettings");
       const textSet = document.getElementById("textSettings");
       
       if (settings) settings.style.display = "block";
+      if (disclaimer) disclaimer.style.display = "flex";
+      
       if (e.target.value === 'upload_logo') {
         if (logoSet) logoSet.style.display = "flex";
         if (textSet) textSet.style.display = "none";
@@ -1162,38 +1210,55 @@ function initProductPage(sku) {
     });
   });
   
-  // Initialize text thread colors
+  // Initialize text thread colors (Borderless Premium Swatches)
   const threadColorDiv = document.getElementById("pageTextThreadColors");
   if (threadColorDiv) {
-    threadColorDiv.innerHTML = threadColors.map(c => colorButton(c.name)).join("");
-    const defaultColorBtn = threadColorDiv.querySelector(`[data-color="Black"]`);
-    if(defaultColorBtn) defaultColorBtn.classList.add('active');
+    threadColorDiv.innerHTML = threadColors.map(c => `
+      <span class="color-dot ${c.name === 'Black' ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; width: 34px; height: 34px; border-radius: 50%; display: inline-block; cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.18); transition: transform 0.2s ease;" data-thread-color="${c.name}" title="${c.name}"></span>
+    `).join("");
     
     threadColorDiv.querySelectorAll('.color-dot').forEach(dot => {
       dot.addEventListener('click', (e) => {
-        threadColorDiv.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
-        e.target.closest('.color-dot').classList.add("active");
+        threadColorDiv.querySelectorAll(".color-dot").forEach((b) => {
+          b.classList.remove("active");
+          b.style.transform = "scale(1)";
+          b.style.boxShadow = "0 2px 6px rgba(0,0,0,0.18)";
+        });
+        const target = e.target.closest('.color-dot');
+        target.classList.add("active");
+        target.style.transform = "scale(1.18)";
+        target.style.boxShadow = "0 0 0 2px #fff, 0 0 0 4px var(--ink)";
       });
     });
+    // Apply active ring to initial color
+    const initial = threadColorDiv.querySelector('.color-dot.active');
+    if (initial) {
+      initial.style.transform = "scale(1.18)";
+      initial.style.boxShadow = "0 0 0 2px #fff, 0 0 0 4px var(--ink)";
+    }
   }
 
-  // Handle Customization Radio Buttons
-  document.querySelectorAll('.radio-btn input[type="radio"]').forEach(radio => {
+  // Handle Customization Radio & Font Buttons
+  document.querySelectorAll('.radio-btn input[type="radio"], .font-radio-btn input[type="radio"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
-      const container = e.target.closest('.radio-btn').parentElement;
-      container.querySelectorAll('.radio-btn').forEach(lbl => {
+      const container = e.target.closest('label').parentElement;
+      container.querySelectorAll('label').forEach(lbl => {
         lbl.classList.remove('active');
         lbl.style.borderColor = 'var(--line)';
         lbl.style.background = '#fff';
         const span = lbl.querySelector('span');
         if(span) span.style.color = '';
       });
-      const activeLbl = e.target.closest('.radio-btn');
+      const activeLbl = e.target.closest('label');
       activeLbl.classList.add('active');
-      activeLbl.style.borderColor = 'var(--green)';
-      activeLbl.style.background = 'rgba(47,135,61,0.05)';
+      activeLbl.style.borderColor = 'var(--ink)';
+      activeLbl.style.background = '#f2f1ed';
       const activeSpan = activeLbl.querySelector('span');
-      if(activeSpan) activeSpan.style.color = 'var(--green)';
+      if(activeSpan) activeSpan.style.color = 'var(--ink)';
+      
+      if (e.target.name === "pageLogoFinish") {
+        updateFinishHelper();
+      }
     });
   });
 
@@ -1330,7 +1395,7 @@ function initProductPage(sku) {
       const allText = [text1, text2, text3].filter(t => t.trim() !== "").join(" | ");
       const place = document.querySelector('input[name="pageTextPlacement"]:checked')?.nextElementSibling.textContent || "Left Chest";
       const font = document.querySelector('input[name="pageTextFont"]:checked')?.nextElementSibling.textContent || "Block";
-      const tColor = document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.color || "Black";
+      const tColor = document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.threadColor || document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.color || "Black";
       brandingDesc = `Text "${allText}" (${font}, ${tColor}) on ${place}`;
     }
     
