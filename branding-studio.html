@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fabric 8 | Interactive Garment Branding Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
+  <link rel="stylesheet" href="site.css?v=5" />
+  <style>
+    .studio-container {
+      max-width: 1320px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    @media (max-width: 968px) {
+      .studio-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .preview-stage {
+      background: #111;
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: sticky;
+      top: 100px;
+    }
+
+    .canvas-viewport {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      background: #0a0a0a;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas-viewport img#baseGarmentImg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .simulation-overlay {
+      position: absolute;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1px dashed rgba(255, 215, 0, 0.4);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(2px);
+      text-align: center;
+    }
+
+    .simulation-overlay:hover {
+      border: 1px solid var(--yellow, #ffd700);
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Placement Positions */
+    .place-left-chest { top: 28%; left: 62%; width: 140px; height: 140px; }
+    .place-right-chest { top: 28%; left: 24%; width: 140px; height: 140px; }
+    .place-center-back { top: 32%; left: 32%; width: 260px; height: 260px; }
+    .place-upper-sleeve { top: 34%; left: 78%; width: 100px; height: 100px; }
+    .place-pocket { top: 48%; left: 58%; width: 120px; height: 120px; }
+
+    .garment-selector {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .garment-pill {
+      background: #1f1f1f;
+      color: #ccc;
+      border: 1px solid #333;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .garment-pill.active, .garment-pill:hover {
+      background: var(--yellow, #ffd700);
+      color: #111;
+      border-color: var(--yellow, #ffd700);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.25);
+    }
+
+    .controls-panel {
+      background: #1a1a1a;
+      border-radius: 20px;
+      padding: 36px;
+      border: 1px solid #2d2d2d;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-switcher {
+      display: flex;
+      background: #0d0d0d;
+      border-radius: 12px;
+      padding: 6px;
+      margin-bottom: 30px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px 10px;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      color: #777;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: none;
+      background: transparent;
+    }
+
+    .tab-btn.active {
+      background: var(--yellow, #ffd700);
+      color: #111;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #ddd;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .studio-input, .studio-select {
+      width: 100%;
+      padding: 14px 18px;
+      background: #0d0d0d;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .studio-input:focus, .studio-select:focus {
+      border-color: var(--yellow, #ffd700);
+    }
+
+    .swatch-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .thread-swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 3px solid #333;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      position: relative;
+    }
+
+    .thread-swatch.active {
+      transform: scale(1.15);
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .helper-note {
+      background: #142217;
+      border-left: 4px solid #2f873d;
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      color: #a0d4aa;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .action-suite {
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid #2d2d2d;
+    }
+
+    .button-studio {
+      width: 100%;
+      padding: 18px;
+      background: var(--yellow, #ffd700);
+      color: #111;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .button-studio:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+    }
+
+    /* Text styles */
+    .emb-text-preview {
+      font-weight: 900;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      word-break: break-word;
+      display: block;
+      width: 100%;
+    }
+    .font-block { font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
+    .font-serif { font-family: 'Times New Roman', serif; }
+    .font-script { font-family: 'Brush Script MT', cursive; font-size: 1.3em; }
+  </style>
+</head>
+
+<body style="background: #0f0f0f; color: #eee;">
+  <div class="topline"><a href="contact.html" style="color: var(--yellow, #ffd700);">DISCOVER HOW WE CAN HELP &gt;</a></div>
+  <header class="header">
+    <a class="logo-wrapper" href="index.html" title="Fabric 8 Home">
+      <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo No Needle" class="logo-icon-default" />
+      <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);" />
+    </a>
+    <nav>
+      <a href="services.html" class="active">Services</a>
+      <a href="method.html">The Fabric 8 Method</a>
+      <a href="sectors.html">Sectors</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About Us</a>
+    </nav>
+    <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
+      <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: #111; color: #fff; cursor: pointer; text-transform: uppercase; font-weight: 800;">
+        <option value="US">USA</option>
+        <option value="JO">Jordan</option>
+        <option value="INT">International</option>
+      </select>
+      <a class="quote-link" href="checkout.html" aria-label="View Cart">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <span id="cartCount" style="font-weight: 900; font-size: 14px;">0</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero" style="background: linear-gradient(135deg, #181818 0%, #080808 100%); padding: 80px 20px 60px; border-bottom: 1px solid #222;">
+      <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+        <p style="color: var(--yellow, #ffd700); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Fabric 8 Customization Suite</p>
+        <h1 style="font-size: 44px; font-weight: 900; color: #fff; margin-bottom: 16px;">Interactive Garment Branding Studio</h1>
+        <p style="color: #aaa; font-size: 17px; max-width: 780px; margin: 0 auto; line-height: 1.6;">Directly test and visualize how your custom company logos, Direct to Fabric (DTF) artwork, or thread embroidery text will look across our commercial uniform styles in real time—with zero pop-up interruptions.</p>
+      </div>
+    </section>
+
+    <div class="studio-container">
+      <!-- Left Stage: Garment Preview Canvas -->
+      <div class="preview-stage">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h3 style="font-size: 16px; color: #fff; font-weight: 800; text-transform: uppercase; margin: 0;">Interactive Canvas</h3>
+          <span style="font-size: 12px; color: var(--yellow, #ffd700); font-weight: 700; background: #221f00; padding: 4px 10px; border-radius: 4px; border: 1px solid #554d00;">Live Prototype Mode</span>
+        </div>
+
+        <div class="canvas-viewport" id="canvasViewport">
+          <img id="baseGarmentImg" src="assets/fabric8-service-people.webp" alt="Garment Canvas" />
+          
+          <!-- Simulation Layer -->
+          <div class="simulation-overlay place-left-chest" id="simulationBox">
+            <img id="logoPreviewImg" src="assets/fabric8_logo_noneedle_cropped.png" style="max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));" alt="Uploaded Logo Preview" />
+            <div id="textPreviewContainer" style="display: none; width: 100%;">
+              <span class="emb-text-preview font-block" id="line1Display" style="color: #ffd700; font-size: 18px;">YOUR LOGO</span>
+              <span class="emb-text-preview font-block" id="line2Display" style="color: #ffffff; font-size: 13px; margin-top: 4px;">EST. 2026</span>
+            </div>
+            <span id="placementLabel" style="position: absolute; bottom: -24px; font-size: 10px; color: var(--yellow, #ffd700); background: #111; padding: 2px 6px; border-radius: 3px; font-weight: 700; opacity: 0.8;">Left Chest</span>
+          </div>
+        </div>
+
+        <!-- Garment Swatch Selector -->
+        <div style="margin-top: 20px;">
+          <label style="font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase;">1. Choose Garment Style:</label>
+          <div class="garment-selector">
+            <button class="garment-pill active" onclick="switchGarment('assets/fabric8-service-people.webp', 'Hospitality Service Apron', this)">Hospitality Apron</button>
+            <button class="garment-pill" onclick="switchGarment('assets/fabric8-health-hospitality-uniforms.webp', 'Medical & Healthcare Scrub', this)">Healthcare Scrub</button>
+            <button class="garment-pill" onclick="switchGarment('assets/fabric8-restaurant-uniforms.webp', 'Culinary & Chef Uniform', this)">Chef & Kitchen</button>
+            <button class="garment-pill" onclick="switchGarment('assets/fabric8-business-uniform-hero.webp', 'Corporate Suiting & Polo', this)">Corporate Wear</button>
+            <button class="garment-pill" onclick="switchGarment('assets/fabric8-silk-hero.webp', 'Executive Silk Suiting', this)">Executive Specialty</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Suite: Customization Controls -->
+      <div class="controls-panel">
+        <label style="font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">2. Select Customization Method:</label>
+        <div class="tab-switcher">
+          <button class="tab-btn active" id="tabDtfBtn" onclick="switchStudioMode('dtf')">(DTF) Direct to Fabric / Logo</button>
+          <button class="tab-btn" id="tabEmbBtn" onclick="switchStudioMode('embroidery')">Text & Emblem Embroidery</button>
+        </div>
+
+        <!-- DTF & LOGO UPLOAD SECTION -->
+        <div id="dtfSection">
+          <div class="helper-note">
+            <strong>(DTF) Direct to Fabric Printing & Customization:</strong> Recommended for intricate company artwork, vibrant multi-color logos, and sharp graphic transfers. Directly upload your file to simulate placement.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Upload Company Artwork / Logo (PNG or JPG):</label>
+            <input type="file" id="studioLogoUpload" accept="image/*" class="studio-input" style="padding: 10px;" onchange="handleLogoUpload(event)" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Garment Placement Position:</label>
+            <select id="dtfPlacementSelect" class="studio-select" onchange="updatePlacement(this.value)">
+              <option value="place-left-chest">Left Chest (Standard B2B Pocket Area)</option>
+              <option value="place-right-chest">Right Chest (Opposite Pocket)</option>
+              <option value="place-center-back">Full Center Back (Large Graphic)</option>
+              <option value="place-upper-sleeve">Upper Sleeve (Subtle Emblem)</option>
+              <option value="place-pocket">Front Pocket / Apron Bib Center</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" id="scaleLabel">Logo Display Scale: (4.0 inches)</label>
+            <input type="range" id="logoScaleSlider" min="50" max="150" value="85" style="width: 100%; accent-color: var(--yellow, #ffd700); cursor: pointer;" oninput="updateLogoScale(this.value)" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Transfer Finish Method:</label>
+            <select id="dtfFinishSelect" class="studio-select">
+              <option value="DTF High-Definition Matte Print">DTF High-Definition Matte Print (Standard)</option>
+              <option value="DTF Ultra-Durable Silicone Vinyl">DTF Ultra-Durable Silicone Vinyl</option>
+              <option value="High-Gloss Industrial Screen Transfer">High-Gloss Industrial Screen Transfer</option>
+              <option value="Woven Emblem Patch Transfer">Woven Emblem Patch Transfer</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TEXT EMBROIDERY SECTION -->
+        <div id="embSection" style="display: none;">
+          <div class="helper-note" style="border-left-color: #ffd700; background: #262102; color: #ffeb8c;">
+            <strong>Text & Thread Embroidery Studio:</strong> Ideal for employee names, job titles, department emblems, and classic corporate apparel. High thread density engineered to withstand industrial laundering.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Line 1 Text (Primary Title or Company Name):</label>
+            <input type="text" id="embLine1" class="studio-input" placeholder="e.g. EXECUTIVE CHEF" value="YOUR LOGO" oninput="updateEmbText()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Line 2 Text (Optional Subtitle or Department):</label>
+            <input type="text" id="embLine2" class="studio-input" placeholder="e.g. HOSPICE CARE DIVISION" value="EST. 2026" oninput="updateEmbText()" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Embroidery Typography Style:</label>
+            <select id="embFontSelect" class="studio-select" onchange="updateEmbFont(this.value)">
+              <option value="font-block">Classic B2B Block (Bold Gothic)</option>
+              <option value="font-serif">Traditional Executive (Serif)</option>
+              <option value="font-script">Artisanal Script (Cursive Tailored)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Thread Color Palette:</label>
+            <div class="swatch-row" id="threadColorSwatches">
+              <button class="thread-swatch active" style="background: #ffd700;" title="Imperial Gold" onclick="selectThreadColor('#ffd700', 'Imperial Gold', this)"></button>
+              <button class="thread-swatch" style="background: #ffffff;" title="Pure White" onclick="selectThreadColor('#ffffff', 'Pure White', this)"></button>
+              <button class="thread-swatch" style="background: #2F873D;" title="Fabric8 Emerald Green" onclick="selectThreadColor('#2F873D', 'Fabric8 Emerald Green', this)"></button>
+              <button class="thread-swatch" style="background: #111111; border-color: #555;" title="Obsidian Black" onclick="selectThreadColor('#111111', 'Obsidian Black', this)"></button>
+              <button class="thread-swatch" style="background: #0b1e36;" title="Navy Blue" onclick="selectThreadColor('#0b1e36', 'Navy Blue', this)"></button>
+              <button class="thread-swatch" style="background: #900c3f;" title="Burgundy Crimson" onclick="selectThreadColor('#900c3f', 'Burgundy Crimson', this)"></button>
+            </div>
+            <p id="selectedColorLabel" style="font-size: 12px; color: #aaa; margin-top: 8px;">Selected Color: <strong style="color: #fff;">Imperial Gold</strong></p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Embroidery Placement Position:</label>
+            <select id="embPlacementSelect" class="studio-select" onchange="updatePlacement(this.value)">
+              <option value="place-left-chest">Left Chest (Standard Name / Emblem)</option>
+              <option value="place-right-chest">Right Chest</option>
+              <option value="place-pocket">Pocket Center / Apron Bib</option>
+              <option value="place-upper-sleeve">Upper Shoulder Sleeve</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ACTION SUITE & ORDER INTEGRATION -->
+        <div class="action-suite">
+          <label style="font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block;">3. Production Order Specifications:</label>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 24px;">
+            <div>
+              <label class="form-label" style="font-size: 11px;">Target Garment Size:</label>
+              <select id="studioSize" class="studio-select" style="padding: 10px;">
+                <option value="Assorted / Sizing Roster">Assorted (Will Send Roster)</option>
+                <option value="M">Medium (M)</option>
+                <option value="L">Large (L)</option>
+                <option value="XL">Extra Large (XL)</option>
+                <option value="XXL">2XL / Custom Fit</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 11px;">Estimated Quantity (Units):</label>
+              <input type="number" id="studioQty" class="studio-input" min="1" value="50" style="padding: 10px;" />
+            </div>
+          </div>
+
+          <button class="button-studio" onclick="transferToQuoteCart()">Transfer Prototype To Quote Cart &amp; Checkout</button>
+          <p style="text-align: center; font-size: 12px; color: #777; margin-top: 14px;">Generates your customized line item and directs you straight to our automated Excel quotation engine.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6; border-top: 1px solid #222;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Fabric-8</h4>
+        <p style="max-width: 280px; color: #777;">Elevating workplace appearance and performance through custom industrial manufacturing and fashion-forward tailoring.</p>
+      </div>
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Overview</h4>
+        <p style="display: flex; flex-direction: column; gap: 8px;">
+          <a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
+          <a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
+          <a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
+          <a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
+          <a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a>
+        </p>
+      </div>
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
+        <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
+      </div>
+      <div>
+        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
+        <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
+      &copy; 2026 Fabric8. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="site.js?v=5"></script>
+  <script>
+    let currentMode = 'dtf';
+    let currentGarmentName = 'Hospitality Service Apron';
+    let currentGarmentImg = 'assets/fabric8-service-people.webp';
+    let customLogoBase64 = null;
+    let selectedThreadHex = '#ffd700';
+    let selectedThreadName = 'Imperial Gold';
+
+    function switchStudioMode(mode) {
+      currentMode = mode;
+      const dtfSec = document.getElementById("dtfSection");
+      const embSec = document.getElementById("embSection");
+      const tabDtf = document.getElementById("tabDtfBtn");
+      const tabEmb = document.getElementById("tabEmbBtn");
+      const logoImg = document.getElementById("logoPreviewImg");
+      const textBox = document.getElementById("textPreviewContainer");
+
+      if (mode === 'dtf') {
+        dtfSec.style.display = "block";
+        embSec.style.display = "none";
+        tabDtf.classList.add("active");
+        tabEmb.classList.remove("active");
+        logoImg.style.display = "block";
+        textBox.style.display = "none";
+        updatePlacement(document.getElementById("dtfPlacementSelect").value);
+      } else {
+        dtfSec.style.display = "none";
+        embSec.style.display = "block";
+        tabDtf.classList.remove("active");
+        tabEmb.classList.add("active");
+        logoImg.style.display = "none";
+        textBox.style.display = "block";
+        updatePlacement(document.getElementById("embPlacementSelect").value);
+        updateEmbText();
+      }
+    }
+
+    function switchGarment(imgSrc, name, btnEl) {
+      currentGarmentImg = imgSrc;
+      currentGarmentName = name;
+      document.getElementById("baseGarmentImg").src = imgSrc;
+      document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
+      btnEl.classList.add("active");
+    }
+
+    function updatePlacement(className) {
+      const box = document.getElementById("simulationBox");
+      const label = document.getElementById("placementLabel");
+      box.className = "simulation-overlay " + className;
+      
+      if (className.includes("left-chest")) label.textContent = "Left Chest";
+      else if (className.includes("right-chest")) label.textContent = "Right Chest";
+      else if (className.includes("center-back")) label.textContent = "Center Back";
+      else if (className.includes("sleeve")) label.textContent = "Sleeve";
+      else if (className.includes("pocket")) label.textContent = "Pocket / Bib Center";
+    }
+
+    function updateLogoScale(val) {
+      const img = document.getElementById("logoPreviewImg");
+      const percent = Number(val);
+      const inches = ((percent / 100) * 4.0).toFixed(1);
+      document.getElementById("scaleLabel").textContent = `Logo Display Scale: (${inches} inches)`;
+      img.style.maxWidth = `${percent}%`;
+      img.style.maxHeight = `${percent}%`;
+    }
+
+    function handleLogoUpload(e) {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const res = ev.target.result;
+          document.getElementById("logoPreviewImg").src = res;
+          customLogoBase64 = res; // Will be stripped cleanly when transferring to cart if needed
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function updateEmbText() {
+      const l1 = document.getElementById("embLine1").value || "YOUR LOGO";
+      const l2 = document.getElementById("embLine2").value || "";
+      const l1El = document.getElementById("line1Display");
+      const l2El = document.getElementById("line2Display");
+      l1El.textContent = l1;
+      l2El.textContent = l2;
+      l2El.style.display = l2 ? "block" : "none";
+    }
+
+    function updateEmbFont(fontClass) {
+      const l1El = document.getElementById("line1Display");
+      const l2El = document.getElementById("line2Display");
+      l1El.className = "emb-text-preview " + fontClass;
+      l2El.className = "emb-text-preview " + fontClass;
+    }
+
+    function selectThreadColor(hex, name, btnEl) {
+      selectedThreadHex = hex;
+      selectedThreadName = name;
+      document.getElementById("line1Display").style.color = hex;
+      document.getElementById("selectedColorLabel").innerHTML = `Selected Color: <strong style="color: #fff;">${name}</strong>`;
+      document.querySelectorAll(".thread-swatch").forEach(b => b.classList.remove("active"));
+      btnEl.classList.add("active");
+    }
+
+    function transferToQuoteCart() {
+      const qty = document.getElementById("studioQty").value || 50;
+      const size = document.getElementById("studioSize").value;
+      let brandingDesc = "";
+      let logoDataToSave = null;
+
+      if (currentMode === 'dtf') {
+        const place = document.getElementById("dtfPlacementSelect").options[document.getElementById("dtfPlacementSelect").selectedIndex].text;
+        const finish = document.getElementById("dtfFinishSelect").value;
+        const scale = document.getElementById("scaleLabel").textContent.replace("Logo Display Scale: ", "");
+        brandingDesc = `(DTF) Direct to Fabric Printing & Customization | Placement: ${place} | Size: ${scale} | Finish: ${finish}`;
+        if (customLogoBase64) {
+          logoDataToSave = customLogoBase64;
+        }
+      } else {
+        const l1 = document.getElementById("embLine1").value;
+        const l2 = document.getElementById("embLine2").value;
+        const font = document.getElementById("embFontSelect").options[document.getElementById("embFontSelect").selectedIndex].text;
+        const place = document.getElementById("embPlacementSelect").options[document.getElementById("embPlacementSelect").selectedIndex].text;
+        brandingDesc = `Embroidery Studio Customization | Placement: ${place} | Font: ${font} | Thread: ${selectedThreadName} | Text Line 1: [${l1}], Line 2: [${l2}]`;
+      }
+
+      const item = {
+        sku: "F8-STUDIO-CUSTOM",
+        name: `${currentGarmentName} (Atelier Studio Prototype)`,
+        price: 0,
+        image: currentGarmentImg,
+        size: size,
+        color: "Standard Commercial Spec",
+        quantity: parseInt(qty) || 50,
+        branding: brandingDesc,
+        logoData: logoDataToSave
+      };
+
+      if (typeof cart !== 'undefined' && typeof saveCart === 'function') {
+        cart.push(item);
+        saveCart();
+        if (typeof updateCartCount === 'function') updateCartCount();
+      } else {
+        // Fallback direct storage access
+        let existing = JSON.parse(localStorage.getItem("fabric8_cart") || "[]");
+        existing.push(item);
+        localStorage.setItem("fabric8_cart", JSON.stringify(existing));
+      }
+
+      alert("🎉 Studio Prototype added to your quotation order! Redirecting directly to Checkout...");
+      window.location.href = "checkout.html";
+    }
+  </script>
+</body>
+
+</html>
