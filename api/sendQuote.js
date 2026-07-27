@@ -243,17 +243,25 @@ export default async function handler(req, res) {
     if (data.attachments && Array.isArray(data.attachments)) {
       data.attachments.forEach(att => {
         if (!att.filename?.includes(".xlsx") && att.content) {
-          let cleanContent = typeof att.content === 'string' ? att.content : Buffer.from(att.content).toString('base64');
-          // Strip any data:image/...;base64, header prefix to satisfy Resend strict base64 requirement
-          if (cleanContent.includes('base64,')) {
-            cleanContent = cleanContent.split('base64,')[1];
-          } else if (cleanContent.startsWith('data:')) {
-            cleanContent = cleanContent.split(',')[1];
+          let rawContent = att.content;
+          if (typeof rawContent === 'object' && !Buffer.isBuffer(rawContent) && !Array.isArray(rawContent) && !(rawContent instanceof ArrayBuffer)) {
+            rawContent = rawContent.imageSrc || rawContent.data || null;
           }
-          attachments.push({
-            filename: att.filename || `Attachment_${Date.now()}.png`,
-            content: cleanContent
-          });
+          if (rawContent) {
+            let cleanContent = typeof rawContent === 'string' ? rawContent : Buffer.from(rawContent).toString('base64');
+            // Strip any data:image/...;base64, header prefix to satisfy Resend strict base64 requirement
+            if (cleanContent.includes('base64,')) {
+              cleanContent = cleanContent.split('base64,')[1];
+            } else if (cleanContent.startsWith('data:')) {
+              cleanContent = cleanContent.split(',')[1];
+            }
+            if (cleanContent && cleanContent.trim() !== '') {
+              attachments.push({
+                filename: att.filename || `Attachment_${Date.now()}.png`,
+                content: cleanContent
+              });
+            }
+          }
         }
       });
     }

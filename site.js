@@ -935,7 +935,10 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   // Attach auto-transparent logos from the cart
   cart.forEach((item, index) => {
     if (item.logoData) {
-      attachments.push({ filename: `${item.sku}_Logo_${index + 1}.png`, content: item.logoData });
+      const logoContent = typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData;
+      if (typeof logoContent === 'string' && logoContent.trim() !== '') {
+        attachments.push({ filename: `${item.sku}_Logo_${index + 1}.png`, content: logoContent });
+      }
     }
   });
 
