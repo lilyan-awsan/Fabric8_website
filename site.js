@@ -953,19 +953,21 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     });
     
     if (res.ok) {
-      alert("Quote request sent successfully! We will contact you soon.");
+      alert("Quote request and Excel spreadsheet sent successfully to hello@thefabric8.com!");
       cart.splice(0, cart.length);
       saveCart();
       renderCart();
       form.reset();
       if (typeof initClientDetailsPersistence === 'function') initClientDetailsPersistence();
     } else {
-      const errorData = await res.json();
+      const errorData = await res.json().catch(() => ({}));
       console.error("Resend error:", errorData);
+      alert(`Vercel Email Server Error: ${errorData.message || errorData.error || "Server rejected email dispatch."}\n\nFalling back to manual plain-text draft copy.`);
       triggerMailtoFallback(customerInfo, cart);
     }
   } catch (err) {
     console.error("Network error:", err);
+    alert("Vercel Serverless Connection Notice: Could not reach the automated Excel email server (Note: Serverless Excel generation requires testing on your LIVE Vercel web domain rather than local PC preview).\n\nDisplaying backup manual text draft.");
     triggerMailtoFallback(customerInfo, cart);
   } finally {
     if (submitBtn) {

@@ -249,7 +249,7 @@ export default async function handler(req, res) {
     }
 
     const options = {
-      from: process.env.RESEND_FROM_EMAIL || 'Fabric8 Orders <onboarding@resend.dev>',
+      from: 'Fabric8 Orders <onboarding@resend.dev>',
       to: targetEmails,
       reply_to: replyTo,
       subject: `[New Order & Quote] Fabric 8 Request from ${customerName}`,
