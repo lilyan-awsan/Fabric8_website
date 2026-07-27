@@ -1265,6 +1265,13 @@ function initProductPage(sku) {
     
     let totalQty = 50;
     let targetSize = "Assorted / Sizing Roster";
+    
+    // Check if user clicked/selected a size button directly
+    const activeBtn = document.querySelector("#sizeQtyMatrix .size-select-btn.selected") || document.querySelector("#sizeQtyMatrix .size-select-btn");
+    if (activeBtn && activeBtn.dataset.size) {
+      targetSize = activeBtn.dataset.size;
+    }
+
     const sizeInputs = document.querySelectorAll("#sizeQtyMatrix input[type='number']");
     if (sizeInputs && sizeInputs.length > 0) {
       let sum = 0;
@@ -1272,7 +1279,7 @@ function initProductPage(sku) {
         const v = parseInt(inp.value);
         if (!isNaN(v) && v > 0) {
           sum += v;
-          targetSize = inp.dataset.size || "Assorted / Sizing Roster";
+          targetSize = inp.dataset.size || targetSize;
         }
       });
       if (sum > 0) totalQty = sum;

@@ -485,7 +485,7 @@
         <div class="action-suite">
           <label class="form-label" style="margin-bottom: 14px;">3. Confirm Order Specifications:</label>
           
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 26px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 26px;">
             <div>
               <label class="form-label" style="font-size: 11px;">Target Garment Size:</label>
               <select id="studioSize" class="studio-select" style="padding: 12px 14px;">
@@ -498,7 +498,11 @@
               </select>
             </div>
             <div>
-              <label class="form-label" style="font-size: 11px;">Estimated Quantity (Units):</label>
+              <label class="form-label" style="font-size: 11px;">Selected Color:</label>
+              <input type="text" id="studioColor" class="studio-input" value="Standard Commercial Spec" style="padding: 12px 14px; font-weight: bold;" />
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 11px;">Estimated Quantity:</label>
               <input type="number" id="studioQty" class="studio-input" min="1" value="50" style="padding: 12px 14px;" />
             </div>
           </div>
@@ -556,35 +560,55 @@
     window.addEventListener('DOMContentLoaded', function() {
       const params = new URLSearchParams(window.location.search);
       if (params.has('sku') || params.has('name') || params.has('img')) {
-        const incomingName = params.get('name');
-        const incomingSku = params.get('sku');
+        const incomingName = params.get('name') || "Selected Shop Product";
+        const incomingSku = params.get('sku') || "F8-STUDIO-CUSTOM";
         const incomingImg = params.get('img');
         const incomingSize = params.get('size');
         const incomingColor = params.get('color');
         const incomingQty = params.get('qty');
         const incomingMode = params.get('mode');
 
-        if (incomingName) currentGarmentName = incomingName;
-        if (incomingSku) currentGarmentSku = incomingSku;
-        if (incomingColor) selectedShopColor = incomingColor;
+        currentGarmentName = incomingName;
+        currentGarmentSku = incomingSku;
+        
+        if (incomingColor) {
+          selectedShopColor = incomingColor;
+          const colorEl = document.getElementById("studioColor");
+          if (colorEl) colorEl.value = incomingColor;
+        }
         
         if (incomingImg) {
           currentGarmentImg = incomingImg;
           document.getElementById("baseGarmentImg").src = incomingImg;
           document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
+          
+          // Prepend an active pill representing the exact product chosen in shop
+          const selectorBox = document.querySelector(".garment-selector");
+          if (selectorBox) {
+            const shopPill = document.createElement("button");
+            shopPill.className = "garment-pill active";
+            shopPill.textContent = `★ ${incomingName}`;
+            shopPill.onclick = function() { switchGarment(incomingImg, incomingName, this); };
+            selectorBox.prepend(shopPill);
+          }
         }
 
         if (incomingSize) {
           const sizeEl = document.getElementById("studioSize");
-          if (Array.from(sizeEl.options).some(o => o.value === incomingSize)) {
-            sizeEl.value = incomingSize;
+          let found = Array.from(sizeEl.options).find(o => o.value.toLowerCase() === incomingSize.toLowerCase() || o.text.toLowerCase().includes(incomingSize.toLowerCase()));
+          if (found) {
+            sizeEl.value = found.value;
           } else {
-            sizeEl.value = "Assorted / Sizing Roster";
+            const newOpt = document.createElement("option");
+            newOpt.value = incomingSize;
+            newOpt.text = `${incomingSize} (Selected in Shop)`;
+            sizeEl.prepend(newOpt);
+            sizeEl.value = incomingSize;
           }
         }
         
-        if (incomingQty) {
-          document.getElementById("studioQty").value = parseInt(incomingQty) || 50;
+        if (incomingQty && !isNaN(parseInt(incomingQty))) {
+          document.getElementById("studioQty").value = parseInt(incomingQty);
         }
 
         // Show shop selection banner at top of controls
@@ -705,6 +729,9 @@
     function transferToQuoteCart() {
       const qty = document.getElementById("studioQty").value || 50;
       const size = document.getElementById("studioSize").value;
+      const colorInput = document.getElementById("studioColor");
+      if (colorInput && colorInput.value) selectedShopColor = colorInput.value;
+      
       let brandingDesc = "";
       let logoDataToSave = null;
 
