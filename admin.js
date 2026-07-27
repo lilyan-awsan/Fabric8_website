@@ -254,16 +254,24 @@ let activeSectors = [];
 let pendingSketchFile = null;
 let pendingSiteImages = {};
 
-['Hero', 'Promo', 'About'].forEach(type => {
-  const uploadInput = document.getElementById(`setting${type}ImageUpload`);
-  const textInput = document.getElementById(`setting${type}Image`);
+[
+  { input: 'HeroImage', key: 'heroImage' },
+  { input: 'PromoImage', key: 'promoImage' },
+  { input: 'AboutImage', key: 'aboutImage' },
+  { input: 'ServicesConsultImg', key: 'servicesConsultImg' },
+  { input: 'ServicesBrandImg', key: 'servicesBrandImg' },
+  { input: 'ServicesProdImg', key: 'servicesProdImg' },
+  { input: 'SectorsHeroImg', key: 'sectorsHeroImg' }
+].forEach(item => {
+  const uploadInput = document.getElementById(`setting${item.input}Upload`);
+  const textInput = document.getElementById(`setting${item.input}`);
   if (uploadInput && textInput) {
     uploadInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (evt) => {
-        pendingSiteImages[type.toLowerCase() + 'Image'] = { base64: evt.target.result, name: file.name };
+        pendingSiteImages[item.key] = { base64: evt.target.result, name: file.name };
         textInput.value = `[Pending Upload: ${file.name}]`;
       };
       reader.readAsDataURL(file);
@@ -859,13 +867,42 @@ async function fetchSettings() {
       document.getElementById("settingFooterLegal").value = settings.footerLegal || "";
 
       const sc = settings.siteContent || {};
-      if (document.getElementById("settingHomeTitle")) document.getElementById("settingHomeTitle").value = sc.homeHeroTitle || "Engineered for Comfort, Designed to Inspire";
-      if (document.getElementById("settingHomeBtn")) document.getElementById("settingHomeBtn").value = sc.homeHeroBtnText || "EXPLORE THE COLLECTION";
-      if (document.getElementById("settingHomeSub")) document.getElementById("settingHomeSub").value = sc.homeHeroSubtitle || "High-performance industrial uniforms & corporate fashion designed for modern teams.";
-      if (document.getElementById("settingAboutText")) document.getElementById("settingAboutText").value = sc.aboutText || "We partner with leading corporate enterprises, healthcare groups, and industrial sectors...";
+      // Homepage
+      if (document.getElementById("settingHomeTitle")) document.getElementById("settingHomeTitle").value = sc.homeHeroTitle || "UNIFORMS, SOLVED.";
+      if (document.getElementById("settingHomeBtn")) document.getElementById("settingHomeBtn").value = sc.homeHeroBtnText || "Shop";
+      if (document.getElementById("settingHomeSub")) document.getElementById("settingHomeSub").value = sc.homeHeroSubtitle || "Built to perform. Styled to represent. Fabric8 delivers tailored uniform solutions for organizations that need more than a catalog.";
       if (document.getElementById("settingHeroImage")) document.getElementById("settingHeroImage").value = sc.heroImage || "";
       if (document.getElementById("settingPromoImage")) document.getElementById("settingPromoImage").value = sc.promoImage || "";
+      
+      // Services
+      if (document.getElementById("settingServicesTitle")) document.getElementById("settingServicesTitle").value = sc.servicesTitle || "Service uniforms, designed like fashion.";
+      if (document.getElementById("settingServicesSub")) document.getElementById("settingServicesSub").value = sc.servicesSub || "Fabric8 manages the full uniform lifecycle from textile advice to branded delivery.";
+      if (document.getElementById("settingServicesConsultImg")) document.getElementById("settingServicesConsultImg").value = sc.servicesConsultImg || "";
+      if (document.getElementById("settingServicesBrandImg")) document.getElementById("settingServicesBrandImg").value = sc.servicesBrandImg || "";
+      if (document.getElementById("settingServicesProdImg")) document.getElementById("settingServicesProdImg").value = sc.servicesProdImg || "";
+
+      // Method
+      if (document.getElementById("settingMethodTitle")) document.getElementById("settingMethodTitle").value = sc.methodTitle || "Eight steps to partner success.";
+      if (document.getElementById("settingMethodSub")) document.getElementById("settingMethodSub").value = sc.methodSub || "The operational backbone behind every Fabric8 uniform engagement.";
+      if (document.getElementById("settingMethodBrochure")) document.getElementById("settingMethodBrochure").value = sc.methodBrochure || "Fabric 8 _Leaflet.pdf";
+
+      // Sectors
+      if (document.getElementById("settingSectorsTitle")) document.getElementById("settingSectorsTitle").value = sc.sectorsTitle || "Uniform concepts for every business environment.";
+      if (document.getElementById("settingSectorsSub")) document.getElementById("settingSectorsSub").value = sc.sectorsSub || "Explore Our Sector Capabilities";
+      if (document.getElementById("settingSectorsHeroImg")) document.getElementById("settingSectorsHeroImg").value = sc.sectorsHeroImg || "";
+
+      // About Us
+      if (document.getElementById("settingAboutTitle")) document.getElementById("settingAboutTitle").value = sc.aboutTitle || "A uniform partner, not just a catalog.";
+      if (document.getElementById("settingAboutSub")) document.getElementById("settingAboutSub").value = sc.aboutSub || "B2B uniform solutions for clients who demand brand, purpose, performance, and reliability.";
+      if (document.getElementById("settingAboutMission")) document.getElementById("settingAboutMission").value = sc.aboutMission || "We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.";
+      if (document.getElementById("settingAboutVision")) document.getElementById("settingAboutVision").value = sc.aboutVision || "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and commitment to client success.";
       if (document.getElementById("settingAboutImage")) document.getElementById("settingAboutImage").value = sc.aboutImage || "";
+
+      // Contact Info
+      if (document.getElementById("settingContactHQ")) document.getElementById("settingContactHQ").value = sc.contactHQ || "6290 Jimmy Carter Blvd Suite 202\nNorcross, GA 30071\nUnited States";
+      if (document.getElementById("settingContactUSA")) document.getElementById("settingContactUSA").value = sc.contactUSA || "+1 770-710-2286";
+      if (document.getElementById("settingContactJordan")) document.getElementById("settingContactJordan").value = sc.contactJordan || "+962 796 788 240";
+      if (document.getElementById("settingContactEmail")) document.getElementById("settingContactEmail").value = sc.contactEmail || "hello@thefabric8.com";
 
       const lc = settings.legalContent || {};
       if (document.getElementById("settingTermsText")) document.getElementById("settingTermsText").value = lc.termsText || "";
@@ -898,14 +935,33 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
     categories1stLayer: categories1stLayer,
     categories2ndLayer: categories2ndLayer,
     siteContent: {
-      homeHeroTitle: document.getElementById("settingHomeTitle")?.value || "Engineered for Comfort, Designed to Inspire",
-      homeHeroBtnText: document.getElementById("settingHomeBtn")?.value || "EXPLORE THE COLLECTION",
+      homeHeroTitle: document.getElementById("settingHomeTitle")?.value || "UNIFORMS, SOLVED.",
+      homeHeroBtnText: document.getElementById("settingHomeBtn")?.value || "Shop",
       homeHeroSubtitle: document.getElementById("settingHomeSub")?.value || "",
-      aboutText: document.getElementById("settingAboutText")?.value || "",
+      aboutText: document.getElementById("settingAboutMission")?.value || "",
       methodLeafletUrl: "assets/needs/Product Data General Sheet (1).xlsx",
       heroImage: pendingSiteImages.heroImage ? "PENDING_UPLOAD" : (document.getElementById("settingHeroImage")?.value || ""),
       promoImage: pendingSiteImages.promoImage ? "PENDING_UPLOAD" : (document.getElementById("settingPromoImage")?.value || ""),
-      aboutImage: pendingSiteImages.aboutImage ? "PENDING_UPLOAD" : (document.getElementById("settingAboutImage")?.value || "")
+      aboutImage: pendingSiteImages.aboutImage ? "PENDING_UPLOAD" : (document.getElementById("settingAboutImage")?.value || ""),
+      servicesTitle: document.getElementById("settingServicesTitle")?.value || "",
+      servicesSub: document.getElementById("settingServicesSub")?.value || "",
+      servicesConsultImg: pendingSiteImages.servicesConsultImg ? "PENDING_UPLOAD" : (document.getElementById("settingServicesConsultImg")?.value || ""),
+      servicesBrandImg: pendingSiteImages.servicesBrandImg ? "PENDING_UPLOAD" : (document.getElementById("settingServicesBrandImg")?.value || ""),
+      servicesProdImg: pendingSiteImages.servicesProdImg ? "PENDING_UPLOAD" : (document.getElementById("settingServicesProdImg")?.value || ""),
+      methodTitle: document.getElementById("settingMethodTitle")?.value || "",
+      methodSub: document.getElementById("settingMethodSub")?.value || "",
+      methodBrochure: document.getElementById("settingMethodBrochure")?.value || "",
+      sectorsTitle: document.getElementById("settingSectorsTitle")?.value || "",
+      sectorsSub: document.getElementById("settingSectorsSub")?.value || "",
+      sectorsHeroImg: pendingSiteImages.sectorsHeroImg ? "PENDING_UPLOAD" : (document.getElementById("settingSectorsHeroImg")?.value || ""),
+      aboutTitle: document.getElementById("settingAboutTitle")?.value || "",
+      aboutSub: document.getElementById("settingAboutSub")?.value || "",
+      aboutMission: document.getElementById("settingAboutMission")?.value || "",
+      aboutVision: document.getElementById("settingAboutVision")?.value || "",
+      contactHQ: document.getElementById("settingContactHQ")?.value || "",
+      contactUSA: document.getElementById("settingContactUSA")?.value || "",
+      contactJordan: document.getElementById("settingContactJordan")?.value || "",
+      contactEmail: document.getElementById("settingContactEmail")?.value || ""
     },
     legalContent: {
       termsText: document.getElementById("settingTermsText")?.value || "",

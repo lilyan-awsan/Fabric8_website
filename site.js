@@ -3,15 +3,20 @@ let siteSettings = {};
 
 function applySiteSettings() {
   if (siteSettings.promoBanner) {
-    const banner = document.querySelector('.promo-banner p');
-    if (banner) banner.textContent = siteSettings.promoBanner;
+    document.querySelectorAll('.promo-banner p, .topline a').forEach(el => {
+      if (!el.id || el.id !== 'cmsMethodBrochureLink') {
+        el.textContent = siteSettings.promoBanner;
+      }
+    });
   }
   if (siteSettings.footerLegal) {
-    const footer = document.querySelector('.site-footer-bottom p');
-    if (footer) footer.textContent = siteSettings.footerLegal;
+    document.querySelectorAll('.site-footer-bottom p, footer div:last-child').forEach(footer => {
+      footer.innerHTML = siteSettings.footerLegal;
+    });
   }
   
   const sc = siteSettings.siteContent || {};
+  // 1. Homepage Engine
   if (sc.homeHeroTitle) {
     const heroTitle = document.getElementById('cmsHomeHeroTitle');
     if (heroTitle) heroTitle.textContent = sc.homeHeroTitle;
@@ -24,27 +29,117 @@ function applySiteSettings() {
     const heroBtn = document.getElementById('cmsHomeHeroBtn');
     if (heroBtn) heroBtn.textContent = sc.homeHeroBtnText;
   }
-  if (sc.aboutText) {
-    const aboutBox = document.getElementById('cmsAboutText');
-    if (aboutBox) aboutBox.textContent = sc.aboutText;
-  }
-  if (sc.heroImage) {
-    const heroBg = document.querySelector('.page-hero, .home-hero');
-    if (heroBg && !heroBg.classList.contains('shop-hero')) {
-      heroBg.style.backgroundImage = `url('${sc.heroImage}')`;
-      heroBg.style.backgroundSize = 'cover';
-      heroBg.style.backgroundPosition = 'center';
+  if (sc.heroImage && document.getElementById('cmsHomeHeroTitle')) {
+    const heroBg = document.querySelector('.page-hero');
+    if (heroBg) {
+      heroBg.style.background = `linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url('${sc.heroImage}') center / cover`;
     }
   }
   if (sc.promoImage) {
     const promoEl = document.getElementById('cmsPromoGraphic');
     if (promoEl) promoEl.src = sc.promoImage;
   }
-  if (sc.aboutImage) {
-    const aboutEl = document.getElementById('cmsAboutImage');
-    if (aboutEl) aboutEl.src = sc.aboutImage;
+
+  // 2. Services Page Engine
+  if (sc.servicesTitle) {
+    const el = document.getElementById('cmsServicesTitle');
+    if (el) el.textContent = sc.servicesTitle;
   }
-  
+  if (sc.servicesSub) {
+    const el = document.getElementById('cmsServicesSub');
+    if (el) el.textContent = sc.servicesSub;
+  }
+  if (sc.servicesConsultImg) {
+    const el = document.getElementById('cmsServicesConsultImg');
+    if (el) el.src = sc.servicesConsultImg;
+  }
+  if (sc.servicesBrandImg) {
+    const el = document.getElementById('cmsServicesBrandImg');
+    if (el) el.src = sc.servicesBrandImg;
+  }
+  if (sc.servicesProdImg) {
+    const el = document.getElementById('cmsServicesProdImg');
+    if (el) el.src = sc.servicesProdImg;
+  }
+
+  // 3. Method Page Engine
+  if (sc.methodTitle) {
+    const el = document.getElementById('cmsMethodTitle');
+    if (el) el.textContent = sc.methodTitle;
+  }
+  if (sc.methodSub) {
+    const el = document.getElementById('cmsMethodSub');
+    if (el) el.textContent = sc.methodSub;
+  }
+  if (sc.methodBrochure) {
+    const el = document.getElementById('cmsMethodBrochureLink');
+    if (el) el.href = sc.methodBrochure;
+  }
+
+  // 4. Sectors Showcase Engine
+  if (sc.sectorsTitle) {
+    const el = document.getElementById('cmsSectorsTitle');
+    if (el) el.textContent = sc.sectorsTitle;
+  }
+  if (sc.sectorsSub) {
+    const el = document.getElementById('cmsSectorsSub');
+    if (el) el.textContent = sc.sectorsSub;
+  }
+  if (sc.sectorsHeroImg) {
+    const el = document.getElementById('cmsSectorsHeroBg');
+    if (el) {
+      el.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${sc.sectorsHeroImg}') center / cover`;
+    }
+  }
+
+  // 5. About Us & Core Values Engine
+  if (sc.aboutTitle) {
+    const el = document.getElementById('cmsAboutTitle');
+    if (el) el.textContent = sc.aboutTitle;
+  }
+  if (sc.aboutSub) {
+    const el = document.getElementById('cmsAboutSub');
+    if (el) el.textContent = sc.aboutSub;
+  }
+  if (sc.aboutMission) {
+    const el = document.getElementById('cmsAboutMission');
+    if (el) el.textContent = sc.aboutMission;
+  }
+  if (sc.aboutVision) {
+    const el = document.getElementById('cmsAboutVision');
+    if (el) el.textContent = sc.aboutVision;
+  }
+  if (sc.aboutImage) {
+    const el = document.getElementById('cmsAboutImage');
+    if (el) el.src = sc.aboutImage;
+    const heroBg = document.getElementById('cmsAboutHeroBg');
+    if (heroBg) {
+      heroBg.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${sc.aboutImage}') center / cover`;
+    }
+  }
+
+  // 6. Contact Information & Global Footers Engine
+  if (sc.contactHQ) {
+    const el = document.getElementById('cmsContactHQText');
+    if (el) el.innerHTML = sc.contactHQ.replace(/\n/g, '<br>');
+  }
+  if (sc.contactUSA) {
+    const el = document.getElementById('cmsContactUSAText');
+    if (el) el.textContent = `USA: ${sc.contactUSA}`;
+  }
+  if (sc.contactJordan) {
+    const el = document.getElementById('cmsContactJordanText');
+    if (el) el.textContent = `Jordan: ${sc.contactJordan}`;
+  }
+  if (sc.contactEmail) {
+    const el = document.getElementById('cmsContactEmailText');
+    if (el) {
+      el.textContent = sc.contactEmail;
+      el.href = `mailto:${sc.contactEmail}`;
+    }
+  }
+
+  // 7. Legal Agreements Engine
   const lc = siteSettings.legalContent || {};
   if (lc.termsText) {
     const termsEl = document.getElementById('cmsTermsContent');

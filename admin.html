@@ -125,86 +125,210 @@
             </div>
           </div>
 
-          <!-- Section 2: General Website Content (Titles, Text, Buttons & Pictures) -->
-          <div style="margin-bottom: 36px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
-            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">General Website Content (Text, Titles, Buttons & Pictures)</h3>
-            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Directly modify headings, call-to-action button texts, corporate descriptions, and banner pictures across the whole website without needing code updates.</p>
+          <!-- Section 2: Homepage CMS (index.html) -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🏠 Homepage CMS (index.html)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Control headings, buttons, descriptions, and background showcase pictures on your primary home page.</p>
             
             <div class="form-grid">
               <div class="input-group full-width">
-                <label>Global Promo Banner Text</label>
-                <input type="text" id="settingPromoBanner" placeholder="e.g. Elevating Workplace Appearance & Performance">
+                <label>Global Promo Banner Text (Top Notice Bar)</label>
+                <input type="text" id="settingPromoBanner" placeholder="e.g. CHECK OUT OUR NEW COLLECTIONS - CLICK HERE">
               </div>
               <div class="input-group">
-                <label>Home Hero Title</label>
-                <input type="text" id="settingHomeTitle" placeholder="Engineered for Comfort, Designed to Inspire">
+                <label>Home Hero Main Heading Title</label>
+                <input type="text" id="settingHomeTitle" placeholder="UNIFORMS, SOLVED.">
               </div>
               <div class="input-group">
                 <label>Home Hero Call-to-Action Button Text</label>
-                <input type="text" id="settingHomeBtn" placeholder="EXPLORE THE COLLECTION">
+                <input type="text" id="settingHomeBtn" placeholder="Shop">
               </div>
               <div class="input-group full-width">
-                <label>Home Hero Subtitle / Description</label>
-                <textarea id="settingHomeSub" rows="2" placeholder="High-performance industrial uniforms & corporate fashion designed for modern teams."></textarea>
+                <label>Home Hero Subtitle / Description Text</label>
+                <textarea id="settingHomeSub" rows="2" placeholder="Built to perform. Styled to represent. Fabric8 delivers tailored uniform solutions..."></textarea>
               </div>
               <div class="input-group full-width">
-                <label>About Us Company Profile Text</label>
-                <textarea id="settingAboutText" rows="3" placeholder="We partner with leading corporate enterprises..."></textarea>
-              </div>
-            </div>
-
-            <!-- Photography Upload Suite -->
-            <h4 style="margin-top: 24px; font-size: 15px; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 20px; margin-bottom: 12px;">Website Photography & Banners</h4>
-            <div class="form-grid">
-              <div class="input-group full-width">
-                <label>Homepage Hero Background / Showcase Image</label>
+                <label>Homepage Hero Background Showcase Picture</label>
                 <div style="display: flex; gap: 8px;">
-                  <input type="text" id="settingHeroImage" placeholder="e.g. assets/hero_bg.jpg or upload below..." style="flex: 1;">
-                  <input type="file" id="settingHeroImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 260px;">
+                  <input type="text" id="settingHeroImage" placeholder="e.g. assets/fabric8-service-people.webp or upload replacement..." style="flex: 1;">
+                  <input type="file" id="settingHeroImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
                 </div>
               </div>
               <div class="input-group full-width">
-                <label>Promotional Showcase Picture / Banner Graphic</label>
+                <label>Promotional Banner Graphic Picture</label>
                 <div style="display: flex; gap: 8px;">
-                  <input type="text" id="settingPromoImage" placeholder="e.g. assets/promo_showcase.png or upload below..." style="flex: 1;">
-                  <input type="file" id="settingPromoImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 260px;">
-                </div>
-              </div>
-              <div class="input-group full-width">
-                <label>About Us Company Profile Graphic / Team Picture</label>
-                <div style="display: flex; gap: 8px;">
-                  <input type="text" id="settingAboutImage" placeholder="e.g. assets/about_us_team.jpg or upload below..." style="flex: 1;">
-                  <input type="file" id="settingAboutImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 260px;">
+                  <input type="text" id="settingPromoImage" placeholder="e.g. assets/promo_showcase.png or upload..." style="flex: 1;">
+                  <input type="file" id="settingPromoImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Section 3: Legal & Terms -->
-          <div style="margin-bottom: 36px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
-            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">Legal Documents, Privacy & Terms</h3>
-            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Manage official policy agreements displayed on the Terms and Conditions and Privacy Policy pages.</p>
+          <!-- Section 3: Services Page CMS (services.html) -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🛠️ Services Page CMS (services.html)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Customize descriptions, service capability headlines, and accompanying feature imagery on your Services page.</p>
+            
+            <div class="form-grid">
+              <div class="input-group">
+                <label>Services Hero Title</label>
+                <input type="text" id="settingServicesTitle" placeholder="Service uniforms, designed like fashion.">
+              </div>
+              <div class="input-group">
+                <label>Services Hero Subtitle</label>
+                <input type="text" id="settingServicesSub" placeholder="Fabric8 manages the full uniform lifecycle from textile advice to branded delivery.">
+              </div>
+              <div class="input-group full-width">
+                <label>Consultation Feature Showcase Picture</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingServicesConsultImg" placeholder="assets/fabric8-service-people.webp" style="flex: 1;">
+                  <input type="file" id="settingServicesConsultImgUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
+                </div>
+              </div>
+              <div class="input-group full-width">
+                <label>Branding Studio Feature Picture</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingServicesBrandImg" placeholder="assets/fabric8-fashion-hero.webp" style="flex: 1;">
+                  <input type="file" id="settingServicesBrandImgUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
+                </div>
+              </div>
+              <div class="input-group full-width">
+                <label>Production & QC Showcase Picture</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingServicesProdImg" placeholder="assets/fabric8-royal-atelier.webp" style="flex: 1;">
+                  <input type="file" id="settingServicesProdImgUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: The Fabric 8 Method CMS (method.html) -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">📐 The Fabric 8 Method CMS (method.html)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Manage your 8-step methodology headers, introductory summary text, and downloadable company brochure attachment.</p>
+            
+            <div class="form-grid">
+              <div class="input-group">
+                <label>Method Page Hero Title</label>
+                <input type="text" id="settingMethodTitle" placeholder="Eight steps to partner success.">
+              </div>
+              <div class="input-group">
+                <label>Method Page Subtitle / Summary Text</label>
+                <input type="text" id="settingMethodSub" placeholder="The operational backbone behind every Fabric8 uniform engagement.">
+              </div>
+              <div class="input-group full-width">
+                <label>Company Method Brochure PDF Attachment URL / Name</label>
+                <input type="text" id="settingMethodBrochure" placeholder="Fabric 8 _Leaflet.pdf">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Sectors Showcase CMS (sectors.html) -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🏢 Sectors Showcase CMS (sectors.html)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Update headline descriptions on your Sectors overview page and upload custom sector symbol photography.</p>
+            
+            <div class="form-grid">
+              <div class="input-group">
+                <label>Sectors Page Hero Title</label>
+                <input type="text" id="settingSectorsTitle" placeholder="Uniform concepts for every business environment.">
+              </div>
+              <div class="input-group">
+                <label>Sectors Introductory Subtext</label>
+                <input type="text" id="settingSectorsSub" placeholder="Explore Our Sector Capabilities">
+              </div>
+              <div class="input-group full-width">
+                <label>Sectors Page Hero Background / Banner Picture</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingSectorsHeroImg" placeholder="assets/fabric8-service-people.webp or upload..." style="flex: 1;">
+                  <input type="file" id="settingSectorsHeroImgUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 6: About Us & Values CMS (about.html) -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">📖 About Us & Core Values CMS (about.html)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Directly modify your Mission statement, Vision statement, company profile texts, and about page team photography.</p>
+            
+            <div class="form-grid">
+              <div class="input-group">
+                <label>About Us Page Title</label>
+                <input type="text" id="settingAboutTitle" placeholder="A uniform partner, not just a catalog.">
+              </div>
+              <div class="input-group">
+                <label>About Us Hero Subtext</label>
+                <input type="text" id="settingAboutSub" placeholder="B2B uniform solutions for clients who demand brand, purpose, performance, and reliability.">
+              </div>
+              <div class="input-group full-width">
+                <label>Company Mission Statement</label>
+                <textarea id="settingAboutMission" rows="2" placeholder="We bridge the knowledge gap between buyers and their business needs..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>Company Vision Statement</label>
+                <textarea id="settingAboutVision" rows="2" placeholder="To become the regional benchmark for high-volume, high-quality uniform supply..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>About Us Company Profile Team / Atelier Picture</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingAboutImage" placeholder="assets/about_us_team.jpg or upload below..." style="flex: 1;">
+                  <input type="file" id="settingAboutImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 250px;">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 7: Contact Info & Global Footers (contact.html & All Footers) -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">📞 Contact Information & Global Footers (contact.html & Footers)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Update telephone numbers, office headquarters location, and email addresses. These changes automatically sync across your Contact page and all page footers!</p>
             
             <div class="form-grid">
               <div class="input-group full-width">
-                <label>Terms & Conditions Content</label>
-                <textarea id="settingTermsText" rows="4" placeholder="By accessing and using the Fabric8 website..."></textarea>
+                <label>Corporate Headquarters Address</label>
+                <textarea id="settingContactHQ" rows="2" placeholder="6290 Jimmy Carter Blvd Suite 202&#10;Norcross, GA 30071"></textarea>
+              </div>
+              <div class="input-group">
+                <label>USA Contact Phone Number</label>
+                <input type="text" id="settingContactUSA" placeholder="+1 770-710-2286">
+              </div>
+              <div class="input-group">
+                <label>Jordan Contact Phone Number</label>
+                <input type="text" id="settingContactJordan" placeholder="+962 796 788 240">
               </div>
               <div class="input-group full-width">
-                <label>Privacy Policy Content</label>
-                <textarea id="settingPrivacyText" rows="4" placeholder="We rigorously respect corporate client privacy..."></textarea>
-              </div>
-              <div class="input-group full-width">
-                <label>Footer Legal Text</label>
-                <input type="text" id="settingFooterLegal" placeholder="© 2026 Fabric8 Workwear. All rights reserved.">
+                <label>Direct General Inquiry Email Address</label>
+                <input type="text" id="settingContactEmail" placeholder="hello@thefabric8.com">
               </div>
             </div>
           </div>
 
-          <!-- Section 4: Branding Atelier Guidance & Placements -->
+          <!-- Section 8: Legal & Compliance Documents -->
+          <div style="margin-bottom: 28px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">⚖️ Legal Documents, Privacy Policy & Terms</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Manage official legal policy agreements displayed across terms.html and privacy.html without code editing.</p>
+            
+            <div class="form-grid">
+              <div class="input-group full-width">
+                <label>Terms & Conditions Complete Content</label>
+                <textarea id="settingTermsText" rows="4" placeholder="By accessing and using the Fabric8 website..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>Privacy Policy Complete Content</label>
+                <textarea id="settingPrivacyText" rows="4" placeholder="We rigorously respect corporate client privacy..."></textarea>
+              </div>
+              <div class="input-group full-width">
+                <label>Footer Copyright & Legal Text</label>
+                <input type="text" id="settingFooterLegal" placeholder="© 2026 Fabric8. All rights reserved.">
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 9: Custom Branding Tool General Guidance -->
           <div style="margin-bottom: 24px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
-            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">Branding Tool General Editing & Guidance</h3>
-            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Customize standard placement choices and advisory notes shown to customers during online custom finishing.</p>
+            <h3 style="margin-top: 0; font-size: 17px; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🧵 Branding Atelier Tool General Guidance & Notes</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Customize standard embroidery and DTF printing advisory instructions displayed inside the interactive shop branding studio.</p>
             
             <div class="form-grid">
               <div class="input-group full-width">
