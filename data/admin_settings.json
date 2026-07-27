@@ -2,26 +2,61 @@
   "promoBanner": "Elevating Workplace Appearance & Performance • Premier B2B Custom Workwear Solutions",
   "footerLegal": "© 2026 Fabric8 Workwear. All rights reserved. Professional High-Performance Uniform & Custom Workwear Manufacturing.",
   "categories1stLayer": [
-    { "name": "Food & beverage", "enabled": true },
-    { "name": "Hospitality", "enabled": true },
-    { "name": "Corporate", "enabled": true },
-    { "name": "Healthcare", "enabled": true },
-    { "name": "Industrial", "enabled": true },
-    { "name": "Education", "enabled": false },
-    { "name": "Aviation", "enabled": false }
+    {
+      "name": "Food & beverage",
+      "enabled": true
+    },
+    {
+      "name": "Hospitality",
+      "enabled": true
+    },
+    {
+      "name": "Corporate",
+      "enabled": true
+    },
+    {
+      "name": "Healthcare",
+      "enabled": true
+    },
+    {
+      "name": "Industrial",
+      "enabled": true
+    },
+    {
+      "name": "Education",
+      "enabled": true
+    },
+    {
+      "name": "Aviation",
+      "enabled": false
+    }
   ],
   "categories2ndLayer": [
-    { "name": "HEAD WEAR", "enabled": true },
-    { "name": "TOP WEAR", "enabled": true },
-    { "name": "BOTTOM WEAR", "enabled": true },
-    { "name": "OUTER WEAR", "enabled": true },
-    { "name": "ACCESSORIES", "enabled": true }
+    {
+      "name": "HEAD WEAR",
+      "enabled": true
+    },
+    {
+      "name": "TOP WEAR",
+      "enabled": true
+    },
+    {
+      "name": "BOTTOM WEAR",
+      "enabled": true
+    },
+    {
+      "name": "OUTER WEAR",
+      "enabled": true
+    },
+    {
+      "name": "ACCESSORIES",
+      "enabled": true
+    }
   ],
   "siteContent": {
     "homeHeroTitle": "Engineered for Comfort, Designed to Inspire",
-    "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
     "homeHeroBtnText": "EXPLORE THE COLLECTION",
-    "aboutHeadline": "Elevating Workplace Appearance and Performance",
+    "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
     "aboutText": "We partner with leading corporate enterprises, healthcare groups, and industrial sectors to deliver high-performance apparel engineered for durability and sophistication.",
     "methodLeafletUrl": "assets/needs/Product Data General Sheet (1).xlsx"
   },
@@ -30,8 +65,13 @@
     "privacyText": "We rigorously respect corporate client privacy. All design specifications, technical CAD sketches, and logo attachments submitted through our quotation engine remain confidential between Fabric8 and your enterprise."
   },
   "brandingSettings": {
+    "defaultPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "dtfHelperNote": "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.",
-    "embroideryHelperNote": "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.",
-    "defaultPlacements": ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]
+    "embroideryHelperNote": "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics."
   }
 }
