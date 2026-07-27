@@ -229,11 +229,8 @@ export default async function handler(req, res) {
     const replyTo = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'] || 'hello@thefabric8.com';
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // GUARANTEED INBOX DELIVERY: Always include hello@thefabric8.com without override failure
-    const targetEmails = ['hello@thefabric8.com', 'lilyanawsan@gmail.com'];
-    if (process.env.RESEND_TO_EMAIL && !targetEmails.includes(process.env.RESEND_TO_EMAIL)) {
-      targetEmails.push(process.env.RESEND_TO_EMAIL);
-    }
+    // Set destination exclusively to the verified Resend registered account address
+    const targetEmails = ['lilyanawsan@gmail.com'];
 
     const attachments = [
       {
@@ -252,7 +249,7 @@ export default async function handler(req, res) {
     }
 
     const options = {
-      from: process.env.RESEND_FROM_EMAIL || 'Fabric8 Orders <orders@thefabric8.com>',
+      from: process.env.RESEND_FROM_EMAIL || 'Fabric8 Orders <onboarding@resend.dev>',
       to: targetEmails,
       reply_to: replyTo,
       subject: `[New Order & Quote] Fabric 8 Request from ${customerName}`,
