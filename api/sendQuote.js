@@ -15,6 +15,11 @@ export default async function handler(req, res) {
     const customerInfo = data.customerInfo || {};
     const cart = data.cart || [];
 
+    // Resolve base host domain for Vercel CDN asset URL links
+    const host = req.headers.host || 'thefabric8.com';
+    const protocol = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
+
     // ==========================================
     // 1. ENTERPRISE EXCEL SPREADSHEET GENERATION
     // ==========================================
@@ -24,10 +29,10 @@ export default async function handler(req, res) {
 
     const sheet = workbook.addWorksheet('Fabric8 Quote Order', {
       views: [{ showGridLines: true }],
-      properties: { defaultRowHeight: 20 }
+      properties: { defaultRowHeight: 22 }
     });
 
-    // Styling configurations
+    // Professional styling configurations
     const headerFont = { name: 'Arial', size: 11, bold: true, color: { argb: 'FFFFFFFF' } };
     const headerFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF111111' } };
     const subHeaderFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2F873D' } }; // Fabric8 Green
@@ -44,23 +49,24 @@ export default async function handler(req, res) {
     titleRow.getCell(1).fill = subHeaderFill;
     titleRow.height = 28;
     titleRow.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 };
-    sheet.mergeCells('A1:C1');
+    sheet.mergeCells('A1:D1');
 
     for (const [key, value] of Object.entries(customerInfo)) {
       const row = sheet.addRow([key, value]);
       row.getCell(1).font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF333333' } };
       row.getCell(2).font = { name: 'Arial', size: 11, color: { argb: 'FF111111' } };
       row.height = 22;
-      row.alignment = { vertical: 'middle' };
+      row.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 };
       row.getCell(1).border = borderStyle;
       row.getCell(2).border = borderStyle;
+      sheet.mergeCells(`B${row.number}:D${row.number}`);
     }
 
     // Spacer rows between sections
     sheet.addRow([]);
     sheet.addRow([]);
 
-    // SECTION 2: Order Details Table
+    // SECTION 2: Required Order Details Table
     const orderSectionTitle = sheet.addRow(['REQUIRED ORDER DETAILS']);
     orderSectionTitle.font = { name: 'Arial', size: 13, bold: true, color: { argb: 'FFFFFFFF' } };
     orderSectionTitle.getCell(1).fill = subHeaderFill;
@@ -71,14 +77,14 @@ export default async function handler(req, res) {
     // Configure exact 9 client required column widths
     sheet.columns = [
       { key: 'index', width: 6 },      // 1. #
-      { key: 'photo', width: 18 },     // 2. Photo
+      { key: 'photo', width: 22 },     // 2. Photo
       { key: 'sku', width: 16 },       // 3. Product SKU
-      { key: 'name', width: 36 },      // 4. Product Name
+      { key: 'name', width: 38 },      // 4. Product Name
       { key: 'qty', width: 10 },       // 5. QTY
       { key: 'size', width: 14 },      // 6. Size
       { key: 'color', width: 18 },     // 7. Color
       { key: 'price', width: 18 },     // 8. Product Price (Empty)
-      { key: 'total', width: 18 }      // 9. Total (Empty)
+      { key: 'total', width: 20 }      // 9. Total (Formula Calculated)
     ];
 
     const tableHeaders = ['#', 'Photo', 'Product SKU', 'Product Name', 'QTY', 'Size', 'Color', 'Product Price', 'Total'];
@@ -91,7 +97,9 @@ export default async function handler(req, res) {
       cell.border = borderStyle;
     });
 
-    // Populate order lines & embed garment photo thumbnails
+    const startRow = tableHeaderRow.number + 1;
+
+    // Populate order lines & embed garment visual link/thumbnail
     for (let i = 0; i < cart.length; i++) {
       const item = cart[i];
       let productName = item.name || 'Custom Garment';
@@ -99,56 +107,61 @@ export default async function handler(req, res) {
         productName += ` [Branding: ${item.branding}]`;
       }
 
+      // Resolve Vercel CDN or local HTTP asset link
+      let photoCellVal = "";
+      const imgRef = item.image || (item.images && item.images[0]) || '';
+      let fullImgUrl = "";
+      if (imgRef) {
+        if (imgRef.startsWith('http://') || imgRef.startsWith('https://')) {
+          fullImgUrl = imgRef;
+        } else {
+          fullImgUrl = `${baseUrl}/${imgRef.replace(/^\//, '')}`;
+        }
+        // Insert interactive clickable formula link in Photo cell (guaranteed to work across all Excel versions & formats like .webp)
+        photoCellVal = { formula: `HYPERLINK("${fullImgUrl}", "VIEW PHOTO 🔗")` };
+      }
+
       const row = sheet.addRow([
         i + 1,                   // 1. #
-        "",                      // 2. Photo (cell reserved for visual thumbnail embed)
+        photoCellVal,            // 2. Photo (Live Hyperlink)
         item.sku || 'N/A',       // 3. Product SKU
         productName,             // 4. Product Name
-        item.quantity || 1,      // 5. QTY
+        Number(item.quantity) || 1, // 5. QTY (Numeric)
         item.size || "N/A",      // 6. Size
         item.color || "Standard",// 7. Color
-        "",                      // 8. Product Price (Empty for sales pricing)
-        ""                       // 9. Total (Empty)
+        "",                      // 8. Product Price (Empty as required for quotation fill-in)
+        { formula: `IF(ISBLANK(H${tableHeaderRow.number + 1 + i}), "", E${tableHeaderRow.number + 1 + i} * H${tableHeaderRow.number + 1 + i})` } // 9. Total (Live Calculation Formula)
       ]);
 
-      row.height = 55; // Expand row height to fit embedded thumbnail image cleanly
+      row.height = 55; // Expand row height for clean visual preview and layout
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
         cell.border = borderStyle;
         cell.font = { name: 'Arial', size: 11 };
+        
         if (colNumber === 1 || colNumber === 5 || colNumber === 6 || colNumber === 7) {
           cell.alignment = { vertical: 'middle', horizontal: 'center' };
+        } else if (colNumber === 2) {
+          cell.alignment = { vertical: 'middle', horizontal: 'center' };
+          cell.font = { name: 'Arial', size: 10, color: { argb: 'FF0052CC' }, underline: true };
+        } else if (colNumber === 8 || colNumber === 9) {
+          cell.alignment = { vertical: 'middle', horizontal: 'right' };
+          cell.numFmt = '$#,##0.00';
         } else {
           cell.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 };
         }
       });
 
-      // Attempt to embed product image thumbnail into Column B (Photo)
+      // Concurrently attempt visual thumbnail overlay whenever binary image formats (.jpg/.png) are supported by ExcelJS
       try {
-        const imgRef = item.image || (item.images && item.images[0]) || '';
-        if (imgRef) {
+        if (fullImgUrl && !fullImgUrl.toLowerCase().endsWith('.webp') && !fullImgUrl.toLowerCase().endsWith('.gif')) {
           let imgBuffer = null;
           let imgExtension = 'jpeg';
+          if (fullImgUrl.toLowerCase().endsWith('.png')) imgExtension = 'png';
 
-          if (imgRef.toLowerCase().endsWith('.png')) {
-            imgExtension = 'png';
-          } else if (imgRef.toLowerCase().endsWith('.webp') || imgRef.toLowerCase().endsWith('.gif')) {
-            // ExcelJS standard image support focuses on PNG/JPEG
-            continue;
-          }
-
-          if (imgRef.startsWith('http://') || imgRef.startsWith('https://')) {
-            const resImg = await fetch(imgRef);
-            if (resImg.ok) {
-              const arrayBuf = await resImg.arrayBuffer();
-              imgBuffer = Buffer.from(arrayBuf);
-            }
-          } else {
-            // Local project filesystem image lookup
-            const cleanPath = imgRef.replace(/^\//, '');
-            const localPath = path.join(process.cwd(), cleanPath);
-            if (fs.existsSync(localPath)) {
-              imgBuffer = fs.readFileSync(localPath);
-            }
+          const resImg = await fetch(fullImgUrl);
+          if (resImg.ok) {
+            const arrayBuf = await resImg.arrayBuffer();
+            imgBuffer = Buffer.from(arrayBuf);
           }
 
           if (imgBuffer) {
@@ -156,19 +169,42 @@ export default async function handler(req, res) {
               buffer: imgBuffer,
               extension: imgExtension,
             });
-
-            // Anchor image directly over Row i's Column B cell
             sheet.addImage(imageId, {
-              tl: { col: 1.15, row: row.number - 1 + 0.1 },
-              br: { col: 1.85, row: row.number - 0.1 },
+              tl: { col: 1.1, row: row.number - 1 + 0.1 },
+              br: { col: 1.9, row: row.number - 0.1 },
               editAs: 'oneCell'
             });
           }
         }
       } catch (imgErr) {
-        console.warn(`Could not embed photo thumbnail for SKU ${item.sku}:`, imgErr.message);
+        console.warn(`Could not overlay picture bitmap for SKU ${item.sku}:`, imgErr.message);
       }
     }
+
+    const endRow = tableHeaderRow.number + cart.length;
+
+    // Automated Quotation Totals Footer Row
+    const totalRow = sheet.addRow([
+      "", "", "", "TOTALS / SUMMARY:",
+      { formula: `SUM(E${startRow}:E${endRow})` }, // Total Garments Count
+      "", "",
+      "GRAND TOTAL:",
+      { formula: `SUM(I${startRow}:I${endRow})` }  // Computed Quotation Value
+    ]);
+    totalRow.height = 28;
+    totalRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      cell.border = borderStyle;
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF7F7F7' } };
+      cell.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FF111111' } };
+      if (colNumber === 4 || colNumber === 8) {
+        cell.alignment = { vertical: 'middle', horizontal: 'right', indent: 1 };
+      } else if (colNumber === 5) {
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      } else if (colNumber === 9) {
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.numFmt = '$#,##0.00';
+      }
+    });
 
     const excelBuffer = await workbook.xlsx.writeBuffer();
 
@@ -187,16 +223,17 @@ export default async function handler(req, res) {
     emailHtml += `</table>`;
 
     emailHtml += `<h2 style="font-size: 15px; color: #2f873d; border-bottom: 2px solid #2f873d; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Order Spreadsheet Preview</h2>`;
-    emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review customized product line items, visual garment thumbnails, quantities, sizes, colors, and to complete the empty Product Price and Total columns according to order specifics.</p>`;
+    emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review customized product line items, clickable photo links, quantities, sizes, colors, and to complete the empty Product Price column—your line totals and Grand Total will compute automatically.</p>`;
     emailHtml += `<div style="margin-top: 36px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #999; text-align: center;">Fabric 8 Custom Atelier System &copy; 2026. All rights reserved.</div></div>`;
 
     const replyTo = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'] || 'hello@thefabric8.com';
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // Target recipients according to client specification
-    const targetEmails = process.env.RESEND_TO_EMAIL 
-      ? [process.env.RESEND_TO_EMAIL] 
-      : ['hello@thefabric8.com', 'lilyanawsan@gmail.com'];
+    // GUARANTEED INBOX DELIVERY: Always include hello@thefabric8.com without override failure
+    const targetEmails = ['hello@thefabric8.com', 'lilyanawsan@gmail.com'];
+    if (process.env.RESEND_TO_EMAIL && !targetEmails.includes(process.env.RESEND_TO_EMAIL)) {
+      targetEmails.push(process.env.RESEND_TO_EMAIL);
+    }
 
     const attachments = [
       {
