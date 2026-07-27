@@ -610,11 +610,11 @@ checkAuth();
 const categorySelect = document.getElementById("category");
 let previousCategory = "";
 
-categorySelect.addEventListener("focus", () => {
+categorySelect?.addEventListener("focus", () => {
   previousCategory = categorySelect.value;
 });
 
-categorySelect.addEventListener("change", (e) => {
+categorySelect?.addEventListener("change", (e) => {
   if (e.target.value === "ADD_NEW") {
     const newCat = prompt("Enter new category name:");
     if (newCat && newCat.trim() !== "") {
@@ -633,7 +633,7 @@ categorySelect.addEventListener("change", (e) => {
 });
 
 // --- Select All Logic ---
-document.getElementById("selectAllSizes").addEventListener("click", (e) => {
+document.getElementById("selectAllSizes")?.addEventListener("click", (e) => {
   e.preventDefault();
   const cbs = document.querySelectorAll("#sizesGroup input[type='checkbox']");
   const allChecked = Array.from(cbs).every(cb => cb.checked);
@@ -641,7 +641,7 @@ document.getElementById("selectAllSizes").addEventListener("click", (e) => {
   updateMultiSelectText('sizesGroup', 'sizesText', 'Select Sizes');
 });
 
-document.getElementById("selectAllColors").addEventListener("click", (e) => {
+document.getElementById("selectAllColors")?.addEventListener("click", (e) => {
   e.preventDefault();
   const cbs = document.querySelectorAll("#colorsGroup input[type='checkbox']");
   const allChecked = Array.from(cbs).every(cb => cb.checked);
