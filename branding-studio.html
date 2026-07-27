@@ -12,28 +12,35 @@
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
   <link rel="stylesheet" href="site.css?v=5" />
   <style>
+    body {
+      background-color: #f8fafe !important;
+      color: #1f2937 !important;
+      font-family: 'Montserrat', sans-serif;
+    }
+
     .studio-container {
-      max-width: 1320px;
-      margin: 40px auto 80px;
-      padding: 0 20px;
+      max-width: 1360px;
+      margin: 40px auto 100px;
+      padding: 0 24px;
       display: grid;
       grid-template-columns: 1.1fr 1fr;
-      gap: 50px;
+      gap: 40px;
       align-items: start;
     }
 
-    @media (max-width: 968px) {
+    @media (max-width: 1024px) {
       .studio-container {
         grid-template-columns: 1fr;
       }
     }
 
+    /* Left Canvas Card */
     .preview-stage {
-      background: #111;
+      background: #ffffff;
       border-radius: 20px;
-      padding: 30px;
-      border: 1px solid #2a2a2a;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      padding: 32px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
       position: sticky;
       top: 100px;
     }
@@ -41,11 +48,11 @@
     .canvas-viewport {
       position: relative;
       width: 100%;
-      height: 600px;
-      background: #0a0a0a;
-      border-radius: 12px;
+      height: 580px;
+      background: #f1f5f9;
+      border-radius: 14px;
       overflow: hidden;
-      border: 1px solid #222;
+      border: 1px solid #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -54,7 +61,8 @@
     .canvas-viewport img#baseGarmentImg {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 15px;
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -66,37 +74,38 @@
       align-items: center;
       justify-content: center;
       padding: 8px 12px;
-      border: 1px dashed rgba(255, 215, 0, 0.4);
-      border-radius: 6px;
-      background: rgba(0, 0, 0, 0.15);
+      border: 1px dashed rgba(11, 30, 54, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(2px);
       text-align: center;
     }
 
     .simulation-overlay:hover {
-      border: 1px solid var(--yellow, #ffd700);
-      background: rgba(0, 0, 0, 0.35);
+      border: 1.5px solid #0b1e36;
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     }
 
-    /* Placement Positions */
-    .place-left-chest { top: 28%; left: 62%; width: 140px; height: 140px; }
-    .place-right-chest { top: 28%; left: 24%; width: 140px; height: 140px; }
-    .place-center-back { top: 32%; left: 32%; width: 260px; height: 260px; }
-    .place-upper-sleeve { top: 34%; left: 78%; width: 100px; height: 100px; }
-    .place-pocket { top: 48%; left: 58%; width: 120px; height: 120px; }
+    /* Placement Positions optimized for Polo Shirt / Tops */
+    .place-left-chest { top: 32%; left: 58%; width: 130px; height: 130px; }
+    .place-right-chest { top: 32%; left: 28%; width: 130px; height: 130px; }
+    .place-center-back { top: 30%; left: 32%; width: 250px; height: 250px; }
+    .place-upper-sleeve { top: 38%; left: 74%; width: 95px; height: 95px; }
+    .place-pocket { top: 48%; left: 56%; width: 120px; height: 120px; }
 
     .garment-selector {
       display: flex;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 10px;
+      margin-top: 18px;
       overflow-x: auto;
       padding-bottom: 8px;
     }
 
     .garment-pill {
-      background: #1f1f1f;
-      color: #ccc;
-      border: 1px solid #333;
+      background: #f3f4f6;
+      color: #4b5563;
+      border: 1px solid #d1d5db;
       padding: 10px 18px;
       border-radius: 30px;
       font-size: 13px;
@@ -107,39 +116,53 @@
     }
 
     .garment-pill.active, .garment-pill:hover {
-      background: var(--yellow, #ffd700);
-      color: #111;
-      border-color: var(--yellow, #ffd700);
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.25);
+      background: #ffd700;
+      color: #111827;
+      border-color: #ffd700;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.35);
     }
 
+    /* Right Controls Card */
     .controls-panel {
-      background: #1a1a1a;
+      background: #ffffff;
       border-radius: 20px;
-      padding: 36px;
-      border: 1px solid #2d2d2d;
-      color: #fff;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      padding: 38px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .shop-selection-notice {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 14px 18px;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 28px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      color: #1e40af;
+      font-size: 13.5px;
+      font-weight: 600;
     }
 
     .tab-switcher {
       display: flex;
-      background: #0d0d0d;
+      background: #f1f5f9;
       border-radius: 12px;
       padding: 6px;
-      margin-bottom: 30px;
-      border: 1px solid #2a2a2a;
+      margin-bottom: 32px;
+      border: 1px solid #e2e8f0;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 14px 10px;
+      padding: 14px 12px;
       text-align: center;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 800;
       cursor: pointer;
-      color: #777;
+      color: #64748b;
       transition: all 0.25s ease;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -148,9 +171,9 @@
     }
 
     .tab-btn.active {
-      background: var(--yellow, #ffd700);
-      color: #111;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background: #ffd700;
+      color: #111827;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .form-group {
@@ -161,7 +184,7 @@
       display: block;
       font-size: 13px;
       font-weight: 800;
-      color: #ddd;
+      color: #334155;
       margin-bottom: 8px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -170,18 +193,19 @@
     .studio-input, .studio-select {
       width: 100%;
       padding: 14px 18px;
-      background: #0d0d0d;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      color: #0f172a;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .studio-input:focus, .studio-select:focus {
-      border-color: var(--yellow, #ffd700);
+      border-color: #0b1e36;
+      box-shadow: 0 0 0 3px rgba(11, 30, 54, 0.08);
     }
 
     .swatch-row {
@@ -191,27 +215,27 @@
     }
 
     .thread-swatch {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      border: 3px solid #333;
+      border: 3px solid #e2e8f0;
       cursor: pointer;
       transition: transform 0.2s, border-color 0.2s;
       position: relative;
     }
 
     .thread-swatch.active {
-      transform: scale(1.15);
-      border-color: #fff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      transform: scale(1.18);
+      border-color: #0b1e36;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .helper-note {
-      background: #142217;
-      border-left: 4px solid #2f873d;
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
       padding: 14px 18px;
       border-radius: 0 8px 8px 0;
-      color: #a0d4aa;
+      color: #065f46;
       font-size: 13px;
       line-height: 1.6;
       margin-bottom: 25px;
@@ -220,34 +244,35 @@
     .action-suite {
       margin-top: 36px;
       padding-top: 28px;
-      border-top: 1px solid #2d2d2d;
+      border-top: 1px solid #e2e8f0;
     }
 
     .button-studio {
       width: 100%;
       padding: 18px;
-      background: var(--yellow, #ffd700);
-      color: #111;
+      background: #ffd700;
+      color: #111827;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: 900;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 1px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.35);
     }
 
     .button-studio:hover {
+      background: #facc15;
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+      box-shadow: 0 10px 28px rgba(255, 215, 0, 0.5);
     }
 
-    /* Text styles */
     .emb-text-preview {
       font-weight: 900;
       line-height: 1.2;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       word-break: break-word;
       display: block;
       width: 100%;
@@ -258,110 +283,123 @@
   </style>
 </head>
 
-<body style="background: #0f0f0f; color: #eee;">
-  <div class="topline"><a href="contact.html" style="color: var(--yellow, #ffd700);">DISCOVER HOW WE CAN HELP &gt;</a></div>
-  <header class="header">
+<body>
+  <div class="topline" style="background: #0b1e36; color: #ffffff;"><a href="contact.html" style="color: #ffd700;">DISCOVER HOW WE CAN HELP &gt;</a></div>
+  <header class="header" style="background: #ffffff; border-bottom: 1px solid #e5e7eb;">
     <a class="logo-wrapper" href="index.html" title="Fabric 8 Home">
       <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo No Needle" class="logo-icon-default" />
-      <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);" />
+      <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" />
     </a>
     <nav>
-      <a href="services.html" class="active">Services</a>
-      <a href="method.html">The Fabric 8 Method</a>
-      <a href="sectors.html">Sectors</a>
-      <a href="shop.html">Shop</a>
-      <a href="about.html">About Us</a>
+      <a href="services.html" class="active" style="color: #0b1e36; font-weight: 800;">Services</a>
+      <a href="method.html" style="color: #4b5563;">The Fabric 8 Method</a>
+      <a href="sectors.html" style="color: #4b5563;">Sectors</a>
+      <a href="shop.html" style="color: #4b5563;">Shop</a>
+      <a href="about.html" style="color: #4b5563;">About Us</a>
     </nav>
     <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
-      <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: #111; color: #fff; cursor: pointer; text-transform: uppercase; font-weight: 800;">
+      <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #1f2937; cursor: pointer; text-transform: uppercase; font-weight: 800;">
         <option value="US">USA</option>
         <option value="JO">Jordan</option>
         <option value="INT">International</option>
       </select>
-      <a class="quote-link" href="checkout.html" aria-label="View Cart">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        <span id="cartCount" style="font-weight: 900; font-size: 14px;">0</span>
+      <a class="quote-link" href="checkout.html" aria-label="View Cart" style="color: #0b1e36;">
+        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <span id="cartCount" style="font-weight: 900; font-size: 15px;">0</span>
       </a>
     </div>
   </header>
 
   <main>
-    <section class="page-hero" style="background: linear-gradient(135deg, #181818 0%, #080808 100%); padding: 80px 20px 60px; border-bottom: 1px solid #222;">
-      <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-        <p style="color: var(--yellow, #ffd700); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Fabric 8 Customization Suite</p>
-        <h1 style="font-size: 44px; font-weight: 900; color: #fff; margin-bottom: 16px;">Interactive Garment Branding Studio</h1>
-        <p style="color: #aaa; font-size: 17px; max-width: 780px; margin: 0 auto; line-height: 1.6;">Directly test and visualize how your custom company logos, Direct to Fabric (DTF) artwork, or thread embroidery text will look across our commercial uniform styles in real time—with zero pop-up interruptions.</p>
+    <!-- Crisp Light Luxury Hero Banner -->
+    <section class="page-hero" style="background: linear-gradient(135deg, #0b1e36 0%, #1a365d 100%); padding: 70px 20px 55px; border-bottom: 1px solid #e2e8f0; color: #ffffff; text-align: center;">
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <p style="color: #ffd700; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px;">Fabric 8 Customization &amp; Branding Suite</p>
+        <h1 style="font-size: 42px; font-weight: 900; color: #ffffff; margin-bottom: 16px;">Interactive Garment Branding Studio</h1>
+        <p style="color: #e2e8f0; font-size: 17px; max-width: 780px; margin: 0 auto; line-height: 1.6;">Directly test and simulate how your custom logos, Direct to Fabric (DTF) artwork, or thread embroidery text will look across your selected uniforms in real time—with zero pop-up interruptions.</p>
       </div>
     </section>
 
     <div class="studio-container">
       <!-- Left Stage: Garment Preview Canvas -->
       <div class="preview-stage">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h3 style="font-size: 16px; color: #fff; font-weight: 800; text-transform: uppercase; margin: 0;">Interactive Canvas</h3>
-          <span style="font-size: 12px; color: var(--yellow, #ffd700); font-weight: 700; background: #221f00; padding: 4px 10px; border-radius: 4px; border: 1px solid #554d00;">Live Prototype Mode</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h3 style="font-size: 17px; color: #0b1e36; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">Interactive Prototype Canvas</h3>
+          <span id="canvasModeTag" style="font-size: 12px; color: #92400e; font-weight: 800; background: #fef3c7; padding: 5px 12px; border-radius: 20px; border: 1px solid #fde68a;">Polo Shirt Canvas</span>
         </div>
 
         <div class="canvas-viewport" id="canvasViewport">
-          <img id="baseGarmentImg" src="assets/fabric8-service-people.webp" alt="Garment Canvas" />
+          <!-- Default Polo Shirt Canvas -->
+          <img id="baseGarmentImg" src="assets/products/Polo White Front.jpg" alt="Garment Canvas" />
           
-          <!-- Simulation Layer -->
+          <!-- Live Simulation Layer -->
           <div class="simulation-overlay place-left-chest" id="simulationBox">
-            <img id="logoPreviewImg" src="assets/fabric8_logo_noneedle_cropped.png" style="max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));" alt="Uploaded Logo Preview" />
+            <img id="logoPreviewImg" src="assets/fabric8_logo_noneedle_cropped.png" style="max-width: 85%; max-height: 85%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));" alt="Uploaded Logo Preview" />
             <div id="textPreviewContainer" style="display: none; width: 100%;">
-              <span class="emb-text-preview font-block" id="line1Display" style="color: #ffd700; font-size: 18px;">YOUR LOGO</span>
-              <span class="emb-text-preview font-block" id="line2Display" style="color: #ffffff; font-size: 13px; margin-top: 4px;">EST. 2026</span>
+              <span class="emb-text-preview font-block" id="line1Display" style="color: #ffd700; font-size: 17px;">YOUR LOGO</span>
+              <span class="emb-text-preview font-block" id="line2Display" style="color: #0b1e36; font-size: 12px; margin-top: 4px;">EST. 2026</span>
             </div>
-            <span id="placementLabel" style="position: absolute; bottom: -24px; font-size: 10px; color: var(--yellow, #ffd700); background: #111; padding: 2px 6px; border-radius: 3px; font-weight: 700; opacity: 0.8;">Left Chest</span>
+            <span id="placementLabel" style="position: absolute; bottom: -25px; font-size: 10.5px; color: #ffffff; background: #0b1e36; padding: 2px 8px; border-radius: 4px; font-weight: 800; opacity: 0.9;">Left Chest</span>
           </div>
         </div>
 
-        <!-- Garment Swatch Selector -->
-        <div style="margin-top: 20px;">
-          <label style="font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase;">1. Choose Garment Style:</label>
+        <!-- Garment Swatch Selector (Standalone Product Images) -->
+        <div style="margin-top: 24px;" id="garmentSwatchesContainer">
+          <label style="font-size: 12px; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">1. Switch Garment Canvas Style:</label>
           <div class="garment-selector">
-            <button class="garment-pill active" onclick="switchGarment('assets/fabric8-service-people.webp', 'Hospitality Service Apron', this)">Hospitality Apron</button>
-            <button class="garment-pill" onclick="switchGarment('assets/fabric8-health-hospitality-uniforms.webp', 'Medical & Healthcare Scrub', this)">Healthcare Scrub</button>
-            <button class="garment-pill" onclick="switchGarment('assets/fabric8-restaurant-uniforms.webp', 'Culinary & Chef Uniform', this)">Chef & Kitchen</button>
-            <button class="garment-pill" onclick="switchGarment('assets/fabric8-business-uniform-hero.webp', 'Corporate Suiting & Polo', this)">Corporate Wear</button>
-            <button class="garment-pill" onclick="switchGarment('assets/fabric8-silk-hero.webp', 'Executive Silk Suiting', this)">Executive Specialty</button>
+            <button class="garment-pill active" onclick="switchGarment('assets/products/Polo White Front.jpg', 'Classic White Polo Shirt', this)">White Polo Shirt</button>
+            <button class="garment-pill" onclick="switchGarment('assets/products/Polo Black 3.jpg', 'Executive Black Polo', this)">Black Polo</button>
+            <button class="garment-pill" onclick="switchGarment('assets/products/Scrub Ocean Blue Female front.jpg', 'Medical & Healthcare Scrub', this)">Ocean Blue Scrub</button>
+            <button class="garment-pill" onclick="switchGarment('assets/products/Chef jacket white.jpg', 'Culinary Chef Coat', this)">Chef Coat</button>
+            <button class="garment-pill" onclick="switchGarment('assets/products/Hoodie Black.jpg', 'Industrial Workwear Hoodie', this)">Workwear Hoodie</button>
+            <button class="garment-pill" onclick="switchGarment('assets/products/Cap Black.jpg', 'Uniform Headwear Cap', this)">Headwear Cap</button>
           </div>
         </div>
       </div>
 
       <!-- Right Suite: Customization Controls -->
       <div class="controls-panel">
-        <label style="font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">2. Select Customization Method:</label>
+        <!-- Notification banner if arrived from Shop product selection -->
+        <div id="shopSelectionBanner" class="shop-selection-notice">
+          <div>
+            <span style="font-size: 16px; margin-right: 6px;">🛍️</span>
+            <strong>Shop Selection Loaded:</strong> <span id="shopBannerName" style="color: #0f172a; text-decoration: underline;">White Polo Shirt</span>
+            <span style="font-size: 12px; color: #475569; display: block; margin-top: 3px;">Color: <b id="shopBannerColor">Standard</b> | Selected directly from product catalog.</span>
+          </div>
+          <a href="shop.html" style="font-size: 11px; color: #2563eb; text-decoration: underline; font-weight: 700; margin-left: 10px;">Change Item</a>
+        </div>
+
+        <label style="font-size: 12px; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: block;">2. Select Customization Method:</label>
         <div class="tab-switcher">
           <button class="tab-btn active" id="tabDtfBtn" onclick="switchStudioMode('dtf')">(DTF) Direct to Fabric / Logo</button>
-          <button class="tab-btn" id="tabEmbBtn" onclick="switchStudioMode('embroidery')">Text & Emblem Embroidery</button>
+          <button class="tab-btn" id="tabEmbBtn" onclick="switchStudioMode('embroidery')">Text &amp; Emblem Embroidery</button>
         </div>
 
         <!-- DTF & LOGO UPLOAD SECTION -->
         <div id="dtfSection">
           <div class="helper-note">
-            <strong>(DTF) Direct to Fabric Printing & Customization:</strong> Recommended for intricate company artwork, vibrant multi-color logos, and sharp graphic transfers. Directly upload your file to simulate placement.
+            <strong>(DTF) Direct to Fabric Printing &amp; Customization:</strong> Recommended for intricate company artwork, vibrant multi-color logos, and sharp graphic transfers. Directly upload your file to simulate chest or back placement.
           </div>
 
           <div class="form-group">
             <label class="form-label">Upload Company Artwork / Logo (PNG or JPG):</label>
-            <input type="file" id="studioLogoUpload" accept="image/*" class="studio-input" style="padding: 10px;" onchange="handleLogoUpload(event)" />
+            <input type="file" id="studioLogoUpload" accept="image/*" class="studio-input" style="padding: 10px; cursor: pointer;" onchange="handleLogoUpload(event)" />
           </div>
 
           <div class="form-group">
             <label class="form-label">Garment Placement Position:</label>
             <select id="dtfPlacementSelect" class="studio-select" onchange="updatePlacement(this.value)">
-              <option value="place-left-chest">Left Chest (Standard B2B Pocket Area)</option>
-              <option value="place-right-chest">Right Chest (Opposite Pocket)</option>
+              <option value="place-left-chest">Left Chest (Standard Polo Pocket Area)</option>
+              <option value="place-right-chest">Right Chest (Opposite Chest)</option>
               <option value="place-center-back">Full Center Back (Large Graphic)</option>
-              <option value="place-upper-sleeve">Upper Sleeve (Subtle Emblem)</option>
+              <option value="place-upper-sleeve">Upper Shoulder Sleeve (Subtle Emblem)</option>
               <option value="place-pocket">Front Pocket / Apron Bib Center</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label class="form-label" id="scaleLabel">Logo Display Scale: (4.0 inches)</label>
-            <input type="range" id="logoScaleSlider" min="50" max="150" value="85" style="width: 100%; accent-color: var(--yellow, #ffd700); cursor: pointer;" oninput="updateLogoScale(this.value)" />
+            <label class="form-label" id="scaleLabel">Logo Display Scale: (3.5 inches)</label>
+            <input type="range" id="logoScaleSlider" min="50" max="150" value="85" style="width: 100%; accent-color: #0b1e36; cursor: pointer;" oninput="updateLogoScale(this.value)" />
           </div>
 
           <div class="form-group">
@@ -377,8 +415,8 @@
 
         <!-- TEXT EMBROIDERY SECTION -->
         <div id="embSection" style="display: none;">
-          <div class="helper-note" style="border-left-color: #ffd700; background: #262102; color: #ffeb8c;">
-            <strong>Text & Thread Embroidery Studio:</strong> Ideal for employee names, job titles, department emblems, and classic corporate apparel. High thread density engineered to withstand industrial laundering.
+          <div class="helper-note" style="border-left-color: #f59e0b; background: #fffbeb; color: #92400e;">
+            <strong>Text &amp; Thread Embroidery Studio:</strong> Ideal for employee names, job titles, department emblems, and classic corporate polo apparel. High thread density engineered to withstand industrial laundering.
           </div>
 
           <div class="form-group">
@@ -388,7 +426,7 @@
 
           <div class="form-group">
             <label class="form-label">Line 2 Text (Optional Subtitle or Department):</label>
-            <input type="text" id="embLine2" class="studio-input" placeholder="e.g. HOSPICE CARE DIVISION" value="EST. 2026" oninput="updateEmbText()" />
+            <input type="text" id="embLine2" class="studio-input" placeholder="e.g. HOSPITALITY DIVISION" value="EST. 2026" oninput="updateEmbText()" />
           </div>
 
           <div class="form-group">
@@ -404,13 +442,13 @@
             <label class="form-label">Thread Color Palette:</label>
             <div class="swatch-row" id="threadColorSwatches">
               <button class="thread-swatch active" style="background: #ffd700;" title="Imperial Gold" onclick="selectThreadColor('#ffd700', 'Imperial Gold', this)"></button>
-              <button class="thread-swatch" style="background: #ffffff;" title="Pure White" onclick="selectThreadColor('#ffffff', 'Pure White', this)"></button>
+              <button class="thread-swatch" style="background: #0b1e36;" title="Royal Navy Blue" onclick="selectThreadColor('#0b1e36', 'Royal Navy Blue', this)"></button>
               <button class="thread-swatch" style="background: #2F873D;" title="Fabric8 Emerald Green" onclick="selectThreadColor('#2F873D', 'Fabric8 Emerald Green', this)"></button>
-              <button class="thread-swatch" style="background: #111111; border-color: #555;" title="Obsidian Black" onclick="selectThreadColor('#111111', 'Obsidian Black', this)"></button>
-              <button class="thread-swatch" style="background: #0b1e36;" title="Navy Blue" onclick="selectThreadColor('#0b1e36', 'Navy Blue', this)"></button>
+              <button class="thread-swatch" style="background: #111111;" title="Obsidian Black" onclick="selectThreadColor('#111111', 'Obsidian Black', this)"></button>
+              <button class="thread-swatch" style="background: #ffffff; border-color: #94a3b8;" title="Pure White" onclick="selectThreadColor('#ffffff', 'Pure White', this)"></button>
               <button class="thread-swatch" style="background: #900c3f;" title="Burgundy Crimson" onclick="selectThreadColor('#900c3f', 'Burgundy Crimson', this)"></button>
             </div>
-            <p id="selectedColorLabel" style="font-size: 12px; color: #aaa; margin-top: 8px;">Selected Color: <strong style="color: #fff;">Imperial Gold</strong></p>
+            <p id="selectedColorLabel" style="font-size: 12.5px; color: #64748b; margin-top: 10px; font-weight: 600;">Selected Thread Color: <strong style="color: #0f172a;">Imperial Gold</strong></p>
           </div>
 
           <div class="form-group">
@@ -418,7 +456,7 @@
             <select id="embPlacementSelect" class="studio-select" onchange="updatePlacement(this.value)">
               <option value="place-left-chest">Left Chest (Standard Name / Emblem)</option>
               <option value="place-right-chest">Right Chest</option>
-              <option value="place-pocket">Pocket Center / Apron Bib</option>
+              <option value="place-pocket">Pocket Center / Bib</option>
               <option value="place-upper-sleeve">Upper Shoulder Sleeve</option>
             </select>
           </div>
@@ -426,13 +464,14 @@
 
         <!-- ACTION SUITE & ORDER INTEGRATION -->
         <div class="action-suite">
-          <label style="font-size: 12px; color: #888; font-weight: 800; text-transform: uppercase; margin-bottom: 12px; display: block;">3. Production Order Specifications:</label>
+          <label style="font-size: 12px; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: block;">3. Confirm Order Specifications:</label>
           
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 24px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 26px;">
             <div>
               <label class="form-label" style="font-size: 11px;">Target Garment Size:</label>
-              <select id="studioSize" class="studio-select" style="padding: 10px;">
+              <select id="studioSize" class="studio-select" style="padding: 12px 14px;">
                 <option value="Assorted / Sizing Roster">Assorted (Will Send Roster)</option>
+                <option value="S">Small (S)</option>
                 <option value="M">Medium (M)</option>
                 <option value="L">Large (L)</option>
                 <option value="XL">Extra Large (XL)</option>
@@ -441,43 +480,43 @@
             </div>
             <div>
               <label class="form-label" style="font-size: 11px;">Estimated Quantity (Units):</label>
-              <input type="number" id="studioQty" class="studio-input" min="1" value="50" style="padding: 10px;" />
+              <input type="number" id="studioQty" class="studio-input" min="1" value="50" style="padding: 12px 14px;" />
             </div>
           </div>
 
-          <button class="button-studio" onclick="transferToQuoteCart()">Transfer Prototype To Quote Cart &amp; Checkout</button>
-          <p style="text-align: center; font-size: 12px; color: #777; margin-top: 14px;">Generates your customized line item and directs you straight to our automated Excel quotation engine.</p>
+          <button class="button-studio" onclick="transferToQuoteCart()">Confirm Prototype &amp; Add To Quote Cart</button>
+          <p style="text-align: center; font-size: 12.5px; color: #64748b; margin-top: 14px; font-weight: 600;">Generates your customized line item and redirects straight to our automated checkout quotation engine.</p>
         </div>
       </div>
     </div>
   </main>
 
-  <footer style="background: #111; color: #aaa; padding: 60px 20px 40px; font-size: 13px; margin-top: 80px; line-height: 1.6; border-top: 1px solid #222;">
+  <footer style="background: #111827; color: #9ca3af; padding: 60px 20px 40px; font-size: 13.5px; margin-top: 80px; line-height: 1.6; border-top: 1px solid #1f2937;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
       <div>
-        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Fabric-8</h4>
-        <p style="max-width: 280px; color: #777;">Elevating workplace appearance and performance through custom industrial manufacturing and fashion-forward tailoring.</p>
+        <h4 style="color: #ffffff; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Fabric-8</h4>
+        <p style="max-width: 290px; color: #6b7280;">Elevating workplace appearance and performance through custom industrial manufacturing and fashion-forward corporate tailoring.</p>
       </div>
       <div>
-        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Overview</h4>
+        <h4 style="color: #ffffff; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Overview</h4>
         <p style="display: flex; flex-direction: column; gap: 8px;">
-          <a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
-          <a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
-          <a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
-          <a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
-          <a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a>
+          <a href="services.html" style="color: #9ca3af; text-decoration: none;">Services</a>
+          <a href="method.html" style="color: #9ca3af; text-decoration: none;">The Fabric 8 Method</a>
+          <a href="sectors.html" style="color: #9ca3af; text-decoration: none;">Sectors</a>
+          <a href="shop.html" style="color: #9ca3af; text-decoration: none;">Shop</a>
+          <a href="about.html" style="color: #9ca3af; text-decoration: none;">About Us</a>
         </p>
       </div>
       <div>
-        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
-        <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
+        <h4 style="color: #ffffff; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Contact Details</h4>
+        <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: #ffd700; text-decoration: none; font-weight: 800;">Contact Us</a></p>
       </div>
       <div>
-        <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
-        <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
+        <h4 style="color: #ffffff; margin-bottom: 12px; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Legal</h4>
+        <p><a href="privacy.html" style="color: #9ca3af; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #9ca3af; text-decoration: none;">Terms &amp; Conditions</a></p>
       </div>
     </div>
-    <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
+    <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #1f2937; padding-top: 20px; text-align: left; color: #6b7280;">
       &copy; 2026 Fabric8. All rights reserved.
     </div>
   </footer>
@@ -485,11 +524,63 @@
   <script src="site.js?v=5"></script>
   <script>
     let currentMode = 'dtf';
-    let currentGarmentName = 'Hospitality Service Apron';
-    let currentGarmentImg = 'assets/fabric8-service-people.webp';
+    let currentGarmentName = 'Classic White Polo Shirt';
+    let currentGarmentSku = 'F8-STUDIO-POLO';
+    let currentGarmentImg = 'assets/products/Polo White Front.jpg';
     let customLogoBase64 = null;
     let selectedThreadHex = '#ffd700';
     let selectedThreadName = 'Imperial Gold';
+    let selectedShopColor = 'Standard Commercial Spec';
+
+    // 1. AUTOMATIC URL PARAMETER PARSING ENGINE (FROM SHOP)
+    window.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('sku') || params.has('name') || params.has('img')) {
+        const incomingName = params.get('name');
+        const incomingSku = params.get('sku');
+        const incomingImg = params.get('img');
+        const incomingSize = params.get('size');
+        const incomingColor = params.get('color');
+        const incomingQty = params.get('qty');
+        const incomingMode = params.get('mode');
+
+        if (incomingName) currentGarmentName = incomingName;
+        if (incomingSku) currentGarmentSku = incomingSku;
+        if (incomingColor) selectedShopColor = incomingColor;
+        
+        if (incomingImg) {
+          currentGarmentImg = incomingImg;
+          document.getElementById("baseGarmentImg").src = incomingImg;
+          document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
+        }
+
+        if (incomingSize) {
+          const sizeEl = document.getElementById("studioSize");
+          if (Array.from(sizeEl.options).some(o => o.value === incomingSize)) {
+            sizeEl.value = incomingSize;
+          } else {
+            sizeEl.value = "Assorted / Sizing Roster";
+          }
+        }
+        
+        if (incomingQty) {
+          document.getElementById("studioQty").value = parseInt(incomingQty) || 50;
+        }
+
+        // Show shop selection banner at top of controls
+        const banner = document.getElementById("shopSelectionBanner");
+        if (banner) {
+          banner.style.display = "flex";
+          document.getElementById("shopBannerName").textContent = currentGarmentName;
+          document.getElementById("shopBannerColor").textContent = selectedShopColor;
+        }
+
+        const modeTag = document.getElementById("canvasModeTag");
+        if (modeTag) modeTag.textContent = `${currentGarmentName} (${selectedShopColor})`;
+
+        if (incomingMode === 'embroidery') switchStudioMode('embroidery');
+      }
+    });
 
     function switchStudioMode(mode) {
       currentMode = mode;
@@ -523,9 +614,12 @@
     function switchGarment(imgSrc, name, btnEl) {
       currentGarmentImg = imgSrc;
       currentGarmentName = name;
+      currentGarmentSku = "F8-STUDIO-CUSTOM";
       document.getElementById("baseGarmentImg").src = imgSrc;
       document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
       btnEl.classList.add("active");
+      const modeTag = document.getElementById("canvasModeTag");
+      if (modeTag) modeTag.textContent = name;
     }
 
     function updatePlacement(className) {
@@ -536,7 +630,7 @@
       if (className.includes("left-chest")) label.textContent = "Left Chest";
       else if (className.includes("right-chest")) label.textContent = "Right Chest";
       else if (className.includes("center-back")) label.textContent = "Center Back";
-      else if (className.includes("sleeve")) label.textContent = "Sleeve";
+      else if (className.includes("sleeve")) label.textContent = "Upper Sleeve";
       else if (className.includes("pocket")) label.textContent = "Pocket / Bib Center";
     }
 
@@ -556,7 +650,7 @@
         reader.onload = function(ev) {
           const res = ev.target.result;
           document.getElementById("logoPreviewImg").src = res;
-          customLogoBase64 = res; // Will be stripped cleanly when transferring to cart if needed
+          customLogoBase64 = res;
         };
         reader.readAsDataURL(file);
       }
@@ -583,7 +677,7 @@
       selectedThreadHex = hex;
       selectedThreadName = name;
       document.getElementById("line1Display").style.color = hex;
-      document.getElementById("selectedColorLabel").innerHTML = `Selected Color: <strong style="color: #fff;">${name}</strong>`;
+      document.getElementById("selectedColorLabel").innerHTML = `Selected Thread Color: <strong style="color: #0f172a;">${name}</strong>`;
       document.querySelectorAll(".thread-swatch").forEach(b => b.classList.remove("active"));
       btnEl.classList.add("active");
     }
@@ -611,12 +705,12 @@
       }
 
       const item = {
-        sku: "F8-STUDIO-CUSTOM",
-        name: `${currentGarmentName} (Atelier Studio Prototype)`,
+        sku: currentGarmentSku || "F8-STUDIO-CUSTOM",
+        name: `${currentGarmentName} (Atelier Custom Spec)`,
         price: 0,
         image: currentGarmentImg,
         size: size,
-        color: "Standard Commercial Spec",
+        color: selectedShopColor || "Standard Commercial Spec",
         quantity: parseInt(qty) || 50,
         branding: brandingDesc,
         logoData: logoDataToSave
@@ -627,13 +721,12 @@
         saveCart();
         if (typeof updateCartCount === 'function') updateCartCount();
       } else {
-        // Fallback direct storage access
         let existing = JSON.parse(localStorage.getItem("fabric8_cart") || "[]");
         existing.push(item);
         localStorage.setItem("fabric8_cart", JSON.stringify(existing));
       }
 
-      alert("🎉 Studio Prototype added to your quotation order! Redirecting directly to Checkout...");
+      alert("🎉 Customized Prototype added directly to your quotation order! Redirecting to Checkout...");
       window.location.href = "checkout.html";
     }
   </script>

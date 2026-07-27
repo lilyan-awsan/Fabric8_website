@@ -714,10 +714,6 @@ document.addEventListener("click", (event) => {
   }
   
   if (addSelected) {
-    if (selectedCustomization === "text_embroidery") {
-      openTextWizard();
-      return;
-    }
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
     if (!selectedProduct) return;
     
@@ -737,33 +733,33 @@ document.addEventListener("click", (event) => {
       return;
     }
 
-    const studioName = $("#studioProductName");
-    if (studioName) studioName.textContent = selectedProduct.name;
-    
-    const studioDesc = $("#studioProductColorDesc");
-    if (studioDesc) studioDesc.textContent = `Color: ${activeCatalogColor} | Size: ${selectedSize} | Qty: ${quantity}`;
-    
-    activeStudioColor = activeCatalogColor;
-    const shirtImg = $("#studioShirt");
-    if (shirtImg) {
-      shirtImg.dataset.color = activeStudioColor.toLowerCase().replace(/\s+/g, "-");
-      const colorImg = selectedProduct.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
-      if (colorImg) {
-         shirtImg.src = colorImg;
+    // Determine exact product photography matching the selected catalog color
+    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.jpg';
+    if (selectedProduct.images && selectedProduct.images.length > 0) {
+      const colorMatch = selectedProduct.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+      if (colorMatch) {
+        targetImg = colorMatch;
       } else {
-         const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
-         shirtImg.src = imgSrc;
+        targetImg = selectedProduct.images[0];
       }
     }
-    
-    $("#productModal").style.display = "none";
-    const studioSection = $("#studio");
-    if (studioSection) {
-      studioSection.style.display = "block";
-      setTimeout(() => {
-        studioSection.scrollIntoView({ behavior: "smooth" });
-      }, 50); // slight delay to ensure display: block has rendered before scrolling
-    }
+
+    // Determine testing mode (embroidery or dtf)
+    const modeParam = (selectedCustomization === "text_embroidery") ? "embroidery" : "dtf";
+
+    // Direct user straight to dedicated branding studio without pop-up modals!
+    const queryParams = new URLSearchParams({
+      sku: selectedProduct.sku,
+      name: selectedProduct.name,
+      size: selectedSize,
+      color: activeCatalogColor,
+      qty: quantity,
+      img: targetImg,
+      mode: modeParam
+    });
+
+    window.location.href = `branding-studio.html?${queryParams.toString()}`;
+    return;
   }
   if (colorDot) {
     const parent = colorDot.parentElement;
