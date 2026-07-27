@@ -239,11 +239,21 @@ export default async function handler(req, res) {
       }
     ];
 
-    // Preserve customer uploaded logo assets if present
+    // Preserve and sanitize customer uploaded logo assets if present
     if (data.attachments && Array.isArray(data.attachments)) {
       data.attachments.forEach(att => {
-        if (!att.filename?.includes(".xlsx")) {
-          attachments.push(att);
+        if (!att.filename?.includes(".xlsx") && att.content) {
+          let cleanContent = typeof att.content === 'string' ? att.content : Buffer.from(att.content).toString('base64');
+          // Strip any data:image/...;base64, header prefix to satisfy Resend strict base64 requirement
+          if (cleanContent.includes('base64,')) {
+            cleanContent = cleanContent.split('base64,')[1];
+          } else if (cleanContent.startsWith('data:')) {
+            cleanContent = cleanContent.split(',')[1];
+          }
+          attachments.push({
+            filename: att.filename || `Attachment_${Date.now()}.png`,
+            content: cleanContent
+          });
         }
       });
     }
