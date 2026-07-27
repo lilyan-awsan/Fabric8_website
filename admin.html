@@ -125,10 +125,10 @@
             </div>
           </div>
 
-          <!-- Section 2: General Website Content (Titles, Text & Buttons) -->
+          <!-- Section 2: General Website Content (Titles, Text, Buttons & Pictures) -->
           <div style="margin-bottom: 36px; padding: 20px; background: #f9f8f5; border-radius: 8px; border: 1px solid var(--line);">
-            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">General Website Content (Text, Titles & Buttons)</h3>
-            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Directly modify headings, call-to-action button texts, and corporate descriptions across the whole website.</p>
+            <h3 style="margin-top: 0; font-size: 18px; color: var(--ink); margin-bottom: 12px;">General Website Content (Text, Titles, Buttons & Pictures)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 0; margin-bottom: 16px;">Directly modify headings, call-to-action button texts, corporate descriptions, and banner pictures across the whole website without needing code updates.</p>
             
             <div class="form-grid">
               <div class="input-group full-width">
@@ -150,6 +150,32 @@
               <div class="input-group full-width">
                 <label>About Us Company Profile Text</label>
                 <textarea id="settingAboutText" rows="3" placeholder="We partner with leading corporate enterprises..."></textarea>
+              </div>
+            </div>
+
+            <!-- Photography Upload Suite -->
+            <h4 style="margin-top: 24px; font-size: 15px; color: var(--ink); border-top: 1px dashed var(--line); padding-top: 20px; margin-bottom: 12px;">Website Photography & Banners</h4>
+            <div class="form-grid">
+              <div class="input-group full-width">
+                <label>Homepage Hero Background / Showcase Image</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingHeroImage" placeholder="e.g. assets/hero_bg.jpg or upload below..." style="flex: 1;">
+                  <input type="file" id="settingHeroImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 260px;">
+                </div>
+              </div>
+              <div class="input-group full-width">
+                <label>Promotional Showcase Picture / Banner Graphic</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingPromoImage" placeholder="e.g. assets/promo_showcase.png or upload below..." style="flex: 1;">
+                  <input type="file" id="settingPromoImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 260px;">
+                </div>
+              </div>
+              <div class="input-group full-width">
+                <label>About Us Company Profile Graphic / Team Picture</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="settingAboutImage" placeholder="e.g. assets/about_us_team.jpg or upload below..." style="flex: 1;">
+                  <input type="file" id="settingAboutImageUpload" accept="image/*" style="padding: 6px; font-size: 12px; max-width: 260px;">
+                </div>
               </div>
             </div>
           </div>

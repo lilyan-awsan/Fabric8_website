@@ -252,6 +252,24 @@ let activeSizes = ["S", "M", "L", "XL"];
 let activeColors = ["Black", "Navy", "White"];
 let activeSectors = [];
 let pendingSketchFile = null;
+let pendingSiteImages = {};
+
+['Hero', 'Promo', 'About'].forEach(type => {
+  const uploadInput = document.getElementById(`setting${type}ImageUpload`);
+  const textInput = document.getElementById(`setting${type}Image`);
+  if (uploadInput && textInput) {
+    uploadInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        pendingSiteImages[type.toLowerCase() + 'Image'] = { base64: evt.target.result, name: file.name };
+        textInput.value = `[Pending Upload: ${file.name}]`;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+});
 
 function renderSizesTags() {
   const container = document.getElementById("sizesTagsContainer");
@@ -845,6 +863,9 @@ async function fetchSettings() {
       if (document.getElementById("settingHomeBtn")) document.getElementById("settingHomeBtn").value = sc.homeHeroBtnText || "EXPLORE THE COLLECTION";
       if (document.getElementById("settingHomeSub")) document.getElementById("settingHomeSub").value = sc.homeHeroSubtitle || "High-performance industrial uniforms & corporate fashion designed for modern teams.";
       if (document.getElementById("settingAboutText")) document.getElementById("settingAboutText").value = sc.aboutText || "We partner with leading corporate enterprises, healthcare groups, and industrial sectors...";
+      if (document.getElementById("settingHeroImage")) document.getElementById("settingHeroImage").value = sc.heroImage || "";
+      if (document.getElementById("settingPromoImage")) document.getElementById("settingPromoImage").value = sc.promoImage || "";
+      if (document.getElementById("settingAboutImage")) document.getElementById("settingAboutImage").value = sc.aboutImage || "";
 
       const lc = settings.legalContent || {};
       if (document.getElementById("settingTermsText")) document.getElementById("settingTermsText").value = lc.termsText || "";
@@ -881,7 +902,10 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
       homeHeroBtnText: document.getElementById("settingHomeBtn")?.value || "EXPLORE THE COLLECTION",
       homeHeroSubtitle: document.getElementById("settingHomeSub")?.value || "",
       aboutText: document.getElementById("settingAboutText")?.value || "",
-      methodLeafletUrl: "assets/needs/Product Data General Sheet (1).xlsx"
+      methodLeafletUrl: "assets/needs/Product Data General Sheet (1).xlsx",
+      heroImage: pendingSiteImages.heroImage ? "PENDING_UPLOAD" : (document.getElementById("settingHeroImage")?.value || ""),
+      promoImage: pendingSiteImages.promoImage ? "PENDING_UPLOAD" : (document.getElementById("settingPromoImage")?.value || ""),
+      aboutImage: pendingSiteImages.aboutImage ? "PENDING_UPLOAD" : (document.getElementById("settingAboutImage")?.value || "")
     },
     legalContent: {
       termsText: document.getElementById("settingTermsText")?.value || "",
@@ -901,7 +925,8 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
       body: JSON.stringify({
         token: authToken,
         action: "save_settings",
-        product: settingsPayload
+        product: settingsPayload,
+        pendingSiteImages: Object.keys(pendingSiteImages).length > 0 ? pendingSiteImages : null
       })
     });
     

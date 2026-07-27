@@ -28,7 +28,23 @@ function applySiteSettings() {
     const aboutBox = document.getElementById('cmsAboutText');
     if (aboutBox) aboutBox.textContent = sc.aboutText;
   }
-
+  if (sc.heroImage) {
+    const heroBg = document.querySelector('.page-hero, .home-hero');
+    if (heroBg && !heroBg.classList.contains('shop-hero')) {
+      heroBg.style.backgroundImage = `url('${sc.heroImage}')`;
+      heroBg.style.backgroundSize = 'cover';
+      heroBg.style.backgroundPosition = 'center';
+    }
+  }
+  if (sc.promoImage) {
+    const promoEl = document.getElementById('cmsPromoGraphic');
+    if (promoEl) promoEl.src = sc.promoImage;
+  }
+  if (sc.aboutImage) {
+    const aboutEl = document.getElementById('cmsAboutImage');
+    if (aboutEl) aboutEl.src = sc.aboutImage;
+  }
+  
   const lc = siteSettings.legalContent || {};
   if (lc.termsText) {
     const termsEl = document.getElementById('cmsTermsContent');
@@ -199,6 +215,17 @@ function renderProducts() {
 
   let filtered = products;
 
+  const activeGenderFilter = document.getElementById("genderFilter")?.value || "All";
+  if (activeGenderFilter !== "All") {
+    filtered = filtered.filter(p => {
+      const gLower = (p.gender || "Unisex").toLowerCase();
+      if (activeGenderFilter === "Unisex") return gLower.includes("unisex");
+      if (activeGenderFilter === "Men") return gLower.includes("men") && !gLower.includes("women");
+      if (activeGenderFilter === "Women") return gLower.includes("women");
+      return true;
+    });
+  }
+
   if (activeSectorFilter !== "All") {
     filtered = filtered.filter(p => p.sectors && p.sectors.toLowerCase().includes(activeSectorFilter.toLowerCase()));
   }
@@ -250,9 +277,10 @@ function renderProducts() {
           ${imagesHtml}
         </div>
         <div class="product-card-info">
-          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: space-between;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
             <span>${p.category} | ${p.sku}</span>
             ${p.gender ? `<span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">${p.gender}</span>` : ''}
+            ${p.sectors ? `<span style="width: 100%; font-size: 10px; color: var(--muted); text-transform: capitalize; margin-top: 2px;">Sectors: ${p.sectors}</span>` : ''}
           </p>
           <h3 class="product-card-title">${p.name}</h3>
         </div>
@@ -773,53 +801,6 @@ function triggerMailtoFallback(customerInfo, cart) {
   `;
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
-async function generateExcelBase64(customerInfo, cart) {
-  if (typeof XLSX === 'undefined') return null;
-  
-  const wb = XLSX.utils.book_new();
-  const aoa = [];
-  
-  // 1. Client/User Information at the top
-  aoa.push(["CLIENT / USER INFORMATION"]);
-  for (const [key, value] of Object.entries(customerInfo)) {
-    aoa.push([key, value]);
-  }
-  
-  // Spacer
-  aoa.push([]);
-  aoa.push([]);
-  
-  // 2. Order Details Table Headers
-  aoa.push(["ORDER DETAILS"]);
-  const headers = ["#", "Photo", "Product SKU", "Product Name", "QTY", "Size", "Color", "Product Price", "Total"];
-  aoa.push(headers);
-  
-  // 3. Cart Items
-  cart.forEach((item, index) => {
-    let productName = item.name;
-    if (item.branding && item.branding !== "None") {
-      productName += ` (Branding: ${item.branding})`;
-    }
-    
-    aoa.push([
-      index + 1,               // #
-      "",                      // Photo (left empty for them to fill/paste)
-      item.sku,                // Product SKU
-      productName,             // Product Name
-      item.quantity,           // QTY
-      item.size || "N/A",      // Size
-      item.color || "Standard",// Color
-      "",                      // Product Price (empty)
-      ""                       // Total (empty)
-    ]);
-  });
-  
-  const ws = XLSX.utils.aoa_to_sheet(aoa);
-  XLSX.utils.book_append_sheet(wb, ws, "Fabric8 Quote Request");
-
-  return XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
-}
-
 $("#quoteForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.target;
@@ -862,16 +843,6 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       attachments.push({ filename: `${item.sku}_Logo_${index + 1}.png`, content: item.logoData });
     }
   });
-
-  // Generate Excel
-  try {
-    const excelBase64 = await generateExcelBase64(customerInfo, cart);
-    if (excelBase64) {
-      attachments.push({ filename: "Fabric8_Quote_Request.xlsx", content: excelBase64 });
-    }
-  } catch(err) {
-    console.error("Failed to generate Excel:", err);
-  }
 
   const payload = {
     customerInfo,
@@ -1202,10 +1173,10 @@ function initProductPage(sku) {
     const helper = document.getElementById("finishHelperText");
     if (!helper) return;
     if (finishVal.toLowerCase().includes("dtf") || finishVal.toLowerCase().includes("direct")) {
-      helper.textContent = "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
+      helper.textContent = siteSettings?.brandingSettings?.dtfHelperNote || "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
       helper.style.display = "block";
     } else if (finishVal.toLowerCase().includes("embroidery") || finishVal.toLowerCase().includes("embroider")) {
-      helper.textContent = "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
+      helper.textContent = siteSettings?.brandingSettings?.embroideryHelperNote || "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
       helper.style.display = "block";
     } else {
       helper.style.display = "none";
@@ -1214,7 +1185,6 @@ function initProductPage(sku) {
 
   if (customizationSection) {
     const custType = p.customizationCapability || p.customization || "both";
-    const finishes = (p.supportedFinishes && p.supportedFinishes.length > 0) ? p.supportedFinishes : ["Embroidery", "Direct To Fabric (DTF) Printing"];
     
     if (custType === "none") {
       customizationSection.style.display = "none";
@@ -1241,11 +1211,12 @@ function initProductPage(sku) {
         `).join("");
       };
 
+      const defaultPlacements = siteSettings?.brandingSettings?.defaultPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
       const logoPlacement = document.getElementById("pageLogoPlacementContainer");
-      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]);
+      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || defaultPlacements);
 
       const textPlacement = document.getElementById("pageTextPlacementContainer");
-      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]);
+      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || defaultPlacements);
 
       const logoFinish = document.getElementById("pageLogoFinishContainer");
       if (logoFinish) {

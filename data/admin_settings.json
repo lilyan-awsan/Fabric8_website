@@ -24,7 +24,7 @@
     },
     {
       "name": "Education",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "Aviation",

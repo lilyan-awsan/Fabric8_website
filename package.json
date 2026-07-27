@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Fabric-8 Website",
   "dependencies": {
+    "exceljs": "^4.4.0",
     "resend": "^3.5.0"
   }
 }

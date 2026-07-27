@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
 
-  const { token, action, product, newImages } = req.body;
+  const { token, action, product, newImages, pendingSiteImages } = req.body;
   const adminPass = process.env.ADMIN_PASSWORD;
   const githubToken = process.env.GITHUB_TOKEN;
   
@@ -80,6 +80,33 @@ export default async function handler(req, res) {
 
     // 3. Apply the action
     if (action === "save_settings") {
+      if (pendingSiteImages && typeof pendingSiteImages === 'object') {
+        for (const [key, img] of Object.entries(pendingSiteImages)) {
+          if (img && img.base64 && img.name) {
+            const imgPath = `assets/site_images/${Date.now()}_${key}_${img.name.replace(/\s+/g, '_')}`;
+            const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${githubToken}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                message: `Upload site asset for ${key}`,
+                content: img.base64.split(',')[1]
+              })
+            });
+            if (imgRes.ok) {
+              if (product && product.siteContent) {
+                product.siteContent[key] = imgPath;
+              }
+            } else {
+              const err = await imgRes.json();
+              throw new Error(`Failed to upload site graphic (${key}): ` + err.message);
+            }
+          }
+        }
+      }
+
       const settingsPath = "data/admin_settings.json";
       let currentSettingsSha = null;
       try {
