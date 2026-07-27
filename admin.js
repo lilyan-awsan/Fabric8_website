@@ -95,7 +95,7 @@ logoutBtn.addEventListener("click", () => {
 
 // --- GitHub CMS CRUD ---
 async function fetchProducts() {
-  productTableBody.innerHTML = "<tr><td colspan='5'>Loading products from GitHub...</td></tr>";
+  productTableBody.innerHTML = "<tr><td colspan='5'>Loading product catalog...</td></tr>";
   try {
     const res = await fetch('data/products.json?t=' + Date.now());
     if (!res.ok) throw new Error("Failed to read products.json");
@@ -104,7 +104,7 @@ async function fetchProducts() {
     renderTable();
   } catch (error) {
     console.error("Error fetching products:", error);
-    productTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading database. Ensure data/products.json exists on GitHub.</td></tr>";
+    productTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading database. Please check your network or try refreshing the page.</td></tr>";
   }
 }
 
@@ -231,7 +231,7 @@ async function syncWithGithub(action, product) {
     if (data.success) {
       productsList = data.products;
       renderTable();
-      alert(`Success! Changes saved to GitHub.\nNOTE: Vercel takes ~45 seconds to rebuild the website. Your changes will be live shortly.`);
+      alert(`Success! Changes saved successfully.\nNOTE: It takes ~45 seconds to update the live website. Your changes will be live shortly.`);
       return true;
     } else {
       if (data.message === "Unauthorized") {
@@ -452,7 +452,7 @@ productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   
   const submitBtn = document.getElementById("saveProductBtn");
-  submitBtn.textContent = "Saving to GitHub...";
+  submitBtn.textContent = "Saving Product...";
   submitBtn.disabled = true;
 
   const docId = document.getElementById("docId").value || document.getElementById("sku").value;
@@ -867,7 +867,7 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
   const btn = document.getElementById("saveSettingsBtn");
   const statusSpan = document.getElementById("cmsSaveStatus");
   const originalText = btn.textContent;
-  btn.textContent = "Saving CMS to GitHub...";
+  btn.textContent = "Saving CMS Settings...";
   btn.disabled = true;
   if (statusSpan) statusSpan.style.display = "none";
 
@@ -911,7 +911,7 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
         statusSpan.style.display = "inline";
         setTimeout(() => { statusSpan.style.display = "none"; }, 5000);
       }
-      alert(`Success! Master CMS Content and Category states saved to GitHub.\nNOTE: Vercel takes ~45 seconds to rebuild the website.`);
+      alert(`Success! Master CMS Content and Category settings saved successfully.\nNOTE: It takes ~45 seconds to update the live website.`);
     } else {
       alert("Error saving settings: " + data.message);
     }

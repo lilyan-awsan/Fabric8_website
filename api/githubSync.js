@@ -37,7 +37,7 @@ export default async function handler(req, res) {
           });
           if (!imgRes.ok) {
             const err = await imgRes.json();
-            throw new Error("Failed to upload image to GitHub: " + err.message);
+            throw new Error("Failed to upload image: " + err.message);
           }
           finalImages.push(imgPath);
         }
@@ -70,7 +70,7 @@ export default async function handler(req, res) {
       headers: { 'Authorization': `Bearer ${githubToken}` }
     });
     
-    if (!fileRes.ok) throw new Error("Could not read products.json from GitHub");
+    if (!fileRes.ok) throw new Error("Could not read database from server");
     const fileData = await fileRes.json();
     const currentSha = fileData.sha;
     
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
       });
       if (!updateRes.ok) {
         const err = await updateRes.json();
-        throw new Error("Failed to save settings to GitHub: " + err.message);
+        throw new Error("Failed to save settings to server: " + err.message);
       }
       return res.status(200).json({ success: true, message: 'Settings saved successfully' });
     } else if (action === "save") {
@@ -151,7 +151,7 @@ export default async function handler(req, res) {
 
       if (!updateRes.ok) {
         const err = await updateRes.json();
-        throw new Error("Failed to save products.json to GitHub: " + err.message);
+        throw new Error("Failed to save products database to server: " + err.message);
       }
 
       return res.status(200).json({ success: true, message: 'Saved successfully', products: productsList });
