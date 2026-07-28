@@ -639,7 +639,7 @@ input, select, textarea, button { font: inherit; }
 .shop-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-fashion-hero.webp") center / cover; }
 .about-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/about_hero_bg.png") center / cover; }
 .services-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-service-people.webp") center / cover; }
-.sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/sectors-hero-banner.png") center / cover; }
+.sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/sectors-hero-banner.png?v=2") center / cover; }
 .method-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/method_hero_bg.png") center / cover; }
 .contact-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/contact_hero_bg.png") center / cover; }
 
