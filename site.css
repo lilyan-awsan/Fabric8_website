@@ -519,17 +519,18 @@ input, select, textarea, button { font: inherit; }
 .sector-cards {
   max-width: 1300px;
   margin: 60px auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 36px;
-  justify-items: center;
   padding: 0 20px;
 }
 
 .flip-card {
   background-color: transparent;
+  flex: 0 1 380px;
   width: 100%;
-  max-width: 390px;
+  max-width: 380px;
   min-height: 440px;
   perspective: 1400px;
   cursor: pointer;
@@ -638,7 +639,7 @@ input, select, textarea, button { font: inherit; }
 .shop-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-fashion-hero.webp") center / cover; }
 .about-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/about_hero_bg.png") center / cover; }
 .services-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-service-people.webp") center / cover; }
-.sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-royal-atelier.webp") center / cover; }
+.sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/sectors-hero-banner.png") center / cover; }
 .method-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/method_hero_bg.png") center / cover; }
 .contact-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/contact_hero_bg.png") center / cover; }
 
