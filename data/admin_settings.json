@@ -58,7 +58,9 @@
     "homeHeroBtnText": "EXPLORE THE COLLECTION",
     "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
     "aboutText": "We partner with leading corporate enterprises, healthcare groups, and industrial sectors to deliver high-performance apparel engineered for durability and sophistication.",
-    "methodLeafletUrl": "assets/needs/Product Data General Sheet (1).xlsx"
+    "methodBrochure": "assets/needs/Fabric8_Leaflet.pdf",
+    "methodLeafletUrl": "assets/needs/Fabric8_Leaflet.pdf",
+    "companyProfileUrl": "assets/needs/Fabric8_Company_Profile.pdf"
   },
   "legalContent": {
     "termsText": "By accessing and using the Fabric8 website and Branding Atelier, you agree to abide by our manufacturing timelines, minimum order quantities (MOQ), and intellectual property warranty requirements when uploading custom company logos and artwork.",

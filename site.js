@@ -4,7 +4,7 @@ let siteSettings = {};
 function applySiteSettings() {
   if (siteSettings.promoBanner) {
     document.querySelectorAll('.promo-banner p, .topline a').forEach(el => {
-      if (!el.id || el.id !== 'cmsMethodBrochureLink') {
+      if (el.id !== 'cmsMethodBrochureLink' && el.id !== 'cmsAboutProfileLink') {
         el.textContent = siteSettings.promoBanner;
       }
     });
@@ -71,9 +71,13 @@ function applySiteSettings() {
     const el = document.getElementById('cmsMethodSub');
     if (el) el.textContent = sc.methodSub;
   }
-  if (sc.methodBrochure) {
+  if (sc.methodBrochure || sc.methodLeafletUrl) {
     const el = document.getElementById('cmsMethodBrochureLink');
-    if (el) el.href = sc.methodBrochure;
+    if (el) el.href = sc.methodBrochure || sc.methodLeafletUrl;
+  }
+  if (sc.companyProfileUrl) {
+    const el = document.getElementById('cmsAboutProfileLink');
+    if (el) el.href = sc.companyProfileUrl;
   }
 
   // 4. Sectors Showcase Engine
@@ -839,6 +843,7 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("page-ready");
+  if (typeof initHeaderSearch === "function") initHeaderSearch();
 });
 
 document.addEventListener("click", (event) => {
@@ -1020,7 +1025,48 @@ function initClientDetailsPersistence() {
   });
 }
 
+function initHeaderSearch() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get("search") || urlParams.get("q") || "";
+  const productSearchEl = document.getElementById("productSearch");
+
+  if (productSearchEl && searchQuery) {
+    productSearchEl.value = searchQuery;
+  }
+
+  const headerSearchInputs = document.querySelectorAll('input[type="search"]:not(#productSearch)');
+  headerSearchInputs.forEach((input) => {
+    if (searchQuery) {
+      input.value = searchQuery;
+    }
+    if (input.dataset.searchWired === "true") return;
+    input.dataset.searchWired = "true";
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const query = input.value.trim();
+        
+        if (productSearchEl) {
+          productSearchEl.value = query;
+          if (typeof renderProducts === "function") renderProducts();
+          const targetSection = document.getElementById("productGrid") || productSearchEl;
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        } else {
+          document.body.classList.add("silk-leaving");
+          setTimeout(() => {
+            window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
+          }, 200);
+        }
+      }
+    });
+  });
+}
+
 function initSite() {
+  initHeaderSearch();
   const path = window.location.pathname.toLowerCase();
   
   if (path.includes('product.html')) {
