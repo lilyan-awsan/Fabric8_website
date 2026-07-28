@@ -892,10 +892,10 @@ async function fetchSettings() {
       if (document.getElementById("settingSectorsHeroImg")) document.getElementById("settingSectorsHeroImg").value = sc.sectorsHeroImg || "";
 
       // About Us
-      if (document.getElementById("settingAboutTitle")) document.getElementById("settingAboutTitle").value = sc.aboutTitle || "A uniform partner, not just a catalog.";
+      if (document.getElementById("settingAboutTitle")) document.getElementById("settingAboutTitle").value = sc.aboutTitle || "Our Story, Behind the Craft";
       if (document.getElementById("settingAboutSub")) document.getElementById("settingAboutSub").value = sc.aboutSub || "B2B uniform solutions for clients who demand brand, purpose, performance, and reliability.";
-      if (document.getElementById("settingAboutMission")) document.getElementById("settingAboutMission").value = sc.aboutMission || "We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.";
-      if (document.getElementById("settingAboutVision")) document.getElementById("settingAboutVision").value = sc.aboutVision || "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and commitment to client success.";
+      if (document.getElementById("settingAboutMission")) document.getElementById("settingAboutMission").value = sc.aboutMission || "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.";
+      if (document.getElementById("settingAboutVision")) document.getElementById("settingAboutVision").value = sc.aboutVision || "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.";
       if (document.getElementById("settingAboutImage")) document.getElementById("settingAboutImage").value = sc.aboutImage || "";
 
       // Contact Info
