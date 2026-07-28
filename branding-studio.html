@@ -24,12 +24,12 @@
     }
 
     .studio-container {
-      max-width: 1400px;
-      margin: 60px auto 120px;
-      padding: 0 5vw;
+      max-width: 1380px;
+      margin: 40px auto 100px;
+      padding: 0 3vw;
       display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 32px;
+      grid-template-columns: 430px 1fr;
+      gap: 44px;
       align-items: start;
     }
 
@@ -43,7 +43,7 @@
     .preview-stage {
       background: #ffffff;
       border-radius: 12px;
-      padding: 32px;
+      padding: 24px;
       border: 1px solid var(--line, rgba(35, 31, 32, 0.08));
       box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
       position: sticky;
@@ -53,7 +53,7 @@
     .canvas-viewport {
       position: relative;
       width: 100%;
-      height: 580px;
+      height: 440px;
       background: #faf9f5;
       border-radius: 8px;
       overflow: hidden;
@@ -67,7 +67,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      padding: 20px;
+      padding: 16px;
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -79,7 +79,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px;
+      padding: 4px;
       border: 1px dashed rgba(62, 142, 66, 0.35);
       border-radius: 4px;
       background: transparent;
@@ -93,12 +93,12 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
     }
 
-    /* Precisely calibrated placement coordinates for uniform apparel */
-    .place-left-chest { top: 28%; left: 55%; width: 110px; height: 110px; transform: rotate(-1deg); }
-    .place-right-chest { top: 28%; left: 33%; width: 110px; height: 110px; transform: rotate(1deg); }
-    .place-center-back { top: 30%; left: 35%; width: 210px; height: 210px; transform: none; }
-    .place-upper-sleeve { top: 26%; left: 62.5%; width: 85px; height: 85px; transform: rotate(10deg); }
-    .place-pocket { top: 42%; left: 45%; width: 115px; height: 115px; transform: none; }
+    /* Precisely calibrated placement coordinates for compact 430px uniform stage */
+    .place-left-chest { top: 28%; left: 56%; width: 85px; height: 85px; transform: rotate(-1deg); }
+    .place-right-chest { top: 28%; left: 32%; width: 85px; height: 85px; transform: rotate(1deg); }
+    .place-center-back { top: 30%; left: 31%; width: 170px; height: 170px; transform: none; }
+    .place-upper-sleeve { top: 26%; left: 66%; width: 68px; height: 68px; transform: rotate(10deg); }
+    .place-pocket { top: 41%; left: 43%; width: 92px; height: 92px; transform: none; }
 
     .garment-selector {
       display: flex;
@@ -134,7 +134,7 @@
     .controls-panel {
       background: #ffffff;
       border-radius: 12px;
-      padding: 36px;
+      padding: 36px 44px;
       border: 1px solid var(--line, rgba(35, 31, 32, 0.08));
       box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
     }
@@ -144,7 +144,7 @@
       border: 1px solid rgba(204, 220, 41, 0.6);
       border-left: 4px solid #ccdc29;
       padding: 14px 18px;
-      border-radius: 4px;
+      border-radius: 6px;
       margin-bottom: 28px;
       display: none;
       align-items: center;
@@ -155,34 +155,39 @@
 
     .tab-switcher {
       display: flex;
-      background: #f9f8f5;
-      border-radius: 6px;
-      padding: 4px;
+      background: #f2f1ed;
+      border-radius: 8px;
+      padding: 6px;
       margin-bottom: 30px;
       border: 1px solid var(--line, rgba(35, 31, 32, 0.12));
+      gap: 8px;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 12px;
+      padding: 14px 18px;
       text-align: center;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 800;
       cursor: pointer;
       color: var(--muted, #70756e);
       transition: all 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border: none;
+      letter-spacing: 0.04em;
+      border: 1px solid transparent;
       background: transparent;
-      font-family: 'Century Gothic', 'Montserrat', sans-serif;
+      font-family: 'Century Gothic', system-ui, sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .tab-btn.active {
-      background: var(--ink, #231f20);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      background: #ffffff;
+      color: var(--ink, #231f20);
+      border-color: var(--line, rgba(35, 31, 32, 0.15));
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
     }
 
     .form-group {
@@ -396,70 +401,86 @@
 
         <!-- DTF & LOGO UPLOAD SECTION -->
         <div id="dtfSection">
-          <div class="helper-note">
+          <div class="helper-note" style="margin-bottom: 24px;">
             <strong style="font-family: 'Acumin Variable Concept', sans-serif; text-transform: uppercase;">(DTF) Direct to Fabric Printing &amp; Customization:</strong> Recommended for vibrant multi-color logos and high-definition architectural transfers. Upload your file to simulate precision alignment directly on the fabric.
           </div>
 
           <div class="form-group">
             <label class="form-label">Upload Company Artwork / Logo (PNG or JPG):</label>
-            <input type="file" id="studioLogoUpload" accept="image/*" class="studio-input" style="padding: 10px; cursor: pointer;" onchange="handleLogoUpload(event)" />
+            <input type="file" id="studioLogoUpload" accept="image/*" class="studio-input" style="padding: 12px 14px; cursor: pointer;" onchange="handleLogoUpload(event)" />
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Garment Placement Position:</label>
-            <select id="dtfPlacementSelect" class="studio-select" onchange="updatePlacement(this.value)">
-              <option value="place-left-chest">Left Chest (Standard Polo Pocket Area)</option>
-              <option value="place-right-chest">Right Chest (Opposite Chest)</option>
-              <option value="place-center-back">Full Center Back (Large Graphic)</option>
-              <option value="place-upper-sleeve">Upper Shoulder Sleeve (Outer Shoulder)</option>
-              <option value="place-pocket">Front Pocket / Apron Bib Center</option>
-            </select>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 22px;">
+            <div>
+              <label class="form-label">Garment Placement Position:</label>
+              <select id="dtfPlacementSelect" class="studio-select" style="padding: 12px 14px;" onchange="updatePlacement(this.value)">
+                <option value="place-left-chest">Left Chest (Standard Polo Pocket Area)</option>
+                <option value="place-right-chest">Right Chest (Opposite Chest)</option>
+                <option value="place-center-back">Full Center Back (Large Graphic)</option>
+                <option value="place-upper-sleeve">Upper Shoulder Sleeve (Outer Shoulder)</option>
+                <option value="place-pocket">Front Pocket / Apron Bib Center</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="form-label">Transfer Finish Method:</label>
+              <select id="dtfFinishSelect" class="studio-select" style="padding: 12px 14px;">
+                <option value="DTF High-Definition Matte Print">DTF High-Definition Matte Print (Standard)</option>
+                <option value="DTF Ultra-Durable Silicone Vinyl">DTF Ultra-Durable Silicone Vinyl</option>
+                <option value="High-Gloss Industrial Screen Transfer">High-Gloss Industrial Screen Transfer</option>
+                <option value="Woven Emblem Patch Transfer">Woven Emblem Patch Transfer</option>
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" id="scaleLabel">Logo Display Scale: (3.5 inches)</label>
-            <input type="range" id="logoScaleSlider" min="50" max="150" value="85" style="width: 100%; accent-color: var(--ink, #231f20); cursor: pointer;" oninput="updateLogoScale(this.value)" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Transfer Finish Method:</label>
-            <select id="dtfFinishSelect" class="studio-select">
-              <option value="DTF High-Definition Matte Print">DTF High-Definition Matte Print (Standard)</option>
-              <option value="DTF Ultra-Durable Silicone Vinyl">DTF Ultra-Durable Silicone Vinyl</option>
-              <option value="High-Gloss Industrial Screen Transfer">High-Gloss Industrial Screen Transfer</option>
-              <option value="Woven Emblem Patch Transfer">Woven Emblem Patch Transfer</option>
-            </select>
+          <div class="form-group" style="margin-bottom: 28px;">
+            <label class="form-label" id="scaleLabel" style="margin-bottom: 12px;">Logo Display Scale: (3.5 inches)</label>
+            <input type="range" id="logoScaleSlider" min="50" max="150" value="85" style="width: 100%; accent-color: var(--green, #3e8e42); cursor: pointer;" oninput="updateLogoScale(this.value)" />
           </div>
         </div>
 
         <!-- TEXT EMBROIDERY SECTION -->
         <div id="embSection" style="display: none;">
-          <div class="helper-note" style="border-left-color: #ccdc29; background: #fafae6; color: #404707;">
+          <div class="helper-note" style="border-left-color: #ccdc29; background: #fafae6; color: #404707; margin-bottom: 24px;">
             <strong style="font-family: 'Acumin Variable Concept', sans-serif; text-transform: uppercase;">Text &amp; Thread Embroidery Studio:</strong> Engineered for employee names, executive titles, and department emblems with industrial laundering density.
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Line 1 Text (Primary Title or Company Name):</label>
-            <input type="text" id="embLine1" class="studio-input" placeholder="e.g. EXECUTIVE CHEF" value="YOUR LOGO" oninput="updateEmbText()" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 22px;">
+            <div>
+              <label class="form-label">Line 1 Text (Primary Title / Company):</label>
+              <input type="text" id="embLine1" class="studio-input" placeholder="e.g. EXECUTIVE CHEF" value="YOUR LOGO" style="padding: 12px 14px;" oninput="updateEmbText()" />
+            </div>
+
+            <div>
+              <label class="form-label">Line 2 Text (Optional Subtitle / Division):</label>
+              <input type="text" id="embLine2" class="studio-input" placeholder="e.g. HOSPITALITY DIVISION" value="EST. 2026" style="padding: 12px 14px;" oninput="updateEmbText()" />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Line 2 Text (Optional Subtitle or Department):</label>
-            <input type="text" id="embLine2" class="studio-input" placeholder="e.g. HOSPITALITY DIVISION" value="EST. 2026" oninput="updateEmbText()" />
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 22px;">
+            <div>
+              <label class="form-label">Embroidery Typography Style:</label>
+              <select id="embFontSelect" class="studio-select" style="padding: 12px 14px;" onchange="updateEmbFont(this.value)">
+                <option value="font-block">Classic B2B Block (Bold Gothic)</option>
+                <option value="font-serif">Traditional Executive (Serif)</option>
+                <option value="font-script">Artisanal Script (Cursive Tailored)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="form-label">Embroidery Placement Position:</label>
+              <select id="embPlacementSelect" class="studio-select" style="padding: 12px 14px;" onchange="updatePlacement(this.value)">
+                <option value="place-left-chest">Left Chest (Standard Name / Emblem)</option>
+                <option value="place-right-chest">Right Chest</option>
+                <option value="place-pocket">Pocket Center / Bib</option>
+                <option value="place-upper-sleeve">Upper Shoulder Sleeve</option>
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Embroidery Typography Style:</label>
-            <select id="embFontSelect" class="studio-select" onchange="updateEmbFont(this.value)">
-              <option value="font-block">Classic B2B Block (Bold Gothic)</option>
-              <option value="font-serif">Traditional Executive (Serif)</option>
-              <option value="font-script">Artisanal Script (Cursive Tailored)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom: 28px;">
             <label class="form-label">Thread Color Palette:</label>
-            <div class="swatch-row" id="threadColorSwatches">
+            <div class="swatch-row" id="threadColorSwatches" style="gap: 12px;">
               <button class="thread-swatch active" style="background: #231f20;" title="Obsidian Black Ink" onclick="selectThreadColor('#231f20', 'Obsidian Black Ink', this)"></button>
               <button class="thread-swatch" style="background: #3e8e42;" title="Fabric8 Royal Green" onclick="selectThreadColor('#3e8e42', 'Fabric8 Royal Green', this)"></button>
               <button class="thread-swatch" style="background: #ffd700;" title="Imperial Gold" onclick="selectThreadColor('#ffd700', 'Imperial Gold', this)"></button>
@@ -468,16 +489,6 @@
               <button class="thread-swatch" style="background: #8e2a2a;" title="Burgundy Crimson" onclick="selectThreadColor('#8e2a2a', 'Burgundy Crimson', this)"></button>
             </div>
             <p id="selectedColorLabel" style="font-size: 12.5px; color: var(--muted); margin-top: 10px; font-weight: bold;">Selected Thread: <strong style="color: var(--ink);">Obsidian Black Ink</strong></p>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Embroidery Placement Position:</label>
-            <select id="embPlacementSelect" class="studio-select" onchange="updatePlacement(this.value)">
-              <option value="place-left-chest">Left Chest (Standard Name / Emblem)</option>
-              <option value="place-right-chest">Right Chest</option>
-              <option value="place-pocket">Pocket Center / Bib</option>
-              <option value="place-upper-sleeve">Upper Shoulder Sleeve</option>
-            </select>
           </div>
         </div>
 
@@ -579,7 +590,7 @@
         
         if (incomingImg) {
           currentGarmentImg = incomingImg;
-          document.getElementById("baseGarmentImg").src = incomingImg;
+          document.getElementById("baseGarmentImg").src = encodeURI(incomingImg);
           document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
           
           // Prepend an active pill representing the exact product chosen in shop
@@ -659,9 +670,9 @@
       currentGarmentImg = imgSrc;
       currentGarmentName = name;
       currentGarmentSku = "F8-STUDIO-CUSTOM";
-      document.getElementById("baseGarmentImg").src = imgSrc;
+      document.getElementById("baseGarmentImg").src = encodeURI(imgSrc);
       document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
-      btnEl.classList.add("active");
+      if (btnEl) btnEl.classList.add("active");
       const modeTag = document.getElementById("canvasModeTag");
       if (modeTag) modeTag.textContent = name;
     }
