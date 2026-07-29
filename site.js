@@ -1567,16 +1567,7 @@ function initProductPage(sku) {
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           const data = imageData.data;
           
-          // Auto-transparency: convert near-white to transparent
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            if (r > 240 && g > 240 && b > 240) {
-              data[i + 3] = 0; // Alpha to 0
-            }
-          }
-          
+
           ctx.putImageData(imageData, 0, 0);
           uploadedLogoBase64 = canvas.toDataURL('image/png').split(',')[1];
           
@@ -3144,23 +3135,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCapabilityBelt();
 });
 
-    function autoRemoveBackground(src, callback) {
-      const img = new Image();
-      img.onload = function() {
-        const cvs = document.createElement('canvas');
-        cvs.width = img.width; cvs.height = img.height;
-        const c = cvs.getContext('2d');
-        c.drawImage(img,0,0);
-        const d = c.getImageData(0,0,cvs.width,cvs.height);
-        const bg = [d.data[0], d.data[1], d.data[2]];
-        for(let i=0; i<d.data.length; i+=4) {
-           if(Math.abs(d.data[i]-bg[0])<25 && Math.abs(d.data[i+1]-bg[1])<25 && Math.abs(d.data[i+2]-bg[2])<25) {
-               d.data[i+3] = 0;
-           }
-        }
-        c.putImageData(d,0,0);
-        callback(cvs.toDataURL('image/png'));
-      };
-      img.src = src;
-    }
+
     
