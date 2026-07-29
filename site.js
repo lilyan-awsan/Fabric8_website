@@ -1373,25 +1373,18 @@ function initProductPage(sku) {
   }
 
   const updateFinishHelper = () => {
-      const helper = document.getElementById("finishHelperText");
-      const sel = document.querySelector('input[name="pageLogoFinish"]:checked');
-      if(sel && helper) {
-        helper.style.display = "block";
-        if(sel.value === "Embroidery") helper.textContent = "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
-        else helper.textContent = "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
-      }
-
     const finishVal = document.querySelector('input[name="pageLogoFinish"]:checked')?.value || "";
-    const helper = document.getElementById("finishHelperText");
-    if (!helper) return;
-    if (finishVal.toLowerCase().includes("dtf") || finishVal.toLowerCase().includes("direct")) {
-      helper.textContent = siteSettings?.brandingSettings?.dtfHelperNote || "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
-      helper.style.display = "block";
-    } else if (finishVal.toLowerCase().includes("embroidery") || finishVal.toLowerCase().includes("embroider")) {
-      helper.textContent = siteSettings?.brandingSettings?.embroideryHelperNote || "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
-      helper.style.display = "block";
+    const helperEl = document.getElementById("finishHelperText");
+    if (!helperEl) return;
+    
+    if (finishVal === "Embroidery") {
+      helperEl.textContent = siteSettings?.brandingSettings?.embroideryHelperNote || "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
+      helperEl.style.display = "block";
+    } else if (finishVal.toLowerCase().includes("dtf") || finishVal.toLowerCase().includes("direct")) {
+      helperEl.textContent = siteSettings?.brandingSettings?.dtfHelperNote || "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
+      helperEl.style.display = "block";
     } else {
-      helper.style.display = "none";
+      helperEl.style.display = "none";
     }
   };
 
