@@ -1365,6 +1365,14 @@ function initProductPage(sku) {
   }
 
   const updateFinishHelper = () => {
+      const helper = document.getElementById("finishHelperText");
+      const sel = document.querySelector('input[name="pageLogoFinish"]:checked');
+      if(sel && helper) {
+        helper.style.display = "block";
+        if(sel.value === "Embroidery") helper.textContent = "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
+        else helper.textContent = "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.";
+      }
+
     const finishVal = document.querySelector('input[name="pageLogoFinish"]:checked')?.value || "";
     const helper = document.getElementById("finishHelperText");
     if (!helper) return;
@@ -1394,9 +1402,7 @@ function initProductPage(sku) {
         // Logo still supports embroidery finish, just restrict finish options
       }
       
-      const allowedFinishes = custType === "dtf_only" ? ["Direct To Fabric (DTF) Printing"] : 
-                              custType === "embroidery_only" ? ["Embroidery"] : 
-                              ["Embroidery", "Direct To Fabric (DTF) Printing"];
+      const allowedFinishes = ["Embroidery", "Direct To Fabric (DTF) Printing"];
       
       const renderRadioGroup = (name, options) => {
         return options.map((opt, idx) => `
@@ -1847,80 +1853,154 @@ function renderTextInputs() {
   container.innerHTML = html;
 }
 
-function renderTextPreview(preview = document.getElementById("wizardTextPreview"), data = embroideryData, isIsolated = false) {
-  if (!preview) return;
-  
-  let text = [];
-  for (let i = 1; i <= data.lineCount; i++) {
-    if (data.textLines[`line${i}`]) {
-      text.push(data.textLines[`line${i}`]);
-    }
-  }
-  preview.innerHTML = text.join("<br>");
-  
-  let fontFamily = "sans-serif";
-  if (data.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
-  else if (data.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
-  else if (data.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
-  else if (data.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
-  preview.style.fontFamily = fontFamily;
-  
-  const threadColorObj = threadColors.find(c => c.name === data.threadColor);
-  preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
-  
-  if (data.type === "emblem") {
-    const bgObj = threadColors.find(c => c.name === data.bgColor);
-    const borderObj = threadColors.find(c => c.name === data.borderColor);
-    
-    preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
-    preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
-    preview.style.padding = "16px";
-    
-    if (data.selectedStyleSku === "Style EM1092") {
-      preview.style.borderRadius = "50%";
-      preview.style.aspectRatio = "1 / 1";
-      preview.style.display = "flex";
-      preview.style.flexDirection = "column";
-      preview.style.justifyContent = "center";
-      preview.style.alignItems = "center";
-    } else {
-      preview.style.borderRadius = "4px";
-      preview.style.aspectRatio = "auto";
-      preview.style.display = "block";
-    }
-  } else {
-    preview.style.backgroundColor = "transparent";
-    preview.style.border = "none";
-    preview.style.padding = "0";
-    preview.style.borderRadius = "0";
-    preview.style.aspectRatio = "auto";
-    preview.style.display = "block";
-  }
-
-  let scale = 1;
-  if (data.size === "small") scale = 0.7;
-  else if (data.size === "large") scale = 1.3;
-
-  let baseTransform = isIsolated ? `scale(${scale})` : `translate(-50%, -50%) scale(${scale})`;
-
-  if (!isIsolated) {
-    preview.style.left = "50%";
-    preview.style.top = "40%";
-    preview.style.transform = baseTransform;
-    
-    const pos = data.position;
-    if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
-    else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
-    else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
-    else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
-    else if (pos === "back") { preview.style.top = "30%"; }
-  } else {
-    preview.style.transform = baseTransform;
-    preview.style.left = "auto";
-    preview.style.top = "auto";
-  }
-}
-
+function renderTextPreview(preview = document.getElementById("wizardTextPreview"), data = embroideryData, isIsolated = false) {
+
+  if (!preview) return;
+
+  
+
+  let text = [];
+
+  for (let i = 1; i <= data.lineCount; i++) {
+
+    if (data.textLines[`line${i}`]) {
+
+      text.push(data.textLines[`line${i}`]);
+
+    }
+
+  }
+
+  preview.innerHTML = text.join("<br>");
+
+  
+
+  let fontFamily = "sans-serif";
+
+  if (data.fontStyle === "script") fontFamily = "cursive, 'Brush Script MT'";
+
+  else if (data.fontStyle === "serif") fontFamily = "serif, 'Times New Roman'";
+
+  else if (data.fontStyle === "athletic") fontFamily = "Impact, sans-serif";
+
+  else if (data.fontStyle === "typewriter") fontFamily = "monospace, 'Courier New'";
+
+  preview.style.fontFamily = fontFamily;
+
+  
+
+  const threadColorObj = threadColors.find(c => c.name === data.threadColor);
+
+  preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
+
+  
+
+  if (data.type === "emblem") {
+
+    const bgObj = threadColors.find(c => c.name === data.bgColor);
+
+    const borderObj = threadColors.find(c => c.name === data.borderColor);
+
+    
+
+    preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
+
+    preview.style.border = `3px solid ${borderObj ? borderObj.hex : "#000"}`;
+
+    preview.style.padding = "16px";
+
+    
+
+    if (data.selectedStyleSku === "Style EM1092") {
+
+      preview.style.borderRadius = "50%";
+
+      preview.style.aspectRatio = "1 / 1";
+
+      preview.style.display = "flex";
+
+      preview.style.flexDirection = "column";
+
+      preview.style.justifyContent = "center";
+
+      preview.style.alignItems = "center";
+
+    } else {
+
+      preview.style.borderRadius = "4px";
+
+      preview.style.aspectRatio = "auto";
+
+      preview.style.display = "block";
+
+    }
+
+  } else {
+
+    preview.style.backgroundColor = "transparent";
+
+    preview.style.border = "none";
+
+    preview.style.padding = "0";
+
+    preview.style.borderRadius = "0";
+
+    preview.style.aspectRatio = "auto";
+
+    preview.style.display = "block";
+
+  }
+
+
+
+  let scale = 1;
+
+  if (data.size === "small") scale = 0.7;
+
+  else if (data.size === "large") scale = 1.3;
+
+
+
+  let baseTransform = isIsolated ? `scale(${scale})` : `translate(-50%, -50%) scale(${scale})`;
+
+
+
+  if (!isIsolated) {
+
+    preview.style.left = "50%";
+
+    preview.style.top = "40%";
+
+    preview.style.transform = baseTransform;
+
+    
+
+    const pos = data.position;
+
+    if (pos === "left_chest") { preview.style.left = "65%"; preview.style.top = "35%"; }
+
+    else if (pos === "right_chest") { preview.style.left = "35%"; preview.style.top = "35%"; }
+
+    else if (pos === "right_sleeve") { preview.style.left = "20%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(-10deg)`; }
+
+    else if (pos === "left_sleeve") { preview.style.left = "80%"; preview.style.top = "35%"; preview.style.transform = `${baseTransform} rotate(10deg)`; }
+
+    else if (pos === "back") { preview.style.top = "30%"; }
+
+  } else {
+
+    preview.style.transform = baseTransform;
+
+    preview.style.left = "auto";
+
+    preview.style.top = "auto";
+
+  }
+
+}
+
+
+
 function renderSummary() {
   const list = document.getElementById("wizardSummaryList");
   if (!list) return;
@@ -3062,3 +3142,24 @@ document.addEventListener('DOMContentLoaded', () => {
   setupContactForm('contactForm', 'Contact Us Page');
   initCapabilityBelt();
 });
+
+    function autoRemoveBackground(src, callback) {
+      const img = new Image();
+      img.onload = function() {
+        const cvs = document.createElement('canvas');
+        cvs.width = img.width; cvs.height = img.height;
+        const c = cvs.getContext('2d');
+        c.drawImage(img,0,0);
+        const d = c.getImageData(0,0,cvs.width,cvs.height);
+        const bg = [d.data[0], d.data[1], d.data[2]];
+        for(let i=0; i<d.data.length; i+=4) {
+           if(Math.abs(d.data[i]-bg[0])<25 && Math.abs(d.data[i+1]-bg[1])<25 && Math.abs(d.data[i+2]-bg[2])<25) {
+               d.data[i+3] = 0;
+           }
+        }
+        c.putImageData(d,0,0);
+        callback(cvs.toDataURL('image/png'));
+      };
+      img.src = src;
+    }
+    
