@@ -396,7 +396,7 @@
         <label class="form-label" style="margin-bottom: 10px;">2. Select Customization Method:</label>
         <div class="tab-switcher">
           <button class="tab-btn active" id="tabDtfBtn" onclick="switchStudioMode('dtf')">(DTF) Direct to Fabric / Logo</button>
-          <button class="tab-btn" id="tabEmbBtn" onclick="switchStudioMode('embroidery')">Text &amp; Emblem Embroidery</button>
+          <button class="tab-btn" id="tabEmbBtn" onclick="switchStudioMode('embroidery')">Text Embroidery</button>
         </div>
 
         <!-- DTF & LOGO UPLOAD SECTION -->
@@ -414,7 +414,7 @@
             <div>
               <label class="form-label">Garment Placement Position:</label>
               <select id="dtfPlacementSelect" class="studio-select" style="padding: 12px 14px;" onchange="updatePlacement(this.value)">
-                <option value="place-left-chest">Left Chest (Standard Polo Pocket Area)</option>
+                <option value="place-left-chest">Left Chest (Standard Name / Logo)</option>
                 <option value="place-right-chest">Right Chest (Opposite Chest)</option>
                 <option value="place-center-back">Full Center Back (Large Graphic)</option>
                 <option value="place-upper-sleeve">Upper Shoulder Sleeve (Outer Shoulder)</option>
@@ -441,7 +441,7 @@
         <!-- TEXT EMBROIDERY SECTION -->
         <div id="embSection" style="display: none;">
           <div class="helper-note" style="border-left-color: #ccdc29; background: #fafae6; color: #404707; margin-bottom: 24px;">
-            <strong style="font-family: 'Acumin Variable Concept', sans-serif; text-transform: uppercase;">Text &amp; Thread Embroidery Studio:</strong> Engineered for employee names, executive titles, and department emblems with industrial laundering density.
+            <strong style="font-family: 'Acumin Variable Concept', sans-serif; text-transform: uppercase;">Text &amp; Thread Embroidery Studio:</strong> Engineered for employee names, executive titles, and custom embroidery with industrial laundering density.
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 22px;">
@@ -469,7 +469,7 @@
             <div>
               <label class="form-label">Embroidery Placement Position:</label>
               <select id="embPlacementSelect" class="studio-select" style="padding: 12px 14px;" onchange="updatePlacement(this.value)">
-                <option value="place-left-chest">Left Chest (Standard Name / Emblem)</option>
+                <option value="place-left-chest">Left Chest (Standard Name / Logo)</option>
                 <option value="place-right-chest">Right Chest</option>
                 <option value="place-pocket">Pocket Center / Bib</option>
                 <option value="place-upper-sleeve">Upper Shoulder Sleeve</option>
