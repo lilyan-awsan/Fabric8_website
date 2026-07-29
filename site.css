@@ -22,6 +22,10 @@ html {
   src: url('assets/fonts/heading.otf') format('opentype');
 }
 @font-face {
+  font-family: 'Acumin Condensed';
+  src: url('assets/fonts/heading-condensed.otf') format('opentype');
+}
+@font-face {
   font-family: 'Century Gothic';
   src: url('assets/fonts/body.ttf') format('truetype');
   font-weight: normal;
