@@ -903,6 +903,9 @@ async function fetchSettings() {
       if (document.getElementById("settingContactUSA")) document.getElementById("settingContactUSA").value = sc.contactUSA || "+1 770-710-2286";
       if (document.getElementById("settingContactJordan")) document.getElementById("settingContactJordan").value = sc.contactJordan || "+962 796 788 240";
       if (document.getElementById("settingContactEmail")) document.getElementById("settingContactEmail").value = sc.contactEmail || "hello@thefabric8.com";
+      if (document.getElementById("settingSocialInstagram")) document.getElementById("settingSocialInstagram").value = sc.socialInstagram || "";
+      if (document.getElementById("settingSocialFacebook")) document.getElementById("settingSocialFacebook").value = sc.socialFacebook || "";
+      if (document.getElementById("settingSocialLinkedIn")) document.getElementById("settingSocialLinkedIn").value = sc.socialLinkedIn || "";
 
       const lc = settings.legalContent || {};
       if (document.getElementById("settingTermsText")) document.getElementById("settingTermsText").value = lc.termsText || "";
@@ -961,7 +964,10 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
       contactHQ: document.getElementById("settingContactHQ")?.value || "",
       contactUSA: document.getElementById("settingContactUSA")?.value || "",
       contactJordan: document.getElementById("settingContactJordan")?.value || "",
-      contactEmail: document.getElementById("settingContactEmail")?.value || ""
+      contactEmail: document.getElementById("settingContactEmail")?.value || "",
+      socialInstagram: document.getElementById("settingSocialInstagram")?.value || "",
+      socialFacebook: document.getElementById("settingSocialFacebook")?.value || "",
+      socialLinkedIn: document.getElementById("settingSocialLinkedIn")?.value || ""
     },
     legalContent: {
       termsText: document.getElementById("settingTermsText")?.value || "",

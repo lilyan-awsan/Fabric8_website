@@ -143,6 +143,20 @@ function applySiteSettings() {
     }
   }
 
+  // Social Links Engine
+  document.querySelectorAll('#cmsSocialInstagram').forEach(el => {
+    if (sc.socialInstagram) { el.href = sc.socialInstagram; el.style.display = "inline-block"; }
+    else { el.style.display = "none"; }
+  });
+  document.querySelectorAll('#cmsSocialFacebook').forEach(el => {
+    if (sc.socialFacebook) { el.href = sc.socialFacebook; el.style.display = "inline-block"; }
+    else { el.style.display = "none"; }
+  });
+  document.querySelectorAll('#cmsSocialLinkedIn').forEach(el => {
+    if (sc.socialLinkedIn) { el.href = sc.socialLinkedIn; el.style.display = "inline-block"; }
+    else { el.style.display = "none"; }
+  });
+
   // 7. Legal Agreements Engine
   const lc = siteSettings.legalContent || {};
   if (lc.termsText) {
