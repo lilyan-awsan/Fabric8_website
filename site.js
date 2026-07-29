@@ -1314,7 +1314,7 @@ function initProductPage(sku) {
   window.launchBrandingStudioFromProduct = function(e) {
     if (e) e.preventDefault();
     const prod = window.currentLoadedProduct || p || {};
-    const selectedColor = window.activeProductColor || (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
+    const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
     
     let targetImg = prod.image || "assets/products/Polo White Front.jpg";
     if (prod.images && prod.images.length > 0) {
@@ -1333,16 +1333,24 @@ function initProductPage(sku) {
     }
 
     const sizeInputs = document.querySelectorAll("#sizeQtyMatrix input[type='number']");
+    let selectedSizesList = [];
     if (sizeInputs && sizeInputs.length > 0) {
       let sum = 0;
       sizeInputs.forEach(inp => {
         const v = parseInt(inp.value);
         if (!isNaN(v) && v > 0) {
           sum += v;
-          targetSize = inp.dataset.size || targetSize;
+          selectedSizesList.push(inp.dataset.size);
         }
       });
-      if (sum > 0) totalQty = sum;
+      if (sum > 0) {
+        totalQty = sum;
+        if (selectedSizesList.length === 1) {
+          targetSize = selectedSizesList[0];
+        } else if (selectedSizesList.length > 1) {
+          targetSize = "Assorted / Sizing Roster";
+        }
+      }
     }
 
     const queryParams = new URLSearchParams({
