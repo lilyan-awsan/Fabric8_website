@@ -60,7 +60,7 @@
     .method-list { grid-template-columns: 1fr 1fr; }
     @media (max-width: 768px) { .method-list { grid-template-columns: 1fr; } }
     
-    .flip-card { min-height: 240px; cursor: pointer; perspective: 1000px; }
+    .flip-card { aspect-ratio: 1.5; min-height: 280px; cursor: pointer; perspective: 1000px; }
     .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
     .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
     @media (hover: none) {
@@ -69,42 +69,51 @@
     
     .flip-card-front, .flip-card-back {
       position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-      border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      padding: 32px; display: flex; flex-direction: column; justify-content: center;
+      background: #fff; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 16px; display: flex; flex-direction: column;
     }
-    .flip-card-back { transform: rotateY(180deg); text-align: center; align-items: center; }
+    .flip-card-back { transform: rotateY(180deg); }
     
-    /* ODD CARDS FRONT (LEFT) - GREEN */
-    .flip-card:nth-child(odd) .flip-card-front { background: var(--green); color: #fff; }
+    .card-inner-box {
+      flex: 1; border-radius: 6px; padding: 32px 40px; display: flex; flex-direction: column; justify-content: center;
+    }
     
-    /* ODD CARDS BACK - WHITE W/ GREEN BORDER */
-    .flip-card:nth-child(odd) .flip-card-back { background: #fff; border: 2px solid var(--green); color: var(--ink); }
-    .flip-card:nth-child(odd) .flip-card-back .method-title { color: var(--green); }
+    /* LEFT COLUMN (ODD CARDS: 1, 3, 5, 7) -> Inner Box GREEN */
+    .flip-card:nth-child(odd) .flip-card-front, .flip-card:nth-child(odd) .flip-card-back { border-left: 10px solid var(--yellow); }
+    .flip-card:nth-child(odd) .flip-card-front .card-inner-box { background: var(--green); color: #fff; }
     
-    /* EVEN CARDS FRONT (RIGHT) - YELLOW */
-    .flip-card:nth-child(even) .flip-card-front { background: var(--yellow); color: var(--ink); }
+    /* LEFT COLUMN BACK */
+    .flip-card:nth-child(odd) .flip-card-back .card-inner-box { background: var(--green); color: #fff; }
     
-    /* EVEN CARDS BACK - WHITE W/ YELLOW BORDER */
-    .flip-card:nth-child(even) .flip-card-back { background: #fff; border: 2px solid var(--yellow); color: var(--ink); }
-    .flip-card:nth-child(even) .flip-card-back .method-title { color: var(--yellow); }
+    /* RIGHT COLUMN (EVEN CARDS: 2, 4, 6, 8) -> Inner Box YELLOW */
+    .flip-card:nth-child(even) .flip-card-front, .flip-card:nth-child(even) .flip-card-back { border-left: 10px solid var(--green); }
+    .flip-card:nth-child(even) .flip-card-front .card-inner-box { background: var(--yellow); color: var(--ink); }
     
-    .method-num { font-size: 16px; font-weight: 900; margin-bottom: 12px; display: block; opacity: 0.8; }
-    .method-title { font-size: 20px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; line-height: 1.2; font-family: 'Acumin Variable Concept', 'Acumin Pro Condensed', Montserrat, sans-serif; }
-    .method-desc { font-size: 14px; opacity: 0.9; line-height: 1.5; margin: 0; font-weight: 500; }
+    /* RIGHT COLUMN BACK */
+    .flip-card:nth-child(even) .flip-card-back .card-inner-box { background: var(--yellow); color: var(--ink); }
+    
+    .method-num { font-size: 16px; font-weight: 800; margin-bottom: 12px; display: block; opacity: 0.9; }
+    .method-title { font-size: 24px; font-weight: 900; margin-bottom: 16px; text-transform: uppercase; line-height: 1.1; font-family: 'Acumin Variable Concept', 'Acumin Pro Condensed', Montserrat, sans-serif; letter-spacing: 0.5px; word-wrap: break-word; hyphens: auto; }
+    .method-desc { font-size: 15px; opacity: 0.95; line-height: 1.5; margin: 0; font-weight: 500; font-family: Montserrat, sans-serif; }
+    
   </style>
 
   <article class="flip-card">
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">01</span>
-        <h2 class="method-title">Knowledge Allocation</h2>
-        <p class="method-desc">Needs, pain points, brand identity, and operational environment are mapped first.</p>
+        <div class="card-inner-box">
+          <span class="method-num">01</span>
+          <h2 class="method-title">Knowledge Allocation</h2>
+          <p class="method-desc">Needs, pain points, brand identity, and operational environment are mapped first.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Knowledge Allocation</h2>
-        <p class="method-desc">We begin by listening: Your needs, pain-points, brand identity requirements, and operational environment are mapped before any solution is proposed.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Knowledge Allocation</h2>
+          <p class="method-desc">We begin by listening: Your needs, pain-points, brand identity requirements, and operational environment are mapped before any solution is proposed.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -112,14 +121,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">02</span>
-        <h2 class="method-title">Consultation</h2>
-        <p class="method-desc">Garment and textile solutions are tailored to role profile, climate, and budget.</p>
+        <div class="card-inner-box">
+          <span class="method-num">02</span>
+          <h2 class="method-title">Consultation</h2>
+          <p class="method-desc">Garment and textile solutions are tailored to role profile, climate, and budget.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Consultation</h2>
-        <p class="method-desc">We advise on garment and textile solutions tailored to your role profile, climate, and budget. There is always the right fabric for the right job.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Consultation</h2>
+          <p class="method-desc">We advise on garment and textile solutions tailored to your role profile, climate, and budget. There is always the right fabric for the right job.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -127,14 +140,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">03</span>
-        <h2 class="method-title">Budget Management</h2>
-        <p class="method-desc">Quantity, item selection, and distribution are optimized for maximum value.</p>
+        <div class="card-inner-box">
+          <span class="method-num">03</span>
+          <h2 class="method-title">Budget Management</h2>
+          <p class="method-desc">Quantity, item selection, and distribution are optimized for maximum value.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Budget Management</h2>
-        <p class="method-desc">We optimize quantity, item selection, and distribution to get maximum value within your approved budget and no surprises.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Budget Management</h2>
+          <p class="method-desc">We optimize quantity, item selection, and distribution to get maximum value within your approved budget and no surprises.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -142,14 +159,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">04</span>
-        <h2 class="method-title">Order Deliberation</h2>
-        <p class="method-desc">Alterations, edits, and specifications are locked before production.</p>
+        <div class="card-inner-box">
+          <span class="method-num">04</span>
+          <h2 class="method-title">Order Deliberation</h2>
+          <p class="method-desc">Alterations, edits, and specifications are locked before production.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Order Deliberation</h2>
-        <p class="method-desc">During the PO stage we manage alterations, edits, and problem-solving so your specification is locked and correct before production begins.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Order Deliberation</h2>
+          <p class="method-desc">During the PO stage we manage alterations, edits, and problem-solving so your specification is locked and correct before production begins.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -157,14 +178,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">05</span>
-        <h2 class="method-title">Branding</h2>
-        <p class="method-desc">Embroidery, printing, and finishing transform garments into brand assets.</p>
+        <div class="card-inner-box">
+          <span class="method-num">05</span>
+          <h2 class="method-title">Branding</h2>
+          <p class="method-desc">Embroidery, printing, and finishing transform garments into brand assets.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Branding</h2>
-        <p class="method-desc">Embroidery, printing, and finishing transform each garment into a brand asset: consistent, professional, and identity-aligned.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Branding</h2>
+          <p class="method-desc">Embroidery, printing, and finishing transform each garment into a brand asset: consistent, professional, and identity-aligned.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -172,14 +197,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">06</span>
-        <h2 class="method-title">Manufacturing</h2>
-        <p class="method-desc">Production follows agreed specifications with quality control checkpoints.</p>
+        <div class="card-inner-box">
+          <span class="method-num">06</span>
+          <h2 class="method-title">Manufacturing</h2>
+          <p class="method-desc">Production follows agreed specifications with quality control checkpoints.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Manufacturing</h2>
-        <p class="method-desc">Production is executed by agreed specifications, with quality control checkpoints and compliance with applicable health and safety standards throughout.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Manufacturing</h2>
+          <p class="method-desc">Production is executed by agreed specifications, with quality control checkpoints and compliance with applicable health and safety standards throughout.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -187,14 +216,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">07</span>
-        <h2 class="method-title">Logistics & Delivery</h2>
-        <p class="method-desc">Freight and final-mile delivery are coordinated and tracked to required orders.</p>
+        <div class="card-inner-box">
+          <span class="method-num">07</span>
+          <h2 class="method-title">Logistics & Delivery</h2>
+          <p class="method-desc">Freight and final-mile delivery are coordinated and tracked to required orders.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">Logistics & Delivery</h2>
-        <p class="method-desc">Coordinated freight and final-mile delivery to your sites, tracked and confirmed using critical path method for required orders.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">Logistics & Delivery</h2>
+          <p class="method-desc">Coordinated freight and final-mile delivery to your sites, tracked and confirmed using critical path method for required orders.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -202,14 +235,18 @@
     <div class="flip-card-inner">
       <!-- Front -->
       <div class="flip-card-front">
-        <span class="method-num">08</span>
-        <h2 class="method-title">After-Sales</h2>
-        <p class="method-desc">Guidance, reorders, support, and lifecycle planning continue after delivery.</p>
+        <div class="card-inner-box">
+          <span class="method-num">08</span>
+          <h2 class="method-title">After-Sales</h2>
+          <p class="method-desc">Guidance, reorders, support, and lifecycle planning continue after delivery.</p>
+        </div>
       </div>
       <!-- Back -->
       <div class="flip-card-back">
-        <h2 class="method-title">After-Sales</h2>
-        <p class="method-desc">Our relationship does not end at delivery. We handle guidance, problem solving, re-orders, and ongoing support for the lifecycle of your uniform planning.</p>
+        <div class="card-inner-box">
+          <h2 class="method-title">After-Sales</h2>
+          <p class="method-desc">Our relationship does not end at delivery. We handle guidance, problem solving, re-orders, and ongoing support for the lifecycle of your uniform planning.</p>
+        </div>
       </div>
     </div>
   </article>
@@ -222,6 +259,7 @@
     });
   });
 </script>
+
 
 
 
