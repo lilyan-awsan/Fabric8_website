@@ -167,6 +167,17 @@ function applySiteSettings() {
     const privacyEl = document.getElementById('cmsPrivacyContent');
     if (privacyEl) privacyEl.innerText = lc.privacyText;
   }
+
+  // 8. Branding Studio Placements (branding-studio.html)
+  const bs = siteSettings.brandingSettings || {};
+  const dtfSelect = document.getElementById('dtfPlacementSelect');
+  if (dtfSelect && bs.dtfPlacements) {
+    dtfSelect.innerHTML = bs.dtfPlacements.map(p => `<option value="${p.toLowerCase().replace(/ /g, '-')}">${p}</option>`).join("");
+  }
+  const embSelect = document.getElementById('embPlacementSelect');
+  if (embSelect && bs.embPlacements) {
+    embSelect.innerHTML = bs.embPlacements.map(p => `<option value="${p.toLowerCase().replace(/ /g, '-')}">${p}</option>`).join("");
+  }
 }
 
 
@@ -1414,12 +1425,15 @@ function initProductPage(sku) {
         `).join("");
       };
 
-      const defaultPlacements = siteSettings?.brandingSettings?.defaultPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+      const bs = siteSettings?.brandingSettings || {};
+      const dtfPlacements = bs.dtfPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+      const embPlacements = bs.embPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+      
       const logoPlacement = document.getElementById("pageLogoPlacementContainer");
-      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || defaultPlacements);
+      if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || dtfPlacements);
 
       const textPlacement = document.getElementById("pageTextPlacementContainer");
-      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || defaultPlacements);
+      if (textPlacement) textPlacement.innerHTML = renderRadioGroup("pageTextPlacement", p.supportedPlacements || embPlacements);
 
       const logoFinish = document.getElementById("pageLogoFinishContainer");
       if (logoFinish) {
@@ -1631,6 +1645,90 @@ function initProductPage(sku) {
       reader.readAsDataURL(file);
     });
   }
+
+
+  // --- Live Text Embroidery Preview ---
+  const textPreviewWrap = document.getElementById("pageTextPreview");
+  const textPreviewContent = document.getElementById("pageTextPreviewContent");
+  const tInput1 = document.getElementById("pageTextInput1");
+  const tInput2 = document.getElementById("pageTextInput2");
+  const tInput3 = document.getElementById("pageTextInput3");
+
+  const updateLiveTextPreview = () => {
+    if (!textPreviewWrap || !textPreviewContent || !tInput1) return;
+    const l1 = tInput1.value.trim();
+    const l2 = tInput2 ? tInput2.value.trim() : "";
+    const l3 = tInput3 ? tInput3.value.trim() : "";
+    
+    if (!l1 && !l2 && !l3) {
+      textPreviewWrap.style.display = "none";
+      return;
+    }
+    
+    textPreviewWrap.style.display = "block";
+    let html = l1;
+    if (l2) html += "<br>" + l2;
+    if (l3) html += "<br>" + l3;
+    textPreviewContent.innerHTML = html;
+    
+    // Get Font
+    const font = document.querySelector('input[name="pageTextFont"]:checked')?.value || "block";
+    if (font === "script") textPreviewContent.style.fontFamily = "'Brush Script MT', 'Lucida Calligraphy', cursive";
+    else if (font === "serif") textPreviewContent.style.fontFamily = "'Times New Roman', serif";
+    else textPreviewContent.style.fontFamily = "'Montserrat', sans-serif";
+    
+    // Get Color
+    const activeColorDot = document.querySelector("#pageTextThreadColors .color-dot.active");
+    if (activeColorDot) {
+      const hex = activeColorDot.style.backgroundColor;
+      textPreviewContent.style.color = hex;
+      // Special handling for white/light thread to keep it visible
+      if (hex === "rgb(255, 255, 255)" || hex === "white" || hex === "#ffffff") {
+        textPreviewContent.style.textShadow = "1px 1px 2px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8)";
+      } else {
+        textPreviewContent.style.textShadow = "1px 1px 2px rgba(255,255,255,0.8)";
+      }
+    }
+  };
+
+  if (tInput1) tInput1.addEventListener("input", updateLiveTextPreview);
+  if (tInput2) tInput2.addEventListener("input", updateLiveTextPreview);
+  if (tInput3) tInput3.addEventListener("input", updateLiveTextPreview);
+  
+  document.querySelectorAll('input[name="pageTextFont"]').forEach(radio => {
+    radio.addEventListener("change", updateLiveTextPreview);
+  });
+  
+  if (threadColorDiv) {
+    threadColorDiv.addEventListener("click", (e) => {
+      if (e.target.classList.contains("color-dot")) {
+        // Small timeout to allow the other click listener to add 'active' class
+        setTimeout(updateLiveTextPreview, 10);
+      }
+    });
+  }
+  
+  // Drag logic for text preview
+  if (textPreviewWrap) {
+    let isTDragging = false;
+    let currTX, currTY, initTX, initTY, txOff = 0, tyOff = 0;
+    textPreviewWrap.onmousedown = (e) => {
+      initTX = e.clientX - txOff;
+      initTY = e.clientY - tyOff;
+      isTDragging = true;
+    };
+    document.addEventListener("mouseup", () => { isTDragging = false; });
+    document.addEventListener("mousemove", (e) => {
+      if (isTDragging) {
+        e.preventDefault();
+        currTX = e.clientX - initTX;
+        currTY = e.clientY - initTY;
+        txOff = currTX; tyOff = currTY;
+        textPreviewWrap.style.transform = `translate(${currTX}px, ${currTY}px)`;
+      }
+    });
+  }
+  // --- End Live Text Embroidery Preview ---
 
   // Add to Cart
   document.getElementById("pageAddToCart")?.addEventListener("click", () => {

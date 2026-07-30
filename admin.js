@@ -589,7 +589,10 @@ function renderImagePreviews() {
 window.updateImageColorMatch = function(type, index, colorName) {
   if (type === 'pending' && pendingImages[index]) {
     const origName = pendingImages[index].name || "image.png";
-    const cleanName = origName.replace(/^([a-zA-Z0-9]+)_/, "");
+    let cleanName = origName;
+    if (origName.includes("_")) {
+      cleanName = origName.split("_").slice(1).join("_"); // Remove existing color prefix
+    }
     pendingImages[index].name = colorName ? `${colorName}_${cleanName}` : cleanName;
   }
 };
@@ -780,6 +783,9 @@ let categories1stLayer = [
   { name: "Education", enabled: false },
   { name: "Aviation", enabled: false }
 ];
+
+let dtfPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+let embPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
 let categories2ndLayer = [
   { name: "HEAD WEAR", enabled: true },
   { name: "TOP WEAR", enabled: true },
@@ -787,6 +793,36 @@ let categories2ndLayer = [
   { name: "OUTER WEAR", enabled: true },
   { name: "ACCESSORIES", enabled: true }
 ];
+
+
+function renderBrandingPlacements() {
+  const dtfList = document.getElementById("cmsDtfPlacementList");
+  const embList = document.getElementById("cmsEmbPlacementList");
+  if(dtfList) {
+    dtfList.innerHTML = dtfPlacements.map((p, idx) => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; border-bottom: 1px solid #eee;">
+        <span style="font-size: 13px;">${p}</span>
+        <button type="button" onclick="deletePlacement('dtf', ${idx})" style="background: none; border: none; color: #d00; font-size: 11px; cursor: pointer;">Remove</button>
+      </div>
+    `).join("");
+  }
+  if(embList) {
+    embList.innerHTML = embPlacements.map((p, idx) => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; border-bottom: 1px solid #eee;">
+        <span style="font-size: 13px;">${p}</span>
+        <button type="button" onclick="deletePlacement('emb', ${idx})" style="background: none; border: none; color: #d00; font-size: 11px; cursor: pointer;">Remove</button>
+      </div>
+    `).join("");
+  }
+}
+
+window.deletePlacement = function(type, idx) {
+  if (confirm("Remove this placement?")) {
+    if (type === 'dtf') dtfPlacements.splice(idx, 1);
+    else embPlacements.splice(idx, 1);
+    renderBrandingPlacements();
+  }
+};
 
 function renderCmsCategoryLists() {
   const list1 = document.getElementById("cms1stLayerList");
@@ -831,6 +867,7 @@ window.removeCmsCat = function(layer, index) {
     if (layer === '1st') categories1stLayer.splice(index, 1);
     if (layer === '2nd') categories2ndLayer.splice(index, 1);
     renderCmsCategoryLists();
+    renderBrandingPlacements();
   }
 };
 
@@ -841,6 +878,7 @@ document.getElementById("add1stLayerBtn")?.addEventListener("click", () => {
     categories1stLayer.push({ name: val, enabled: true });
     input.value = "";
     renderCmsCategoryLists();
+    renderBrandingPlacements();
   }
 });
 
@@ -851,7 +889,20 @@ document.getElementById("add2ndLayerBtn")?.addEventListener("click", () => {
     categories2ndLayer.push({ name: val, enabled: true });
     input.value = "";
     renderCmsCategoryLists();
+    renderBrandingPlacements();
   }
+});
+
+
+document.getElementById("addDtfPlacementBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("newDtfPlacementInput");
+  const val = input?.value.trim();
+  if (val) { dtfPlacements.push(val); input.value = ""; renderBrandingPlacements(); }
+});
+document.getElementById("addEmbPlacementBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("newEmbPlacementInput");
+  const val = input?.value.trim();
+  if (val) { embPlacements.push(val); input.value = ""; renderBrandingPlacements(); }
 });
 
 async function fetchSettings() {
@@ -862,6 +913,12 @@ async function fetchSettings() {
       if (settings.categories1stLayer) categories1stLayer = settings.categories1stLayer;
       if (settings.categories2ndLayer) categories2ndLayer = settings.categories2ndLayer;
       renderCmsCategoryLists();
+
+      if (settings.brandingSettings) {
+        if (settings.brandingSettings.dtfPlacements) dtfPlacements = settings.brandingSettings.dtfPlacements;
+        if (settings.brandingSettings.embPlacements) embPlacements = settings.brandingSettings.embPlacements;
+      }
+      renderBrandingPlacements();
 
       document.getElementById("settingPromoBanner").value = settings.promoBanner || "";
       document.getElementById("settingFooterLegal").value = settings.footerLegal || "";
@@ -917,10 +974,12 @@ async function fetchSettings() {
       if (document.getElementById("settingEmbroideryNote")) document.getElementById("settingEmbroideryNote").value = bc.embroideryHelperNote || "";
     } else {
       renderCmsCategoryLists();
+      renderBrandingPlacements();
     }
   } catch (err) {
     console.error("No existing settings found.");
     renderCmsCategoryLists();
+    renderBrandingPlacements();
   }
 }
 
@@ -974,7 +1033,8 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
       privacyText: document.getElementById("settingPrivacyText")?.value || ""
     },
     brandingSettings: {
-      defaultPlacements: document.getElementById("settingDefaultPlacements")?.value.split(",").map(p => p.trim()).filter(Boolean) || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"],
+      dtfPlacements: dtfPlacements,
+      embPlacements: embPlacements,
       dtfHelperNote: document.getElementById("settingDtfNote")?.value || "",
       embroideryHelperNote: document.getElementById("settingEmbroideryNote")?.value || ""
     }
