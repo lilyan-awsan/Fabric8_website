@@ -55,46 +55,46 @@
           engagement.</span>
       </div>
     </section>
-    <section class="method-list" style="display: grid; gap: 24px; padding: 40px 5vw; max-width: 1200px; margin: 0 auto;">
+    <section class="method-grid-layout" style="display: grid; gap: 24px; padding: 40px 5vw; max-width: 1200px; margin: 0 auto;">
   <style>
-    .method-list { grid-template-columns: 1fr 1fr; }
-    @media (max-width: 768px) { .method-list { grid-template-columns: 1fr; } }
+    .method-grid-layout { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 768px) { .method-grid-layout { grid-template-columns: 1fr; } }
     
-    .flip-card { aspect-ratio: auto; min-height: 240px; cursor: pointer; perspective: 1000px; }
-    .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
-    .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+    .method-flip-card { aspect-ratio: auto; min-height: 240px; cursor: pointer; perspective: 1000px; width: 100%; max-width: none; }
+    .method-flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+    .method-flip-card:hover .method-flip-inner { transform: rotateY(180deg); }
     @media (hover: none) {
-      .flip-card.is-flipped .flip-card-inner { transform: rotateY(180deg); }
+      .method-flip-card.is-flipped .method-flip-inner { transform: rotateY(180deg); }
     }
     
-    .flip-card-front, .flip-card-back {
+    .method-flip-front, .method-flip-back {
       position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
       background: #fff; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
       padding: 10px; display: flex; flex-direction: column;
     }
-    .flip-card-back { transform: rotateY(180deg); }
+    .method-flip-back { transform: rotateY(180deg); }
     
-    .card-inner-box {
+    .method-inner-box {
       flex: 1; border-radius: 6px; padding: 24px; display: flex; flex-direction: column; justify-content: center;
     }
     
     /* LEFT COLUMN (ODD CARDS) -> Inner Box GREEN, Border YELLOW */
-    .flip-card:nth-child(odd) .flip-card-front { border-left: 8px solid var(--yellow); }
-    .flip-card:nth-child(odd) .flip-card-front .card-inner-box { background: var(--green); color: #fff; }
+    .method-flip-card:nth-child(odd) .method-flip-front { border-left: 8px solid var(--yellow); }
+    .method-flip-card:nth-child(odd) .method-flip-front .method-inner-box { background: var(--green); color: #fff; }
     
     /* LEFT COLUMN BACK */
-    .flip-card:nth-child(odd) .flip-card-back { border-left: 8px solid var(--yellow); }
-    .flip-card:nth-child(odd) .flip-card-back .card-inner-box { background: #fff; border: 2px solid var(--green); color: var(--ink); align-items: center; text-align: center; }
-    .flip-card:nth-child(odd) .flip-card-back .method-title { color: var(--green); }
+    .method-flip-card:nth-child(odd) .method-flip-back { border-left: 8px solid var(--yellow); }
+    .method-flip-card:nth-child(odd) .method-flip-back .method-inner-box { background: #fff; border: 2px solid var(--green); color: var(--ink); align-items: center; text-align: center; }
+    .method-flip-card:nth-child(odd) .method-flip-back .method-title { color: var(--green); }
     
     /* RIGHT COLUMN (EVEN CARDS) -> Inner Box YELLOW, Border GREEN */
-    .flip-card:nth-child(even) .flip-card-front { border-left: 8px solid var(--green); }
-    .flip-card:nth-child(even) .flip-card-front .card-inner-box { background: var(--yellow); color: var(--ink); }
+    .method-flip-card:nth-child(even) .method-flip-front { border-left: 8px solid var(--green); }
+    .method-flip-card:nth-child(even) .method-flip-front .method-inner-box { background: var(--yellow); color: var(--ink); }
     
     /* RIGHT COLUMN BACK */
-    .flip-card:nth-child(even) .flip-card-back { border-left: 8px solid var(--green); }
-    .flip-card:nth-child(even) .flip-card-back .card-inner-box { background: #fff; border: 2px solid var(--yellow); color: var(--ink); align-items: center; text-align: center; }
-    .flip-card:nth-child(even) .flip-card-back .method-title { color: var(--yellow); }
+    .method-flip-card:nth-child(even) .method-flip-back { border-left: 8px solid var(--green); }
+    .method-flip-card:nth-child(even) .method-flip-back .method-inner-box { background: #fff; border: 2px solid var(--yellow); color: var(--ink); align-items: center; text-align: center; }
+    .method-flip-card:nth-child(even) .method-flip-back .method-title { color: var(--yellow); }
     
     .method-num { font-size: 14px; font-weight: 800; margin-bottom: 8px; display: block; opacity: 0.9; }
     .method-title { font-size: 22px; font-weight: 900; margin-bottom: 12px; text-transform: uppercase; line-height: 1.1; font-family: 'Acumin Variable Concept', 'Acumin Pro Condensed', Montserrat, sans-serif; letter-spacing: 0.5px; word-wrap: normal; word-break: keep-all; }
@@ -102,152 +102,152 @@
     
   </style>
 
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">01</span>
           <h2 class="method-title">Knowledge Allocation</h2>
           <p class="method-desc">Needs, pain points, brand identity, and operational environment are mapped first.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Knowledge Allocation</h2>
           <p class="method-desc">We begin by listening: Your needs, pain-points, brand identity requirements, and operational environment are mapped before any solution is proposed.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">02</span>
           <h2 class="method-title">Consultation</h2>
           <p class="method-desc">Garment and textile solutions are tailored to role profile, climate, and budget.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Consultation</h2>
           <p class="method-desc">We advise on garment and textile solutions tailored to your role profile, climate, and budget. There is always the right fabric for the right job.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">03</span>
           <h2 class="method-title">Budget Management</h2>
           <p class="method-desc">Quantity, item selection, and distribution are optimized for maximum value.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Budget Management</h2>
           <p class="method-desc">We optimize quantity, item selection, and distribution to get maximum value within your approved budget and no surprises.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">04</span>
           <h2 class="method-title">Order Deliberation</h2>
           <p class="method-desc">Alterations, edits, and specifications are locked before production.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Order Deliberation</h2>
           <p class="method-desc">During the PO stage we manage alterations, edits, and problem-solving so your specification is locked and correct before production begins.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">05</span>
           <h2 class="method-title">Branding</h2>
           <p class="method-desc">Embroidery, printing, and finishing transform garments into brand assets.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Branding</h2>
           <p class="method-desc">Embroidery, printing, and finishing transform each garment into a brand asset: consistent, professional, and identity-aligned.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">06</span>
           <h2 class="method-title">Manufacturing</h2>
           <p class="method-desc">Production follows agreed specifications with quality control checkpoints.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Manufacturing</h2>
           <p class="method-desc">Production is executed by agreed specifications, with quality control checkpoints and compliance with applicable health and safety standards throughout.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">07</span>
           <h2 class="method-title">Logistics & Delivery</h2>
           <p class="method-desc">Freight and final-mile delivery are coordinated and tracked to required orders.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">Logistics & Delivery</h2>
           <p class="method-desc">Coordinated freight and final-mile delivery to your sites, tracked and confirmed using critical path method for required orders.</p>
         </div>
       </div>
     </div>
   </article>
-  <article class="flip-card">
-    <div class="flip-card-inner">
+  <article class="method-flip-card">
+    <div class="method-flip-inner">
       <!-- Front -->
-      <div class="flip-card-front">
-        <div class="card-inner-box">
+      <div class="method-flip-front">
+        <div class="method-inner-box">
           <span class="method-num">08</span>
           <h2 class="method-title">After-Sales</h2>
           <p class="method-desc">Guidance, reorders, support, and lifecycle planning continue after delivery.</p>
         </div>
       </div>
       <!-- Back -->
-      <div class="flip-card-back">
-        <div class="card-inner-box">
+      <div class="method-flip-back">
+        <div class="method-inner-box">
           <h2 class="method-title">After-Sales</h2>
           <p class="method-desc">Our relationship does not end at delivery. We handle guidance, problem solving, re-orders, and ongoing support for the lifecycle of your uniform planning.</p>
         </div>
@@ -257,12 +257,13 @@
 </section>
 <script>
   // For mobile tap-to-flip
-  document.querySelectorAll('.flip-card').forEach(card => {
+  document.querySelectorAll('.method-flip-card').forEach(card => {
     card.addEventListener('click', () => {
       card.classList.toggle('is-flipped');
     });
   });
 </script>
+
 
 
 
