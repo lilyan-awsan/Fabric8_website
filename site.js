@@ -10,7 +10,7 @@ function applySiteSettings() {
     });
   }
   if (siteSettings.footerLegal) {
-    document.querySelectorAll('.site-footer-bottom p, footer div:last-child').forEach(footer => {
+    document.querySelectorAll('.site-footer-bottom p, footer > div:last-child').forEach(footer => {
       footer.innerHTML = siteSettings.footerLegal;
     });
   }
