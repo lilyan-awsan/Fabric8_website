@@ -722,6 +722,25 @@
           alert("This product does not support customization. Redirecting to cart.");
           window.location.href = "checkout.html";
         }
+      } else {
+        currentGarmentName = 'Classic White Polo Shirt';
+        currentGarmentSku = 'F8-STUDIO-POLO';
+        currentGarmentImg = 'assets/products/Polo White Front.jpg';
+        
+        document.getElementById("baseGarmentImg").src = encodeURI(currentGarmentImg);
+        
+        const modeTag = document.getElementById("canvasModeTag");
+        if (modeTag) modeTag.textContent = currentGarmentName;
+        
+        const selectorBox = document.querySelector(".garment-selector");
+        if (selectorBox) {
+          selectorBox.innerHTML = ''; 
+          const shopPill = document.createElement("button");
+          shopPill.className = "garment-pill active";
+          shopPill.textContent = `★ ${currentGarmentName}`;
+          shopPill.onclick = function() { switchGarment(currentGarmentImg, currentGarmentName, this); };
+          selectorBox.appendChild(shopPill);
+        }
       }
     });
 
