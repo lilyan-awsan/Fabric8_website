@@ -472,10 +472,9 @@
       "Left Thigh Pocket"
     ],
     "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
+      "Embroidery"
     ],
-    "customizationCapability": "both",
+    "customizationCapability": "Embroidery",
     "images": [
       "assets/products/Cargo Beige trousers.jpg",
       "assets/products/Cargo Beige trousers Side.jpg",
@@ -485,14 +484,6 @@
       "assets/products/Cargo Navy trousers.jpg",
       "assets/products/1785490970246_Cap_Burgundy.jpg"
     ],
-    "supportedFinishes": [
-      "Embroidery"
-    ],
-    "supportedPlacements": [
-      "Right Thigh Pocket",
-      "Left Thigh Pocket"
-    ],
-    "customizationCapability": "Embroidery",
     "placements": [
       {
         "name": "Right Thigh Pocket",
