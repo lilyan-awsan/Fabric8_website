@@ -534,7 +534,7 @@
       </p>
       <div style="display: flex; gap: 12px; justify-content: flex-end;">
         <button type="button" onclick="document.getElementById('disclaimerModal').style.display='none'" style="padding: 12px 20px; border: 1px solid var(--line); background: transparent; border-radius: 6px; cursor: pointer; font-weight: bold;">Cancel</button>
-        <button type="button" onclick="transferToQuoteCart()" style="padding: 12px 20px; border: none; background: var(--green); color: #fff; border-radius: 6px; cursor: pointer; font-weight: bold;">I Understand & Add to Cart</button>
+        <button type="button" onclick="transferToQuoteCart()" style="padding: 12px 20px; border: none; background: var(--green); color: #fff; border-radius: 6px; cursor: pointer; font-weight: bold;">ADD TO CART</button>
       </div>
     </div>
   </div>
@@ -880,15 +880,6 @@
       else if (className.includes("center-back")) label.textContent = "Center Back";
       else if (className.includes("sleeve")) label.textContent = "Upper Sleeve";
       else if (className.includes("pocket")) label.textContent = "Pocket / Bib";
-    }
-
-    function updateLogoScale(val) {
-      const img = document.getElementById("logoPreviewImg");
-      const percent = Number(val);
-      const inches = ((percent / 100) * 4.0).toFixed(1);
-      document.getElementById("scaleLabel").textContent = `Logo Display Scale: (${inches} inches)`;
-      img.style.maxWidth = `${percent}%`;
-      img.style.maxHeight = `${percent}%`;
     }
 
     function handleLogoUpload(e) {

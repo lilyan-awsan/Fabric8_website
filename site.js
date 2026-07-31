@@ -184,7 +184,7 @@ function applySiteSettings() {
     if (privacyEl) privacyEl.innerText = lc.privacyText;
   }
 
-  // 8. Branding Studio Placements (branding-studio.html)
+  // 8. Branding Studio Placements (product-customizer.html)
   const bs = siteSettings.brandingSettings || {};
   const dtfSelect = document.getElementById('dtfPlacementSelect');
   if (dtfSelect && bs.dtfPlacements) {
@@ -803,7 +803,7 @@ document.addEventListener("click", (event) => {
       mode: modeParam
     });
 
-    window.location.href = `branding-studio.html?${queryParams.toString()}`;
+    window.location.href = `product-customizer.html?${queryParams.toString()}`;
     return;
   }
   if (colorDot) {
@@ -1407,7 +1407,7 @@ function initProductPage(sku) {
       cust: prod.customizationCapability || prod.customizationPermissions || "both"
     });
     
-    window.location.href = `branding-studio.html?${queryParams.toString()}`;
+    window.location.href = `product-customizer.html?${queryParams.toString()}`;
   };
 
   const customizationSection = document.getElementById("productCustomizationSection");
