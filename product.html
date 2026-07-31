@@ -141,101 +141,12 @@
 
           <div id="productCustomizationSection" style="margin-bottom: 24px;">
             <a href="branding-studio.html" id="customizationToggleHeader" onclick="launchBrandingStudioFromProduct(event)" title="Click to launch Standalone Interactive Branding Studio" style="display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1.5px solid var(--green); border-radius: 8px; padding: 14px 16px; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(62, 142, 66, 0.08); text-decoration: none; user-select: none;">
-              <span style="font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);">CUSTOMIZATION STUDIO</span>
+              <span style="font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);">CUSTOMIZATION</span>
               <span id="customizationToggleIcon" style="font-size: 13.5px; color: var(--green); font-weight: 900; text-transform: uppercase;">+ Add Logo / Embroidery ➔</span>
             </a>
-
-            <div id="customizationTypeContainer" style="display: none; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <label class="customization-card" id="cardUploadLogo" style="border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s ease;">
-                <input type="radio" name="customizationType" value="upload_logo" style="display: none;">
-                <span style="font-size: 13px; font-weight: 800; display: block;">Upload Logo</span>
-                <span style="font-size: 11px; color: var(--muted); display: block; margin-top: 4px;">Print / Embroidery</span>
-              </label>
-              <label class="customization-card" id="cardTextEmbroidery" style="border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s ease;">
-                <input type="radio" name="customizationType" value="text_embroidery" style="display: none;">
-                <span style="font-size: 13px; font-weight: 800; display: block;">Text Embroidery</span>
-                <span style="font-size: 11px; color: var(--muted); display: block; margin-top: 4px;">Direct Lettering</span>
-              </label>
-            </div>
           </div>
 
-          <!-- Mockup Disclaimer Notice -->
-          <div id="brandingDisclaimer" style="margin-bottom: 20px; padding: 14px; background: #fdfaf3; border: 1px solid #e8e2d4; border-radius: 8px; font-size: 12px; line-height: 1.5; color: var(--ink); display: none; align-items: flex-start; gap: 10px;">
-            <span style="font-size: 16px; line-height: 1;">ⓘ</span>
-            <div>
-              <strong style="font-weight: 800;">Mockup Note:</strong> Mockup previews are approximate. Final thread colors and print dimensions will be scaled to match your chosen garment size specifications.
-            </div>
-          </div>
 
-          <div id="customizationSettings" style="display: none; margin-bottom: 24px; padding: 20px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.02);">
-            <!-- Upload Logo Settings -->
-            <div id="logoSettings" style="display: none; flex-direction: column; gap: 16px;">
-              <h4 style="margin: 0; font-size: 13px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid var(--line); padding-bottom: 10px;">1. Upload Logo & Placement</h4>
-              <input type="file" id="pageLogoUpload" accept="image/*" style="width: 100%; font-size: 13px; padding: 10px; border: 1px dashed var(--line); border-radius: 6px; background: #fdfdfd; cursor: pointer;" />
-              
-              <div style="display: flex; flex-direction: column; gap: 16px;">
-                <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Placement Recommendation</label>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="pageLogoPlacementContainer">
-                  </div>
-                </div>
-                <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Finish Choice</label>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;" id="pageLogoFinishContainer">
-                  </div>
-                  <div id="finishHelperText" style="margin-top: 10px; font-size: 12px; line-height: 1.5; color: var(--muted); background: #f8f8f6; padding: 10px 12px; border-radius: 6px; display: none;"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Text Embroidery Settings -->
-            <div id="textSettings" style="display: none; flex-direction: column; gap: 16px;">
-              <h4 style="margin: 0; font-size: 13px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid var(--line); padding-bottom: 10px;">Direct Text Embroidery</h4>
-              
-              <div>
-                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px;">Text Input (Line 1 - 14px)</label>
-                <input type="text" id="pageTextInput1" placeholder="Enter text for Line 1..." style="width: 100%; padding: 10px; font-size: 14px; border: 1px solid var(--line); border-radius: 6px; font-weight: 600;" />
-              </div>
-              <div>
-                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px;">Text Input (Line 2 - 12px)</label>
-                <input type="text" id="pageTextInput2" placeholder="Optional Line 2..." style="width: 100%; padding: 10px; font-size: 12px; border: 1px solid var(--line); border-radius: 6px; font-weight: 500;" />
-              </div>
-              <div>
-                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 4px;">Text Input (Line 3 - 12px)</label>
-                <input type="text" id="pageTextInput3" placeholder="Optional Line 3..." style="width: 100%; padding: 10px; font-size: 12px; border: 1px solid var(--line); border-radius: 6px; font-weight: 500;" />
-              </div>
-
-              <div style="display: flex; flex-direction: column; gap: 16px;">
-                <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Placement</label>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="pageTextPlacementContainer">
-                  </div>
-                </div>
-                <div>
-                  <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block;">Font Style</label>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;" id="pageTextFontContainer">
-                    <label class="font-radio-btn active" style="border: 1px solid var(--ink); background: #f2f1ed; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; transition: all 0.2s ease;">
-                      <input type="radio" name="pageTextFont" value="block" checked style="display: none;">
-                      <span style="font-size: 12px; font-weight: 800; color: var(--ink);">Block</span>
-                    </label>
-                    <label class="font-radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; transition: all 0.2s ease;">
-                      <input type="radio" name="pageTextFont" value="script" style="display: none;">
-                      <span style="font-size: 12px; font-weight: 800;">Script</span>
-                    </label>
-                    <label class="font-radio-btn" style="border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 10px; cursor: pointer; text-align: center; transition: all 0.2s ease;">
-                      <input type="radio" name="pageTextFont" value="serif" style="display: none;">
-                      <span style="font-size: 12px; font-weight: 800;">Serif</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 10px;">Premium Thread Color</label>
-                <div id="pageTextThreadColors" class="color-filter" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
-              </div>
-            </div>
-          </div>
 
           <button id="pageAddToCart" class="button primary" style="width: 100%; padding: 18px; font-size: 15px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">ADD TO CART</button>
         </div>

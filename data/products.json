@@ -88,6 +88,44 @@
       "Full Back",
       "Upper Left Sleeve",
       "Upper Right Sleeve"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Upper Left Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Upper Right Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -131,6 +169,23 @@
     "supportedPlacements": [
       "Left Chest",
       "Full Back"
+    ],
+    "customizationCapability": "Embroidery",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -178,6 +233,23 @@
     "supportedPlacements": [
       "Full Back",
       "Front Left Chest Pocket"
+    ],
+    "customizationCapability": "Embroidery",
+    "placements": [
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Front Left Chest Pocket",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -211,7 +283,9 @@
     ],
     "image": "assets/products/Chef Hat Grey -.jpg",
     "supportedFinishes": [],
-    "supportedPlacements": []
+    "supportedPlacements": [],
+    "customizationCapability": "N/A",
+    "placements": []
   },
   {
     "sku": "F8-005",
@@ -254,6 +328,16 @@
     ],
     "supportedPlacements": [
       "Front Center"
+    ],
+    "customizationCapability": "Embroidery",
+    "placements": [
+      {
+        "name": "Front Center",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -298,6 +382,16 @@
     ],
     "supportedPlacements": [
       "Front Center"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Front Center",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -391,7 +485,30 @@
       "assets/products/Cargo Navy trousers.jpg",
       "assets/products/1785490970246_Cap_Burgundy.jpg"
     ],
-    "image": "assets/products/Cargo Beige trousers.jpg"
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "supportedPlacements": [
+      "Right Thigh Pocket",
+      "Left Thigh Pocket"
+    ],
+    "customizationCapability": "Embroidery",
+    "placements": [
+      {
+        "name": "Right Thigh Pocket",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Left Thigh Pocket",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
+    ]
   },
   {
     "sku": "F8-009",
@@ -493,6 +610,23 @@
     "supportedPlacements": [
       "Front Center Panel",
       "Side Panel"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Front Center Panel",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Side Panel",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -538,6 +672,30 @@
       "Left Chest",
       "Right Chest",
       "Upper Left Sleeve"
+    ],
+    "customizationCapability": "Embroidery",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Upper Left Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -700,7 +858,9 @@
       "assets/products/Chef Trousers Grey.jpg"
     ],
     "supportedFinishes": [],
-    "supportedPlacements": []
+    "supportedPlacements": [],
+    "customizationCapability": "N/A",
+    "placements": []
   },
   {
     "id": "F8-014",
@@ -745,6 +905,23 @@
     "supportedPlacements": [
       "Bottom Left Corner",
       "Bottom Right Corner"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Bottom Left Corner",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Bottom Right Corner",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -834,6 +1011,23 @@
     "supportedPlacements": [
       "Left Corner",
       "Right Corner"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Left Corner",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Corner",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -937,6 +1131,44 @@
       "Full Front",
       "Full Back",
       "Sleeve"
+    ],
+    "customizationCapability": "DTF",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Front",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -1039,6 +1271,37 @@
       "Right Chest",
       "Full Back",
       "Sleeve"
+    ],
+    "customizationCapability": "DTF",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -1095,6 +1358,44 @@
       "Full Back",
       "Sleeve",
       "Collar"
+    ],
+    "customizationCapability": "DTF",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Collar",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -1145,6 +1446,37 @@
       "Right Chest",
       "Full Back",
       "Sleeve"
+    ],
+    "customizationCapability": "Embroidery",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -1196,6 +1528,44 @@
       "Full Back",
       "Sleeve",
       "Hood"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Front",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Hood",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -1248,6 +1618,44 @@
       "Full Back",
       "Sleeve",
       "Hood"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Hood",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   },
   {
@@ -1293,6 +1701,37 @@
       "Right Chest",
       "Full Back",
       "Sleeve"
+    ],
+    "customizationCapability": "Both",
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Right Chest",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      },
+      {
+        "name": "Sleeve",
+        "x": 50,
+        "y": 30,
+        "w": 15,
+        "h": 15
+      }
     ]
   }
 ]

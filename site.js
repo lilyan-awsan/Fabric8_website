@@ -2,12 +2,28 @@ let products = [];
 let siteSettings = {};
 
 function applySiteSettings() {
-  if (siteSettings.promoBanner) {
-    document.querySelectorAll('.promo-banner p, .topline a').forEach(el => {
-      if (el.id !== 'cmsMethodBrochureLink' && el.id !== 'cmsAboutProfileLink') {
-        el.textContent = siteSettings.promoBanner;
-      }
-    });
+  if (siteSettings.banners) {
+    const path = window.location.pathname.toLowerCase();
+    let pageKey = 'home';
+    if (path.includes('shop') || path.includes('product') || path.includes('checkout') || path.includes('branding')) pageKey = 'shop';
+    else if (path.includes('services')) pageKey = 'services';
+    else if (path.includes('sectors')) pageKey = 'sectors';
+    else if (path.includes('method')) pageKey = 'method';
+    else if (path.includes('about')) pageKey = 'about';
+    else if (path.includes('contact')) pageKey = 'contact';
+
+    const bannerText = siteSettings.banners[pageKey];
+    if (bannerText && bannerText.trim() !== '') {
+      document.querySelectorAll('.promo-banner p, .topline a').forEach(el => {
+        if (el.id !== 'cmsMethodBrochureLink' && el.id !== 'cmsAboutProfileLink') {
+          // Do not overwrite topline on shop, services, sectors
+          if (el.closest('.topline') && (path.includes('shop') || path.includes('product') || path.includes('checkout') || path.includes('branding') || path.includes('services') || path.includes('sectors'))) {
+            return;
+          }
+          el.textContent = bannerText;
+        }
+      });
+    }
   }
   if (siteSettings.footerLegal) {
     document.querySelectorAll('.site-footer-bottom p, footer > div:last-child').forEach(footer => {
@@ -1173,6 +1189,15 @@ function initProductPage(sku) {
   document.getElementById('productCategory').textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
   
+  const custSection = document.getElementById("productCustomizationSection");
+  if (custSection) {
+    if (p.customizationPermissions && p.customizationPermissions.toLowerCase() === "none") {
+      custSection.style.display = "none";
+    } else {
+      custSection.style.display = "block";
+    }
+  }
+  
   const genderBadge = document.getElementById('productGenderBadge');
   if (genderBadge && p.gender) {
     genderBadge.textContent = p.gender;
@@ -1371,7 +1396,8 @@ function initProductPage(sku) {
       size: targetSize,
       qty: totalQty,
       img: targetImg,
-      mode: "dtf"
+      mode: "dtf",
+      cust: prod.customizationPermissions || "both"
     });
     
     window.location.href = `branding-studio.html?${queryParams.toString()}`;
@@ -1402,7 +1428,7 @@ function initProductPage(sku) {
   if (customizationSection) {
     const custType = p.customizationCapability || p.customization || "both";
     
-    if (custType === "none") {
+    if (custType.toLowerCase() === "none" || custType.toLowerCase() === "n/a") {
       customizationSection.style.display = "none";
     } else {
       customizationSection.style.display = "block";
@@ -1747,32 +1773,7 @@ function initProductPage(sku) {
       return;
     }
     
-    // Check customization
-    const custType = document.querySelector('input[name="customizationType"]:checked')?.value;
     let brandingDesc = "Blank";
-    if (custType === 'upload_logo') {
-      const place = document.querySelector('input[name="pageLogoPlacement"]:checked')?.nextElementSibling.textContent || "Left Chest";
-      const finish = document.querySelector('input[name="pageLogoFinish"]:checked')?.nextElementSibling.textContent || "Embroidery";
-      const fileInput = document.getElementById("pageLogoUpload");
-      if (!fileInput.files.length || !uploadedLogoBase64) {
-        alert("Please upload a logo image and wait a moment for processing.");
-        return;
-      }
-      brandingDesc = `Logo (${finish}) on ${place}`;
-    } else if (custType === 'text_embroidery') {
-      const text1 = document.getElementById("pageTextInput1").value;
-      const text2 = document.getElementById("pageTextInput2")?.value || "";
-      const text3 = document.getElementById("pageTextInput3")?.value || "";
-      if (!text1) {
-        alert("Please enter text for at least Line 1.");
-        return;
-      }
-      const allText = [text1, text2, text3].filter(t => t.trim() !== "").join(" | ");
-      const place = document.querySelector('input[name="pageTextPlacement"]:checked')?.nextElementSibling.textContent || "Left Chest";
-      const font = document.querySelector('input[name="pageTextFont"]:checked')?.nextElementSibling.textContent || "Block";
-      const tColor = document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.threadColor || document.querySelector("#pageTextThreadColors .color-dot.active")?.dataset.color || "Black";
-      brandingDesc = `Text "${allText}" (${font}, ${tColor}) on ${place}`;
-    }
     
     // Add items for each size
     for (const [size, qty] of Object.entries(sizes)) {
@@ -1782,8 +1783,8 @@ function initProductPage(sku) {
         color: activeCatalogColor,
         size: size,
         branding: brandingDesc,
-        customizationType: custType || null,
-        logoData: custType === 'upload_logo' ? uploadedLogoBase64 : null
+        customizationType: null,
+        logoData: null
       });
     }
     

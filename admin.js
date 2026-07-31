@@ -920,7 +920,16 @@ async function fetchSettings() {
       }
       renderBrandingPlacements();
 
-      document.getElementById("settingPromoBanner").value = settings.promoBanner || "";
+      if (settings.banners) {
+        document.getElementById("settingBannerHome").value = settings.banners.home || "";
+        document.getElementById("settingBannerShop").value = settings.banners.shop || "";
+        document.getElementById("settingBannerServices").value = settings.banners.services || "";
+        document.getElementById("settingBannerSectors").value = settings.banners.sectors || "";
+        document.getElementById("settingBannerMethod").value = settings.banners.method || "";
+        document.getElementById("settingBannerAbout").value = settings.banners.about || "";
+        document.getElementById("settingBannerContact").value = settings.banners.contact || "";
+      }
+      
       document.getElementById("settingFooterLegal").value = settings.footerLegal || "";
 
       const sc = settings.siteContent || {};
@@ -992,7 +1001,15 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
   if (statusSpan) statusSpan.style.display = "none";
 
   const settingsPayload = {
-    promoBanner: document.getElementById("settingPromoBanner")?.value || "",
+    banners: {
+      home: document.getElementById("settingBannerHome")?.value || "",
+      shop: document.getElementById("settingBannerShop")?.value || "",
+      services: document.getElementById("settingBannerServices")?.value || "",
+      sectors: document.getElementById("settingBannerSectors")?.value || "",
+      method: document.getElementById("settingBannerMethod")?.value || "",
+      about: document.getElementById("settingBannerAbout")?.value || "",
+      contact: document.getElementById("settingBannerContact")?.value || ""
+    },
     footerLegal: document.getElementById("settingFooterLegal")?.value || "",
     categories1stLayer: categories1stLayer,
     categories2ndLayer: categories2ndLayer,
