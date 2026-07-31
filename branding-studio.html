@@ -349,12 +349,11 @@
       <div class="preview-stage">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
           <h3 style="font-size: 18px; color: var(--ink); font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; font-family: 'Acumin Variable Concept', sans-serif;">Real-Time Prototype Canvas</h3>
-          <span id="canvasModeTag" style="font-size: 11.5px; color: #ffffff; font-weight: bold; background: var(--ink, #231f20); padding: 6px 14px; border-radius: 4px; letter-spacing: 0.04em; text-transform: uppercase;">Classic White Polo Shirt</span>
+          <span id="canvasModeTag" style="font-size: 11.5px; color: #ffffff; font-weight: bold; background: var(--ink, #231f20); padding: 6px 14px; border-radius: 4px; letter-spacing: 0.04em; text-transform: uppercase;">Loading Product...</span>
         </div>
 
         <div class="canvas-viewport" id="canvasViewport">
-          <!-- Default Polo Shirt Canvas -->
-          <img id="baseGarmentImg" src="assets/products/Polo White Front.jpg" alt="Garment Canvas" />
+          <img id="baseGarmentImg" src="" alt="Garment Canvas" style="display: none;" onload="this.style.display='block'" />
           
           <!-- Live Simulation Layer (Calibrated directly onto fabric) -->
           <div class="simulation-overlay place-left-chest" id="simulationBox" title="Click or hover to align custom branding positioning">
@@ -370,14 +369,8 @@
 
         <!-- Garment Swatch Selector (Standalone Product Images) -->
         <div style="margin-top: 24px;" id="garmentSwatchesContainer">
-          <label style="font-size: 11.5px; color: var(--muted); font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Century Gothic', sans-serif;">1. Switch Garment Canvas Style:</label>
+          <label style="font-size: 11.5px; color: var(--muted); font-weight: bold; text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Century Gothic', sans-serif;">Active Garment Selected:</label>
           <div class="garment-selector">
-            <button class="garment-pill active" onclick="switchGarment('assets/products/Polo White Front.jpg', 'Classic White Polo Shirt', this)">White Polo Shirt</button>
-            <button class="garment-pill" onclick="switchGarment('assets/products/Polo Black 3.jpg', 'Executive Black Polo', this)">Black Polo</button>
-            <button class="garment-pill" onclick="switchGarment('assets/products/Scrub Ocean Blue Female front.jpg', 'Medical & Healthcare Scrub', this)">Ocean Blue Scrub</button>
-            <button class="garment-pill" onclick="switchGarment('assets/products/Chef jacket white.jpg', 'Culinary Chef Coat', this)">Chef Coat</button>
-            <button class="garment-pill" onclick="switchGarment('assets/products/Hoodie Black.jpg', 'Industrial Workwear Hoodie', this)">Workwear Hoodie</button>
-            <button class="garment-pill" onclick="switchGarment('assets/products/Cap Black.jpg', 'Uniform Headwear Cap', this)">Headwear Cap</button>
           </div>
         </div>
       </div>
@@ -623,17 +616,21 @@
         if (incomingImg) {
           currentGarmentImg = incomingImg;
           document.getElementById("baseGarmentImg").src = encodeURI(incomingImg);
-          document.querySelectorAll(".garment-pill").forEach(p => p.classList.remove("active"));
           
           // Prepend an active pill representing the exact product chosen in shop
           const selectorBox = document.querySelector(".garment-selector");
           if (selectorBox) {
+            // Remove the hardcoded Polo pills
+            selectorBox.innerHTML = ''; 
             const shopPill = document.createElement("button");
             shopPill.className = "garment-pill active";
             shopPill.textContent = `★ ${incomingName}`;
             shopPill.onclick = function() { switchGarment(incomingImg, incomingName, this); };
-            selectorBox.prepend(shopPill);
+            selectorBox.appendChild(shopPill);
           }
+        } else {
+          // Strict enforcement: if no img payload, redirect to shop
+          window.location.href = "shop.html";
         }
 
         if (incomingSize) {
@@ -681,13 +678,8 @@
             const dtfSelect = document.getElementById("dtfPlacementSelect");
             const embSelect = document.getElementById("embPlacementSelect");
             const mapPlacementToValue = (name) => {
-              const lower = name.toLowerCase();
-              if (lower.includes("left chest")) return "place-left-chest";
-              if (lower.includes("right chest")) return "place-right-chest";
-              if (lower.includes("back")) return "place-center-back";
-              if (lower.includes("sleeve")) return "place-upper-sleeve";
-              if (lower.includes("pocket") || lower.includes("corner")) return "place-pocket";
-              return "place-left-chest"; // default fallback
+              // Instead of arbitrary mapping, we can use the exact string name for value
+              return name.toLowerCase().replace(/\s+/g, '-');
             };
             
             const optionsHtml = placements.map(p => `<option value="${mapPlacementToValue(p)}">${p}</option>`).join('');
@@ -697,16 +689,25 @@
         }
 
         // Apply Customization Restrictions
-        const incomingCust = params.get('cust') || (loadedProduct ? (loadedProduct.customizationCapability || loadedProduct.customization || "both") : "both");
+        const incomingCustStr = params.get('cust') || "Both";
+        const incomingCust = loadedProduct ? (loadedProduct.customizationCapability || loadedProduct.customization || incomingCustStr) : incomingCustStr;
+        
         const tabDtf = document.getElementById("tabDtfBtn");
         const tabEmb = document.getElementById("tabEmbBtn");
         
-        if (incomingCust === 'embroidery_only') {
-          if(tabDtf) tabDtf.style.display = 'none';
+        if (incomingCust.toLowerCase() === 'embroidery' || incomingCust.toLowerCase() === 'embroidery_only') {
+          if (tabDtf) tabDtf.style.display = 'none';
           switchStudioMode('embroidery');
-        } else if (incomingCust === 'dtf_only') {
-          if(tabEmb) tabEmb.style.display = 'none';
+        } else if (incomingCust.toLowerCase() === 'dtf' || incomingCust.toLowerCase() === 'dtf_only') {
+          if (tabEmb) tabEmb.style.display = 'none';
           switchStudioMode('dtf');
+        } else if (incomingCust.toLowerCase() === 'both') {
+          // Show both, default to DTF or what incomingMode said
+          if (tabDtf) tabDtf.style.display = 'block';
+          if (tabEmb) tabEmb.style.display = 'block';
+        } else if (incomingCust.toLowerCase() === 'n/a' || incomingCust.toLowerCase() === 'none') {
+          alert("This product does not support customization. Redirecting to cart.");
+          window.location.href = "checkout.html";
         }
       }
     });
