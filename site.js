@@ -1191,7 +1191,8 @@ function initProductPage(sku) {
   
   const custSection = document.getElementById("productCustomizationSection");
   if (custSection) {
-    if (p.customizationPermissions && p.customizationPermissions.toLowerCase() === "none") {
+    const custCap = p.customizationCapability || p.customizationPermissions || "both";
+    if (custCap.toLowerCase() === "none" || custCap.toLowerCase() === "n/a") {
       custSection.style.display = "none";
     } else {
       custSection.style.display = "block";
@@ -1397,7 +1398,7 @@ function initProductPage(sku) {
       qty: totalQty,
       img: targetImg,
       mode: "dtf",
-      cust: prod.customizationPermissions || "both"
+      cust: prod.customizationCapability || prod.customizationPermissions || "both"
     });
     
     window.location.href = `branding-studio.html?${queryParams.toString()}`;
