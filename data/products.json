@@ -472,34 +472,19 @@
       "Left Thigh Pocket"
     ],
     "supportedFinishes": [
-      "Embroidery"
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
     ],
-    "customizationCapability": "Embroidery",
+    "customizationCapability": "both",
     "images": [
       "assets/products/Cargo Beige trousers.jpg",
       "assets/products/Cargo Beige trousers Side.jpg",
       "assets/products/Cargo Beige trousers Back.jpg",
       "assets/products/Cargo Black trousers.jpg",
       "assets/products/Cargo Charcoal trousers.jpg",
-      "assets/products/Cargo Navy trousers.jpg",
-      "assets/products/1785490970246_Cap_Burgundy.jpg"
+      "assets/products/Cargo Navy trousers.jpg"
     ],
-    "placements": [
-      {
-        "name": "Right Thigh Pocket",
-        "x": 50,
-        "y": 30,
-        "w": 15,
-        "h": 15
-      },
-      {
-        "name": "Left Thigh Pocket",
-        "x": 50,
-        "y": 30,
-        "w": 15,
-        "h": 15
-      }
-    ]
+    "image": "assets/products/Cargo Beige trousers.jpg"
   },
   {
     "sku": "F8-009",
