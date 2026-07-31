@@ -1350,6 +1350,37 @@ function initProductPage(sku) {
   window.currentLoadedProduct = p;
   window.launchBrandingStudioFromProduct = function(e) {
     if (e) e.preventDefault();
+
+    // 1. Validate Color Selection
+    const colorFilter = document.getElementById("productColorFilter");
+    if (colorFilter) {
+      const activeColorBtn = colorFilter.querySelector(".color-btn.active");
+      if (!activeColorBtn) {
+        alert("Please select a garment color before customizing.");
+        return;
+      }
+    }
+
+    // 2. Validate Size & Quantity Selection
+    const sizeInputs = document.querySelectorAll("#sizeQtyMatrix input[type='number']");
+    let totalQty = 0;
+    let selectedSizesList = [];
+    
+    if (sizeInputs && sizeInputs.length > 0) {
+      sizeInputs.forEach(inp => {
+        const v = parseInt(inp.value);
+        if (!isNaN(v) && v > 0) {
+          totalQty += v;
+          selectedSizesList.push(inp.dataset.size);
+        }
+      });
+    }
+
+    if (totalQty === 0) {
+      alert("Please enter a quantity for at least one size before customizing.");
+      return;
+    }
+
     const prod = window.currentLoadedProduct || p || {};
     const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
     
@@ -1360,34 +1391,9 @@ function initProductPage(sku) {
       else targetImg = prod.images[0];
     }
     
-    let totalQty = 50;
     let targetSize = "Assorted / Sizing Roster";
-    
-    // Check if user clicked/selected a size button directly
-    const activeBtn = document.querySelector("#sizeQtyMatrix .size-select-btn.selected") || document.querySelector("#sizeQtyMatrix .size-select-btn");
-    if (activeBtn && activeBtn.dataset.size) {
-      targetSize = activeBtn.dataset.size;
-    }
-
-    const sizeInputs = document.querySelectorAll("#sizeQtyMatrix input[type='number']");
-    let selectedSizesList = [];
-    if (sizeInputs && sizeInputs.length > 0) {
-      let sum = 0;
-      sizeInputs.forEach(inp => {
-        const v = parseInt(inp.value);
-        if (!isNaN(v) && v > 0) {
-          sum += v;
-          selectedSizesList.push(inp.dataset.size);
-        }
-      });
-      if (sum > 0) {
-        totalQty = sum;
-        if (selectedSizesList.length === 1) {
-          targetSize = selectedSizesList[0];
-        } else if (selectedSizesList.length > 1) {
-          targetSize = "Assorted / Sizing Roster";
-        }
-      }
+    if (selectedSizesList.length === 1) {
+      targetSize = selectedSizesList[0];
     }
 
     const queryParams = new URLSearchParams({
@@ -1759,6 +1765,16 @@ function initProductPage(sku) {
 
   // Add to Cart
   document.getElementById("pageAddToCart")?.addEventListener("click", () => {
+    // Validate Color Selection
+    const colorFilter = document.getElementById("productColorFilter");
+    if (colorFilter) {
+      const activeColorBtn = colorFilter.querySelector(".color-btn.active");
+      if (!activeColorBtn) {
+        alert("Please select a garment color before adding to cart.");
+        return;
+      }
+    }
+
     let totalQty = 0;
     const sizes = {};
     document.querySelectorAll(".matrix-qty-input").forEach(input => {
