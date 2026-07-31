@@ -629,8 +629,21 @@
             selectorBox.appendChild(shopPill);
           }
         } else {
-          // Strict enforcement: if no img payload, redirect to shop
-          window.location.href = "shop.html";
+          // Fallback to default Polo Shirt if no product payload exists
+          currentGarmentName = 'Classic White Polo Shirt';
+          currentGarmentSku = 'F8-STUDIO-POLO';
+          currentGarmentImg = 'assets/products/Polo White Front.jpg';
+          
+          document.getElementById("baseGarmentImg").src = encodeURI(currentGarmentImg);
+          const selectorBox = document.querySelector(".garment-selector");
+          if (selectorBox) {
+            selectorBox.innerHTML = ''; 
+            const shopPill = document.createElement("button");
+            shopPill.className = "garment-pill active";
+            shopPill.textContent = `★ ${currentGarmentName}`;
+            shopPill.onclick = function() { switchGarment(currentGarmentImg, currentGarmentName, this); };
+            selectorBox.appendChild(shopPill);
+          }
         }
 
         if (incomingSize) {
