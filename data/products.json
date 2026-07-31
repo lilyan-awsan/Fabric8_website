@@ -342,9 +342,11 @@
     ]
   },
   {
+    "id": "F8-008",
     "sku": "F8-008",
     "name": "Cargo Pants",
     "category": "Bottom Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Durable, functional pants for on-the-go teams.",
     "long": "Rugged pants with utility pockets and reinforced stitching for facilities, warehouse, or maintenance staff.",
@@ -360,32 +362,36 @@
       "Beige",
       "Black",
       "Charcoal",
-      "Navy"
+      "Navy",
+      "green"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Cargo Beige trousers.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "50 pieces",
     "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Right Thigh Pocket",
+      "Left Thigh Pocket"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
     "images": [
       "assets/products/Cargo Beige trousers.jpg",
       "assets/products/Cargo Beige trousers Side.jpg",
       "assets/products/Cargo Beige trousers Back.jpg",
       "assets/products/Cargo Black trousers.jpg",
       "assets/products/Cargo Charcoal trousers.jpg",
-      "assets/products/Cargo Navy trousers.jpg"
+      "assets/products/Cargo Navy trousers.jpg",
+      "assets/products/1785490970246_Cap_Burgundy.jpg"
     ],
-    "supportedFinishes": [
-      "Embroidery"
-    ],
-    "supportedPlacements": [
-      "Right Thigh Pocket",
-      "Left Thigh Pocket"
-    ]
+    "image": "assets/products/Cargo Beige trousers.jpg"
   },
   {
     "sku": "F8-009",
