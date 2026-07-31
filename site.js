@@ -755,7 +755,21 @@ document.addEventListener("click", (event) => {
 
   if (edit) {
     editingCartIndex = Number(edit.dataset.edit);
-    renderEditOrderSummaryModal(editingCartIndex);
+    const item = cart[editingCartIndex];
+    if (item) {
+      if (confirm("You will be redirected to the Branding Studio to edit this item. The current item will be removed from your cart.")) {
+        cart.splice(editingCartIndex, 1);
+        saveCart();
+        const queryParams = new URLSearchParams({
+          sku: item.sku || "F8-STUDIO-CUSTOM",
+          name: item.name || "Custom Uniform Garment",
+          color: item.color || "Standard",
+          size: item.size || "Assorted",
+          qty: item.quantity || 50,
+        });
+        window.location.href = `branding-studio.html?_cb=${Date.now()}&${queryParams.toString()}`;
+      }
+    }
   }
   
   if (addSelected) {
