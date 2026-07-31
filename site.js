@@ -1351,15 +1351,6 @@ function initProductPage(sku) {
   window.launchBrandingStudioFromProduct = function(e) {
     if (e) e.preventDefault();
 
-    // 1. Validate Color Selection
-    const colorFilter = document.getElementById("productColorFilter");
-    if (colorFilter) {
-      const activeColorBtn = colorFilter.querySelector(".color-dot.active");
-      if (!activeColorBtn) {
-        alert("Please select a garment color before customizing.");
-        return;
-      }
-    }
 
     // 2. Validate Size & Quantity Selection
     const sizeInputs = document.querySelectorAll("#sizeQtyMatrix input[type='number']");
@@ -1765,15 +1756,6 @@ function initProductPage(sku) {
 
   // Add to Cart
   document.getElementById("pageAddToCart")?.addEventListener("click", () => {
-    // Validate Color Selection
-    const colorFilter = document.getElementById("productColorFilter");
-    if (colorFilter) {
-      const activeColorBtn = colorFilter.querySelector(".color-dot.active");
-      if (!activeColorBtn) {
-        alert("Please select a garment color before adding to cart.");
-        return;
-      }
-    }
 
     let totalQty = 0;
     const sizes = {};
