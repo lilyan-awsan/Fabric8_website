@@ -1354,7 +1354,7 @@ function initProductPage(sku) {
     // 1. Validate Color Selection
     const colorFilter = document.getElementById("productColorFilter");
     if (colorFilter) {
-      const activeColorBtn = colorFilter.querySelector(".color-btn.active");
+      const activeColorBtn = colorFilter.querySelector(".color-dot.active");
       if (!activeColorBtn) {
         alert("Please select a garment color before customizing.");
         return;
@@ -1768,7 +1768,7 @@ function initProductPage(sku) {
     // Validate Color Selection
     const colorFilter = document.getElementById("productColorFilter");
     if (colorFilter) {
-      const activeColorBtn = colorFilter.querySelector(".color-btn.active");
+      const activeColorBtn = colorFilter.querySelector(".color-dot.active");
       if (!activeColorBtn) {
         alert("Please select a garment color before adding to cart.");
         return;
