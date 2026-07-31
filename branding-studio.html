@@ -708,16 +708,37 @@
         const tabDtf = document.getElementById("tabDtfBtn");
         const tabEmb = document.getElementById("tabEmbBtn");
         
+        const finishBtns = document.getElementById("dtfFinishButtons") ? document.getElementById("dtfFinishButtons").querySelectorAll("button") : [];
+        const embFinishBtn = Array.from(finishBtns).find(b => b.textContent.includes("EMBROIDERY"));
+        const dtfFinishBtn = Array.from(finishBtns).find(b => b.textContent.includes("DTF"));
+
         if (incomingCust.toLowerCase() === 'embroidery' || incomingCust.toLowerCase() === 'embroidery_only') {
-          if (tabDtf) tabDtf.style.display = 'none';
-          switchStudioMode('embroidery');
+          if (tabDtf) {
+            tabDtf.style.display = 'block';
+            tabDtf.textContent = "Upload Logo (Embroidery)";
+          }
+          if (tabEmb) tabEmb.style.display = 'block';
+          if (dtfFinishBtn) dtfFinishBtn.style.display = 'none';
+          if (embFinishBtn) embFinishBtn.click();
+          if (!incomingMode || incomingMode === 'dtf') switchStudioMode('dtf');
         } else if (incomingCust.toLowerCase() === 'dtf' || incomingCust.toLowerCase() === 'dtf_only') {
+          if (tabDtf) {
+            tabDtf.style.display = 'block';
+            tabDtf.textContent = "(DTF) Direct to Fabric / Logo";
+          }
           if (tabEmb) tabEmb.style.display = 'none';
+          if (embFinishBtn) embFinishBtn.style.display = 'none';
+          if (dtfFinishBtn) dtfFinishBtn.click();
           switchStudioMode('dtf');
         } else if (incomingCust.toLowerCase() === 'both') {
           // Show both, default to DTF or what incomingMode said
-          if (tabDtf) tabDtf.style.display = 'block';
+          if (tabDtf) {
+            tabDtf.style.display = 'block';
+            tabDtf.textContent = "(DTF) Direct to Fabric / Logo";
+          }
           if (tabEmb) tabEmb.style.display = 'block';
+          if (embFinishBtn) embFinishBtn.style.display = 'inline-block';
+          if (dtfFinishBtn) dtfFinishBtn.style.display = 'inline-block';
         } else if (incomingCust.toLowerCase() === 'n/a' || incomingCust.toLowerCase() === 'none') {
           alert("This product does not support customization. Redirecting to cart.");
           window.location.href = "checkout.html";

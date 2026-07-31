@@ -800,10 +800,11 @@ document.addEventListener("click", (event) => {
       color: activeCatalogColor,
       qty: quantity,
       img: targetImg,
-      mode: modeParam
+      mode: modeParam,
+      cust: selectedProduct.customizationCapability || selectedProduct.customizationPermissions || "both"
     });
 
-    window.location.href = `product-customizer.html?${queryParams.toString()}`;
+    window.location.href = `branding-studio.html?_cb=${Date.now()}&${queryParams.toString()}`;
     return;
   }
   if (colorDot) {
@@ -1387,6 +1388,12 @@ function initProductPage(sku) {
       targetSize = selectedSizesList[0];
     }
 
+    let modeParam = "dtf";
+    const custSetting = (prod.customizationCapability || prod.customizationPermissions || "both").toLowerCase();
+    if (custSetting === "embroidery" || custSetting === "embroidery_only") {
+      modeParam = "embroidery";
+    }
+
     const queryParams = new URLSearchParams({
       sku: prod.sku || "F8-STUDIO-CUSTOM",
       name: prod.name || "Custom Uniform Garment",
@@ -1394,11 +1401,11 @@ function initProductPage(sku) {
       size: targetSize,
       qty: totalQty,
       img: targetImg,
-      mode: "dtf",
+      mode: modeParam,
       cust: prod.customizationCapability || prod.customizationPermissions || "both"
     });
     
-    window.location.href = `product-customizer.html?${queryParams.toString()}`;
+    window.location.href = `branding-studio.html?_cb=${Date.now()}&${queryParams.toString()}`;
   };
 
   const customizationSection = document.getElementById("productCustomizationSection");
