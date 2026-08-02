@@ -1,6 +1,14 @@
 {
-  "promoBanner": "Elevating Workplace Appearance & Performance • Premier B2B Custom Workwear Solutions",
-  "footerLegal": "© 2029 Fabric8 Workwear. All rights reserved. Professional High-Performance Uniform & Custom Workwear Manufacturing.",
+  "banners": {
+    "home": "",
+    "shop": "",
+    "services": "",
+    "sectors": "",
+    "method": "",
+    "about": "",
+    "contact": ""
+  },
+  "footerLegal": "© 2026 Fabric8 Workwear. All rights reserved. Professional High-Performance Uniform & Custom Workwear Manufacturing.",
   "categories1stLayer": [
     {
       "name": "Food & beverage",
@@ -90,18 +98,6 @@
     "privacyText": "We rigorously respect corporate client privacy. All design specifications, technical CAD sketches, and logo attachments submitted through our quotation engine remain confidential between Fabric8 and your enterprise."
   },
   "brandingSettings": {
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
     "dtfHelperNote": "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.",
     "embroideryHelperNote": "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics."
   }
