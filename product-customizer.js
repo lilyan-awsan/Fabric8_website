@@ -94,11 +94,35 @@
       if (params.get("cust")) state.product.capability = params.get("cust");
     }
 
+    function calibratePlacement(p) {
+      if (!p || !p.name) return p;
+      const lower = p.name.toLowerCase();
+      // Auto-correct dummy defaults or misalignments on cap panels and common zones
+      if ((p.x === 50 && p.y === 30) || (p.x === 50 && p.y === 50) || lower.includes("panel")) {
+        if (lower.includes("front center panel") || (lower.includes("cap") && lower.includes("front"))) {
+          return { ...p, x: 55, y: 58, w: 22, h: 22, r: 3 };
+        } else if (lower.includes("side panel") || (lower.includes("cap") && lower.includes("side"))) {
+          return { ...p, x: 32, y: 56, w: 16, h: 16, r: -12 };
+        } else if (lower.includes("left chest")) {
+          return { ...p, x: 63, y: 44, w: 18, h: 18, r: 0 };
+        } else if (lower.includes("right chest")) {
+          return { ...p, x: 37, y: 44, w: 18, h: 18, r: 0 };
+        } else if (lower.includes("back")) {
+          return { ...p, x: 50, y: 52, w: 42, h: 42, r: 0 };
+        } else if (lower.includes("sleeve")) {
+          return { ...p, x: 82, y: 45, w: 14, h: 14, r: 8 };
+        }
+      }
+      return p;
+    }
+
+    state.product.placements = (state.product.placements || []).map(calibratePlacement);
+
     // Default selected placement
     if (state.product.placements && state.product.placements.length > 0) {
       state.selectedPlacement = state.product.placements[0];
     } else {
-      state.selectedPlacement = { name: "Left Chest", x: 65, y: 36, w: 18, h: 18, r: 0 };
+      state.selectedPlacement = { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 };
     }
   }
 
@@ -169,6 +193,52 @@
         drawCanvas();
       });
     });
+
+    // Interactive Canvas Drag & Drop positioning
+    const canvas = document.getElementById("renderCanvas");
+    let isDragging = false;
+
+    function handleDragStart(e) {
+      if (!state.selectedPlacement) return;
+      isDragging = true;
+      canvas.style.cursor = "grabbing";
+      updatePositionFromEvent(e);
+    }
+
+    function handleDragMove(e) {
+      if (!isDragging || !state.selectedPlacement) return;
+      updatePositionFromEvent(e);
+    }
+
+    function handleDragEnd() {
+      isDragging = false;
+      if (canvas) canvas.style.cursor = "grab";
+    }
+
+    function updatePositionFromEvent(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+      
+      const x = ((clientX - rect.left) / rect.width) * 100;
+      const y = ((clientY - rect.top) / rect.height) * 100;
+
+      state.selectedPlacement.x = Math.max(10, Math.min(90, x));
+      state.selectedPlacement.y = Math.max(10, Math.min(90, y));
+      drawCanvas();
+    }
+
+    if (canvas) {
+      canvas.style.cursor = "grab";
+      canvas.addEventListener("mousedown", handleDragStart);
+      canvas.addEventListener("mousemove", handleDragMove);
+      canvas.addEventListener("mouseup", handleDragEnd);
+      canvas.addEventListener("mouseleave", handleDragEnd);
+
+      canvas.addEventListener("touchstart", handleDragStart, { passive: true });
+      canvas.addEventListener("touchmove", handleDragMove, { passive: true });
+      canvas.addEventListener("touchend", handleDragEnd);
+    }
   }
 
   // Mode Switcher
