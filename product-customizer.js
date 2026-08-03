@@ -97,21 +97,26 @@
     function calibratePlacement(p) {
       if (!p || !p.name) return p;
       const lower = p.name.toLowerCase();
-      // Auto-correct dummy defaults or misalignments on cap panels and common zones
-      if ((p.x === 50 && p.y === 30) || (p.x === 50 && p.y === 50) || lower.includes("panel")) {
-        if (lower.includes("front center panel") || (lower.includes("cap") && lower.includes("front"))) {
-          return { ...p, x: 55, y: 58, w: 22, h: 22, r: 3 };
-        } else if (lower.includes("side panel") || (lower.includes("cap") && lower.includes("side"))) {
-          return { ...p, x: 32, y: 56, w: 16, h: 16, r: -12 };
-        } else if (lower.includes("left chest")) {
-          return { ...p, x: 63, y: 44, w: 18, h: 18, r: 0 };
-        } else if (lower.includes("right chest")) {
-          return { ...p, x: 37, y: 44, w: 18, h: 18, r: 0 };
-        } else if (lower.includes("back")) {
-          return { ...p, x: 50, y: 52, w: 42, h: 42, r: 0 };
-        } else if (lower.includes("sleeve")) {
-          return { ...p, x: 82, y: 45, w: 14, h: 14, r: 8 };
-        }
+      
+      // Automatically enforce accurate anatomical placement coordinates on the garment image
+      if (lower.includes("front center panel") || (lower.includes("cap") && lower.includes("front"))) {
+        return { ...p, x: 55, y: 58, w: 22, h: 22, r: 3 };
+      } else if (lower.includes("side panel") || (lower.includes("cap") && lower.includes("side"))) {
+        return { ...p, x: 33, y: 56, w: 16, h: 16, r: -12 };
+      } else if (lower.includes("left chest pocket") || lower.includes("pocket")) {
+        return { ...p, x: 64, y: 46, w: 16, h: 16, r: 0 };
+      } else if (lower.includes("left chest")) {
+        return { ...p, x: 63, y: 44, w: 18, h: 18, r: 0 };
+      } else if (lower.includes("right chest")) {
+        return { ...p, x: 37, y: 44, w: 18, h: 18, r: 0 };
+      } else if (lower.includes("back") || lower.includes("center")) {
+        return { ...p, x: 50, y: 52, w: 42, h: 42, r: 0 };
+      } else if (lower.includes("left sleeve") || lower.includes("upper sleeve") || (lower.includes("sleeve") && !lower.includes("right"))) {
+        return { ...p, x: 76, y: 48, w: 14, h: 14, r: 8 };
+      } else if (lower.includes("right sleeve")) {
+        return { ...p, x: 24, y: 48, w: 14, h: 14, r: -8 };
+      } else if (lower.includes("collar") || lower.includes("neck")) {
+        return { ...p, x: 50, y: 34, w: 20, h: 12, r: 0 };
       }
       return p;
     }
