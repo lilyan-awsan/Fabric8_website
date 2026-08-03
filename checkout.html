@@ -46,7 +46,17 @@
       </div>
       <div class="quote-wrap" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;">
         <div>
-          <h3 style="margin: 0 0 20px 0; font-size: 24px; text-transform: uppercase;">Cart Contents</h3>
+          <h3 style="margin: 0 0 16px 0; font-size: 24px; text-transform: uppercase;">Cart Contents</h3>
+          
+          <div id="checkoutMockupNotice" style="background: var(--ink, #141414); color: #fff; padding: 18px 22px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);">
+            <div style="font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+              <span style="color: var(--yellow, #ffd700);">💡</span> MOCKUP NOTICE
+            </div>
+            <p style="color: rgba(255,255,255,0.85); font-size: 13px; margin: 0; line-height: 1.5; font-weight: 500;">
+              Mockup previews are approximate. Final thread colors and print dimensions will be scaled to match your chosen garment size specifications.
+            </p>
+          </div>
+
           <div id="cartItems" class="cart-items" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
           <button id="clearCart" class="button dark" type="button" style="width: 100%;">Clear Cart</button>
         </div>
