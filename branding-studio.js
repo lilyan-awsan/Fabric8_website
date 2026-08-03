@@ -221,7 +221,6 @@
     const ctx = state.canvas.ctx;
     const img = state.artwork.imageObj;
     if (!img) {
-      drawPlacementGuide();
       return;
     }
 
@@ -242,7 +241,6 @@
   function drawText() {
     const ctx = state.canvas.ctx;
     if (!state.text.line1 && !state.text.line2 && !state.text.line3) {
-      drawPlacementGuide();
       return;
     }
 
@@ -268,28 +266,6 @@
       startY += lineSpacing;
     });
 
-    ctx.restore();
-  }
-
-  function drawPlacementGuide() {
-    const ctx = state.canvas.ctx;
-    if (!state.selectedPlacement) return;
-
-    const xPx = (state.selectedPlacement.x / 100) * 800;
-    const yPx = (state.selectedPlacement.y / 100) * 800;
-    const wPx = (state.selectedPlacement.w / 100) * 800;
-    const hPx = (state.selectedPlacement.h / 100) * 800;
-
-    ctx.save();
-    ctx.strokeStyle = "#3e8e42";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6, 6]);
-    ctx.strokeRect(xPx - wPx / 2, yPx - hPx / 2, wPx, hPx);
-
-    ctx.fillStyle = "#3e8e42";
-    ctx.font = "bold 13px 'Century Gothic', sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("📍 BRANDING ZONE", xPx, yPx);
     ctx.restore();
   }
 
@@ -486,19 +462,6 @@
       }
     });
 
-    // Center button
-    const centerBtn = document.getElementById("btnCenter");
-    if (centerBtn) {
-      centerBtn.addEventListener("click", () => {
-        if (state.selectedPlacement) {
-          state.artwork.x = state.selectedPlacement.x;
-          state.artwork.y = state.selectedPlacement.y;
-          state.text.x = state.selectedPlacement.x;
-          state.text.y = state.selectedPlacement.y;
-          drawCanvas();
-        }
-      });
-    }
 
     // Order Review Modal triggers
     const btnReview = document.getElementById("mainAddToCartBtn");

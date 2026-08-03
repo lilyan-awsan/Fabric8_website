@@ -452,7 +452,22 @@
       ctx.rotate((rotDeg * Math.PI) / 180);
     }
 
-    if (state.currentMode === "logo" && state.artwork.processedImage) {
+    const isLogoEmpty = state.currentMode === "logo" && !state.artwork.processedImage;
+    const isTextEmpty = state.currentMode === "text" && !state.text.line1.trim() && !state.text.line2.trim() && !state.text.line3.trim();
+
+    if (isLogoEmpty || isTextEmpty) {
+      const wPx = ((p.w || 20) / 100) * w;
+      const hPx = ((p.h || 20) / 100) * h;
+      ctx.strokeStyle = "#3e8e42";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 6]);
+      ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
+
+      ctx.fillStyle = "#3e8e42";
+      ctx.font = "bold 13px 'Century Gothic', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("📍 BRANDING ZONE", 0, 0);
+    } else if (state.currentMode === "logo" && state.artwork.processedImage) {
       // MODE A: Fixed Placement Sizing Metrics (No user size sliders)
       let targetWRatio = 0.18; // Default chest ~18%
       const pName = p.name ? p.name.toLowerCase() : "";
