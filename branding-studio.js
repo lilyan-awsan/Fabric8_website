@@ -1,9 +1,20 @@
 /**
  * Fabric8 Standalone Branding Discovery Studio Engine
- * Provides interactive logo & text customization across prototype garments.
+ * Provides interactive logo & text customization across prototype garments with size selection.
  */
 (function() {
   "use strict";
+
+  const THREAD_SWATCHES = [
+    { name: "Classic Black", hex: "#111111" },
+    { name: "Pure White", hex: "#ffffff" },
+    { name: "Royal Navy", hex: "#1b263b" },
+    { name: "Industrial Charcoal", hex: "#3f4244" },
+    { name: "Crimson Red", hex: "#85144b" },
+    { name: "Forest Green", hex: "#28532f" },
+    { name: "Metallic Gold", hex: "#d4af37" },
+    { name: "Sterling Silver", hex: "#a7a7a7" }
+  ];
 
   // Central State Engine
   const state = {
@@ -11,7 +22,7 @@
       sku: "F8-PROTO-POLO",
       name: "Corporate Dri-Fit Polo",
       color: "White",
-      size: "Standard Spec (M/L/XL)",
+      size: "Standard Spec (Assorted M/L/XL)",
       qty: 50,
       image: "assets/products/Polo White Front.jpg",
       placements: [
@@ -23,7 +34,7 @@
     },
     selectedPlacement: null,
     currentMode: "logo",
-    currentFinish: "DTF Direct Print",
+    currentFinish: "Thread Embroidery",
     artwork: {
       imageObj: null,
       fileName: "",
@@ -36,8 +47,9 @@
       line1: "FABRIC 8 ATELIER",
       line2: "",
       line3: "",
-      fontStyle: "'Century Gothic', sans-serif",
-      swatchName: "#111111",
+      fontStyle: "'Acumin Variable Concept', system-ui, sans-serif",
+      swatchName: "Classic Black",
+      swatchHex: "#111111",
       x: 63,
       y: 44
     },
@@ -53,6 +65,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     state.selectedPlacement = state.product.placements[0];
     initCanvas();
+    buildThreadSwatches();
     setupEventListeners();
     setupGarmentSwitcher();
     renderPlacementOptions();
@@ -109,6 +122,35 @@
         renderPlacementOptions();
         loadBaseImage();
       });
+    });
+  }
+
+  function buildThreadSwatches() {
+    const container = document.getElementById("swatchesContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    THREAD_SWATCHES.forEach((swatch, index) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "thread-swatch" + (index === 0 ? " active" : "");
+      btn.style.backgroundColor = swatch.hex;
+      if (swatch.hex.toLowerCase() === "#ffffff") {
+        btn.style.borderColor = "#cccccc";
+      }
+      btn.title = swatch.name;
+
+      btn.addEventListener("click", () => {
+        container.querySelectorAll(".thread-swatch").forEach(s => s.classList.remove("active"));
+        btn.classList.add("active");
+        state.text.swatchName = swatch.name;
+        state.text.swatchHex = swatch.hex;
+        const lbl = document.getElementById("selectedSwatchName");
+        if (lbl) lbl.textContent = swatch.name;
+        drawCanvas();
+      });
+
+      container.appendChild(btn);
     });
   }
 
@@ -219,7 +261,7 @@
     let startY = -totalHeight / 2;
 
     ctx.font = `900 ${baseSize}px ${state.text.fontStyle || "'Century Gothic', sans-serif"}`;
-    ctx.fillStyle = state.text.swatchName || "#111111";
+    ctx.fillStyle = state.text.swatchHex || "#111111";
 
     lines.forEach(l => {
       ctx.fillText(l.toUpperCase(), 0, startY);
@@ -321,11 +363,30 @@
   }
 
   function setupEventListeners() {
+    // Size & Quantity listeners
+    const sizeSel = document.getElementById("sizeSelector");
+    const qtyInp = document.getElementById("qtyInput");
+    if (sizeSel) {
+      sizeSel.addEventListener("change", (e) => {
+        state.product.size = e.target.value;
+        const sizeBadge = document.getElementById("headerProdSize");
+        if (sizeBadge) sizeBadge.textContent = `Size: ${state.product.size}`;
+      });
+    }
+    if (qtyInp) {
+      qtyInp.addEventListener("input", (e) => {
+        let val = parseInt(e.target.value) || 50;
+        state.product.qty = val;
+        const qtyBadge = document.getElementById("headerProdQty");
+        if (qtyBadge) qtyBadge.textContent = `Qty: ${val} Pcs`;
+      });
+    }
+
     // Mode switcher
-    const btnLogo = document.getElementById("btnModeLogo");
-    const btnText = document.getElementById("btnModeText");
-    const pLogo = document.getElementById("panelLogo");
-    const pText = document.getElementById("panelText");
+    const btnLogo = document.getElementById("tabLogoBtn");
+    const btnText = document.getElementById("tabTextBtn");
+    const pLogo = document.getElementById("panelLogoUpload");
+    const pText = document.getElementById("panelTextEmbroidery");
 
     if (btnLogo && btnText) {
       btnLogo.addEventListener("click", () => {
@@ -365,26 +426,10 @@
     }
 
     // Logo Upload
-    const dropZone = document.getElementById("dropZone");
-    const logoInp = document.getElementById("logoInput");
-    if (dropZone && logoInp) {
-      dropZone.addEventListener("click", () => logoInp.click());
+    const logoInp = document.getElementById("logoFileInput");
+    if (logoInp) {
       logoInp.addEventListener("change", (e) => {
         const file = e.target.files && e.target.files[0];
-        if (file) handleFileRead(file);
-      });
-      dropZone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = "#3e8e42";
-      });
-      dropZone.addEventListener("dragleave", (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = "#bbb";
-      });
-      dropZone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropZone.style.borderColor = "#bbb";
-        const file = e.dataTransfer.files && e.dataTransfer.files[0];
         if (file) handleFileRead(file);
       });
     }
@@ -410,11 +455,21 @@
     }
 
     // Finish selection
-    document.querySelectorAll(".finish-option").forEach(opt => {
+    document.querySelectorAll(".toggle-btn").forEach(opt => {
       opt.addEventListener("click", () => {
-        document.querySelectorAll(".finish-option").forEach(o => o.classList.remove("active"));
+        document.querySelectorAll(".toggle-btn").forEach(o => o.classList.remove("active"));
         opt.classList.add("active");
-        state.currentFinish = opt.dataset.finish;
+        state.currentFinish = opt.dataset.finish || opt.textContent.trim();
+      });
+    });
+
+    // Font toggle selection
+    document.querySelectorAll(".font-btn").forEach(fBtn => {
+      fBtn.addEventListener("click", () => {
+        document.querySelectorAll(".font-btn").forEach(b => b.classList.remove("active"));
+        fBtn.classList.add("active");
+        state.text.fontStyle = fBtn.dataset.font;
+        drawCanvas();
       });
     });
 
@@ -429,23 +484,6 @@
           drawCanvas();
         });
       }
-    });
-
-    const fontSel = document.getElementById("textFont");
-    if (fontSel) {
-      fontSel.addEventListener("change", (e) => {
-        state.text.fontStyle = e.target.value;
-        drawCanvas();
-      });
-    }
-
-    document.querySelectorAll("#threadSwatches .swatch-btn").forEach(swatch => {
-      swatch.addEventListener("click", () => {
-        document.querySelectorAll("#threadSwatches .swatch-btn").forEach(s => s.classList.remove("active"));
-        swatch.classList.add("active");
-        state.text.swatchName = swatch.dataset.color;
-        drawCanvas();
-      });
     });
 
     // Center button
@@ -463,41 +501,53 @@
     }
 
     // Order Review Modal triggers
-    const btnReview = document.getElementById("btnReviewOrder");
-    const modal = document.getElementById("summaryModal");
-    const btnCancel = document.getElementById("btnCancelModal");
-    const btnConfirm = document.getElementById("btnConfirmAddToCart");
+    const btnReview = document.getElementById("mainAddToCartBtn");
+    const modal = document.getElementById("summaryModalOverlay");
+    const btnClose = document.getElementById("closeModalBtn");
+    const btnModify = document.getElementById("btnModifyModal");
+    const btnConfirm = document.getElementById("confirmAddToCartBtn");
 
     if (btnReview && modal) {
       btnReview.addEventListener("click", () => {
+        // MOQ check
+        const qVal = parseInt(document.getElementById("qtyInput")?.value || state.product.qty);
+        if (qVal < 50) {
+          alert("Minimum Order Quantity is 50 pcs. Please enter a quantity of at least 50.");
+          return;
+        }
+        state.product.qty = qVal;
+
         if (state.currentMode === "logo" && !state.artwork.imageObj) {
           alert("Please upload an artwork logo file first or switch to Text Embroidery.");
           return;
         }
 
-        document.getElementById("summaryProdName").textContent = state.product.name;
-        document.getElementById("summaryProdDetails").textContent = `SKU: ${state.product.sku} | Color: ${state.product.color}`;
-        document.getElementById("summaryPlacement").textContent = state.selectedPlacement ? state.selectedPlacement.name : "Custom Zone";
+        document.getElementById("modalProductMeta").textContent = `${state.product.name} (Size: ${state.product.size}) - ${state.product.qty} Pcs`;
+        document.getElementById("modalPlacementLocation").textContent = state.selectedPlacement ? state.selectedPlacement.name : "Custom Zone";
+        document.getElementById("modalFinishTechnique").textContent = state.currentFinish;
 
         if (state.currentMode === "logo") {
-          document.getElementById("summaryMethod").textContent = "Logo Artwork Upload";
-          document.getElementById("summaryDetails").textContent = `File: ${state.artwork.fileName} | Finish: ${state.currentFinish}`;
+          document.getElementById("modalCustomizationType").textContent = `Logo Artwork Upload (${state.artwork.fileName})`;
         } else {
-          document.getElementById("summaryMethod").textContent = "Text Embroidery";
           const lines = [state.text.line1, state.text.line2, state.text.line3].filter(Boolean).join(" / ");
-          document.getElementById("summaryDetails").textContent = `Text: "${lines}"`;
+          document.getElementById("modalCustomizationType").textContent = `Text Embroidery: "${lines}" (${state.text.swatchName})`;
         }
 
         // Snapshot preview
         const dataUrl = document.getElementById("renderCanvas").toDataURL();
-        document.getElementById("summaryPreviewImg").src = dataUrl;
+        document.getElementById("modalPreviewImg").src = dataUrl;
 
-        modal.style.display = "flex";
+        modal.style.display = "grid";
       });
     }
 
-    if (btnCancel && modal) {
-      btnCancel.addEventListener("click", () => {
+    if (btnClose && modal) {
+      btnClose.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
+    if (btnModify && modal) {
+      btnModify.addEventListener("click", () => {
         modal.style.display = "none";
       });
     }
@@ -512,7 +562,7 @@
     const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Custom";
     let brandingDesc = state.currentMode === "logo" 
       ? `Custom Logo: ${state.artwork.fileName || "Uploaded"} (${state.currentFinish} - ${placementName})`
-      : `Text Embroidery: "${state.text.line1}" (${placementName})`;
+      : `Text Embroidery: "${state.text.line1}" (${state.text.swatchName} - ${placementName})`;
 
     const cartItem = {
       sku: state.product.sku,

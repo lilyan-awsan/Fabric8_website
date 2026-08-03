@@ -13,6 +13,7 @@
       --border-color: rgba(35, 31, 32, 0.12);
       --green-highlight: #3e8e42;
       --ink-dark: #111111;
+      --muted: #666666;
     }
 
     body {
@@ -236,8 +237,8 @@
       }
     }
 
-    /* Right Configuration Tools */
-    .controls-panel {
+    /* Right Suite: Customization Controls (Identical to product-customizer) */
+    .controls-card {
       background: var(--panel-bg);
       border-radius: 16px;
       border: 1px solid var(--border-color);
@@ -248,215 +249,286 @@
       gap: 32px;
     }
 
-    .section-head-control {
-      border-bottom: 2px solid var(--ink-dark);
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+    .form-section {
+      display: flex;
+      flex-direction: column;
     }
 
-    .section-head-control h3 {
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      color: var(--ink-dark);
-      margin: 0;
-    }
-
-    .method-switch {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .method-btn {
-      padding: 14px;
-      border: 2px solid #e2e0d8;
-      border-radius: 8px;
-      background: #faf9f5;
-      font-weight: 800;
+    .section-label {
+      display: block;
       font-size: 13px;
-      color: #555;
+      font-weight: 800;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .customizer-select, .customizer-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      background: #ffffff;
+      border: 1.5px solid rgba(35, 31, 32, 0.25);
+      border-radius: 8px;
+      color: var(--ink);
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+
+    .customizer-select:focus, .customizer-input:focus {
+      border-color: var(--green-highlight);
+      box-shadow: 0 0 0 3px rgba(62, 142, 66, 0.15);
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-tabs {
+      display: flex;
+      background: #f0efe9;
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .mode-tab-btn {
+      flex: 1;
+      padding: 14px 16px;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
       cursor: pointer;
-      transition: all 0.2s;
+      color: #666;
+      background: transparent;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
 
-    .method-btn:hover {
-      border-color: #ccc;
+    .mode-tab-btn.active {
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .method-btn.active {
-      border-color: var(--green-highlight);
-      background: #f2f8f1;
-      color: var(--green-highlight);
+    /* Toggle Buttons (Finish Options & Fonts) */
+    .toggle-grid {
+      display: grid;
+      gap: 12px;
     }
 
-    .method-btn:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-      border-color: #eee;
-      background: #fcfcfc;
-    }
-
-    .upload-box {
-      border: 2px dashed #bbb;
+    .toggle-btn {
+      border: 2px solid rgba(35, 31, 32, 0.2);
+      background: #faf9f6;
       border-radius: 10px;
-      padding: 24px;
-      text-align: center;
-      background: #fcfbf9;
+      padding: 16px;
       cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-btn.active {
+      border-color: var(--green-highlight);
+      background: #f3faf4;
+      box-shadow: 0 4px 12px rgba(62, 142, 66, 0.12);
+    }
+
+    .toggle-btn-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toggle-btn-title .check-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #bbb;
+      display: inline-grid;
+      place-items: center;
+      font-size: 11px;
+      color: transparent;
+    }
+
+    .toggle-btn.active .check-icon {
+      background: var(--green-highlight);
+      border-color: var(--green-highlight);
+      color: #fff;
+    }
+
+    .finish-helper-note {
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: #555;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    /* Font Selector Buttons */
+    .font-toggle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .font-btn {
+      padding: 12px;
+      border: 1.5px solid rgba(35, 31, 32, 0.2);
+      border-radius: 8px;
+      background: #fff;
+      text-align: center;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 700;
       transition: all 0.2s;
     }
 
-    .upload-box:hover {
-      border-color: var(--green-highlight);
-      background: #f4f8f3;
+    .font-btn.active {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
     }
 
-    .upload-box input {
-      display: none;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      color: var(--ink-dark);
-    }
-
-    .form-input, .form-select {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-      font-family: inherit;
-      box-sizing: border-box;
-      background: #ffffff;
-      color: var(--ink-dark);
-    }
-
-    .form-select {
-      font-weight: 700;
-    }
-
-    .color-swatches {
+    /* Thread Swatches */
+    .swatches-grid {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .swatch-btn {
-      width: 34px;
-      height: 34px;
+    .thread-swatch {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 0 0 1px #ccc;
       cursor: pointer;
-      transition: transform 0.15s;
+      position: relative;
+      border: 2px solid transparent;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .swatch-btn:hover {
-      transform: scale(1.1);
+    .thread-swatch.active {
+      transform: scale(1.18);
+      box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--ink);
+      z-index: 2;
     }
 
-    .swatch-btn.active {
-      box-shadow: 0 0 0 2px var(--ink-dark);
-      transform: scale(1.15);
-    }
-
-    .finish-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-    }
-
-    .finish-option {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 12px;
-      text-align: center;
-      cursor: pointer;
-      background: #fff;
-      font-weight: 700;
-      font-size: 12px;
-    }
-
-    .finish-option.active {
-      border-color: var(--green-highlight);
-      background: #f2f8f1;
-      color: var(--green-highlight);
-    }
-
-    .action-row {
-      border-top: 1px solid #e6e4dc;
-      padding-top: 24px;
-      display: flex;
-      gap: 16px;
-    }
-
-    .btn-submit {
-      flex: 1;
+    /* CTA Button */
+    .cta-submit {
+      width: 100%;
+      min-height: 56px;
       background: var(--green-highlight);
       color: #ffffff;
       border: none;
-      padding: 18px;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 9999px;
+      font-size: 15px;
       font-weight: 900;
-      text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      letter-spacing: 0.05em;
-      box-shadow: 0 6px 20px rgba(62, 142, 66, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 12px;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(62, 142, 66, 0.3);
     }
 
-    .btn-submit:hover {
-      background: #357a38;
+    .cta-submit:hover {
+      background: #2f6e32;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(62, 142, 66, 0.4);
     }
 
     /* Summary Modal */
-    .modal-backdrop {
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
       display: none;
-      align-items: center;
-      justify-content: center;
+      place-items: center;
       z-index: 1000;
-      backdrop-filter: blur(4px);
+      padding: 20px;
     }
 
-    .modal-box {
-      background: #fff;
+    .summary-modal-card {
+      background: #ffffff;
       border-radius: 16px;
-      max-width: 520px;
-      width: 90%;
-      padding: 32px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
+      max-width: 680px;
+      padding: 36px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+      margin: 24px 0;
+      align-items: center;
+    }
+
+    .summary-thumb {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #faf9f5;
+    }
+
+    .summary-details dt {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: 10px;
+    }
+
+    .summary-details dd {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+      margin: 2px 0 0 0;
+    }
+
+    .close-modal-btn {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: transparent;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: #666;
     }
   </style>
 </head>
 <body>
 
   <!-- Top Context Header -->
-  <div class="context-banner">
+  <header class="context-banner">
     <div class="context-left">
       <img id="headerProdImg" class="context-thumb" src="assets/products/Polo White Front.jpg" alt="Product Thumbnail" />
       <div class="context-info">
         <h2 id="headerProdName">Corporate Dri-Fit Polo</h2>
         <div class="context-badges">
-          <span class="badge-item" id="headerProdSku">SKU: F8-PROTO-01</span>
+          <span class="badge-item" id="headerProdSku">SKU: F8-PROTO-POLO</span>
           <span class="badge-item" id="headerProdColor">Color: White</span>
           <span class="badge-item" id="headerProdSize">Size: Standard Spec (M/L/XL)</span>
           <span class="badge-item" id="headerProdQty">Qty: 50 Pcs (MOQ)</span>
@@ -466,7 +538,7 @@
     <div>
       <a href="services.html" class="back-link">&larr; Return to Services</a>
     </div>
-  </div>
+  </header>
 
   <main class="customizer-workspace">
     <!-- Left Stage: Interactive Canvas & Garment Switcher -->
@@ -511,122 +583,156 @@
       </div>
     </div>
 
-    <!-- Right Configuration Panel -->
-    <div class="controls-panel">
-      <div class="section-head-control" style="margin-bottom: 0;">
-        <h3>1. Select Placement Zone</h3>
-      </div>
-      <div>
-        <select id="placementSelector" class="form-select"></select>
-      </div>
+    <!-- Right Suite: Customization & Size Controls (Identical to Product Customizer) -->
+    <section class="controls-card">
+      <h2 class="brand-title" style="font-size: 24px; margin-bottom: 8px;">Configure Branding &amp; Sizing</h2>
 
-      <div class="section-head-control" style="margin-bottom: 0;">
-        <h3>2. Select Customization Method</h3>
-      </div>
-      <div class="method-switch">
-        <button type="button" class="method-btn active" id="btnModeLogo">
-          <span>🖼️ UPLOAD LOGO</span>
-        </button>
-        <button type="button" class="method-btn" id="btnModeText">
-          <span>🔤 TEXT EMBROIDERY</span>
-        </button>
+      <!-- 1. Placement Zone -->
+      <div class="form-section">
+        <label class="section-label" for="placementSelector">1. Select Placement Zone</label>
+        <select id="placementSelector" class="customizer-select"></select>
       </div>
 
-      <!-- Tab A: Logo Upload Controls -->
-      <div id="panelLogo" class="tab-panel">
-        <div class="form-group">
-          <label>Upload Artwork File (PNG, JPG, SVG)</label>
-          <div class="upload-box" id="dropZone">
-            <p style="margin:0; font-weight: 800; color:#555;">📁 Click or Drag & Drop Logo Here</p>
-            <p style="margin:6px 0 0 0; font-size:11px; color:#888;">High-res transparent files recommended</p>
-            <input type="file" id="logoInput" accept="image/*" />
-          </div>
-          <div id="fileStatus" style="font-size:12px; margin-top:8px; font-weight:bold; color:var(--green-highlight); display:none;">
-            ✓ Uploaded: <span id="fileName">logo.png</span>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-top:24px;">
-          <label>Select Finish Technique</label>
-          <div class="finish-selector" id="logoFinishSelector">
-            <div class="finish-option active" data-finish="DTF Direct Print">DTF Direct Print</div>
-            <div class="finish-option" data-finish="Precision Embroidery">Precision Embroidery</div>
-            <div class="finish-option" data-finish="Silicone 3D Transfer">Silicone 3D Transfer</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab B: Text Embroidery Controls -->
-      <div id="panelText" class="tab-panel" style="display:none;">
-        <div class="form-group">
-          <label>Line 1 (Primary Brand or Employee Name)</label>
-          <input type="text" id="textLine1" class="form-input" placeholder="e.g. FABRIC8 ATELIER" maxlength="24" value="FABRIC 8 ATELIER" />
-        </div>
-        <div class="form-group" style="margin-top:14px;">
-          <label>Line 2 (Optional Department or Title)</label>
-          <input type="text" id="textLine2" class="form-input" placeholder="e.g. QUALITY & PRODUCTION" maxlength="30" />
-        </div>
-        <div class="form-group" style="margin-top:14px;">
-          <label>Line 3 (Optional Tagline or ID)</label>
-          <input type="text" id="textLine3" class="form-input" placeholder="e.g. EST. 2026" maxlength="30" />
-        </div>
-
-        <div class="form-group" style="margin-top:20px;">
-          <label>Typography Style</label>
-          <select id="textFont" class="form-select">
-            <option value="'Century Gothic', sans-serif">Modern block (Clean Sans-Serif)</option>
-            <option value="Georgia, serif">Classic Serif (Traditional & Elegant)</option>
-            <option value="'Courier New', monospace">Technical / Industrial Monospaced</option>
-            <option value="'Impact', sans-serif">Bold Industrial Condensed</option>
+      <!-- 2. Choose Size & Quantity -->
+      <div class="form-section">
+        <label class="section-label" for="sizeSelector">2. Choose Size &amp; Quantity (MOQ 50 Pcs)</label>
+        <div style="display: grid; grid-template-columns: 1fr 120px; gap: 12px;">
+          <select id="sizeSelector" class="customizer-select">
+            <option value="Standard Spec (Assorted M/L/XL)">Standard Spec (Assorted M/L/XL)</option>
+            <option value="Small (S)">Small (S)</option>
+            <option value="Medium (M)">Medium (M)</option>
+            <option value="Large (L)">Large (L)</option>
+            <option value="Extra Large (XL)">Extra Large (XL)</option>
+            <option value="Double Extra Large (2XL)">Double Extra Large (2XL)</option>
+            <option value="Custom Size Roster">Custom Size Roster (Specify in Quote)</option>
           </select>
+          <input type="number" id="qtyInput" class="customizer-input" value="50" min="50" placeholder="Qty" title="Minimum Order Quantity is 50 pieces" style="text-align: center; font-weight: 900;" />
+        </div>
+        <p style="font-size: 11.5px; color: var(--muted); margin: 6px 0 0;">
+          🔒 Minimum Order Quantity is strictly enforced at 50 pieces per custom run.
+        </p>
+      </div>
+
+      <!-- 3. Mode Switcher Tabs -->
+      <div class="form-section">
+        <label class="section-label">3. Select Customization Method</label>
+        <div class="mode-tabs" id="modeSwitcherTabs">
+          <button type="button" id="tabLogoBtn" class="mode-tab-btn active">
+            <span>🖼️ Upload Logo</span>
+          </button>
+          <button type="button" id="tabTextBtn" class="mode-tab-btn">
+            <span>🔤 Text Embroidery</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODE A: Logo Upload Workflow -->
+      <div id="panelLogoUpload" class="mode-panel">
+        <div class="form-section" style="margin-bottom: 24px;">
+          <label class="section-label" for="logoFileInput">Upload Artwork File (PNG, JPG, SVG)</label>
+          <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/svg+xml" class="customizer-input" style="padding: 10px; cursor: pointer;" />
+          <p style="font-size: 12px; color: var(--green-highlight); font-weight: 700; margin: 8px 0 0;">
+            ⚡ Auto-Background Removal enabled: White backgrounds will be treated as transparent automatically.
+          </p>
+          <div id="fileStatus" style="font-size:12px; margin-top:8px; font-weight:bold; color:var(--ink-dark); display:none;">
+            ✓ Active File: <span id="fileName">logo.png</span>
+          </div>
         </div>
 
-        <div class="form-group" style="margin-top:20px;">
-          <label>Thread Color</label>
-          <div class="color-swatches" id="threadSwatches">
-            <button type="button" class="swatch-btn active" style="background:#111111;" data-color="#111111" title="Industrial Black"></button>
-            <button type="button" class="swatch-btn" style="background:#ffffff; border-color:#ccc;" data-color="#ffffff" title="Pure White"></button>
-            <button type="button" class="swatch-btn" style="background:#1e3d59;" data-color="#1e3d59" title="Deep Navy"></button>
-            <button type="button" class="swatch-btn" style="background:#800020;" data-color="#800020" title="Burgundy Wine"></button>
-            <button type="button" class="swatch-btn" style="background:#3e8e42;" data-color="#3e8e42" title="Fabric8 Green"></button>
-            <button type="button" class="swatch-btn" style="background:#d4af37;" data-color="#d4af37" title="Metallic Gold"></button>
-            <button type="button" class="swatch-btn" style="background:#c0c0c0;" data-color="#c0c0c0" title="Sterling Silver"></button>
+        <div class="form-section">
+          <label class="section-label">Select Finish Technique</label>
+          <div class="toggle-grid" id="finishToggleGrid">
+            <!-- Button 1: Embroidery -->
+            <div class="toggle-btn active" id="finishEmbroideryBtn" data-finish="Thread Embroidery">
+              <div class="toggle-btn-title">
+                <span>Thread Embroidery</span>
+                <span class="check-icon">✓</span>
+              </div>
+              <div class="finish-helper-note">
+                Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.
+              </div>
+            </div>
+            <!-- Button 2: Direct To Fabric (DTF) Printing -->
+            <div class="toggle-btn" id="finishDtfBtn" data-finish="Direct To Fabric (DTF) Printing">
+              <div class="toggle-btn-title">
+                <span>Direct To Fabric (DTF) Printing</span>
+                <span class="check-icon">✓</span>
+              </div>
+              <div class="finish-helper-note">
+                Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="action-row">
-        <button type="button" class="btn-submit" id="btnReviewOrder">
-          <span>🛒 ADD TO CART &amp; REQUEST QUOTE</span>
-        </button>
+      <!-- MODE B: Text Embroidery Workflow -->
+      <div id="panelTextEmbroidery" class="mode-panel" style="display: none;">
+        <div class="form-section" style="margin-bottom: 24px;">
+          <label class="section-label">Enter Custom Embroidery Text (Max 3 Lines)</label>
+          <div style="display: grid; gap: 10px;">
+            <input type="text" id="textLine1" placeholder="Line 1 (Fixed at 14px size)" class="customizer-input" maxlength="28" value="FABRIC 8 ATELIER" />
+            <input type="text" id="textLine2" placeholder="Line 2 (Fixed at 12px size)" class="customizer-input" maxlength="32" />
+            <input type="text" id="textLine3" placeholder="Line 3 (Fixed at 12px size)" class="customizer-input" maxlength="32" />
+          </div>
+          <p style="font-size: 11.5px; color: var(--muted); margin: 6px 0 0;">
+            🔒 Enforcing straight-line commercial layout. Line 1 renders larger (14px ratio) than Lines 2 &amp; 3 (12px ratio).
+          </p>
+        </div>
+
+        <!-- Typography Toggle Selector -->
+        <div class="form-section" style="margin-bottom: 24px;">
+          <label class="section-label">Select Typography Style</label>
+          <div class="font-toggle-grid">
+            <button type="button" class="font-btn active" id="fontBlockBtn" data-font="'Acumin Variable Concept', system-ui, sans-serif" style="font-family: 'Acumin Variable Concept', system-ui, sans-serif; text-transform: uppercase;">Block</button>
+            <button type="button" class="font-btn" id="fontSerifBtn" data-font="'Times New Roman', serif" style="font-family: 'Times New Roman', serif;">Serif</button>
+            <button type="button" class="font-btn" id="fontScriptBtn" data-font="'Brush Script MT', cursive" style="font-family: 'Brush Script MT', cursive; font-size: 15px;">Script</button>
+          </div>
+        </div>
+
+        <!-- Thread Color Swatches -->
+        <div class="form-section">
+          <label class="section-label">Select Thread Swatch Color: <span id="selectedSwatchName" style="color: var(--ink);">Classic Black</span></label>
+          <div class="swatches-grid" id="swatchesContainer">
+            <!-- Swatches injected dynamically via JS -->
+          </div>
+        </div>
       </div>
-    </div>
+
+      <!-- Standardized CTA Button -->
+      <button type="button" class="cta-submit" id="mainAddToCartBtn">
+        ADD TO CART &amp; REQUEST QUOTE
+      </button>
+    </section>
   </main>
 
-  <!-- Order Summary Modal -->
-  <div class="modal-backdrop" id="summaryModal">
-    <div class="modal-box">
-      <h3 style="font-size:22px; color:var(--ink-dark); border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 20px;">Review Customized Prototype</h3>
+  <!-- Summary Modal Overlay (Identical to Product Customizer) -->
+  <div id="summaryModalOverlay" class="modal-overlay">
+    <div class="summary-modal-card">
+      <button type="button" class="close-modal-btn" id="closeModalBtn">&times;</button>
+      <h2 class="brand-title" style="font-size: 22px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">Review Customization Order</h2>
       
-      <div style="display:flex; gap:16px; align-items:center; margin-bottom:20px; background:#f9f8f4; padding:16px; border-radius:10px;">
-        <img id="summaryPreviewImg" src="" style="width:80px; height:80px; object-fit:contain; background:#fff; border:1px solid #ddd; border-radius:8px;" alt="Custom Mockup" />
-        <div>
-          <h4 id="summaryProdName" style="font-size:16px; color:var(--ink-dark); margin-bottom:4px;">Product</h4>
-          <p id="summaryProdDetails" style="margin:0; font-size:13px; color:#555;">SKU | Color | Size</p>
-          <p id="summaryProdQty" style="margin:4px 0 0 0; font-size:13px; font-weight:800; color:var(--green-highlight);">Qty: 50 Pcs (MOQ)</p>
-        </div>
+      <div class="summary-grid">
+        <img id="modalPreviewImg" class="summary-thumb" src="" alt="Customized Prototype Preview" />
+        
+        <dl class="summary-details" style="margin: 0;">
+          <dt>Product Metadata &amp; Size</dt>
+          <dd id="modalProductMeta">Corporate Dri-Fit Polo (Size Standard Spec) - 50 Pcs</dd>
+          
+          <dt>Customization Type</dt>
+          <dd id="modalCustomizationType">Logo Upload</dd>
+          
+          <dt>Finish Technique</dt>
+          <dd id="modalFinishTechnique">Thread Embroidery</dd>
+          
+          <dt>Selected Placement Location</dt>
+          <dd id="modalPlacementLocation">Left Chest</dd>
+        </dl>
       </div>
 
-      <div style="border-top:1px solid #eee; padding-top:16px; margin-bottom:24px;">
-        <h5 style="font-size:13px; color:#888; margin-bottom:8px;">BRANDING SPECIFICATIONS:</h5>
-        <p style="margin:4px 0; font-size:14px;"><strong>Method:</strong> <span id="summaryMethod">--</span></p>
-        <p style="margin:4px 0; font-size:14px;"><strong>Placement:</strong> <span id="summaryPlacement">--</span></p>
-        <p style="margin:4px 0; font-size:14px;"><strong>Details / Finish:</strong> <span id="summaryDetails">--</span></p>
-      </div>
-
-      <div style="display:flex; gap:12px; justify-content:flex-end;">
-        <button type="button" id="btnCancelModal" style="padding:12px 24px; border-radius:8px; border:1px solid #ccc; background:#fff; font-weight:800; cursor:pointer;">Edit Design</button>
-        <button type="button" id="btnConfirmAddToCart" style="padding:12px 28px; border-radius:8px; border:none; background:var(--green-highlight); color:#fff; font-weight:900; cursor:pointer; font-size:15px; box-shadow: 0 4px 14px rgba(62,142,66,0.3);">ADD TO CART</button>
+      <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <button type="button" id="btnModifyModal" style="padding: 14px 24px; background: transparent; border: 1.5px solid #888; border-radius: 9999px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 13px;">Modify</button>
+        <button type="button" id="confirmAddToCartBtn" class="cta-submit" style="margin-top: 0; width: auto; padding: 14px 40px;">ADD TO CART</button>
       </div>
     </div>
   </div>
@@ -651,6 +757,6 @@
     </div>
   </footer>
 
-  <script src="branding-studio.js?v=1"></script>
+  <script src="branding-studio.js?v=2"></script>
 </body>
 </html>
