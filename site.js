@@ -1396,7 +1396,10 @@ function initProductPage(sku) {
   // Dynamic Customization Configuration & Direct Studio Redirection
   window.currentLoadedProduct = p;
   window.launchBrandingStudioFromProduct = function(e) {
-    if (e) e.preventDefault();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
 
     // 2. Validate Size & Quantity Selection
