@@ -1417,12 +1417,13 @@ function initProductPage(sku) {
       });
     }
 
-    if (totalQty === 0) {
-      showToast("Please enter a quantity for at least one size before customizing.", "warning");
+    const prod = window.currentLoadedProduct || p || {};
+    const moqLimit = parseInt(prod.moq ? prod.moq.toString().replace(/[^0-9]/g, '') : "50") || 50;
+    if (totalQty < moqLimit) {
+      showToast(`Minimum Order Quantity is ${moqLimit} pcs. Please enter a total quantity of at least ${moqLimit} pieces across your chosen sizes before customizing.`, "warning", 5000);
       return;
     }
 
-    const prod = window.currentLoadedProduct || p || {};
     const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
     
     let targetImg = prod.image || "assets/products/Polo White Front.jpg";
@@ -1844,8 +1845,9 @@ function initProductPage(sku) {
       }
     });
     
-    if (totalQty === 0) {
-      showToast("Please enter a quantity for at least one size.", "warning");
+    const moqLimit = parseInt(p.moq ? p.moq.toString().replace(/[^0-9]/g, '') : "50") || 50;
+    if (totalQty < moqLimit) {
+      showToast(`Minimum Order Quantity is ${moqLimit} pcs. Please enter a total quantity of at least ${moqLimit} pieces across your chosen sizes.`, "warning", 5000);
       return;
     }
     
