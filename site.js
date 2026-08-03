@@ -1451,8 +1451,32 @@ function initProductPage(sku) {
       mode: modeParam,
       cust: prod.customizationCapability || prod.customizationPermissions || "both"
     });
-    
-    window.location.href = `branding-studio.html?_cb=${Date.now()}&${queryParams.toString()}`;
+
+    const customizerState = {
+      sku: prod.sku || "F8-STUDIO-CUSTOM",
+      name: prod.name || "Custom Uniform Garment",
+      color: selectedColor,
+      size: targetSize,
+      qty: totalQty,
+      image: targetImg,
+      category: prod.category || "General Apparel",
+      capability: prod.customizationCapability || prod.customizationPermissions || "both",
+      supportedFinishes: prod.supportedFinishes || ["Embroidery", "DTF"],
+      supportedPlacements: prod.supportedPlacements || ["Left Chest", "Right Chest", "Full Back", "Upper Sleeve"],
+      placements: prod.placements || [
+        { name: "Left Chest", x: 68, y: 34, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 32, y: 34, w: 18, h: 18, r: 0 },
+        { name: "Full Back", x: 50, y: 40, w: 45, h: 45, r: 0 },
+        { name: "Upper Sleeve", x: 82, y: 32, w: 14, h: 14, r: 5 }
+      ]
+    };
+    try {
+      localStorage.setItem('fabric8_customizer_state', JSON.stringify(customizerState));
+    } catch (err) {
+      console.warn("Unable to store customizer state in localStorage", err);
+    }
+
+    window.location.href = `product-customizer.html?_cb=${Date.now()}&${queryParams.toString()}`;
   };
 
   const customizationSection = document.getElementById("productCustomizationSection");

@@ -284,6 +284,7 @@ async function syncWithGithub(action, product) {
 let activeSizes = ["S", "M", "L", "XL"];
 let activeColors = ["Black", "Navy", "White"];
 let activeSectors = [];
+let activeProductPlacements = [];
 let pendingSketchFile = null;
 let pendingSiteImages = {};
 
@@ -344,6 +345,40 @@ window.removeColorTag = function(index) {
   activeColors.splice(index, 1);
   renderColorsTags();
 };
+
+function renderPlacementsTable() {
+  const tbody = document.getElementById("placementsTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = activeProductPlacements.map((p, idx) => `
+    <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+      <td style="padding: 6px;"><input type="text" value="${p.name || ''}" onchange="window.updatePlacementField(${idx}, 'name', this.value)" style="width: 100%; padding: 6px; font-size: 12px;"></td>
+      <td style="padding: 6px;"><input type="number" value="${p.x ?? 65}" onchange="window.updatePlacementField(${idx}, 'x', this.value)" style="width: 60px; padding: 6px; text-align: center; font-size: 12px;"></td>
+      <td style="padding: 6px;"><input type="number" value="${p.y ?? 36}" onchange="window.updatePlacementField(${idx}, 'y', this.value)" style="width: 60px; padding: 6px; text-align: center; font-size: 12px;"></td>
+      <td style="padding: 6px;"><input type="number" value="${p.w ?? 18}" onchange="window.updatePlacementField(${idx}, 'w', this.value)" style="width: 60px; padding: 6px; text-align: center; font-size: 12px;"></td>
+      <td style="padding: 6px;"><input type="number" value="${p.h ?? 18}" onchange="window.updatePlacementField(${idx}, 'h', this.value)" style="width: 60px; padding: 6px; text-align: center; font-size: 12px;"></td>
+      <td style="padding: 6px;"><input type="number" value="${p.r ?? 0}" onchange="window.updatePlacementField(${idx}, 'r', this.value)" style="width: 60px; padding: 6px; text-align: center; font-size: 12px;"></td>
+      <td style="padding: 6px; text-align: center;"><button type="button" onclick="window.removePlacementRow(${idx})" style="background: none; border: none; font-size: 16px; color: #e74c3c; cursor: pointer;">&times;</button></td>
+    </tr>
+  `).join("");
+}
+
+window.updatePlacementField = function(idx, field, val) {
+  if (field === 'name') {
+    activeProductPlacements[idx][field] = val;
+  } else {
+    activeProductPlacements[idx][field] = parseFloat(val) || 0;
+  }
+};
+
+window.removePlacementRow = function(idx) {
+  activeProductPlacements.splice(idx, 1);
+  renderPlacementsTable();
+};
+
+document.getElementById("addPlacementRowBtn")?.addEventListener("click", () => {
+  activeProductPlacements.push({ name: "New Zone", x: 50, y: 50, w: 20, h: 20, r: 0 });
+  renderPlacementsTable();
+});
 
 document.getElementById("addSizeTagBtn")?.addEventListener("click", () => {
   const input = document.getElementById("newSizeInput");
@@ -449,7 +484,13 @@ function openModal(docId = null) {
       document.getElementById("care").value = p.care || "";
       document.getElementById("sketch").value = p.sketch || "";
       document.getElementById("sketchDescription").value = p.sketchDescription || "";
-      document.getElementById("supportedPlacements").value = (p.supportedPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"]).join(", ");
+      activeProductPlacements = p.placements && p.placements.length > 0 ? JSON.parse(JSON.stringify(p.placements)) : [
+        { name: "Left Chest", x: 65, y: 36, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 35, y: 36, w: 18, h: 18, r: 0 },
+        { name: "Full Back", x: 50, y: 45, w: 45, h: 45, r: 0 },
+        { name: "Upper Sleeve", x: 84, y: 34, w: 13, h: 13, r: 6 }
+      ];
+      renderPlacementsTable();
 
       const custCap = p.customizationCapability || "both";
       const radio = document.querySelector(`input[name="customizationCapability"][value="${custCap}"]`);
@@ -480,7 +521,13 @@ function openModal(docId = null) {
     renderSectorButtons();
     renderSizesTags();
     renderColorsTags();
-    document.getElementById("supportedPlacements").value = "Left Chest, Right Chest, Center Back, Upper Sleeve";
+    activeProductPlacements = [
+      { name: "Left Chest", x: 65, y: 36, w: 18, h: 18, r: 0 },
+      { name: "Right Chest", x: 35, y: 36, w: 18, h: 18, r: 0 },
+      { name: "Full Back", x: 50, y: 45, w: 45, h: 45, r: 0 },
+      { name: "Upper Sleeve", x: 84, y: 34, w: 13, h: 13, r: 6 }
+    ];
+    renderPlacementsTable();
   }
   
   productModal.style.display = "flex";
@@ -539,7 +586,8 @@ productForm.addEventListener("submit", async (e) => {
     care: document.getElementById("care").value,
     sketch: pendingSketchFile ? "PENDING_UPLOAD" : document.getElementById("sketch").value,
     sketchDescription: document.getElementById("sketchDescription")?.value || "",
-    supportedPlacements: document.getElementById("supportedPlacements")?.value.split(",").map(p => p.trim()).filter(Boolean) || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"],
+    supportedPlacements: activeProductPlacements.map(p => p.name).filter(Boolean),
+    placements: activeProductPlacements,
     supportedFinishes: supportedFinishes,
     customizationCapability: custCap,
     existingImages: existingImages

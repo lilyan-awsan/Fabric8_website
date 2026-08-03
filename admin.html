@@ -552,8 +552,29 @@
             </div>
           </div>
           <div class="input-group full-width">
-            <label>Recommended Placements (comma separated)</label>
-            <input type="text" id="supportedPlacements" placeholder="e.g. Left Chest, Right Chest, Center Back, Upper Sleeve">
+            <label style="margin-bottom: 8px; display: block;">Configured Placements & Anchor Bounds (x, y, width, height, rotation)</label>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 0; margin-bottom: 10px;">Define accurate placement zones and anchor scale percentages for real-time canvas positioning.</p>
+            <div id="placementsTableContainer" style="background: #f9f8f5; border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 8px; overflow-x: auto;">
+              <table style="width: 100%; text-align: left; font-size: 13px; border-collapse: collapse; min-width: 500px;">
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--line); color: var(--ink);">
+                    <th style="padding: 6px;">Zone Name</th>
+                    <th style="padding: 6px; width: 70px;">X (%)</th>
+                    <th style="padding: 6px; width: 70px;">Y (%)</th>
+                    <th style="padding: 6px; width: 70px;">W (%)</th>
+                    <th style="padding: 6px; width: 70px;">H (%)</th>
+                    <th style="padding: 6px; width: 70px;">Rot (°)</th>
+                    <th style="padding: 6px; width: 50px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="placementsTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" id="addPlacementRowBtn" class="button outline" style="padding: 6px 16px; font-size: 13px; font-weight: 600;">+ Add Placement Zone</button>
+            </div>
           </div>
           <div class="input-group full-width">
             <label>Technical Sketch Image (URL or File Upload)</label>
