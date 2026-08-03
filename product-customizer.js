@@ -449,10 +449,14 @@
     modal.style.display = "none";
   };
 
-  // Add to Cart Handler
   window.confirmAndAddToCart = function () {
     const canvas = document.getElementById("renderCanvas");
     const previewUrl = canvas.toDataURL("image/png");
+    const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Default";
+
+    const brandingDesc = state.currentMode === "logo" 
+      ? `Custom Logo (${state.currentFinish} on ${placementName})`
+      : `Text Embroidery (${state.text.fontStyle} font, ${state.text.swatchName} thread on ${placementName})`;
 
     const cartItem = {
       id: "F8-CUST-" + Date.now(),
@@ -460,13 +464,15 @@
       name: `${state.product.name} [Customized]`,
       color: state.product.color,
       size: state.product.size,
-      qty: state.product.qty,
+      qty: parseInt(state.product.qty || 50),
+      quantity: parseInt(state.product.qty || 50),
       price: "Custom Quotation",
+      branding: brandingDesc,
       image: previewUrl || state.product.image,
       customization: {
         type: state.currentMode === "logo" ? "Logo Upload" : "Text Embroidery",
         finish: state.currentFinish,
-        placement: state.selectedPlacement ? state.selectedPlacement.name : "Default",
+        placement: placementName,
         artworkFile: state.currentMode === "logo" ? state.artwork.fileName : "N/A",
         textDetails: state.currentMode === "text" ? {
           line1: state.text.line1,
@@ -478,10 +484,10 @@
       }
     };
 
-    // Push into localStorage cart array
+    // Push into localStorage cart array (syncing across fabric8QuoteCart, fabric8_cart, and legacy cart)
     let currentCart = [];
     try {
-      const existing = localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
+      const existing = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
       if (existing) currentCart = JSON.parse(existing);
       if (!Array.isArray(currentCart)) currentCart = [];
     } catch (e) {
@@ -491,6 +497,7 @@
     currentCart.push(cartItem);
 
     try {
+      localStorage.setItem("fabric8QuoteCart", JSON.stringify(currentCart));
       localStorage.setItem("fabric8_cart", JSON.stringify(currentCart));
       localStorage.setItem("cart", JSON.stringify(currentCart)); // Legacy support
     } catch (e) {
@@ -500,11 +507,13 @@
     // Non-blocking user feedback
     if (typeof window.showToast === "function") {
       window.showToast("🎉 Customized Prototype added to cart! Redirecting to checkout...", "success");
+    } else {
+      console.log("Customized Prototype added to cart! Redirecting to checkout...");
     }
 
     setTimeout(() => {
       window.location.href = "checkout.html";
-    }, 700);
+    }, 600);
   };
 
 })();
