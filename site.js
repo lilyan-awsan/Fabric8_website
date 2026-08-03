@@ -1404,6 +1404,7 @@ function initProductPage(sku) {
     const sizeInputs = document.querySelectorAll("#sizeQtyMatrix input[type='number']");
     let totalQty = 0;
     let selectedSizesList = [];
+    let sizeDetailsList = [];
     
     if (sizeInputs && sizeInputs.length > 0) {
       sizeInputs.forEach(inp => {
@@ -1411,6 +1412,7 @@ function initProductPage(sku) {
         if (!isNaN(v) && v > 0) {
           totalQty += v;
           selectedSizesList.push(inp.dataset.size);
+          sizeDetailsList.push(`${inp.dataset.size} (${v})`);
         }
       });
     }
@@ -1430,10 +1432,7 @@ function initProductPage(sku) {
       else targetImg = prod.images[0];
     }
     
-    let targetSize = "Assorted / Sizing Roster";
-    if (selectedSizesList.length === 1) {
-      targetSize = selectedSizesList[0];
-    }
+    let targetSize = sizeDetailsList.length > 0 ? sizeDetailsList.join(", ") : "Standard Commercial Spec";
 
     let modeParam = "dtf";
     const custSetting = (prod.customizationCapability || prod.customizationPermissions || "both").toLowerCase();
