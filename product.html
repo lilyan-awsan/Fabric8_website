@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fabric8 | Product</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
     <link rel="stylesheet" href="site.css?v=11" />
 </head>
@@ -84,14 +84,14 @@
         <div class="product-accordions" style="border-top: 1px solid var(--line);">
           <!-- Product Details -->
           <details class="accordion" style="border-bottom: 1px solid var(--line);">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Product Details</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Product Details</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: inherit;">+</span></summary>
             <div style="padding-bottom: 16px; font-size: 14px; line-height: 1.6; color: var(--ink);">
               <p id="productDesc" style="margin: 0;"></p>
             </div>
           </details>
           <!-- Material Details -->
           <details class="accordion" style="border-bottom: 1px solid var(--line);">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Material Details</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Material Details</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: inherit;">+</span></summary>
             <div style="padding-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--ink);">
               <p style="margin: 0 0 8px 0;"><strong>Material:</strong> <span id="productFabric"></span></p>
               <p style="margin: 0;"><strong>GSM:</strong> <span id="productGsm"></span></p>
@@ -99,14 +99,14 @@
           </details>
           <!-- Care Instructions (Dedicated Standalone Tab as requested in Req 12) -->
           <details class="accordion" style="border-bottom: 1px solid var(--line);">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Care Instructions</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Care Instructions</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: inherit;">+</span></summary>
             <div style="padding-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--ink);">
               <p id="productCareFull" style="margin: 0;">Machine wash cold, tumble dry low. Do not bleach.</p>
             </div>
           </details>
           <!-- Technical Sketch -->
           <details id="sketchAccordion" class="accordion" style="border-bottom: 1px solid var(--line); display: block;">
-            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Technical Sketch</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: monospace;">+</span></summary>
+            <summary style="padding: 16px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Technical Sketch</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: inherit;">+</span></summary>
             <div style="padding-bottom: 16px; display: grid; place-items: center; background: #fafafa; border-radius: 8px; padding: 16px; text-align: center;">
               <p id="noSketchMsg" style="display: none; font-size: 12px; color: var(--muted); margin: 0;">Technical CAD sketch available upon quote confirmation.</p>
               <img id="productSketch" src="" alt="Technical Sketch" style="max-height: 300px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;" />

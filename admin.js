@@ -1,3 +1,36 @@
+// Toast Notification System for Admin
+window.showToast = function(message, type = 'success', duration = 6000) {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast-notice ${type === 'error' ? 'toast-error' : type === 'warning' ? 'toast-warning' : ''}`;
+  const msgEl = document.createElement('span');
+  msgEl.style.whiteSpace = 'pre-line';
+  msgEl.textContent = message;
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'toast-close-btn';
+  closeBtn.innerHTML = '&times;';
+  closeBtn.onclick = () => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  };
+  toast.appendChild(msgEl);
+  toast.appendChild(closeBtn);
+  container.appendChild(toast);
+  if (duration > 0) {
+    setTimeout(() => {
+      if (toast && toast.parentElement) {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }
+    }, duration);
+  }
+};
+
 // Make the page visible (removes opacity: 0 from site.css)
 document.body.classList.add("page-ready");
 
@@ -231,17 +264,17 @@ async function syncWithGithub(action, product) {
     if (data.success) {
       productsList = data.products;
       renderTable();
-      alert(`Success! Changes saved successfully.\nNOTE: It takes ~45 seconds to update the live website. Your changes will be live shortly.`);
+      showToast(`Success! Changes saved successfully.\nNOTE: It takes ~45 seconds to update the live website. Your changes will be live shortly.`, "success", 8000);
       return true;
     } else {
       if (data.message === "Unauthorized") {
         logoutBtn.click();
       }
-      alert("Error saving: " + data.message);
+      showToast("Error saving: " + data.message, "error", 8000);
       return false;
     }
   } catch (error) {
-    alert("Network error. Ensure you are on Vercel.");
+    showToast("Network error. Ensure you are on Vercel.", "error", 8000);
     return false;
   }
 }
@@ -1075,12 +1108,12 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
         statusSpan.style.display = "inline";
         setTimeout(() => { statusSpan.style.display = "none"; }, 5000);
       }
-      alert(`Success! Master CMS Content and Category settings saved successfully.\nNOTE: It takes ~45 seconds to update the live website.`);
+      showToast(`Success! Master CMS Content and Category settings saved successfully.\nNOTE: It takes ~45 seconds to update the live website.`, "success", 8000);
     } else {
-      alert("Error saving settings: " + data.message);
+      showToast("Error saving settings: " + data.message, "error", 8000);
     }
   } catch (error) {
-    alert("Network error. Ensure you are on Vercel.");
+    showToast("Network error. Ensure you are on Vercel.", "error", 8000);
   } finally {
     btn.textContent = originalText;
     btn.disabled = false;
