@@ -1,0 +1,562 @@
+/**
+ * Fabric8 Standalone Branding Discovery Studio Engine
+ * Provides interactive logo & text customization across prototype garments.
+ */
+(function() {
+  "use strict";
+
+  // Central State Engine
+  const state = {
+    product: {
+      sku: "F8-PROTO-POLO",
+      name: "Corporate Dri-Fit Polo",
+      color: "White",
+      size: "Standard Spec (M/L/XL)",
+      qty: 50,
+      image: "assets/products/Polo White Front.jpg",
+      placements: [
+        { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
+        { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+      ]
+    },
+    selectedPlacement: null,
+    currentMode: "logo",
+    currentFinish: "DTF Direct Print",
+    artwork: {
+      imageObj: null,
+      fileName: "",
+      x: 63,
+      y: 44,
+      scale: 1,
+      rotation: 0
+    },
+    text: {
+      line1: "FABRIC 8 ATELIER",
+      line2: "",
+      line3: "",
+      fontStyle: "'Century Gothic', sans-serif",
+      swatchName: "#111111",
+      x: 63,
+      y: 44
+    },
+    canvas: {
+      ctx: null,
+      baseImage: null,
+      isDragging: false,
+      dragOffsetX: 0,
+      dragOffsetY: 0
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    state.selectedPlacement = state.product.placements[0];
+    initCanvas();
+    setupEventListeners();
+    setupGarmentSwitcher();
+    renderPlacementOptions();
+    drawCanvas();
+  });
+
+  function setupGarmentSwitcher() {
+    const garmentBtns = document.querySelectorAll(".garment-btn");
+    garmentBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        garmentBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const protoType = btn.dataset.proto;
+        state.product.sku = btn.dataset.sku;
+        state.product.name = btn.dataset.name;
+        state.product.color = btn.dataset.color;
+        state.product.image = btn.dataset.img;
+
+        // Update top header badges
+        document.getElementById("headerProdName").textContent = state.product.name;
+        document.getElementById("headerProdImg").src = state.product.image;
+        document.getElementById("headerProdSku").textContent = `SKU: ${state.product.sku}`;
+        document.getElementById("headerProdColor").textContent = `Color: ${state.product.color}`;
+
+        // Recalibrate placement zones based on garment category
+        if (protoType === "cap") {
+          state.product.placements = [
+            { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
+            { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
+          ];
+        } else if (protoType === "chef") {
+          state.product.placements = [
+            { name: "Left Chest Pocket", x: 64, y: 46, w: 16, h: 16, r: 0 },
+            { name: "Right Collar / Collar Tip", x: 44, y: 36, w: 12, h: 12, r: 0 },
+            { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 }
+          ];
+        } else {
+          state.product.placements = [
+            { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+            { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+            { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
+            { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+          ];
+        }
+
+        state.selectedPlacement = state.product.placements[0];
+        state.artwork.x = state.selectedPlacement.x;
+        state.artwork.y = state.selectedPlacement.y;
+        state.artwork.rotation = state.selectedPlacement.r || 0;
+        state.text.x = state.selectedPlacement.x;
+        state.text.y = state.selectedPlacement.y;
+
+        renderPlacementOptions();
+        loadBaseImage();
+      });
+    });
+  }
+
+  function renderPlacementOptions() {
+    const sel = document.getElementById("placementSelector");
+    if (!sel) return;
+    sel.innerHTML = "";
+    state.product.placements.forEach((p, i) => {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = p.name;
+      sel.appendChild(opt);
+    });
+    sel.value = 0;
+  }
+
+  function initCanvas() {
+    const canvasEl = document.getElementById("renderCanvas");
+    if (!canvasEl) return;
+    state.canvas.ctx = canvasEl.getContext("2d");
+
+    canvasEl.addEventListener("mousedown", handleMouseDown);
+    canvasEl.addEventListener("mousemove", handleMouseMove);
+    canvasEl.addEventListener("mouseup", handleMouseUp);
+    canvasEl.addEventListener("mouseleave", handleMouseUp);
+    canvasEl.addEventListener("touchstart", handleTouchStart, { passive: false });
+    canvasEl.addEventListener("touchmove", handleTouchMove, { passive: false });
+    canvasEl.addEventListener("touchend", handleMouseUp);
+
+    loadBaseImage();
+  }
+
+  function loadBaseImage() {
+    state.canvas.baseImage = new Image();
+    state.canvas.baseImage.crossOrigin = "anonymous";
+    state.canvas.baseImage.onload = drawCanvas;
+    state.canvas.baseImage.onerror = () => {
+      console.warn("Could not load base image:", state.product.image);
+      drawCanvas();
+    };
+    state.canvas.baseImage.src = state.product.image;
+  }
+
+  function drawCanvas() {
+    const ctx = state.canvas.ctx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, 800, 800);
+
+    // Draw background garment image
+    if (state.canvas.baseImage && state.canvas.baseImage.complete) {
+      ctx.drawImage(state.canvas.baseImage, 0, 0, 800, 800);
+    } else {
+      ctx.fillStyle = "#f0efe9";
+      ctx.fillRect(0, 0, 800, 800);
+      ctx.fillStyle = "#888";
+      ctx.font = "bold 20px Century Gothic";
+      ctx.fillText("Loading Prototype Garment...", 260, 400);
+    }
+
+    if (state.currentMode === "logo") {
+      drawLogo();
+    } else {
+      drawText();
+    }
+  }
+
+  function drawLogo() {
+    const ctx = state.canvas.ctx;
+    const img = state.artwork.imageObj;
+    if (!img) {
+      drawPlacementGuide();
+      return;
+    }
+
+    const xPx = (state.artwork.x / 100) * 800;
+    const yPx = (state.artwork.y / 100) * 800;
+    const boxW = ((state.selectedPlacement ? state.selectedPlacement.w : 20) / 100) * 800;
+    const aspect = img.naturalWidth / img.naturalHeight || 1;
+    let drawW = boxW * state.artwork.scale;
+    let drawH = drawW / aspect;
+
+    ctx.save();
+    ctx.translate(xPx, yPx);
+    ctx.rotate((state.artwork.rotation * Math.PI) / 180);
+    ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+    ctx.restore();
+  }
+
+  function drawText() {
+    const ctx = state.canvas.ctx;
+    if (!state.text.line1 && !state.text.line2 && !state.text.line3) {
+      drawPlacementGuide();
+      return;
+    }
+
+    const xPx = (state.text.x / 100) * 800;
+    const yPx = (state.text.y / 100) * 800;
+    const baseSize = 22;
+
+    ctx.save();
+    ctx.translate(xPx, yPx);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const lines = [state.text.line1, state.text.line2, state.text.line3].filter(Boolean);
+    const lineSpacing = baseSize * 1.35;
+    const totalHeight = (lines.length - 1) * lineSpacing;
+    let startY = -totalHeight / 2;
+
+    ctx.font = `900 ${baseSize}px ${state.text.fontStyle || "'Century Gothic', sans-serif"}`;
+    ctx.fillStyle = state.text.swatchName || "#111111";
+
+    lines.forEach(l => {
+      ctx.fillText(l.toUpperCase(), 0, startY);
+      startY += lineSpacing;
+    });
+
+    ctx.restore();
+  }
+
+  function drawPlacementGuide() {
+    const ctx = state.canvas.ctx;
+    if (!state.selectedPlacement) return;
+
+    const xPx = (state.selectedPlacement.x / 100) * 800;
+    const yPx = (state.selectedPlacement.y / 100) * 800;
+    const wPx = (state.selectedPlacement.w / 100) * 800;
+    const hPx = (state.selectedPlacement.h / 100) * 800;
+
+    ctx.save();
+    ctx.strokeStyle = "#3e8e42";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.strokeRect(xPx - wPx / 2, yPx - hPx / 2, wPx, hPx);
+
+    ctx.fillStyle = "#3e8e42";
+    ctx.font = "bold 13px 'Century Gothic', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("📍 BRANDING ZONE", xPx, yPx);
+    ctx.restore();
+  }
+
+  // Interaction handlers
+  function getCanvasCoords(clientX, clientY) {
+    const el = document.getElementById("renderCanvas");
+    const rect = el.getBoundingClientRect();
+    const scaleX = 800 / rect.width;
+    const scaleY = 800 / rect.height;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  }
+
+  function handleMouseDown(e) {
+    e.preventDefault();
+    const pos = getCanvasCoords(e.clientX, e.clientY);
+    startDrag(pos.x, pos.y);
+  }
+
+  function handleMouseMove(e) {
+    if (!state.canvas.isDragging) return;
+    const pos = getCanvasCoords(e.clientX, e.clientY);
+    dragTo(pos.x, pos.y);
+  }
+
+  function handleTouchStart(e) {
+    if (e.touches.length === 1) {
+      e.preventDefault();
+      const pos = getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+      startDrag(pos.x, pos.y);
+    }
+  }
+
+  function handleTouchMove(e) {
+    if (!state.canvas.isDragging) return;
+    e.preventDefault();
+    const pos = getCanvasCoords(e.touches[0].clientX, e.touches[0].clientY);
+    dragTo(pos.x, pos.y);
+  }
+
+  function startDrag(xPx, yPx) {
+    const targetX = state.currentMode === "logo" ? (state.artwork.x / 100) * 800 : (state.text.x / 100) * 800;
+    const targetY = state.currentMode === "logo" ? (state.artwork.y / 100) * 800 : (state.text.y / 100) * 800;
+    const dist = Math.hypot(xPx - targetX, yPx - targetY);
+
+    if (dist < 180) {
+      state.canvas.isDragging = true;
+      state.canvas.dragOffsetX = xPx - targetX;
+      state.canvas.dragOffsetY = yPx - targetY;
+    }
+  }
+
+  function dragTo(xPx, yPx) {
+    const newX = Math.max(0, Math.min(800, xPx - state.canvas.dragOffsetX));
+    const newY = Math.max(0, Math.min(800, yPx - state.canvas.dragOffsetY));
+
+    if (state.currentMode === "logo") {
+      state.artwork.x = (newX / 800) * 100;
+      state.artwork.y = (newY / 800) * 100;
+    } else {
+      state.text.x = (newX / 800) * 100;
+      state.text.y = (newY / 800) * 100;
+    }
+    drawCanvas();
+  }
+
+  function handleMouseUp() {
+    state.canvas.isDragging = false;
+  }
+
+  function setupEventListeners() {
+    // Mode switcher
+    const btnLogo = document.getElementById("btnModeLogo");
+    const btnText = document.getElementById("btnModeText");
+    const pLogo = document.getElementById("panelLogo");
+    const pText = document.getElementById("panelText");
+
+    if (btnLogo && btnText) {
+      btnLogo.addEventListener("click", () => {
+        btnLogo.classList.add("active");
+        btnText.classList.remove("active");
+        pLogo.style.display = "block";
+        pText.style.display = "none";
+        state.currentMode = "logo";
+        drawCanvas();
+      });
+
+      btnText.addEventListener("click", () => {
+        btnText.classList.add("active");
+        btnLogo.classList.remove("active");
+        pText.style.display = "block";
+        pLogo.style.display = "none";
+        state.currentMode = "text";
+        drawCanvas();
+      });
+    }
+
+    // Placement selector
+    const placeSel = document.getElementById("placementSelector");
+    if (placeSel) {
+      placeSel.addEventListener("change", (e) => {
+        const idx = parseInt(e.target.value) || 0;
+        state.selectedPlacement = state.product.placements[idx];
+        if (state.selectedPlacement) {
+          state.artwork.x = state.selectedPlacement.x;
+          state.artwork.y = state.selectedPlacement.y;
+          state.artwork.rotation = state.selectedPlacement.r || 0;
+          state.text.x = state.selectedPlacement.x;
+          state.text.y = state.selectedPlacement.y;
+          drawCanvas();
+        }
+      });
+    }
+
+    // Logo Upload
+    const dropZone = document.getElementById("dropZone");
+    const logoInp = document.getElementById("logoInput");
+    if (dropZone && logoInp) {
+      dropZone.addEventListener("click", () => logoInp.click());
+      logoInp.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) handleFileRead(file);
+      });
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#3e8e42";
+      });
+      dropZone.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#bbb";
+      });
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#bbb";
+        const file = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) handleFileRead(file);
+      });
+    }
+
+    function handleFileRead(file) {
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+          state.artwork.imageObj = img;
+          state.artwork.fileName = file.name;
+          const statusEl = document.getElementById("fileStatus");
+          const nameEl = document.getElementById("fileName");
+          if (statusEl && nameEl) {
+            nameEl.textContent = file.name;
+            statusEl.style.display = "block";
+          }
+          drawCanvas();
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Finish selection
+    document.querySelectorAll(".finish-option").forEach(opt => {
+      opt.addEventListener("click", () => {
+        document.querySelectorAll(".finish-option").forEach(o => o.classList.remove("active"));
+        opt.classList.add("active");
+        state.currentFinish = opt.dataset.finish;
+      });
+    });
+
+    // Text input synchronization
+    ["textLine1", "textLine2", "textLine3"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener("input", () => {
+          state.text.line1 = document.getElementById("textLine1").value;
+          state.text.line2 = document.getElementById("textLine2").value;
+          state.text.line3 = document.getElementById("textLine3").value;
+          drawCanvas();
+        });
+      }
+    });
+
+    const fontSel = document.getElementById("textFont");
+    if (fontSel) {
+      fontSel.addEventListener("change", (e) => {
+        state.text.fontStyle = e.target.value;
+        drawCanvas();
+      });
+    }
+
+    document.querySelectorAll("#threadSwatches .swatch-btn").forEach(swatch => {
+      swatch.addEventListener("click", () => {
+        document.querySelectorAll("#threadSwatches .swatch-btn").forEach(s => s.classList.remove("active"));
+        swatch.classList.add("active");
+        state.text.swatchName = swatch.dataset.color;
+        drawCanvas();
+      });
+    });
+
+    // Center button
+    const centerBtn = document.getElementById("btnCenter");
+    if (centerBtn) {
+      centerBtn.addEventListener("click", () => {
+        if (state.selectedPlacement) {
+          state.artwork.x = state.selectedPlacement.x;
+          state.artwork.y = state.selectedPlacement.y;
+          state.text.x = state.selectedPlacement.x;
+          state.text.y = state.selectedPlacement.y;
+          drawCanvas();
+        }
+      });
+    }
+
+    // Order Review Modal triggers
+    const btnReview = document.getElementById("btnReviewOrder");
+    const modal = document.getElementById("summaryModal");
+    const btnCancel = document.getElementById("btnCancelModal");
+    const btnConfirm = document.getElementById("btnConfirmAddToCart");
+
+    if (btnReview && modal) {
+      btnReview.addEventListener("click", () => {
+        if (state.currentMode === "logo" && !state.artwork.imageObj) {
+          alert("Please upload an artwork logo file first or switch to Text Embroidery.");
+          return;
+        }
+
+        document.getElementById("summaryProdName").textContent = state.product.name;
+        document.getElementById("summaryProdDetails").textContent = `SKU: ${state.product.sku} | Color: ${state.product.color}`;
+        document.getElementById("summaryPlacement").textContent = state.selectedPlacement ? state.selectedPlacement.name : "Custom Zone";
+
+        if (state.currentMode === "logo") {
+          document.getElementById("summaryMethod").textContent = "Logo Artwork Upload";
+          document.getElementById("summaryDetails").textContent = `File: ${state.artwork.fileName} | Finish: ${state.currentFinish}`;
+        } else {
+          document.getElementById("summaryMethod").textContent = "Text Embroidery";
+          const lines = [state.text.line1, state.text.line2, state.text.line3].filter(Boolean).join(" / ");
+          document.getElementById("summaryDetails").textContent = `Text: "${lines}"`;
+        }
+
+        // Snapshot preview
+        const dataUrl = document.getElementById("renderCanvas").toDataURL();
+        document.getElementById("summaryPreviewImg").src = dataUrl;
+
+        modal.style.display = "flex";
+      });
+    }
+
+    if (btnCancel && modal) {
+      btnCancel.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
+
+    if (btnConfirm) {
+      btnConfirm.addEventListener("click", handleAddToCart);
+    }
+  }
+
+  function handleAddToCart() {
+    const previewUrl = document.getElementById("renderCanvas").toDataURL();
+    const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Custom";
+    let brandingDesc = state.currentMode === "logo" 
+      ? `Custom Logo: ${state.artwork.fileName || "Uploaded"} (${state.currentFinish} - ${placementName})`
+      : `Text Embroidery: "${state.text.line1}" (${placementName})`;
+
+    const cartItem = {
+      sku: state.product.sku,
+      name: state.product.name,
+      size: state.product.size,
+      color: state.product.color,
+      quantity: state.product.qty || 50,
+      price: "Custom Quotation",
+      branding: brandingDesc,
+      image: previewUrl || state.product.image,
+      customization: {
+        type: state.currentMode === "logo" ? "Logo Upload" : "Text Embroidery",
+        finish: state.currentFinish,
+        placement: placementName,
+        artworkFile: state.currentMode === "logo" ? state.artwork.fileName : "N/A"
+      }
+    };
+
+    let currentCart = [];
+    try {
+      const existing = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
+      if (existing) currentCart = JSON.parse(existing);
+      if (!Array.isArray(currentCart)) currentCart = [];
+    } catch (e) {
+      currentCart = [];
+    }
+
+    currentCart.push(cartItem);
+
+    try {
+      localStorage.setItem("fabric8QuoteCart", JSON.stringify(currentCart));
+      localStorage.setItem("fabric8_cart", JSON.stringify(currentCart));
+      localStorage.setItem("cart", JSON.stringify(currentCart));
+    } catch (e) {
+      console.warn("Error updating localStorage cart", e);
+    }
+
+    if (typeof window.showToast === "function") {
+      window.showToast("🎉 Customized prototype added to cart! Redirecting to checkout...", "success");
+    }
+
+    setTimeout(() => {
+      window.location.href = "checkout.html";
+    }, 600);
+  }
+
+})();

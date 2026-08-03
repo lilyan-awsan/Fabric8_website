@@ -800,7 +800,7 @@ document.addEventListener("click", (event) => {
           size: item.size || "Assorted",
           qty: item.quantity || 50,
         });
-        window.location.href = `branding-studio.html?_cb=${Date.now()}&${queryParams.toString()}`;
+        window.location.href = `product-customizer.html?_cb=${Date.now()}&${queryParams.toString()}`;
       }
     }
   }
@@ -850,8 +850,7 @@ document.addEventListener("click", (event) => {
       mode: modeParam,
       cust: selectedProduct.customizationCapability || selectedProduct.customizationPermissions || "both"
     });
-
-    window.location.href = `branding-studio.html?_cb=${Date.now()}&${queryParams.toString()}`;
+    window.location.href = `product-customizer.html?_cb=${Date.now()}&${queryParams.toString()}`;
     return;
   }
   if (colorDot) {
