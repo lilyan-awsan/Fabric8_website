@@ -1687,4 +1687,119 @@ input.error, select.error, textarea.error {
     left: 20px;
     width: auto;
   }
+}
+
+/* =========================================================================
+   FABRIC8 ATELIER - GLOBAL RESPONSIVE & MONITOR ADAPTABILITY SUITE
+   Ensures zero horizontal overflow and visual excellence from 1440p to iPhones
+   ========================================================================= */
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  max-width: 1600px !important;
+  margin: 0 auto;
+}
+
+/* 1. Universal Table Responsive Overflow Protection */
+.table-scroll-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 2. Ultra-Wide Monitor Refinement (1440px +) */
+@media (min-width: 1440px) {
+  .container, .header-inner, .main-container {
+    max-width: 1380px !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* 3. Tablet & iPad Adaptations (768px - 1024px) */
+@media (max-width: 1024px) {
+  .header-inner, .navbar, .header {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .grid-3, .grid-4, .shop-grid, .sectors-grid, .method-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .product-page-layout, .quote-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+}
+
+/* 4. Smartphone & Compact Touch Screen Overhaul (< 768px) */
+@media (max-width: 767px) {
+  .grid-2, .grid-3, .grid-4, .shop-grid, .sectors-grid, .method-grid, .footer-grid, .product-page-layout, .quote-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  
+  .service-feature, .service-feature.reverse {
+    grid-template-columns: 1fr !important;
+    direction: ltr !important;
+    text-align: left !important;
+  }
+  
+  /* Stack inline 2-column forms vertically */
+  form div[style*="grid-template-columns: 1fr 1fr"],
+  .form-row[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Fluid Hero Typography Scaling */
+  .hero h1, .landing-hero h1, .about-hero h1, .services-hero h1, .sectors-hero h1, .shop-hero h1 {
+    font-size: clamp(2rem, 7vw, 2.8rem) !important;
+    line-height: 1.15 !important;
+    word-wrap: break-word !important;
+  }
+
+  /* Reduce heavy spacing for compact vertical rhythm */
+  section {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .button-group, .hero-actions, .cta-row {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+  
+  .button-group button, .button-group a, .hero-actions button, .hero-actions a {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* 5. Compact iPhone & Narrow Mobile Viewports (< 480px) */
+@media (max-width: 480px) {
+  .container, section, main {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  h1 { font-size: clamp(1.75rem, 6.5vw, 2.4rem) !important; }
+  h2 { font-size: clamp(1.4rem, 5vw, 1.8rem) !important; }
+  h3 { font-size: clamp(1.2rem, 4.5vw, 1.5rem) !important; }
 }
