@@ -123,12 +123,33 @@
 
     state.product.placements = (state.product.placements || []).map(calibratePlacement);
 
-    // Default selected placement
-    if (state.product.placements && state.product.placements.length > 0) {
-      state.selectedPlacement = state.product.placements[0];
-    } else {
-      state.selectedPlacement = { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 };
+    // Guarantee default placement options based on garment category or name if none exist in product record
+    if (!state.product.placements || state.product.placements.length === 0) {
+      const cat = (state.product.category || "").toLowerCase();
+      const name = (state.product.name || "").toLowerCase();
+      if (cat.includes("bottom") || name.includes("pant") || name.includes("trouser") || name.includes("short") || name.includes("skirt")) {
+        state.product.placements = [
+          { name: "Left Hip Pocket", x: 62, y: 35, w: 15, h: 15, r: 0 },
+          { name: "Right Hip Pocket", x: 38, y: 35, w: 15, h: 15, r: 0 },
+          { name: "Left Cargo Pocket / Leg", x: 65, y: 55, w: 16, h: 16, r: 0 },
+          { name: "Right Cargo Pocket / Leg", x: 35, y: 55, w: 16, h: 16, r: 0 }
+        ];
+      } else if (cat.includes("head") || name.includes("cap") || name.includes("hat") || name.includes("beanie") || name.includes("beret")) {
+        state.product.placements = [
+          { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
+          { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
+        ];
+      } else {
+        state.product.placements = [
+          { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+          { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+          { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 },
+          { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+        ];
+      }
     }
+
+    state.selectedPlacement = state.product.placements[0];
   }
 
   // Set up Header, Rules Matrix, and Placement Dropdown
