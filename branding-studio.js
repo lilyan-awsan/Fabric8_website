@@ -37,6 +37,7 @@
     currentFinish: "Thread Embroidery",
     artwork: {
       imageObj: null,
+      sampleImg: null,
       fileName: "",
       x: 63,
       y: 44,
@@ -90,6 +91,14 @@
         document.getElementById("headerProdImg").src = state.product.image;
         document.getElementById("headerProdSku").textContent = `SKU: ${state.product.sku}`;
         document.getElementById("headerProdColor").textContent = `Color: ${state.product.color}`;
+
+        if (state.artwork.sampleImg) {
+          if (protoType === "cap" || protoType === "scrub") {
+            state.artwork.sampleImg.src = "assets/fabric8_logo_white.png";
+          } else {
+            state.artwork.sampleImg.src = "assets/fabric8_logo_noneedle_cropped.png";
+          }
+        }
 
         // Recalibrate placement zones based on garment category
         if (protoType === "cap") {
@@ -180,6 +189,11 @@
     canvasEl.addEventListener("touchmove", handleTouchMove, { passive: false });
     canvasEl.addEventListener("touchend", handleMouseUp);
 
+    state.artwork.sampleImg = new Image();
+    state.artwork.sampleImg.crossOrigin = "anonymous";
+    state.artwork.sampleImg.onload = drawCanvas;
+    state.artwork.sampleImg.src = "assets/fabric8_logo_noneedle_cropped.png";
+
     loadBaseImage();
   }
 
@@ -221,6 +235,7 @@
     const ctx = state.canvas.ctx;
     const img = state.artwork.imageObj;
     if (!img) {
+      drawPlacementGuide(true);
       return;
     }
 
@@ -241,6 +256,7 @@
   function drawText() {
     const ctx = state.canvas.ctx;
     if (!state.text.line1 && !state.text.line2 && !state.text.line3) {
+      drawPlacementGuide(false);
       return;
     }
 
@@ -265,6 +281,49 @@
       ctx.fillText(l.toUpperCase(), 0, startY);
       startY += lineSpacing;
     });
+
+    ctx.restore();
+  }
+
+  function drawPlacementGuide(withSampleLogo) {
+    const ctx = state.canvas.ctx;
+    if (!state.selectedPlacement) return;
+
+    const xPx = (state.selectedPlacement.x / 100) * 800;
+    const yPx = (state.selectedPlacement.y / 100) * 800;
+    const wPx = (state.selectedPlacement.w / 100) * 800;
+    const hPx = (state.selectedPlacement.h / 100) * 800;
+
+    ctx.save();
+    ctx.translate(xPx, yPx);
+    ctx.rotate(((state.selectedPlacement.r || 0) * Math.PI) / 180);
+
+    ctx.strokeStyle = "#3e8e42";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
+
+    if (withSampleLogo && state.artwork.sampleImg && state.artwork.sampleImg.complete) {
+      const sImg = state.artwork.sampleImg;
+      const aspect = sImg.naturalWidth / sImg.naturalHeight || 1;
+      let sW = wPx * 0.8;
+      let sH = sW / aspect;
+      if (sH > hPx * 0.7) {
+        sH = hPx * 0.7;
+        sW = sH * aspect;
+      }
+      ctx.drawImage(sImg, -sW / 2, -sH / 2, sW, sH);
+
+      ctx.fillStyle = "#3e8e42";
+      ctx.font = "bold 11px 'Century Gothic', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("📍 BRANDING ZONE (SAMPLE LOGO)", 0, hPx / 2 + 16);
+    } else {
+      ctx.fillStyle = "#3e8e42";
+      ctx.font = "bold 13px 'Century Gothic', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("📍 BRANDING ZONE", 0, 0);
+    }
 
     ctx.restore();
   }

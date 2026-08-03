@@ -399,8 +399,17 @@
     resultImg.src = offCanvas.toDataURL("image/png");
   }
 
-  // Load Base Garment Image
   function loadGarmentImage() {
+    state.sampleLogoImg = new Image();
+    state.sampleLogoImg.crossOrigin = "anonymous";
+    state.sampleLogoImg.onload = function() { drawCanvas(); };
+    const pColor = (state.product.color || "").toLowerCase();
+    if (pColor.includes("navy") || pColor.includes("black") || pColor.includes("dark") || pColor.includes("charcoal")) {
+      state.sampleLogoImg.src = "assets/fabric8_logo_white.png";
+    } else {
+      state.sampleLogoImg.src = "assets/fabric8_logo_noneedle_cropped.png";
+    }
+
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.onload = function () {
@@ -463,10 +472,27 @@
       ctx.setLineDash([6, 6]);
       ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
 
-      ctx.fillStyle = "#3e8e42";
-      ctx.font = "bold 13px 'Century Gothic', sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("📍 BRANDING ZONE", 0, 0);
+      if (isLogoEmpty && state.sampleLogoImg && state.sampleLogoImg.complete) {
+        const sImg = state.sampleLogoImg;
+        const aspect = sImg.naturalWidth / sImg.naturalHeight || 1;
+        let sW = wPx * 0.8;
+        let sH = sW / aspect;
+        if (sH > hPx * 0.7) {
+          sH = hPx * 0.7;
+          sW = sH * aspect;
+        }
+        ctx.drawImage(sImg, -sW / 2, -sH / 2, sW, sH);
+
+        ctx.fillStyle = "#3e8e42";
+        ctx.font = "bold 11px 'Century Gothic', sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("📍 BRANDING ZONE (SAMPLE LOGO)", 0, hPx / 2 + 16);
+      } else {
+        ctx.fillStyle = "#3e8e42";
+        ctx.font = "bold 13px 'Century Gothic', sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("📍 BRANDING ZONE", 0, 0);
+      }
     } else if (state.currentMode === "logo" && state.artwork.processedImage) {
       // MODE A: Fixed Placement Sizing Metrics (No user size sliders)
       let targetWRatio = 0.18; // Default chest ~18%
