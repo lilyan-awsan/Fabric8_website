@@ -644,7 +644,7 @@ input, select, textarea, button { font: inherit; }
 .about-hero { background: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.35)), url("assets/people_meeting_drive_success.png") center / cover; }
 .services-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/fabric8-service-people.webp") center / cover; }
 .sectors-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/sectors-hero-banner.png?v=4") center / cover; }
-.method-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/method_hero_executive_meeting.png?v=1") center / cover; }
+.method-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/method_hero_faceless_executive.png?v=2") center / cover; }
 .contact-hero { background: linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url("assets/contact_hero_bg.png") center / cover; }
 
 .filters {
