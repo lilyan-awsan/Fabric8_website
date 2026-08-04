@@ -84,19 +84,57 @@
           <input name="Address 1" required placeholder="Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           <input name="Address 2" placeholder="Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <input name="City" required placeholder="City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
             <input name="State" required placeholder="State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <input name="Zip" required placeholder="Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-            <input name="Country" required placeholder="Country*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <select name="Country" required style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit;">
+              <option value="">Select Shipping Country*</option>
+              <option value="United States">United States (USA)</option>
+              <option value="Jordan">Jordan (JO)</option>
+              <option value="United Arab Emirates">United Arab Emirates (UAE)</option>
+              <option value="Saudi Arabia">Saudi Arabia (KSA)</option>
+              <option value="Qatar">Qatar</option>
+              <option value="United Kingdom">United Kingdom (UK)</option>
+              <option value="Canada">Canada</option>
+              <option value="European Union">European Union (EU)</option>
+              <option value="Australia">Australia</option>
+              <option value="Other International">Other International</option>
+            </select>
           </div>
 
-          <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink); margin: 8px 0;">
-            <input type="checkbox" name="Billing same as shipping" value="Yes" checked style="width: 18px; min-height: 18px; padding: 0; margin: 0;" />
-            Billing address is the same as shipping address
+          <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink); margin: 8px 0; cursor: pointer;">
+            <input type="checkbox" id="billingSameChk" name="Billing same as shipping" value="Yes" checked style="width: 18px; min-height: 18px; padding: 0; margin: 0; cursor: pointer;" onchange="document.getElementById('billingAddressFields').style.display = this.checked ? 'none' : 'flex';" />
+            <span>Billing address is the same as shipping address</span>
           </label>
+
+          <div id="billingAddressFields" style="display: none; flex-direction: column; gap: 14px; padding: 20px; background: #faf8f5; border: 1px solid var(--line); border-radius: 8px; margin-top: 4px;">
+            <h4 style="margin: 0; font-size: 16px; text-transform: uppercase; color: var(--ink);">Billing Information</h4>
+            <input name="Billing Address 1" placeholder="Billing Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <input name="Billing Address 2" placeholder="Billing Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <input name="Billing City" placeholder="Billing City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+              <input name="Billing State" placeholder="Billing State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            </div>
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <input name="Billing Zip" placeholder="Billing Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+              <select name="Billing Country" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit;">
+                <option value="">Select Billing Country*</option>
+                <option value="United States">United States (USA)</option>
+                <option value="Jordan">Jordan (JO)</option>
+                <option value="United Arab Emirates">United Arab Emirates (UAE)</option>
+                <option value="Saudi Arabia">Saudi Arabia (KSA)</option>
+                <option value="Qatar">Qatar</option>
+                <option value="United Kingdom">United Kingdom (UK)</option>
+                <option value="Canada">Canada</option>
+                <option value="European Union">European Union (EU)</option>
+                <option value="Australia">Australia</option>
+                <option value="Other International">Other International</option>
+              </select>
+            </div>
+          </div>
 
           <label style="font-size: 13px; font-weight: bold;">Required delivery date*
             <input name="Required delivery date" type="date" required style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 6px; margin-top: 6px;" />
