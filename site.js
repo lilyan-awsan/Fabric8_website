@@ -1217,20 +1217,102 @@ window.highlightActiveThumbnail = function() {
   });
 };
 
+function getImagesForColor(product, targetColor) {
+  if (!product.images || !product.images.length) return [product.image || 'White Polo Shirt.png'];
+  if (!product.colors || !product.colors.length) return [...product.images];
+
+  const colorMap = new Map();
+  product.images.forEach(img => {
+    const imgLower = img.toLowerCase();
+    let bestColor = null;
+    let maxTokens = 0;
+    let maxLen = 0;
+
+    product.colors.forEach(col => {
+      const tokens = col.toLowerCase().split(/\s+|[-/]/).filter(t => t.length > 0);
+      const matchesAll = tokens.every(t => imgLower.includes(t));
+      if (matchesAll) {
+        if (tokens.length > maxTokens || (tokens.length === maxTokens && col.length > maxLen)) {
+          maxTokens = tokens.length;
+          maxLen = col.length;
+          bestColor = col;
+        }
+      }
+    });
+
+    if (bestColor) {
+      if (!colorMap.has(bestColor)) colorMap.set(bestColor, []);
+      colorMap.get(bestColor).push(img);
+    }
+  });
+
+  if (colorMap.has(targetColor) && colorMap.get(targetColor).length > 0) {
+    return colorMap.get(targetColor);
+  }
+
+  const tokens = targetColor.toLowerCase().split(/\s+|[-/]/).filter(t => t.length > 0);
+  const fallback = product.images.filter(img => tokens.every(t => img.toLowerCase().includes(t)));
+  return fallback.length > 0 ? fallback : [product.image || product.images[0]];
+}
+
+function updateGalleryForColor(product, targetColor) {
+  currentCarouselImages = getImagesForColor(product, targetColor);
+  activeCarouselIdx = 0;
+
+  const mainImg = currentCarouselImages[0] || product.image;
+  const mainImageEl = document.getElementById('productMainImage');
+  if (mainImageEl) mainImageEl.src = mainImg.startsWith('http') ? mainImg : mainImg;
+
+  const prevBtn = document.getElementById('carouselPrevBtn');
+  const nextBtn = document.getElementById('carouselNextBtn');
+  const thumbnailsContainer = document.getElementById("productThumbnails");
+
+  if (currentCarouselImages.length > 1) {
+    if (prevBtn) {
+      prevBtn.style.display = 'grid';
+      prevBtn.onclick = () => {
+        activeCarouselIdx = (activeCarouselIdx - 1 + currentCarouselImages.length) % currentCarouselImages.length;
+        window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
+      };
+    }
+    if (nextBtn) {
+      nextBtn.style.display = 'grid';
+      nextBtn.onclick = () => {
+        activeCarouselIdx = (activeCarouselIdx + 1) % currentCarouselImages.length;
+        window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
+      };
+    }
+    if (thumbnailsContainer) {
+      thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
+        return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === 0 ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === 0 ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
+      }).join("");
+    }
+  } else {
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+    if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
+  }
+}
+
 function initProductPage(sku) {
   const p = products.find(x => x.sku === sku);
   if (!p) return;
   
   selectedProductSku = sku;
-  if (!p.colors.includes(activeCatalogColor)) activeCatalogColor = p.colors[0];
+  if (!p.colors.includes(activeCatalogColor)) {
+    let bestInitColor = p.colors[0];
+    let maxLen = 0;
+    const imgLower = (p.image || "").toLowerCase();
+    p.colors.forEach(col => {
+      const tokens = col.toLowerCase().split(/\s+|[-/]/).filter(t => t.length > 0);
+      if (tokens.every(t => imgLower.includes(t)) && col.length > maxLen) {
+        maxLen = col.length;
+        bestInitColor = col;
+      }
+    });
+    activeCatalogColor = bestInitColor;
+  }
   
-  currentCarouselImages = (p.images && p.images.length > 0) ? [...p.images] : [p.image || 'White Polo Shirt.png'];
-  activeCarouselIdx = 0;
-  
-  const mainImg = currentCarouselImages[0];
-  const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
-  
-  document.getElementById('productMainImage').src = imgSrc;
   document.getElementById('productName').textContent = p.name;
   document.getElementById('productCategory').textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
@@ -1291,35 +1373,7 @@ function initProductPage(sku) {
     }
   }
 
-  const prevBtn = document.getElementById('carouselPrevBtn');
-  const nextBtn = document.getElementById('carouselNextBtn');
-  const thumbnailsContainer = document.getElementById("productThumbnails");
-  
-  if (currentCarouselImages.length > 1) {
-    if (prevBtn) {
-      prevBtn.style.display = 'grid';
-      prevBtn.onclick = () => {
-        activeCarouselIdx = (activeCarouselIdx - 1 + currentCarouselImages.length) % currentCarouselImages.length;
-        window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
-      };
-    }
-    if (nextBtn) {
-      nextBtn.style.display = 'grid';
-      nextBtn.onclick = () => {
-        activeCarouselIdx = (activeCarouselIdx + 1) % currentCarouselImages.length;
-        window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
-      };
-    }
-    if (thumbnailsContainer) {
-      thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
-        return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === 0 ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === 0 ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
-      }).join("");
-    }
-  } else {
-    if (prevBtn) prevBtn.style.display = 'none';
-    if (nextBtn) nextBtn.style.display = 'none';
-    if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
-  }
+  updateGalleryForColor(p, activeCatalogColor);
   
   // Colors
   const colorFilter = document.getElementById("productColorFilter");
@@ -1552,18 +1606,7 @@ function initProductPage(sku) {
       colorFilter.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
       dot.classList.add("active");
       activeCatalogColor = dot.dataset.color;
-      const colorImages = p.images?.filter(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
-      if (colorImages && colorImages.length > 0) {
-        window.updateMainImageSmooth(colorImages[0]);
-        const thumbs = document.getElementById('productThumbnails');
-        if (thumbs) {
-          if (colorImages.length > 1) {
-            thumbs.innerHTML = colorImages.map(img => `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: 1px solid var(--line); transition: transform 0.2s ease;" onclick="window.updateMainImageSmooth('${img}')">`).join("");
-          } else {
-            thumbs.innerHTML = "";
-          }
-        }
-      }
+      updateGalleryForColor(p, activeCatalogColor);
     };
     dot.addEventListener('click', triggerColorSwitch);
     dot.addEventListener('mouseenter', triggerColorSwitch);
