@@ -797,7 +797,7 @@
     "sku": "F8-010",
     "name": "Caps",
     "category": "Head Wear",
-    "gender": "Men / Women / Unisex",
+    "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Adjustable branded cap for outdoor or retail teams.",
     "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
@@ -827,33 +827,15 @@
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "",
-    "moq": "5",
-    "images": [
-      "assets/products/Cap American Blue.jpg",
-      "assets/products/Cap White Side.jpg",
-      "assets/products/Cap White Back.jpg",
-      "assets/products/Cap Black.jpg",
-      "assets/products/Cap Brown.jpg",
-      "assets/products/Cap Burgundy.jpg",
-      "assets/products/Cap Charcoal.jpg",
-      "assets/products/Cap Green.jpg",
-      "assets/products/Cap Kiwi 2.jpg",
-      "assets/products/Cap Light Grey.jpg",
-      "assets/products/Cap Navy.jpg",
-      "assets/products/Cap Red.jpg",
-      "assets/products/Cap White.jpg",
-      "assets/products/Cap Yellow 2.jpg"
-    ],
-    "image": "assets/products/Cap American Blue.jpg",
-    "supportedFinishes": [
-      "Embroidery",
-      "DTF"
-    ],
+    "moq": "8",
+    "availability": "Made to Order",
+    "care": "",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Front Center Panel",
       "Side Panel"
     ],
-    "customizationCapability": "Both",
     "placements": [
       {
         "name": "Front Center Panel",
@@ -879,7 +861,29 @@
     "embroideryPlacements": [
       "Front Center Panel",
       "Side Panel"
-    ]
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Cap American Blue.jpg",
+      "assets/products/Cap White Side.jpg",
+      "assets/products/Cap White Back.jpg",
+      "assets/products/Cap Black.jpg",
+      "assets/products/Cap Brown.jpg",
+      "assets/products/Cap Burgundy.jpg",
+      "assets/products/Cap Charcoal.jpg",
+      "assets/products/Cap Green.jpg",
+      "assets/products/Cap Kiwi 2.jpg",
+      "assets/products/Cap Light Grey.jpg",
+      "assets/products/Cap Navy.jpg",
+      "assets/products/Cap Red.jpg",
+      "assets/products/Cap White.jpg",
+      "assets/products/Cap Yellow 2.jpg"
+    ],
+    "image": "assets/products/Cap American Blue.jpg"
   },
   {
     "sku": "F8-011",
