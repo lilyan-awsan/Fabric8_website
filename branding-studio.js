@@ -491,21 +491,42 @@
       reader.readAsDataURL(file);
     }
 
-    // Auto-Background Removal Engine: Treat all white and near-white backgrounds as transparent
+    // Universal Auto-Background Removal Engine: Detects and strips any solid, white, off-white, or neutral box background
     function removeWhiteBackground(img, callback) {
       const offCanvas = document.createElement("canvas");
       const offCtx = offCanvas.getContext("2d");
-      offCanvas.width = img.width;
-      offCanvas.height = img.height;
+      const W = img.width;
+      const H = img.height;
+      offCanvas.width = W;
+      offCanvas.height = H;
 
       offCtx.drawImage(img, 0, 0);
-      const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
+      const imgData = offCtx.getImageData(0, 0, W, H);
       const data = imgData.data;
 
-      // Treat near pure white and off-white as transparent (R>225, G>225, B>225)
+      // Sample primary background reference colors from the image corners
+      const tlR = data[0], tlG = data[1], tlB = data[2];
+      const trIdx = (W - 1) * 4;
+      const trR = data[trIdx], trG = data[trIdx + 1], trB = data[trIdx + 2];
+      const blIdx = ((H - 1) * W) * 4;
+      const blR = data[blIdx], blG = data[blIdx + 1], blB = data[blIdx + 2];
+
       for (let i = 0; i < data.length; i += 4) {
-        if (data[i] > 225 && data[i + 1] > 225 && data[i + 2] > 225) {
-          data[i + 3] = 0; // Set Alpha to 0
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+
+        // 1. Detect any light-neutral/off-white/cream/grey screenshot box background
+        const isNeutralLight = (r > 180 && g > 180 && b > 180 && Math.abs(r - g) < 35 && Math.abs(g - b) < 35 && Math.abs(r - b) < 35);
+
+        // 2. Calculate Euclidean color distance to the perimeter corner background colors
+        const distTL = Math.hypot(r - tlR, g - tlG, b - tlB);
+        const distTR = Math.hypot(r - trR, g - trG, b - trB);
+        const distBL = Math.hypot(r - blR, g - blG, b - blB);
+
+        // If the pixel matches any corner background color within tolerance, or is neutral light grey/white, remove it!
+        if (isNeutralLight || distTL < 55 || distTR < 55 || distBL < 55) {
+          data[i + 3] = 0; // Turn alpha to transparent
         }
       }
 
