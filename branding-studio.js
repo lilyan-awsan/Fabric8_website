@@ -474,19 +474,47 @@
       reader.onload = (evt) => {
         const img = new Image();
         img.onload = () => {
-          state.artwork.imageObj = img;
-          state.artwork.fileName = file.name;
-          const statusEl = document.getElementById("fileStatus");
-          const nameEl = document.getElementById("fileName");
-          if (statusEl && nameEl) {
-            nameEl.textContent = file.name;
-            statusEl.style.display = "block";
-          }
-          drawCanvas();
+          removeWhiteBackground(img, function (processedImg) {
+            state.artwork.imageObj = processedImg;
+            state.artwork.fileName = file.name;
+            const statusEl = document.getElementById("fileStatus");
+            const nameEl = document.getElementById("fileName");
+            if (statusEl && nameEl) {
+              nameEl.textContent = file.name;
+              statusEl.style.display = "block";
+            }
+            drawCanvas();
+          });
         };
         img.src = evt.target.result;
       };
       reader.readAsDataURL(file);
+    }
+
+    // Auto-Background Removal Engine: Treat all white and near-white backgrounds as transparent
+    function removeWhiteBackground(img, callback) {
+      const offCanvas = document.createElement("canvas");
+      const offCtx = offCanvas.getContext("2d");
+      offCanvas.width = img.width;
+      offCanvas.height = img.height;
+
+      offCtx.drawImage(img, 0, 0);
+      const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
+      const data = imgData.data;
+
+      // Treat near pure white and off-white as transparent (R>225, G>225, B>225)
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i] > 225 && data[i + 1] > 225 && data[i + 2] > 225) {
+          data[i + 3] = 0; // Set Alpha to 0
+        }
+      }
+
+      offCtx.putImageData(imgData, 0, 0);
+      const resultImg = new Image();
+      resultImg.onload = function () {
+        callback(resultImg);
+      };
+      resultImg.src = offCanvas.toDataURL("image/png");
     }
 
     // Finish selection

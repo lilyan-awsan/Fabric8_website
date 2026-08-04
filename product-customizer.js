@@ -385,8 +385,8 @@
       const g = data[i + 1];
       const b = data[i + 2];
 
-      // Treat near pure white as transparent (R>240, G>240, B>240)
-      if (r > 238 && g > 238 && b > 238) {
+      // Treat near pure white and off-white as transparent (R>225, G>225, B>225)
+      if (r > 225 && g > 225 && b > 225) {
         data[i + 3] = 0; // Set Alpha to 0
       }
     }
