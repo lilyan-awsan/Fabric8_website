@@ -191,22 +191,45 @@
       selectFinish("Embroidery");
     }
 
-    // Populate Placement Dropdown
-    const selector = document.getElementById("placementSelector");
-    selector.innerHTML = "";
-    const placements = state.product.placements || [];
-    placements.forEach((p, idx) => {
-      const opt = document.createElement("option");
-      opt.value = idx;
-      opt.textContent = p.name || `Zone ${idx + 1}`;
-      selector.appendChild(opt);
-    });
+    // Populate Placement Dropdown based on finish technique & product placement matrix
+    window.updatePlacementDropdown = function() {
+      const sel = document.getElementById("placementSelector");
+      if (!sel || !state.product) return;
+      sel.innerHTML = "";
+      const allPlacements = state.product.placements || [];
+      const allowedNames = state.currentFinish === "DTF" 
+        ? (state.product.dtfPlacements || allPlacements.map(p => p.name))
+        : (state.product.embroideryPlacements || allPlacements.map(p => p.name));
 
-    selector.addEventListener("change", function (e) {
-      const idx = parseInt(e.target.value);
-      state.selectedPlacement = placements[idx];
-      drawCanvas();
-    });
+      const validPlacements = allPlacements.filter(p => allowedNames.includes(p.name));
+      const displayList = validPlacements.length > 0 ? validPlacements : allPlacements;
+
+      displayList.forEach((p) => {
+        const opt = document.createElement("option");
+        opt.value = allPlacements.indexOf(p);
+        opt.textContent = p.name || "Placement Zone";
+        if (state.selectedPlacement && state.selectedPlacement.name === p.name) {
+          opt.selected = true;
+        }
+        sel.appendChild(opt);
+      });
+
+      if (!state.selectedPlacement || !displayList.find(p => p.name === state.selectedPlacement.name)) {
+        state.selectedPlacement = displayList[0];
+        if (sel.options.length > 0) sel.options[0].selected = true;
+      }
+    };
+    updatePlacementDropdown();
+
+    const selector = document.getElementById("placementSelector");
+    if (selector) {
+      selector.addEventListener("change", function (e) {
+        const idx = parseInt(e.target.value);
+        const placements = state.product.placements || [];
+        state.selectedPlacement = placements[idx];
+        drawCanvas();
+      });
+    }
 
     // File Upload Handler with Auto-Background Removal
     const fileInput = document.getElementById("logoFileInput");
@@ -306,6 +329,7 @@
       if (dtfBtn) dtfBtn.classList.add("active");
       if (embBtn) embBtn.classList.remove("active");
     }
+    if (typeof window.updatePlacementDropdown === "function") window.updatePlacementDropdown();
     drawCanvas();
   };
 

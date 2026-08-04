@@ -285,7 +285,39 @@ let activeSizes = ["S", "M", "L", "XL"];
 let activeColors = ["Black", "Navy", "White"];
 let activeSectors = [];
 let activeProductPlacements = [];
+let activeDtfPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+let activeEmbPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
 let pendingSketchFile = null;
+
+function renderProdBrandingPlacements() {
+  const dtfList = document.getElementById("prodDtfPlacementList");
+  const embList = document.getElementById("prodEmbPlacementList");
+  if (dtfList) {
+    dtfList.innerHTML = activeDtfPlacements.map((p, idx) => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; border-bottom: 1px solid #eee;">
+        <span style="font-size: 12px; font-weight: 500;">${p}</span>
+        <button type="button" onclick="window.removeProdPlacement('dtf', ${idx})" style="background: none; border: none; color: #e74c3c; font-size: 11px; font-weight: bold; cursor: pointer;">Remove</button>
+      </div>
+    `).join("");
+  }
+  if (embList) {
+    embList.innerHTML = activeEmbPlacements.map((p, idx) => `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 6px; border-bottom: 1px solid #eee;">
+        <span style="font-size: 12px; font-weight: 500;">${p}</span>
+        <button type="button" onclick="window.removeProdPlacement('emb', ${idx})" style="background: none; border: none; color: #e74c3c; font-size: 11px; font-weight: bold; cursor: pointer;">Remove</button>
+      </div>
+    `).join("");
+  }
+}
+
+window.removeProdPlacement = function(type, idx) {
+  if (type === 'dtf') {
+    activeDtfPlacements.splice(idx, 1);
+  } else {
+    activeEmbPlacements.splice(idx, 1);
+  }
+  renderProdBrandingPlacements();
+};
 let pendingSiteImages = {};
 
 [
@@ -378,6 +410,26 @@ window.removePlacementRow = function(idx) {
 document.getElementById("addPlacementRowBtn")?.addEventListener("click", () => {
   activeProductPlacements.push({ name: "New Zone", x: 50, y: 50, w: 20, h: 20, r: 0 });
   renderPlacementsTable();
+});
+
+document.getElementById("addProdDtfPlacementBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("newProdDtfPlacementInput");
+  const val = input?.value.trim();
+  if (val && !activeDtfPlacements.includes(val)) {
+    activeDtfPlacements.push(val);
+    input.value = "";
+    renderProdBrandingPlacements();
+  }
+});
+
+document.getElementById("addProdEmbPlacementBtn")?.addEventListener("click", () => {
+  const input = document.getElementById("newProdEmbPlacementInput");
+  const val = input?.value.trim();
+  if (val && !activeEmbPlacements.includes(val)) {
+    activeEmbPlacements.push(val);
+    input.value = "";
+    renderProdBrandingPlacements();
+  }
 });
 
 document.getElementById("addSizeTagBtn")?.addEventListener("click", () => {
@@ -484,6 +536,22 @@ function openModal(docId = null) {
       document.getElementById("care").value = p.care || "";
       document.getElementById("sketch").value = p.sketch || "";
       document.getElementById("sketchDescription").value = p.sketchDescription || "";
+      
+      // Implement Garment Placement Matrix Auto-Fill / Customizer Sync
+      const pCat = (p.category || "").toLowerCase();
+      const pName = (p.name || "").toLowerCase();
+      if (pCat.includes("bottom") || pName.includes("pant") || pName.includes("trouser") || pName.includes("short") || pName.includes("skirt")) {
+        activeDtfPlacements = p.dtfPlacements && p.dtfPlacements.length > 0 ? [...p.dtfPlacements] : ["Left Hip Pocket", "Right Hip Pocket", "Left Cargo Pocket / Leg", "Right Cargo Pocket / Leg"];
+        activeEmbPlacements = p.embroideryPlacements && p.embroideryPlacements.length > 0 ? [...p.embroideryPlacements] : ["Left Hip Pocket", "Right Hip Pocket", "Left Cargo Pocket / Leg", "Right Cargo Pocket / Leg"];
+      } else if (pCat.includes("head") || pName.includes("cap") || pName.includes("hat") || pName.includes("beanie")) {
+        activeDtfPlacements = p.dtfPlacements && p.dtfPlacements.length > 0 ? [...p.dtfPlacements] : ["Front Center Panel", "Side Panel"];
+        activeEmbPlacements = p.embroideryPlacements && p.embroideryPlacements.length > 0 ? [...p.embroideryPlacements] : ["Front Center Panel", "Side Panel"];
+      } else {
+        activeDtfPlacements = p.dtfPlacements && p.dtfPlacements.length > 0 ? [...p.dtfPlacements] : ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+        activeEmbPlacements = p.embroideryPlacements && p.embroideryPlacements.length > 0 ? [...p.embroideryPlacements] : ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+      }
+      renderProdBrandingPlacements();
+
       activeProductPlacements = p.placements && p.placements.length > 0 ? JSON.parse(JSON.stringify(p.placements)) : [
         { name: "Left Chest", x: 65, y: 36, w: 18, h: 18, r: 0 },
         { name: "Right Chest", x: 35, y: 36, w: 18, h: 18, r: 0 },
@@ -521,6 +589,9 @@ function openModal(docId = null) {
     renderSectorButtons();
     renderSizesTags();
     renderColorsTags();
+    activeDtfPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+    activeEmbPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
+    renderProdBrandingPlacements();
     activeProductPlacements = [
       { name: "Left Chest", x: 65, y: 36, w: 18, h: 18, r: 0 },
       { name: "Right Chest", x: 35, y: 36, w: 18, h: 18, r: 0 },
@@ -588,6 +659,8 @@ productForm.addEventListener("submit", async (e) => {
     sketchDescription: document.getElementById("sketchDescription")?.value || "",
     supportedPlacements: activeProductPlacements.map(p => p.name).filter(Boolean),
     placements: activeProductPlacements,
+    dtfPlacements: activeDtfPlacements,
+    embroideryPlacements: activeEmbPlacements,
     supportedFinishes: supportedFinishes,
     customizationCapability: custCap,
     existingImages: existingImages
@@ -865,8 +938,6 @@ let categories1stLayer = [
   { name: "Aviation", enabled: false }
 ];
 
-let dtfPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
-let embPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
 let categories2ndLayer = [
   { name: "HEAD WEAR", enabled: true },
   { name: "TOP WEAR", enabled: true },
@@ -874,36 +945,6 @@ let categories2ndLayer = [
   { name: "OUTER WEAR", enabled: true },
   { name: "ACCESSORIES", enabled: true }
 ];
-
-
-function renderBrandingPlacements() {
-  const dtfList = document.getElementById("cmsDtfPlacementList");
-  const embList = document.getElementById("cmsEmbPlacementList");
-  if(dtfList) {
-    dtfList.innerHTML = dtfPlacements.map((p, idx) => `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; border-bottom: 1px solid #eee;">
-        <span style="font-size: 13px;">${p}</span>
-        <button type="button" onclick="deletePlacement('dtf', ${idx})" style="background: none; border: none; color: #d00; font-size: 11px; cursor: pointer;">Remove</button>
-      </div>
-    `).join("");
-  }
-  if(embList) {
-    embList.innerHTML = embPlacements.map((p, idx) => `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px; border-bottom: 1px solid #eee;">
-        <span style="font-size: 13px;">${p}</span>
-        <button type="button" onclick="deletePlacement('emb', ${idx})" style="background: none; border: none; color: #d00; font-size: 11px; cursor: pointer;">Remove</button>
-      </div>
-    `).join("");
-  }
-}
-
-window.deletePlacement = function(type, idx) {
-  if (confirm("Remove this placement?")) {
-    if (type === 'dtf') dtfPlacements.splice(idx, 1);
-    else embPlacements.splice(idx, 1);
-    renderBrandingPlacements();
-  }
-};
 
 function renderCmsCategoryLists() {
   const list1 = document.getElementById("cms1stLayerList");
@@ -948,7 +989,6 @@ window.removeCmsCat = function(layer, index) {
     if (layer === '1st') categories1stLayer.splice(index, 1);
     if (layer === '2nd') categories2ndLayer.splice(index, 1);
     renderCmsCategoryLists();
-    renderBrandingPlacements();
   }
 };
 
@@ -959,7 +999,6 @@ document.getElementById("add1stLayerBtn")?.addEventListener("click", () => {
     categories1stLayer.push({ name: val, enabled: true });
     input.value = "";
     renderCmsCategoryLists();
-    renderBrandingPlacements();
   }
 });
 
@@ -970,21 +1009,9 @@ document.getElementById("add2ndLayerBtn")?.addEventListener("click", () => {
     categories2ndLayer.push({ name: val, enabled: true });
     input.value = "";
     renderCmsCategoryLists();
-    renderBrandingPlacements();
   }
 });
 
-
-document.getElementById("addDtfPlacementBtn")?.addEventListener("click", () => {
-  const input = document.getElementById("newDtfPlacementInput");
-  const val = input?.value.trim();
-  if (val) { dtfPlacements.push(val); input.value = ""; renderBrandingPlacements(); }
-});
-document.getElementById("addEmbPlacementBtn")?.addEventListener("click", () => {
-  const input = document.getElementById("newEmbPlacementInput");
-  const val = input?.value.trim();
-  if (val) { embPlacements.push(val); input.value = ""; renderBrandingPlacements(); }
-});
 
 async function fetchSettings() {
   try {
@@ -994,12 +1021,6 @@ async function fetchSettings() {
       if (settings.categories1stLayer) categories1stLayer = settings.categories1stLayer;
       if (settings.categories2ndLayer) categories2ndLayer = settings.categories2ndLayer;
       renderCmsCategoryLists();
-
-      if (settings.brandingSettings) {
-        if (settings.brandingSettings.dtfPlacements) dtfPlacements = settings.brandingSettings.dtfPlacements;
-        if (settings.brandingSettings.embPlacements) embPlacements = settings.brandingSettings.embPlacements;
-      }
-      renderBrandingPlacements();
 
       if (settings.banners) {
         document.getElementById("settingBannerHome").value = settings.banners.home || "";
@@ -1131,8 +1152,6 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
       privacyText: document.getElementById("settingPrivacyText")?.value || ""
     },
     brandingSettings: {
-      dtfPlacements: dtfPlacements,
-      embPlacements: embPlacements,
       dtfHelperNote: document.getElementById("settingDtfNote")?.value || "",
       embroideryHelperNote: document.getElementById("settingEmbroideryNote")?.value || ""
     }

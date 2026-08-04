@@ -165,15 +165,30 @@
 
   function renderPlacementOptions() {
     const sel = document.getElementById("placementSelector");
-    if (!sel) return;
+    if (!sel || !state.product) return;
     sel.innerHTML = "";
-    state.product.placements.forEach((p, i) => {
+    const allPlacements = state.product.placements || [];
+    const isDtf = (state.currentFinish || "").toLowerCase().includes("dtf");
+    const allowedNames = isDtf 
+      ? (state.product.dtfPlacements || allPlacements.map(p => p.name))
+      : (state.product.embroideryPlacements || allPlacements.map(p => p.name));
+
+    const validPlacements = allPlacements.filter(p => allowedNames.includes(p.name));
+    const displayList = validPlacements.length > 0 ? validPlacements : allPlacements;
+
+    displayList.forEach((p) => {
       const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = p.name;
+      opt.value = allPlacements.indexOf(p);
+      opt.textContent = p.name || "Placement Zone";
+      if (state.selectedPlacement && state.selectedPlacement.name === p.name) {
+        opt.selected = true;
+      }
       sel.appendChild(opt);
     });
-    sel.value = 0;
+    if (sel.options.length > 0 && (!state.selectedPlacement || !displayList.find(p => p.name === state.selectedPlacement.name))) {
+      sel.selectedIndex = 0;
+      state.selectedPlacement = allPlacements[parseInt(sel.value)] || displayList[0];
+    }
   }
 
   function initCanvas() {
@@ -544,6 +559,8 @@
         document.querySelectorAll(".toggle-btn").forEach(o => o.classList.remove("active"));
         opt.classList.add("active");
         state.currentFinish = opt.dataset.finish || opt.textContent.trim();
+        renderPlacementOptions();
+        drawCanvas();
       });
     });
 
