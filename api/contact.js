@@ -25,17 +25,14 @@ export default async function handler(req, res) {
     }
     emailHtml += `</ul></div>`;
 
-    const targetRecipient = data.recipient || 'Hello@thefabric8.com';
-    const toEmails = [targetRecipient];
-    if (!toEmails.includes(process.env.RESEND_TO_EMAIL || 'lilyanawsan@gmail.com')) {
-      toEmails.push(process.env.RESEND_TO_EMAIL || 'lilyanawsan@gmail.com');
-    }
+    // Set destination exclusively to the verified Resend registered account address
+    const toEmails = [process.env.RESEND_TO_EMAIL || 'lilyanawsan@gmail.com'];
 
     const options = {
       from: 'Fabric8 Website <onboarding@resend.dev>',
       to: toEmails,
-      reply_to: data.email,
-      subject: data.subject ? `[Inquiry: ${data.subject}] from ${data.email}` : `New Fabric8 Inquiry from ${data.firstName ? data.firstName + ' ' + (data.lastName || '') : data.email}`,
+      reply_to: data.email || 'lilyanawsan@gmail.com',
+      subject: data.subject ? `[Inquiry: ${data.subject}] from ${data.email || 'Website'}` : `New Fabric8 Inquiry from ${data.firstName ? data.firstName + ' ' + (data.lastName || '') : (data.email || 'Client')}`,
       html: emailHtml,
     };
 
