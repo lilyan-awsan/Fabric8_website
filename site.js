@@ -304,6 +304,7 @@ const colorMap = {
   "Light Blue": "#add8e6",
   "Baby Blue": "#89cff0",
   "Turquoise Blue": "#00b5e2",
+  "Deep Turquoise": "#008a90",
   "Ocean Blue": "#0077be",
   "American Blue": "#3b3b6d",
   "Puple Blue": "#4b0082",
@@ -1217,20 +1218,28 @@ window.highlightActiveThumbnail = function() {
   });
 };
 
+function normalizeForMatch(str) {
+  return (str || "").toLowerCase()
+    .replace(/puple/g, "purple")
+    .replace(/strips|stripe|striped/g, "striped")
+    .replace(/\s+/g, " ");
+}
+
 function getImagesForColor(product, targetColor) {
   if (!product.images || !product.images.length) return [product.image || 'White Polo Shirt.png'];
   if (!product.colors || !product.colors.length) return [...product.images];
 
   const colorMap = new Map();
   product.images.forEach(img => {
-    const imgLower = img.toLowerCase();
+    const imgNorm = normalizeForMatch(img);
     let bestColor = null;
     let maxTokens = 0;
     let maxLen = 0;
 
     product.colors.forEach(col => {
-      const tokens = col.toLowerCase().split(/\s+|[-/]/).filter(t => t.length > 0);
-      const matchesAll = tokens.every(t => imgLower.includes(t));
+      const colNorm = normalizeForMatch(col);
+      const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
+      const matchesAll = tokens.every(t => imgNorm.includes(t));
       if (matchesAll) {
         if (tokens.length > maxTokens || (tokens.length === maxTokens && col.length > maxLen)) {
           maxTokens = tokens.length;
@@ -1250,8 +1259,8 @@ function getImagesForColor(product, targetColor) {
     return colorMap.get(targetColor);
   }
 
-  const tokens = targetColor.toLowerCase().split(/\s+|[-/]/).filter(t => t.length > 0);
-  const fallback = product.images.filter(img => tokens.every(t => img.toLowerCase().includes(t)));
+  const tokens = normalizeForMatch(targetColor).split(/\s+|[-/]/).filter(t => t.length > 0);
+  const fallback = product.images.filter(img => tokens.every(t => normalizeForMatch(img).includes(t)));
   return fallback.length > 0 ? fallback : [product.image || product.images[0]];
 }
 
@@ -1302,10 +1311,11 @@ function initProductPage(sku) {
   if (!p.colors.includes(activeCatalogColor)) {
     let bestInitColor = p.colors[0];
     let maxLen = 0;
-    const imgLower = (p.image || "").toLowerCase();
+    const imgNorm = normalizeForMatch(p.image || "");
     p.colors.forEach(col => {
-      const tokens = col.toLowerCase().split(/\s+|[-/]/).filter(t => t.length > 0);
-      if (tokens.every(t => imgLower.includes(t)) && col.length > maxLen) {
+      const colNorm = normalizeForMatch(col);
+      const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
+      if (tokens.every(t => imgNorm.includes(t)) && col.length > maxLen) {
         maxLen = col.length;
         bestInitColor = col;
       }

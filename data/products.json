@@ -38,6 +38,7 @@
       "Purple",
       "Red",
       "Turquoise Blue",
+      "Deep Turquoise",
       "Yellow"
     ],
     "gender": "Men / Women / Unisex",
@@ -71,11 +72,11 @@
       "assets/products/Polo Olive Green 2.jpg",
       "assets/products/Polo Orange 4.jpg",
       "assets/products/Polo Pink 2.jpg",
-      "assets/products/Polo Puple Blue 2.jpg",
+      "assets/products/Polo Purple Blue.jpg",
       "assets/products/Polo Purple 3.jpg",
       "assets/products/Polo Red 2.jpg",
       "assets/products/Polo Turquoise blue 1-2.jpg",
-      "assets/products/Polo Turquoise blue 2-3.jpg",
+      "assets/products/Polo Deep Turquoise.jpg",
       "assets/products/Polo Yellow 4.jpg"
     ],
     "supportedFinishes": [
@@ -518,8 +519,7 @@
       "Beige",
       "Black",
       "Charcoal",
-      "Navy",
-      "green"
+      "Navy"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -921,7 +921,7 @@
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Chef Trousers black strips.jpg",
+    "image": "assets/products/Chef Trousers Striped Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -930,7 +930,7 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
-      "assets/products/Chef Trousers black strips.jpg",
+      "assets/products/Chef Trousers Striped Black.jpg",
       "assets/products/Chef Trousers black.jpg",
       "assets/products/Chef Trousers Grey.jpg"
     ],
