@@ -388,23 +388,22 @@ function renderProducts() {
 
   let filtered = products;
 
-  const activeGenderFilter = document.getElementById("genderFilter")?.value || "All";
-  if (activeGenderFilter !== "All") {
+  if (activeSectorFilter !== "All") {
+    const targetSec = activeSectorFilter.toLowerCase().replace(/&/g, "and").replace(/\s+/g, " ").trim();
     filtered = filtered.filter(p => {
-      const gLower = (p.gender || "Unisex").toLowerCase();
-      if (activeGenderFilter === "Unisex") return gLower.includes("unisex");
-      if (activeGenderFilter === "Men") return gLower.includes("men") && !gLower.includes("women");
-      if (activeGenderFilter === "Women") return gLower.includes("women");
-      return true;
+      if (!p.sectors) return false;
+      const pSecs = p.sectors.toLowerCase().replace(/&/g, "and").replace(/\s+/g, " ");
+      return pSecs.includes(targetSec);
     });
   }
 
-  if (activeSectorFilter !== "All") {
-    filtered = filtered.filter(p => p.sectors && p.sectors.toLowerCase().includes(activeSectorFilter.toLowerCase()));
-  }
-
   if (activeCategoryFilter !== "All") {
-    filtered = filtered.filter(p => p.category && p.category.toLowerCase().replace(/\s/g, '') === activeCategoryFilter.toLowerCase().replace(/\s/g, ''));
+    const targetCat = activeCategoryFilter.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "").trim();
+    filtered = filtered.filter(p => {
+      if (!p.category) return false;
+      const pCat = p.category.toLowerCase().replace(/&/g, "and").replace(/\s+/g, "").trim();
+      return pCat === targetCat || pCat.includes(targetCat);
+    });
   }
 
   if (activeSearchTerm) {
@@ -892,7 +891,7 @@ document.addEventListener("click", (event) => {
 });
 
 ["input", "change"].forEach((eventName) => {
-  ["#productSearch", "#sortFilter", "#genderFilter", "#availabilityFilter"].forEach((selector) => {
+  ["#productSearch", "#sortFilter", "#availabilityFilter"].forEach((selector) => {
     const el = $(selector);
     if (el) el.addEventListener(eventName, (event) => {
       renderProducts();
