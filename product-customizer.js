@@ -99,11 +99,19 @@
       const lower = p.name.toLowerCase();
       
       // Automatically enforce accurate anatomical placement coordinates on the garment image
-      if (lower.includes("front center panel") || (lower.includes("cap") && lower.includes("front"))) {
+      if (lower.includes("left hip")) {
+        return { ...p, x: 62, y: 26, w: 15, h: 15, r: 0 };
+      } else if (lower.includes("right hip")) {
+        return { ...p, x: 38, y: 26, w: 15, h: 15, r: 0 };
+      } else if (lower.includes("left cargo")) {
+        return { ...p, x: 65, y: 48, w: 16, h: 16, r: 0 };
+      } else if (lower.includes("right cargo")) {
+        return { ...p, x: 35, y: 48, w: 16, h: 16, r: 0 };
+      } else if (lower.includes("front center panel") || (lower.includes("cap") && lower.includes("front"))) {
         return { ...p, x: 55, y: 58, w: 22, h: 22, r: 3 };
       } else if (lower.includes("side panel") || (lower.includes("cap") && lower.includes("side"))) {
         return { ...p, x: 33, y: 56, w: 16, h: 16, r: -12 };
-      } else if (lower.includes("left chest pocket") || lower.includes("pocket")) {
+      } else if (lower.includes("left chest pocket") || lower.includes("chest pocket")) {
         return { ...p, x: 64, y: 46, w: 16, h: 16, r: 0 };
       } else if (lower.includes("left chest")) {
         return { ...p, x: 63, y: 44, w: 18, h: 18, r: 0 };
@@ -129,10 +137,10 @@
       const name = (state.product.name || "").toLowerCase();
       if (cat.includes("bottom") || name.includes("pant") || name.includes("trouser") || name.includes("short") || name.includes("skirt")) {
         state.product.placements = [
-          { name: "Left Hip Pocket", x: 62, y: 35, w: 15, h: 15, r: 0 },
-          { name: "Right Hip Pocket", x: 38, y: 35, w: 15, h: 15, r: 0 },
-          { name: "Left Cargo Pocket / Leg", x: 65, y: 55, w: 16, h: 16, r: 0 },
-          { name: "Right Cargo Pocket / Leg", x: 35, y: 55, w: 16, h: 16, r: 0 }
+          { name: "Left Hip Pocket", x: 62, y: 26, w: 15, h: 15, r: 0 },
+          { name: "Right Hip Pocket", x: 38, y: 26, w: 15, h: 15, r: 0 },
+          { name: "Left Cargo Pocket / Leg", x: 65, y: 48, w: 16, h: 16, r: 0 },
+          { name: "Right Cargo Pocket / Leg", x: 35, y: 48, w: 16, h: 16, r: 0 }
         ];
       } else if (cat.includes("head") || name.includes("cap") || name.includes("hat") || name.includes("beanie") || name.includes("beret")) {
         state.product.placements = [
