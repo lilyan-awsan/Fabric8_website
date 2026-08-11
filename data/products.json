@@ -2301,10 +2301,10 @@
       "2XL"
     ],
     "colors": [
-      "Black",
+      "Striped",
       "Grey",
-      "White",
-      "Striped"
+      "Black",
+      "White"
     ],
     "fabric": "100% Polyester",
     "gsm": "220 GSM",
@@ -2369,11 +2369,11 @@
     "supportedFinishes": [],
     "customizationCapability": "none",
     "images": [
-      "assets/products/1786489110635_Black_Skirt.jpg",
-      "assets/products/1786489111430_Grey_Skirt.jpg",
-      "assets/products/1786489112134_White_Skirt.jpg",
-      "assets/products/1786489112763_Striped_Skirt.jpg"
+      "assets/products/1786489443792_Striped_Skirt.jpg",
+      "assets/products/1786489444788_Grey_Skirt.jpg",
+      "assets/products/1786489445652_Black_Skirt.jpg",
+      "assets/products/1786489446396_White_Skirt.jpg"
     ],
-    "image": "assets/products/1786489110635_Black_Skirt.jpg"
+    "image": "assets/products/1786489443792_Striped_Skirt.jpg"
   }
 ]
