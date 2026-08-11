@@ -1332,9 +1332,11 @@
     ]
   },
   {
+    "id": "F8-016",
     "sku": "F8-016",
     "name": "Half Apron",
     "category": "Accessories",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Lightweight waist apron for quick-service environments.",
     "long": "A waist-down apron that offers essential protection without bulk for counter service, baristas, and retail staff.",
@@ -1351,30 +1353,18 @@
       "White",
       "Grey"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Half Apron Black.jpg",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "50 pieces",
     "availability": "In Stock",
-    "images": [
-      "assets/products/Half Apron Black.jpg",
-      "assets/products/Half Apron White Back.jpg",
-      "assets/products/Half Apron Grey.jpg",
-      "assets/products/Half Apron White.jpg"
-    ],
-    "supportedFinishes": [
-      "Embroidery",
-      "DTF"
-    ],
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Left Corner",
       "Right Corner"
     ],
-    "customizationCapability": "Both",
     "placements": [
       {
         "name": "Left Corner",
@@ -1404,7 +1394,19 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Half Apron Black.jpg",
+      "assets/products/Half Apron White Back.jpg",
+      "assets/products/Half Apron Grey.jpg",
+      "assets/products/Half Apron White.jpg"
+    ],
+    "image": "assets/products/Half Apron Black.jpg"
   },
   {
     "sku": "F8-017",
