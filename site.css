@@ -37,10 +37,8 @@ html {
 }
 
 body {
-  margin: 0 auto;
-  max-width: 1600px; /* Enforces consistent max scale across monitors */
+  margin: 0;
   min-height: 100vh;
-  box-shadow: 0 0 40px rgba(0,0,0,0.05); /* visually separates from html backdrop on huge screens */
   font-family: "Century Gothic", system-ui, sans-serif;
   background: var(--paper);
   color: var(--ink);
