@@ -426,10 +426,11 @@ input, select, textarea, button { font: inherit; }
 .fashion-copy h1,
 .page-hero h1 {
   margin: 0;
-  font-size: clamp(48px, 8vw, 112px);
-  line-height: .92;
+  font-size: clamp(36px, 5.5vw, 82px);
+  line-height: 1;
   font-weight: 900;
   text-transform: uppercase;
+  word-wrap: break-word;
 }
 .landing-copy span,
 .fashion-copy span,
