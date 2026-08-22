@@ -112,45 +112,26 @@
 
       <section class="brands-trust" style="padding: 70px 5vw; background: #ffffff; text-align: center;">
         <p style="font-size: 13px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 36px;">Brands That Trust Us</p>
-        <div class="marquee-container" style="overflow: hidden; max-width: 1200px; margin: 0 auto; position: relative;">
-          <!-- Left and right gradient masks for smooth entering/exiting -->
-          <div style="position: absolute; top:0; bottom:0; left:0; width: 80px; background: linear-gradient(to right, #fff, transparent); z-index: 2; pointer-events: none;"></div>
-          <div style="position: absolute; top:0; bottom:0; right:0; width: 80px; background: linear-gradient(to left, #fff, transparent); z-index: 2; pointer-events: none;"></div>
-          
-          <div class="marquee-content" style="display: flex; gap: 60px; width: max-content; align-items: center; animation: scrollBelt 25s linear infinite;">
-            <!-- Set 1 -->
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=ritzcarlton.com&sz=128" alt="The Ritz-Carlton" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=fourseasons.com&sz=128" alt="Four Seasons" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=emirates.com&sz=128" alt="Emirates Group" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=marriott.com&sz=128" alt="Marriott Int." style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=clevelandclinic.org&sz=128" alt="Cleveland Clinic" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            
-            <!-- Set 2 for seamless loop -->
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=ritzcarlton.com&sz=128" alt="The Ritz-Carlton" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=fourseasons.com&sz=128" alt="Four Seasons" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=emirates.com&sz=128" alt="Emirates Group" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=marriott.com&sz=128" alt="Marriott Int." style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <img src="https://www.google.com/s2/favicons?domain=clevelandclinic.org&sz=128" alt="Cleveland Clinic" style="height: 48px; width: 48px; object-fit: contain;" onerror="this.style.display='none'" />
-            </div>
+        <div style="display: flex; gap: 6vw; justify-content: center; align-items: center; max-width: 1200px; margin: 0 auto; flex-wrap: wrap;">
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer;" onmouseover="this.querySelector('span').style.opacity='1'; this.querySelector('span').style.transform='translateX(-50%) translateY(0)'" onmouseout="this.querySelector('span').style.opacity='0'; this.querySelector('span').style.transform='translateX(-50%) translateY(10px)'">
+            <img src="https://www.google.com/s2/favicons?domain=ritzcarlton.com&sz=128" alt="The Ritz-Carlton" style="height: 72px; width: 72px; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" onerror="this.style.display='none'" />
+            <span style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%) translateY(10px); background: #222; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap; opacity: 0; transition: all 0.3s ease; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;">THE RITZ-CARLTON</span>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer;" onmouseover="this.querySelector('span').style.opacity='1'; this.querySelector('span').style.transform='translateX(-50%) translateY(0)'" onmouseout="this.querySelector('span').style.opacity='0'; this.querySelector('span').style.transform='translateX(-50%) translateY(10px)'">
+            <img src="https://www.google.com/s2/favicons?domain=fourseasons.com&sz=128" alt="Four Seasons" style="height: 72px; width: 72px; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" onerror="this.style.display='none'" />
+            <span style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%) translateY(10px); background: #222; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap; opacity: 0; transition: all 0.3s ease; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;">FOUR SEASONS</span>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer;" onmouseover="this.querySelector('span').style.opacity='1'; this.querySelector('span').style.transform='translateX(-50%) translateY(0)'" onmouseout="this.querySelector('span').style.opacity='0'; this.querySelector('span').style.transform='translateX(-50%) translateY(10px)'">
+            <img src="https://www.google.com/s2/favicons?domain=emirates.com&sz=128" alt="Emirates Group" style="height: 72px; width: 72px; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" onerror="this.style.display='none'" />
+            <span style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%) translateY(10px); background: #222; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap; opacity: 0; transition: all 0.3s ease; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;">EMIRATES GROUP</span>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer;" onmouseover="this.querySelector('span').style.opacity='1'; this.querySelector('span').style.transform='translateX(-50%) translateY(0)'" onmouseout="this.querySelector('span').style.opacity='0'; this.querySelector('span').style.transform='translateX(-50%) translateY(10px)'">
+            <img src="https://www.google.com/s2/favicons?domain=marriott.com&sz=128" alt="Marriott Int." style="height: 72px; width: 72px; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" onerror="this.style.display='none'" />
+            <span style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%) translateY(10px); background: #222; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap; opacity: 0; transition: all 0.3s ease; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;">MARRIOTT INT.</span>
+          </div>
+          <div style="position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer;" onmouseover="this.querySelector('span').style.opacity='1'; this.querySelector('span').style.transform='translateX(-50%) translateY(0)'" onmouseout="this.querySelector('span').style.opacity='0'; this.querySelector('span').style.transform='translateX(-50%) translateY(10px)'">
+            <img src="https://www.google.com/s2/favicons?domain=clevelandclinic.org&sz=128" alt="Cleveland Clinic" style="height: 72px; width: 72px; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" onerror="this.style.display='none'" />
+            <span style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%) translateY(10px); background: #222; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; letter-spacing: 0.05em; white-space: nowrap; opacity: 0; transition: all 0.3s ease; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;">CLEVELAND CLINIC</span>
           </div>
         </div>
       </section>
