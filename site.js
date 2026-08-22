@@ -449,8 +449,8 @@ function renderProducts() {
         <div class="product-card-img" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}', ${p.images.length})" onmouseleave="window.stopSlideshow('${p.sku}', ${p.images.length})"` : ''}>
           ${imagesHtml}
         </div>
-        <div class="product-card-info">
-          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+        <div class="product-card-info" style="text-align: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px;">
             <span>${p.category} | ${p.sku}</span>
             ${p.gender ? `<span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">${p.gender}</span>` : ''}
             ${p.sectors ? `<span style="width: 100%; font-size: 10px; color: var(--muted); text-transform: capitalize; margin-top: 2px;">Sectors: ${p.sectors}</span>` : ''}
