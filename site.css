@@ -1801,4 +1801,10 @@ body {
   h1 { font-size: clamp(1.75rem, 6.5vw, 2.4rem) !important; }
   h2 { font-size: clamp(1.4rem, 5vw, 1.8rem) !important; }
   h3 { font-size: clamp(1.2rem, 4.5vw, 1.5rem) !important; }
+}
+
+/* Brands Marquee Animation */
+@keyframes scrollBelt {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 30px)); /* -50% shifts it exactly halfway, -30px accounts for half the 60px gap so it loops seamlessly */ }
 }
