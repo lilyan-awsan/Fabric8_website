@@ -1251,15 +1251,15 @@ if (iframe && navBtns.length > 0) {
       
       // Inject CSS
       const style = doc.createElement('style');
-      style.innerHTML = \
+      style.innerHTML = `
         [contenteditable="true"] { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: text; transition: outline 0.2s; }
         [contenteditable="true"]:hover { outline: 2px solid var(--green, #2f873d); background: rgba(47, 135, 61, 0.05); }
         [contenteditable="true"]:focus { outline: 2px solid var(--green, #2f873d); background: white; color: black; }
         .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
         .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.8; }
-        .editable-image::after { content: "?? Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
+        .editable-image::after { content: "✏️ Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
         .editable-image:hover::after { opacity: 1; }
-      \;
+      `;
       doc.head.appendChild(style);
       
       // Make text editable
@@ -1310,7 +1310,7 @@ if (iframe && navBtns.length > 0) {
             if (file) {
               const reader = new FileReader();
               reader.onload = (e2) => {
-                hero.style.backgroundImage = \linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("\")\;
+                hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
                 hero.setAttribute('data-new-bg-upload', file.name);
                 hero.setAttribute('data-new-bg-base64', e2.target.result);
               };
