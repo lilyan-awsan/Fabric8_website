@@ -595,13 +595,12 @@ function renderCart() {
     return;
   }
   items.innerHTML = cart.map((item, index) => `
-    <div class="cart-item">
-      <div class="cart-item-info">
-        <strong>${item.name}</strong>
-        <p>Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity} | ${item.branding || "No branding selected"}</p>
-      </div>
-      <div style="display: flex; gap: 12px;">
-        <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;">Remove</button>
+    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px;">
+      ${item.image ? `<div style="flex-shrink: 0; width: 70px; height: 70px; background: #fff; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; padding: 4px;"><img src="${item.image}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply;" /></div>` : ''}
+      <div class="cart-item-info" style="flex: 1;">
+        <h4 style="margin: 0 0 8px 0; font-size: 14px; color: var(--ink);">${item.name}</h4>
+        <p style="margin: 0 0 12px 0; color: var(--muted); line-height: 1.5; font-size: 13px;">Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity} | ${item.branding || "No branding selected"}</p>
+        <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
       </div>
     </div>
   `).join("");
