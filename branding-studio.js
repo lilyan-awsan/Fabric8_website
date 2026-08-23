@@ -228,9 +228,17 @@
     if (!ctx) return;
     ctx.clearRect(0, 0, 800, 800);
 
-    // Draw background garment image
+    // Draw background garment image proportionally
     if (state.canvas.baseImage && state.canvas.baseImage.complete) {
-      ctx.drawImage(state.canvas.baseImage, 0, 0, 800, 800);
+      const img = state.canvas.baseImage;
+      const canvasW = 800;
+      const canvasH = 800;
+      const ratio = Math.min(canvasW / img.width, canvasH / img.height);
+      const newW = img.width * ratio;
+      const newH = img.height * ratio;
+      const offsetX = (canvasW - newW) / 2;
+      const offsetY = (canvasH - newH) / 2;
+      ctx.drawImage(img, offsetX, offsetY, newW, newH);
     } else {
       ctx.fillStyle = "#f0efe9";
       ctx.fillRect(0, 0, 800, 800);
