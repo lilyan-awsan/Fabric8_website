@@ -1067,12 +1067,19 @@ if (saveVisualEditorBtn) {
         }
       }
       
-      const editables = cleanDoc.querySelectorAll('[contenteditable="true"]');
+      // Cleanup all visual editor attributes
+      const editables = cleanDoc.querySelectorAll('[contenteditable]');
       editables.forEach(el => el.removeAttribute('contenteditable'));
       
       const editableImages = cleanDoc.querySelectorAll('.editable-image');
       editableImages.forEach(el => el.classList.remove('editable-image'));
       
+      const editableBgs = cleanDoc.querySelectorAll('[data-editable-bg]');
+      editableBgs.forEach(el => el.removeAttribute('data-editable-bg'));
+
+      const injectedStyleTag = cleanDoc.querySelector('#visual-editor-style');
+      if (injectedStyleTag) injectedStyleTag.remove();
+
       // Extract newly uploaded images and backgrounds
       const newSiteImages = [];
       
@@ -1082,8 +1089,7 @@ if (saveVisualEditorBtn) {
           name: img.getAttribute('data-new-upload'),
           base64: img.src
         });
-        // Set a placeholder relative path which will be replaced by githubSync backend later, or we can leave it as base64 and githubSync parses it.
-        // It's cleaner to let githubSync replace the src in the HTML. 
+        img.removeAttribute('data-new-upload');
       });
       
       const bgTags = cleanDoc.querySelectorAll('[data-new-bg-upload]');
@@ -1092,14 +1098,21 @@ if (saveVisualEditorBtn) {
           name: bg.getAttribute('data-new-bg-upload'),
           base64: bg.getAttribute('data-new-bg-base64')
         });
+        bg.removeAttribute('data-new-bg-upload');
+        bg.removeAttribute('data-new-bg-base64');
       });
 
       // Get raw HTML string
       const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
 
+      // 15 second fetch timeout controller
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const res = await fetch('/api/githubSync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           token: authToken,
           action: "save_html",
@@ -1108,18 +1121,24 @@ if (saveVisualEditorBtn) {
           siteImages: newSiteImages
         })
       });
+      clearTimeout(timeoutId);
       
       const data = await res.json();
       if (data.success) {
-        document.getElementById('visualEditorStatus').style.display = 'block';
-        showToast("Success! Visual layout saved. Allow ~30s for Vercel to deploy.", "success");
-        setTimeout(() => { document.getElementById('visualEditorStatus').style.display = 'none'; }, 5000);
+        const statusEl = document.getElementById('visualEditorStatus');
+        if (statusEl) statusEl.style.display = 'block';
+        showToast("Success! Changes published to GitHub.\nNote: Vercel takes ~30-45s to complete the build for live site.", "success", 10000);
+        setTimeout(() => { if (statusEl) statusEl.style.display = 'none'; }, 6000);
       } else {
         showToast("Error saving layout: " + data.message, "error");
       }
     } catch(err) {
       console.error(err);
-      showToast("Failed to save layout.", "error");
+      if (err.name === 'AbortError') {
+        showToast("Request timed out. Please try saving again.", "error");
+      } else {
+        showToast("Failed to save layout: " + err.message, "error");
+      }
     } finally {
       saveVisualEditorBtn.textContent = 'Publish Changes';
       saveVisualEditorBtn.disabled = false;
