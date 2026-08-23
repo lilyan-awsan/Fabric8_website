@@ -81,16 +81,16 @@
             <option>Other</option>
           </select>
 
-          <input name="Address 1" required placeholder="Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-          <input name="Address 2" placeholder="Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input id="shipAddr1" name="Address 1" required placeholder="Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input id="shipAddr2" name="Address 2" placeholder="Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           
-          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <input name="City" required placeholder="City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-            <input name="State" required placeholder="State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <div id="shipCityStateRow" class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <input id="shipCity" name="City" required placeholder="City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <input id="shipState" name="State" required placeholder="State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           </div>
           <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <input name="Zip" required placeholder="Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-            <select name="Country" required style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit;">
+            <input id="shipZip" name="Zip" required placeholder="Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <select id="shipCountry" name="Country" required style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit;">
               <option value="">Select Shipping Country*</option>
               <option value="United States">United States (USA)</option>
               <option value="Jordan">Jordan (JO)</option>
@@ -112,15 +112,15 @@
 
           <div id="billingAddressFields" style="display: none; flex-direction: column; gap: 14px; padding: 20px; background: #faf8f5; border: 1px solid var(--line); border-radius: 8px; margin-top: 4px;">
             <h4 style="margin: 0; font-size: 16px; text-transform: uppercase; color: var(--ink);">Billing Information</h4>
-            <input name="Billing Address 1" placeholder="Billing Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-            <input name="Billing Address 2" placeholder="Billing Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-              <input name="Billing City" placeholder="Billing City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-              <input name="Billing State" placeholder="Billing State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <input id="billAddr1" name="Billing Address 1" placeholder="Billing Address 1*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <input id="billAddr2" name="Billing Address 2" placeholder="Billing Address 2 (Suite, Floor, etc.)" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+            <div id="billCityStateRow" class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <input id="billCity" name="Billing City" placeholder="Billing City*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+              <input id="billState" name="Billing State" placeholder="Billing State / Province*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
             </div>
             <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-              <input name="Billing Zip" placeholder="Billing Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-              <select name="Billing Country" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit;">
+              <input id="billZip" name="Billing Zip" placeholder="Billing Zip / Postal Code*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+              <select id="billCountry" name="Billing Country" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit;">
                 <option value="">Select Billing Country*</option>
                 <option value="United States">United States (USA)</option>
                 <option value="Jordan">Jordan (JO)</option>
@@ -186,5 +186,82 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="site.js?v=11"></script>
+  <script>
+    // Handle country-specific address fields
+    function updateAddressFields(prefix) {
+      const countrySelect = document.getElementById(prefix + 'Country');
+      if (!countrySelect) return;
+      
+      const isUS = countrySelect.value === 'United States';
+      const addr1 = document.getElementById(prefix + 'Addr1');
+      const addr2 = document.getElementById(prefix + 'Addr2');
+      const cityStateRow = document.getElementById(prefix + 'CityStateRow');
+      const city = document.getElementById(prefix + 'City');
+      const state = document.getElementById(prefix + 'State');
+      const zip = document.getElementById(prefix + 'Zip');
+
+      if (!isUS && countrySelect.value !== '') {
+        // Hide US-specific fields
+        if (addr2) addr2.style.display = 'none';
+        if (cityStateRow) cityStateRow.style.display = 'none';
+        if (zip) zip.style.display = 'none';
+        
+        // Remove required attributes
+        if (city) city.removeAttribute('required');
+        if (state) state.removeAttribute('required');
+        if (zip) zip.removeAttribute('required');
+
+        // Update Address 1 placeholder
+        if (addr1) addr1.placeholder = 'Full Address Description*';
+      } else {
+        // Show fields for US
+        if (addr2) addr2.style.display = 'block';
+        if (cityStateRow) cityStateRow.style.display = 'grid';
+        if (zip) zip.style.display = 'block';
+
+        // Add required attributes back for shipping
+        if (prefix === 'ship') {
+          if (city) city.setAttribute('required', 'true');
+          if (state) state.setAttribute('required', 'true');
+          if (zip) zip.setAttribute('required', 'true');
+        }
+
+        // Update Address 1 placeholder
+        if (addr1) addr1.placeholder = prefix === 'ship' ? 'Address 1*' : 'Billing Address 1*';
+      }
+    }
+
+    // Attach listeners
+    const shipCountry = document.getElementById('shipCountry');
+    const billCountry = document.getElementById('billCountry');
+    
+    if (shipCountry) {
+      shipCountry.addEventListener('change', () => updateAddressFields('ship'));
+      updateAddressFields('ship');
+    }
+    
+    if (billCountry) {
+      billCountry.addEventListener('change', () => updateAddressFields('bill'));
+      updateAddressFields('bill');
+    }
+
+    // Sync header country selector to shipping country
+    const headerCountry = document.querySelector('.country-selector');
+    if (headerCountry && shipCountry) {
+      headerCountry.addEventListener('change', function() {
+        if (this.value === 'US') shipCountry.value = 'United States';
+        else if (this.value === 'JO') shipCountry.value = 'Jordan';
+        else shipCountry.value = 'Other International';
+        updateAddressFields('ship');
+      });
+      
+      // Initialize based on current global country if set
+      const currentCountry = localStorage.getItem('fabric8_country') || 'US';
+      if (currentCountry === 'US') shipCountry.value = 'United States';
+      else if (currentCountry === 'JO') shipCountry.value = 'Jordan';
+      else shipCountry.value = 'Other International';
+      updateAddressFields('ship');
+    }
+  </script>
 </body>
 </html>
