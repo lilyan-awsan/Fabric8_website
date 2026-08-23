@@ -14,7 +14,7 @@
       color: "American Blue",
       size: "L",
       qty: 50,
-      image: "assets/products/Polo American Blue 3.jpg?v=4",
+      image: "assets/products/Polo American Blue 3.png?v=5",
       category: "Top Wear",
       capability: "Both", // "DTF Only", "Embroidery Only", "Both", "None"
       supportedFinishes: ["Embroidery", "DTF"],
@@ -468,7 +468,7 @@
       // Fallback if cross-origin or load fail
       img.src = "assets/fabric8_logo_noneedle_cropped.png";
     };
-    img.src = state.product.image || "assets/products/Polo American Blue 3.jpg?v=4";
+    img.src = state.product.image || "assets/products/Polo American Blue 3.png?v=5";
   }
 
   // Main Real-Time Canvas Preview Engine
@@ -583,7 +583,7 @@
       if (l1) {
         ctx.font = `900 28px ${state.text.fontFamily}`;
         if (state.text.fontStyle === "Block") {
-          ctx.fillText(l1.toUpperCase(), 0, currentOffsetY);
+          ctx.fillText(l1, 0, currentOffsetY);
         } else {
           ctx.fillText(l1, 0, currentOffsetY);
         }
@@ -594,7 +594,7 @@
       if (l2) {
         ctx.font = `800 24px ${state.text.fontFamily}`;
         if (state.text.fontStyle === "Block") {
-          ctx.fillText(l2.toUpperCase(), 0, currentOffsetY);
+          ctx.fillText(l2, 0, currentOffsetY);
         } else {
           ctx.fillText(l2, 0, currentOffsetY);
         }
@@ -604,7 +604,7 @@
       if (l3) {
         ctx.font = `800 24px ${state.text.fontFamily}`;
         if (state.text.fontStyle === "Block") {
-          ctx.fillText(l3.toUpperCase(), 0, currentOffsetY);
+          ctx.fillText(l3, 0, currentOffsetY);
         } else {
           ctx.fillText(l3, 0, currentOffsetY);
         }

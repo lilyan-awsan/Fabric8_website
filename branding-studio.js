@@ -293,7 +293,7 @@
     ctx.fillStyle = state.text.swatchHex || "#111111";
 
     lines.forEach(l => {
-      ctx.fillText(l.toUpperCase(), 0, startY);
+      ctx.fillText(l, 0, startY);
       startY += lineSpacing;
     });
 

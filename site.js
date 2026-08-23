@@ -825,7 +825,7 @@ document.addEventListener("click", (event) => {
     }
 
     // Determine exact product photography matching the selected catalog color
-    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.jpg?v=4';
+    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.png?v=5';
     if (selectedProduct.images && selectedProduct.images.length > 0) {
       const colorMatch = selectedProduct.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
       if (colorMatch) {
@@ -860,20 +860,7 @@ document.addEventListener("click", (event) => {
       activeCatalogColor = colorDot.dataset.color;
       renderProducts();
     }
-    if (parent.id === "productColorFilter") {
-      activeCatalogColor = colorDot.dataset.color;
-      const p = products.find(x => x.sku === selectedProductSku);
-      if (p) {
-        let targetIdx = currentCarouselImages.findIndex(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
-        if (targetIdx !== -1) {
-          if (typeof window.updateMainImageSmooth === 'function') {
-            window.updateMainImageSmooth(currentCarouselImages[targetIdx], targetIdx);
-          } else {
-            document.getElementById('productMainImage').src = currentCarouselImages[targetIdx];
-          }
-        }
-      }
-    }
+    // Product color filter logic is now handled exclusively by dynamic listeners in initProductPage
     if (parent.id === "modalColorFilter") {
       activeCatalogColor = colorDot.dataset.color;
     }
@@ -1490,7 +1477,7 @@ function initProductPage(sku) {
 
     const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
     
-    let targetImg = prod.image || "assets/products/Polo White Front.jpg?v=4";
+    let targetImg = prod.image || "assets/products/Polo White Front.png?v=5";
     if (prod.images && prod.images.length > 0) {
       const colorMatch = prod.images.find(img => img.toLowerCase().includes(selectedColor.toLowerCase()));
       if (colorMatch) targetImg = colorMatch;
