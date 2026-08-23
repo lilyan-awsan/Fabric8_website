@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; padding: 0; }
+  img { cursor: crosshair; }
+  #log { position: fixed; top: 0; left: 0; background: rgba(0,0,0,0.8); color: white; padding: 10px; font-family: monospace; z-index: 1000; }
+</style>
+</head>
+<body>
+  <div id="log">Clicks:</div>
+  <img src="assets/fabric8-business-uniform-hero.webp" id="target" />
+  <script>
+    const log = document.getElementById('log');
+    const clicks = [];
+    document.getElementById('target').addEventListener('click', function(e) {
+      const rect = e.target.getBoundingClientRect();
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
+      clicks.push(`[${x}, ${y}]`);
+      log.innerText = `Clicks: ${clicks.join(', ')}`;
+      console.log(`CLICK: ${x}, ${y}`);
+    });
+  </script>
+</body>
+</html>
