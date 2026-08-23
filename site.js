@@ -825,7 +825,7 @@ document.addEventListener("click", (event) => {
     }
 
     // Determine exact product photography matching the selected catalog color
-    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.jpg?v=3';
+    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.jpg?v=4';
     if (selectedProduct.images && selectedProduct.images.length > 0) {
       const colorMatch = selectedProduct.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
       if (colorMatch) {
@@ -1490,7 +1490,7 @@ function initProductPage(sku) {
 
     const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
     
-    let targetImg = prod.image || "assets/products/Polo White Front.jpg?v=3";
+    let targetImg = prod.image || "assets/products/Polo White Front.jpg?v=4";
     if (prod.images && prod.images.length > 0) {
       const colorMatch = prod.images.find(img => img.toLowerCase().includes(selectedColor.toLowerCase()));
       if (colorMatch) targetImg = colorMatch;
