@@ -79,7 +79,62 @@ export default async function handler(req, res) {
     let productsList = JSON.parse(contentStr);
 
     // 3. Apply the action
-    if (action === "save_settings") {
+    if (action === "save_html") {
+      const { filename, htmlContent, siteImages } = req.body;
+      
+      let finalHtml = htmlContent;
+      if (siteImages && Array.isArray(siteImages)) {
+        for (const img of siteImages) {
+          if (img && img.base64 && img.name) {
+            const ext = img.name.split('.').pop() || 'png';
+            const imgPath = `assets/site_images/${Date.now()}_img.${ext}`;
+            const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
+              method: 'PUT',
+              headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                message: `Upload visual editor image ${img.name}`,
+                content: img.base64.split(',')[1]
+              })
+            });
+            if (imgRes.ok) {
+              // Replace base64 in HTML with actual path
+              // The img.base64 string could be very large and contain special chars, so we use string split/join instead of regex
+              finalHtml = finalHtml.split(img.base64).join(imgPath);
+            }
+          }
+        }
+      }
+
+      let currentHtmlSha = null;
+      try {
+        const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
+          headers: { 'Authorization': `Bearer ${githubToken}` }
+        });
+        if (fileRes.ok) {
+          const fileData = await fileRes.json();
+          currentHtmlSha = fileData.sha;
+        }
+      } catch (e) {}
+
+      const newContentBase64 = Buffer.from(finalHtml).toString('base64');
+      const bodyPayload = {
+        message: `Visual Editor update to ${filename}`,
+        content: newContentBase64
+      };
+      if (currentHtmlSha) bodyPayload.sha = currentHtmlSha;
+
+      const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(bodyPayload)
+      });
+
+      if (!updateRes.ok) {
+        const err = await updateRes.json();
+        throw new Error("Failed to save HTML to server: " + err.message);
+      }
+      return res.status(200).json({ success: true, message: 'HTML layout saved successfully' });
+    } else if (action === "save_settings") {
       if (pendingSiteImages && typeof pendingSiteImages === 'object') {
         for (const [key, img] of Object.entries(pendingSiteImages)) {
           if (img && img.base64 && img.name) {

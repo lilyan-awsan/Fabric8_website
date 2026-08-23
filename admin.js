@@ -1188,3 +1188,224 @@ document.getElementById("saveSettingsBtn")?.addEventListener("click", async () =
 });
 
 
+
+
+// --- Visual Editor Controller ---
+const tabProducts = document.getElementById('tabProducts');
+const tabSettings = document.getElementById('tabSettings');
+const productsSection = document.getElementById('productsSection');
+const tableContainer = document.querySelector('.table-container');
+const settingsSection = document.getElementById('settingsSection');
+
+if (tabProducts && tabSettings) {
+  tabProducts.addEventListener('click', () => {
+    tabProducts.classList.add('active');
+    tabProducts.style.background = 'var(--green)';
+    tabProducts.style.color = 'white';
+    tabSettings.classList.remove('active');
+    tabSettings.style.background = 'white';
+    tabSettings.style.color = 'var(--ink)';
+    
+    productsSection.style.display = 'block';
+    if(tableContainer) tableContainer.style.display = 'block';
+    settingsSection.style.display = 'none';
+  });
+  
+  tabSettings.addEventListener('click', () => {
+    tabSettings.classList.add('active');
+    tabSettings.style.background = 'var(--green)';
+    tabSettings.style.color = 'white';
+    tabProducts.classList.remove('active');
+    tabProducts.style.background = 'white';
+    tabProducts.style.color = 'var(--ink)';
+    
+    productsSection.style.display = 'none';
+    if(tableContainer) tableContainer.style.display = 'none';
+    settingsSection.style.display = 'block';
+  });
+}
+
+const iframe = document.getElementById('visualEditorIframe');
+const iframeOverlay = document.getElementById('iframeOverlay');
+const navBtns = document.querySelectorAll('.editor-nav-btn');
+let currentVisualPage = 'index.html';
+
+if (iframe && navBtns.length > 0) {
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      navBtns.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentVisualPage = e.target.getAttribute('data-page');
+      
+      iframeOverlay.style.display = 'flex';
+      iframe.src = currentVisualPage;
+    });
+  });
+
+  iframe.addEventListener('load', () => {
+    iframeOverlay.style.display = 'none';
+    
+    // Inject Visual Editor Script into iframe
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      
+      // Inject CSS
+      const style = doc.createElement('style');
+      style.innerHTML = \
+        [contenteditable="true"] { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: text; transition: outline 0.2s; }
+        [contenteditable="true"]:hover { outline: 2px solid var(--green, #2f873d); background: rgba(47, 135, 61, 0.05); }
+        [contenteditable="true"]:focus { outline: 2px solid var(--green, #2f873d); background: white; color: black; }
+        .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
+        .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.8; }
+        .editable-image::after { content: "?? Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
+        .editable-image:hover::after { opacity: 1; }
+      \;
+      doc.head.appendChild(style);
+      
+      // Make text editable
+      const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button'];
+      textTags.forEach(tag => {
+        const els = doc.querySelectorAll(tag);
+        els.forEach(el => {
+          if (el.children.length === 0 || tag === 'span' || tag === 'a' || tag === 'button') {
+            el.setAttribute('contenteditable', 'true');
+          }
+        });
+      });
+      
+      // Make images editable
+      const images = doc.querySelectorAll('img');
+      images.forEach(img => {
+        img.classList.add('editable-image');
+        img.addEventListener('click', (e) => {
+          e.preventDefault();
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (e2) => {
+                img.src = e2.target.result;
+                img.setAttribute('data-new-upload', file.name);
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+          fileInput.click();
+        });
+      });
+      
+      // Make CSS background images editable (hero banners)
+      const heroes = doc.querySelectorAll('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide');
+      heroes.forEach(hero => {
+        hero.addEventListener('dblclick', (e) => {
+          if (e.target !== hero) return;
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (e2) => {
+                hero.style.backgroundImage = \linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("\")\;
+                hero.setAttribute('data-new-bg-upload', file.name);
+                hero.setAttribute('data-new-bg-base64', e2.target.result);
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+          fileInput.click();
+        });
+        // Add a tooltip for double click
+        hero.title = "Double-click background to change image";
+      });
+
+    } catch(err) {
+      console.warn("Could not inject editor script into iframe:", err);
+    }
+  });
+}
+
+const saveVisualEditorBtn = document.getElementById('saveVisualEditorBtn');
+if (saveVisualEditorBtn) {
+  saveVisualEditorBtn.addEventListener('click', async () => {
+    try {
+      saveVisualEditorBtn.textContent = 'Extracting HTML & Uploading...';
+      saveVisualEditorBtn.disabled = true;
+      
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      
+      // Deep clone document to strip editor attributes without affecting live preview
+      const cleanDoc = doc.documentElement.cloneNode(true);
+      
+      // Cleanup injected styles and classes
+      const injectedStyles = cleanDoc.querySelectorAll('style');
+      if (injectedStyles.length > 0) {
+        const lastStyle = injectedStyles[injectedStyles.length - 1];
+        if (lastStyle.innerHTML.includes('contenteditable')) {
+          lastStyle.remove();
+        }
+      }
+      
+      const editables = cleanDoc.querySelectorAll('[contenteditable="true"]');
+      editables.forEach(el => el.removeAttribute('contenteditable'));
+      
+      const editableImages = cleanDoc.querySelectorAll('.editable-image');
+      editableImages.forEach(el => el.classList.remove('editable-image'));
+      
+      // Extract newly uploaded images and backgrounds
+      const newSiteImages = [];
+      
+      const imgTags = cleanDoc.querySelectorAll('img[data-new-upload]');
+      imgTags.forEach(img => {
+        newSiteImages.push({
+          name: img.getAttribute('data-new-upload'),
+          base64: img.src
+        });
+        // Set a placeholder relative path which will be replaced by githubSync backend later, or we can leave it as base64 and githubSync parses it.
+        // It's cleaner to let githubSync replace the src in the HTML. 
+      });
+      
+      const bgTags = cleanDoc.querySelectorAll('[data-new-bg-upload]');
+      bgTags.forEach(bg => {
+        newSiteImages.push({
+          name: bg.getAttribute('data-new-bg-upload'),
+          base64: bg.getAttribute('data-new-bg-base64')
+        });
+      });
+
+      // Get raw HTML string
+      const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
+
+      const res = await fetch('/api/githubSync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: authToken,
+          action: "save_html",
+          filename: currentVisualPage,
+          htmlContent: rawHtml,
+          siteImages: newSiteImages
+        })
+      });
+      
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('visualEditorStatus').style.display = 'block';
+        showToast("Success! Visual layout saved. Allow ~30s for Vercel to deploy.", "success");
+        setTimeout(() => { document.getElementById('visualEditorStatus').style.display = 'none'; }, 5000);
+      } else {
+        showToast("Error saving layout: " + data.message, "error");
+      }
+    } catch(err) {
+      console.error(err);
+      showToast("Failed to save layout.", "error");
+    } finally {
+      saveVisualEditorBtn.textContent = 'Publish Changes';
+      saveVisualEditorBtn.disabled = false;
+    }
+  });
+}
