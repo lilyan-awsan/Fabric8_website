@@ -962,14 +962,26 @@ if (iframe && navBtns.length > 0) {
       }
       
       // Make text editable
-      const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button'];
+      const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button', 'td', 'th', 'div'];
       textTags.forEach(tag => {
         const els = doc.querySelectorAll(tag);
         els.forEach(el => {
-          if (el.children.length === 0 || tag === 'span' || tag === 'a' || tag === 'button') {
+          // If element contains only text nodes or inline children
+          if (el.children.length === 0 || tag === 'span' || tag === 'a' || tag === 'button' || tag === 'p' || tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
             el.setAttribute('contenteditable', 'true');
           }
         });
+      });
+
+      // Prevent link navigation inside editor iframe so clicks edit text
+      doc.querySelectorAll('a, button').forEach(el => {
+        if (!el.getAttribute('data-editor-click-handled')) {
+          el.setAttribute('data-editor-click-handled', 'true');
+          el.addEventListener('click', (e) => {
+            // Allow text focus instead of navigating
+            e.preventDefault();
+          });
+        }
       });
       
       // Make images editable
@@ -1076,6 +1088,7 @@ if (saveVisualEditorBtn) {
       
       const editableBgs = cleanDoc.querySelectorAll('[data-editable-bg]');
       editableBgs.forEach(el => el.removeAttribute('data-editable-bg'));
+      cleanDoc.querySelectorAll('[data-editor-click-handled]').forEach(el => el.removeAttribute('data-editor-click-handled'));
 
       const injectedStyleTag = cleanDoc.querySelector('#visual-editor-style');
       if (injectedStyleTag) injectedStyleTag.remove();
