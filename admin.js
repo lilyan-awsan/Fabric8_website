@@ -937,36 +937,29 @@ const navBtns = document.querySelectorAll('.editor-nav-btn');
 let currentVisualPage = 'index.html';
 
 if (iframe && navBtns.length > 0) {
-  navBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      navBtns.forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentVisualPage = e.target.getAttribute('data-page');
-      
-      iframeOverlay.style.display = 'flex';
-      iframe.src = currentVisualPage;
-    });
-  });
-
-  iframe.addEventListener('load', () => {
-    iframeOverlay.style.display = 'none';
+  const initIframeEditing = () => {
+    if (iframeOverlay) iframeOverlay.style.display = 'none';
     
     // Inject Visual Editor Script into iframe
     try {
       const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if (!doc || !doc.body) return;
       
-      // Inject CSS
-      const style = doc.createElement('style');
-      style.innerHTML = `
-        [contenteditable="true"] { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: text; transition: outline 0.2s; }
-        [contenteditable="true"]:hover { outline: 2px solid var(--green, #2f873d); background: rgba(47, 135, 61, 0.05); }
-        [contenteditable="true"]:focus { outline: 2px solid var(--green, #2f873d); background: white; color: black; }
-        .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
-        .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.8; }
-        .editable-image::after { content: "✏️ Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
-        .editable-image:hover::after { opacity: 1; }
-      `;
-      doc.head.appendChild(style);
+      // Inject CSS if not present
+      if (!doc.getElementById('visual-editor-style')) {
+        const style = doc.createElement('style');
+        style.id = 'visual-editor-style';
+        style.innerHTML = `
+          [contenteditable="true"] { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: text; transition: outline 0.2s; }
+          [contenteditable="true"]:hover { outline: 2px solid var(--green, #2f873d); background: rgba(47, 135, 61, 0.05); }
+          [contenteditable="true"]:focus { outline: 2px solid var(--green, #2f873d); background: white; color: black; }
+          .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
+          .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.8; }
+          .editable-image::after { content: "✏️ Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
+          .editable-image:hover::after { opacity: 1; }
+        `;
+        doc.head.appendChild(style);
+      }
       
       // Make text editable
       const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button'];
@@ -982,57 +975,75 @@ if (iframe && navBtns.length > 0) {
       // Make images editable
       const images = doc.querySelectorAll('img');
       images.forEach(img => {
-        img.classList.add('editable-image');
-        img.addEventListener('click', (e) => {
-          e.preventDefault();
-          const fileInput = document.createElement('input');
-          fileInput.type = 'file';
-          fileInput.accept = 'image/*';
-          fileInput.onchange = (event) => {
-            const file = event.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = (e2) => {
-                img.src = e2.target.result;
-                img.setAttribute('data-new-upload', file.name);
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-          fileInput.click();
-        });
+        if (!img.classList.contains('editable-image')) {
+          img.classList.add('editable-image');
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (event) => {
+              const file = event.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (e2) => {
+                  img.src = e2.target.result;
+                  img.setAttribute('data-new-upload', file.name);
+                };
+                reader.readAsDataURL(file);
+              }
+            };
+            fileInput.click();
+          });
+        }
       });
       
       // Make CSS background images editable (hero banners)
       const heroes = doc.querySelectorAll('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide');
       heroes.forEach(hero => {
-        hero.addEventListener('dblclick', (e) => {
-          if (e.target !== hero) return;
-          const fileInput = document.createElement('input');
-          fileInput.type = 'file';
-          fileInput.accept = 'image/*';
-          fileInput.onchange = (event) => {
-            const file = event.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = (e2) => {
-                hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
-                hero.setAttribute('data-new-bg-upload', file.name);
-                hero.setAttribute('data-new-bg-base64', e2.target.result);
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-          fileInput.click();
-        });
-        // Add a tooltip for double click
-        hero.title = "Double-click background to change image";
+        if (!hero.getAttribute('data-editable-bg')) {
+          hero.setAttribute('data-editable-bg', 'true');
+          hero.addEventListener('dblclick', (e) => {
+            if (e.target !== hero) return;
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (event) => {
+              const file = event.target.files[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = (e2) => {
+                  hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
+                  hero.setAttribute('data-new-bg-upload', file.name);
+                  hero.setAttribute('data-new-bg-base64', e2.target.result);
+                };
+                reader.readAsDataURL(file);
+              }
+            };
+            fileInput.click();
+          });
+          hero.title = "Double-click background to change image";
+        }
       });
 
     } catch(err) {
       console.warn("Could not inject editor script into iframe:", err);
     }
+  };
+
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      navBtns.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentVisualPage = e.target.getAttribute('data-page');
+      iframe.src = currentVisualPage;
+    });
   });
+
+  iframe.addEventListener('load', initIframeEditing);
+  // Also try immediate initialization for fast loading
+  setTimeout(initIframeEditing, 300);
+  setTimeout(initIframeEditing, 1000);
 }
 
 const saveVisualEditorBtn = document.getElementById('saveVisualEditorBtn');
@@ -1115,4 +1126,5 @@ if (saveVisualEditorBtn) {
     }
   });
 }
+
 
