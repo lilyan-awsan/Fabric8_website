@@ -390,10 +390,8 @@
       const img = new Image();
       img.onload = function () {
         state.artwork.rawImage = img;
-        removeWhiteBackground(img, function (processedImg) {
-          state.artwork.processedImage = processedImg;
-          drawCanvas();
-        });
+        state.artwork.processedImage = img;
+        drawCanvas();
       };
       img.src = e.target.result;
     };

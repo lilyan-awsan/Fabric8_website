@@ -489,17 +489,14 @@
       reader.onload = (evt) => {
         const img = new Image();
         img.onload = () => {
-          removeWhiteBackground(img, function (processedImg) {
-            state.artwork.imageObj = processedImg;
-            state.artwork.fileName = file.name;
-            const statusEl = document.getElementById("fileStatus");
-            const nameEl = document.getElementById("fileName");
-            if (statusEl && nameEl) {
-              nameEl.textContent = file.name;
-              statusEl.style.display = "block";
-            }
-            drawCanvas();
-          });
+          state.artwork.imageObj = img;
+          state.artwork.fileName = file.name;
+          const statusEl = document.getElementById("fileStatus");
+          if (statusEl) {
+            statusEl.style.display = "block";
+            document.getElementById("fileName").textContent = file.name;
+          }
+          drawCanvas();
         };
         img.src = evt.target.result;
       };

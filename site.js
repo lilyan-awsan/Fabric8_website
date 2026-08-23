@@ -449,8 +449,8 @@ function renderProducts() {
         <div class="product-card-img" ${(p.images && p.images.length > 1) ? `onmouseenter="window.startSlideshow('${p.sku}', ${p.images.length})" onmouseleave="window.stopSlideshow('${p.sku}', ${p.images.length})"` : ''}>
           ${imagesHtml}
         </div>
-        <div class="product-card-info" style="text-align: center;">
-          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px;">
+        <div class="product-card-info" style="text-align: left;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: flex-start; justify-content: flex-start; flex-wrap: wrap; gap: 4px;">
             <span>${p.category} | ${p.sku}</span>
             ${p.gender ? `<span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">${p.gender}</span>` : ''}
             ${p.sectors ? `<span style="width: 100%; font-size: 10px; color: var(--muted); text-transform: capitalize; margin-top: 2px;">Sectors: ${p.sectors}</span>` : ''}
@@ -2738,7 +2738,7 @@ function renderShowcase() {
         <div style="background: transparent; height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: none !important; padding: 10px;">
           <img src="${imgSrc}" alt="${p.name}" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
         </div>
-        <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: center; text-align: center;">
+        <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
           <p style="margin: 0 0 6px; font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>
           <h3 style="margin: 0; font-size: 18px; font-weight: 900; line-height: 1.25; color: var(--ink);">${p.name || 'Product'}</h3>
         </div>
