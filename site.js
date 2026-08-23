@@ -2738,7 +2738,7 @@ function renderShowcase() {
         <div style="background: transparent; height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: none !important; padding: 10px;">
           <img src="${imgSrc}" alt="${p.name}" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
         </div>
-        <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
+        <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: center; text-align: center;">
           <p style="margin: 0 0 6px; font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>
           <h3 style="margin: 0; font-size: 18px; font-weight: 900; line-height: 1.25; color: var(--ink);">${p.name || 'Product'}</h3>
         </div>
