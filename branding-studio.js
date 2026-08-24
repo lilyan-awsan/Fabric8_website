@@ -176,18 +176,29 @@
     const validPlacements = allPlacements.filter(p => allowedNames.includes(p.name));
     const displayList = validPlacements.length > 0 ? validPlacements : allPlacements;
 
-    displayList.forEach((p) => {
+    // Prioritize "Front" placement if available for Embroidery
+    let defaultIdx = 0;
+    if (!isDtf) {
+      const frontIdx = displayList.findIndex(p => p.name && p.name.toLowerCase().includes("front"));
+      if (frontIdx !== -1) defaultIdx = frontIdx;
+    }
+
+    displayList.forEach((p, idx) => {
       const opt = document.createElement("option");
       opt.value = allPlacements.indexOf(p);
       opt.textContent = p.name || "Placement Zone";
-      if (state.selectedPlacement && state.selectedPlacement.name === p.name) {
+      if (idx === defaultIdx && (!state.selectedPlacement || !displayList.find(x => x.name === state.selectedPlacement.name))) {
+        opt.selected = true;
+        state.selectedPlacement = p;
+      } else if (state.selectedPlacement && state.selectedPlacement.name === p.name) {
         opt.selected = true;
       }
       sel.appendChild(opt);
     });
-    if (sel.options.length > 0 && (!state.selectedPlacement || !displayList.find(p => p.name === state.selectedPlacement.name))) {
-      sel.selectedIndex = 0;
-      state.selectedPlacement = allPlacements[parseInt(sel.value)] || displayList[0];
+
+    if (!state.selectedPlacement || !displayList.find(p => p.name === state.selectedPlacement.name)) {
+      sel.selectedIndex = defaultIdx;
+      state.selectedPlacement = allPlacements[parseInt(sel.value)] || displayList[defaultIdx] || displayList[0];
     }
   }
 
