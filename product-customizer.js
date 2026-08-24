@@ -63,15 +63,15 @@
   ];
 
   // DOMContentLoaded
-  document.addEventListener("DOMContentLoaded", function () {
-    initializeState();
+  document.addEventListener("DOMContentLoaded", async function () {
+    await initializeState();
     setupUI();
     loadGarmentImage();
     renderSwatches();
   });
 
   // Load customizer state from localStorage or fallback query params
-  function initializeState() {
+  async function initializeState() {
     let savedState = null;
     try {
       const raw = localStorage.getItem("fabric8_customizer_state");
@@ -80,11 +80,49 @@
       console.warn("Failed to parse fabric8_customizer_state", e);
     }
 
-    if (savedState && savedState.sku && !new URLSearchParams(window.location.search).get("editCartIndex")) {
+    const params = new URLSearchParams(window.location.search);
+    const paramSku = params.get("sku");
+    const editIdx = params.get("editCartIndex");
+
+    // Fetch full catalog product details from data/products.json
+    let catalogProduct = null;
+    try {
+      const res = await fetch('data/products.json');
+      if (res.ok) {
+        const catalog = await res.json();
+        let targetSku = paramSku;
+        if (!targetSku && editIdx !== null) {
+          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
+          if (rawCart) {
+            const parsedCart = JSON.parse(rawCart);
+            const cartItem = parsedCart[parseInt(editIdx)];
+            if (cartItem && cartItem.sku) targetSku = cartItem.sku;
+          }
+        }
+        if (!targetSku && savedState && savedState.sku) targetSku = savedState.sku;
+        if (!targetSku) targetSku = "F8-001";
+
+        catalogProduct = catalog.find(p => p.sku === targetSku);
+      }
+    } catch (err) {
+      console.warn("Could not fetch data/products.json in customizer", err);
+    }
+
+    if (catalogProduct) {
+      state.product.sku = catalogProduct.sku;
+      state.product.name = catalogProduct.name;
+      state.product.color = catalogProduct.colors ? catalogProduct.colors[0] : "Standard";
+      state.product.image = catalogProduct.image || (catalogProduct.images ? catalogProduct.images[0] : "");
+      state.product.category = catalogProduct.category || "General";
+      state.product.capability = catalogProduct.customizationCapability || catalogProduct.customizationPermissions || "Both";
+      if (catalogProduct.placements && catalogProduct.placements.length > 0) {
+        state.product.placements = catalogProduct.placements;
+      }
+    }
+
+    if (savedState && savedState.sku && editIdx === null) {
       state.product = Object.assign(state.product, savedState);
     } else {
-      // Check URL params
-      const params = new URLSearchParams(window.location.search);
       if (params.get("sku")) state.product.sku = params.get("sku");
       if (params.get("name")) state.product.name = params.get("name");
       if (params.get("color")) state.product.color = params.get("color");
@@ -93,7 +131,6 @@
       if (params.get("img")) state.product.image = params.get("img");
       if (params.get("cust")) state.product.capability = params.get("cust");
 
-      const editIdx = params.get("editCartIndex");
       if (editIdx !== null) {
         try {
           const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
@@ -106,6 +143,7 @@
               state.product.color = cartItem.color || state.product.color;
               state.product.size = cartItem.size || state.product.size;
               state.product.qty = cartItem.qty || cartItem.quantity || 50;
+              if (cartItem.image) state.product.image = cartItem.image;
               if (cartItem.customization) {
                 if (cartItem.customization.type === "Text Embroidery") {
                   state.currentMode = "text";
@@ -127,6 +165,11 @@
           console.warn("Failed loading editCartIndex item", e);
         }
       }
+    }
+
+    if (catalogProduct && catalogProduct.images && state.product.color) {
+      const matchCol = catalogProduct.images.find(img => img.toLowerCase().includes(state.product.color.toLowerCase()));
+      if (matchCol) state.product.image = matchCol;
     }
 
     function calibratePlacement(p) {

@@ -924,24 +924,7 @@ document.addEventListener("click", (event) => {
   if (add) addToCart(add.dataset.add);
   if (addBlank) addToCart(selectedProductSku);
 
-  if (edit) {
-    editingCartIndex = Number(edit.dataset.edit);
-    const item = cart[editingCartIndex];
-    if (item) {
-      if (confirm("You will be redirected to the Branding Studio to edit this item. The current item will be removed from your cart.")) {
-        cart.splice(editingCartIndex, 1);
-        saveCart();
-        const queryParams = new URLSearchParams({
-          sku: item.sku || "F8-STUDIO-CUSTOM",
-          name: item.name || "Custom Uniform Garment",
-          color: item.color || "Standard",
-          size: item.size || "Assorted",
-          qty: item.quantity || 50,
-        });
-        window.location.href = `product-customizer.html?_cb=${Date.now()}&${queryParams.toString()}`;
-      }
-    }
-  }
+
   
   if (addSelected) {
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
