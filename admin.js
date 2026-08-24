@@ -961,12 +961,22 @@ if (iframe && navBtns.length > 0) {
         doc.head.appendChild(style);
       }
       
+      // Intercept all link clicks in capture phase to prevent accidental iframe navigation
+      if (!doc.body.getAttribute('data-click-intercepted')) {
+        doc.body.setAttribute('data-click-intercepted', 'true');
+        doc.addEventListener('click', (e) => {
+          const link = e.target.closest('a, button');
+          if (link) {
+            e.preventDefault();
+          }
+        }, true);
+      }
+
       // Make text editable
       const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button', 'td', 'th', 'div'];
       textTags.forEach(tag => {
         const els = doc.querySelectorAll(tag);
         els.forEach(el => {
-          // If element contains only text nodes or inline children
           if (el.children.length === 0 || tag === 'span' || tag === 'a' || tag === 'button' || tag === 'p' || tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
             el.setAttribute('contenteditable', 'true');
           }
@@ -1066,6 +1076,17 @@ if (saveVisualEditorBtn) {
       saveVisualEditorBtn.disabled = true;
       
       const doc = iframe.contentDocument || iframe.contentWindow.document;
+      
+      // Safety check: ensure iframe is not navigated away to product detail page
+      try {
+        const actualPage = iframe.contentWindow.location.pathname.split('/').pop();
+        if (actualPage && actualPage.includes('product.html')) {
+          alert("⚠️ The editor is currently inside a product detail page. Please select 'Home Page' or another page button from the left sidebar before publishing.");
+          saveVisualEditorBtn.textContent = 'Publish Changes';
+          saveVisualEditorBtn.disabled = false;
+          return;
+        }
+      } catch(e) {}
       
       // Deep clone document to strip editor attributes without affecting live preview
       const cleanDoc = doc.documentElement.cloneNode(true);
