@@ -1077,11 +1077,11 @@ if (saveVisualEditorBtn) {
       
       const doc = iframe.contentDocument || iframe.contentWindow.document;
       
-      // Safety check: ensure iframe is not navigated away to product detail page
+      // Safety check: ensure iframe is actually showing currentVisualPage
       try {
-        const actualPage = iframe.contentWindow.location.pathname.split('/').pop();
-        if (actualPage && actualPage.includes('product.html')) {
-          alert("⚠️ The editor is currently inside a product detail page. Please select 'Home Page' or another page button from the left sidebar before publishing.");
+        const actualPage = (iframe.contentWindow.location.pathname.split('/').pop() || '').split('?')[0];
+        if (actualPage && actualPage.endsWith('.html') && actualPage !== currentVisualPage) {
+          alert(`⚠️ The editor preview is currently on '${actualPage}'. You cannot save this onto '${currentVisualPage}'. Please select '${currentVisualPage}' from the left sidebar before publishing.`);
           saveVisualEditorBtn.textContent = 'Publish Changes';
           saveVisualEditorBtn.disabled = false;
           return;
