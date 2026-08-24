@@ -80,7 +80,7 @@
       console.warn("Failed to parse fabric8_customizer_state", e);
     }
 
-    if (savedState && savedState.sku) {
+    if (savedState && savedState.sku && !new URLSearchParams(window.location.search).get("editCartIndex")) {
       state.product = Object.assign(state.product, savedState);
     } else {
       // Check URL params
@@ -92,6 +92,41 @@
       if (params.get("qty")) state.product.qty = parseInt(params.get("qty")) || 50;
       if (params.get("img")) state.product.image = params.get("img");
       if (params.get("cust")) state.product.capability = params.get("cust");
+
+      const editIdx = params.get("editCartIndex");
+      if (editIdx !== null) {
+        try {
+          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
+          if (rawCart) {
+            const parsedCart = JSON.parse(rawCart);
+            const cartItem = parsedCart[parseInt(editIdx)];
+            if (cartItem) {
+              state.product.sku = cartItem.sku || state.product.sku;
+              state.product.name = (cartItem.name || state.product.name).replace(" [Customized]", "");
+              state.product.color = cartItem.color || state.product.color;
+              state.product.size = cartItem.size || state.product.size;
+              state.product.qty = cartItem.qty || cartItem.quantity || 50;
+              if (cartItem.customization) {
+                if (cartItem.customization.type === "Text Embroidery") {
+                  state.currentMode = "text";
+                  if (cartItem.customization.textDetails) {
+                    state.text.line1 = cartItem.customization.textDetails.line1 || "";
+                    state.text.line2 = cartItem.customization.textDetails.line2 || "";
+                    state.text.line3 = cartItem.customization.textDetails.line3 || "";
+                    state.text.fontStyle = cartItem.customization.textDetails.font || "Block";
+                    state.text.swatchName = cartItem.customization.textDetails.threadColor || "Classic Black";
+                  }
+                } else {
+                  state.currentMode = "logo";
+                }
+                state.currentFinish = cartItem.customization.finish || "Embroidery";
+              }
+            }
+          }
+        } catch(e) {
+          console.warn("Failed loading editCartIndex item", e);
+        }
+      }
     }
 
     function calibratePlacement(p) {
@@ -623,6 +658,7 @@
       qty: parseInt(state.product.qty || 50),
       quantity: parseInt(state.product.qty || 50),
       price: "Custom Quotation",
+      originStudio: "Product Customizer",
       branding: brandingDesc,
       image: previewUrl || state.product.image,
       customization: {
@@ -650,7 +686,12 @@
       currentCart = [];
     }
 
-    currentCart.push(cartItem);
+    const editCartIdx = new URLSearchParams(window.location.search).get("editCartIndex");
+    if (editCartIdx !== null && !isNaN(parseInt(editCartIdx)) && currentCart[parseInt(editCartIdx)]) {
+      currentCart[parseInt(editCartIdx)] = cartItem;
+    } else {
+      currentCart.push(cartItem);
+    }
 
     try {
       localStorage.setItem("fabric8QuoteCart", JSON.stringify(currentCart));

@@ -588,7 +588,7 @@ function colorButton(color) {
 function renderCart() {
   const count = $("#cartCount");
   const items = $("#cartItems");
-  if (count) count.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+  if (count) count.textContent = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 0), 0);
   if (!items) return;
   if (!cart.length) {
     items.innerHTML = "<p>No products selected yet.</p>";
@@ -598,13 +598,146 @@ function renderCart() {
     <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px;">
       ${item.image ? `<div style="flex-shrink: 0; width: 70px; height: 70px; background: #fff; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; padding: 4px;"><img src="${item.image}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply;" /></div>` : ''}
       <div class="cart-item-info" style="flex: 1;">
-        <h4 style="margin: 0 0 8px 0; font-size: 14px; color: var(--ink);">${item.name}</h4>
-        <p style="margin: 0 0 12px 0; color: var(--muted); line-height: 1.5; font-size: 13px;">Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity} | ${item.branding || "No branding selected"}</p>
-        <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
+        <h4 style="margin: 0 0 8px 0; font-size: 14px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span>${item.name}</span>
+          <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Catalog"}</span>
+        </h4>
+        <p style="margin: 0 0 10px 0; color: var(--muted); line-height: 1.5; font-size: 13px;">Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity || item.qty || 1} | ${item.branding || "No branding selected"}</p>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit
+          </button>
+          <span style="color: var(--line, #ccc);">|</span>
+          <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
+        </div>
       </div>
     </div>
   `).join("");
 }
+
+window.openEditCartModal = function(idx) {
+  const item = cart[idx];
+  if (!item) return;
+
+  let modal = document.getElementById("editCartModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "editCartModal";
+    modal.className = "product-modal";
+    document.body.appendChild(modal);
+  }
+
+  const pDef = products.find(p => p.sku === item.sku) || item;
+  const availableColors = pDef.colors || [item.color || "White"];
+  const availableSizes = pDef.sizes || ["S", "M", "L", "XL", "2XL"];
+  const moqVal = pDef.moq ? (pDef.moq.replace(/[^0-9]/g, '') || "50") : "1";
+
+  modal.style.display = "flex";
+  modal.innerHTML = `
+    <div class="product-modal-content" style="max-width: 540px; padding: 28px; border-radius: 16px; background: #ffffff; border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(0,0,0,0.18);">
+      <button type="button" class="modal-close" onclick="closeEditCartModal()" style="font-size: 24px; cursor: pointer; background: transparent; border: none;">&times;</button>
+      <div style="display: flex; gap: 16px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 20px;">
+        ${item.image ? `<div style="width: 64px; height: 64px; background: #faf9f5; border: 1px solid var(--line); border-radius: 8px; display: grid; place-items: center; padding: 4px; flex-shrink: 0;"><img src="${item.image}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : ''}
+        <div>
+          <h3 style="margin: 0 0 4px 0; font-size: 17px; text-transform: uppercase; color: var(--ink); font-weight: 900;">Edit Cart Selection</h3>
+          <p style="margin: 0 0 2px 0; font-size: 14px; font-weight: 800; color: var(--green, #2f873d);">${item.name}</p>
+          <span style="font-size: 11px; color: var(--muted); font-weight: 700;">SKU: ${item.sku}</span>
+        </div>
+      </div>
+
+      <form id="editCartItemForm" onsubmit="saveEditCartItem(event, ${idx})">
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Quantity (Min: ${moqVal})</label>
+          <input type="number" id="editItemQty" value="${item.quantity || item.qty || 50}" min="${moqVal}" required style="width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px; font-weight: 700; font-family: inherit;" />
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Size</label>
+          <select id="editItemSize" style="width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; font-weight: 700; background: #fff; font-family: inherit;">
+            ${availableSizes.map(s => `<option value="${s}" ${s === item.size ? 'selected' : ''}>${s}</option>`).join("")}
+          </select>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Color: <span id="editColorLabel" style="color: var(--green, #2f873d); font-weight: 800;">${item.color || "White"}</span></label>
+          <div id="editColorFilter" class="color-filter" style="margin-bottom: 0; display: flex; flex-wrap: wrap; gap: 6px;">
+            ${availableColors.map(c => `<button class="color-dot ${c === item.color ? 'active' : ''}" type="button" data-color="${c}" title="${c}" onclick="selectEditColor('${c}')" style="--swatch:${colorStyle(c)}"><span>${c}</span></button>`).join("")}
+          </div>
+          <input type="hidden" id="editItemColor" value="${item.color || availableColors[0] || 'White'}" />
+        </div>
+
+        <div style="margin-bottom: 24px; padding: 14px; background: #f8f8f6; border: 1px solid var(--line); border-radius: 10px;">
+          <label style="display: block; font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--muted); margin-bottom: 4px;">Customization / Branding</label>
+          <p style="margin: 0 0 10px 0; font-size: 13px; font-weight: 700; color: var(--ink);">${item.branding || "Standard (No Branding Selected)"}</p>
+          <button type="button" onclick="redirectToReCustomize(${idx})" style="padding: 10px 18px; background: var(--ink); color: #fff; border: none; border-radius: 9999px; font-size: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 6px;">
+            ✏️ Re-Customize Logo / Embroidery
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 18px;">
+          <button type="button" onclick="closeEditCartModal()" style="padding: 12px 22px; background: transparent; border: 1px solid var(--line); border-radius: 9999px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cancel</button>
+          <button type="submit" style="padding: 12px 30px; background: var(--green, #2f873d); color: #fff; border: none; border-radius: 9999px; font-size: 13px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  `;
+};
+
+window.closeEditCartModal = function() {
+  const modal = document.getElementById("editCartModal");
+  if (modal) modal.style.display = "none";
+};
+
+window.selectEditColor = function(color) {
+  const input = document.getElementById("editItemColor");
+  const label = document.getElementById("editColorLabel");
+  const container = document.getElementById("editColorFilter");
+  if (input) input.value = color;
+  if (label) label.textContent = color;
+  if (container) {
+    container.querySelectorAll(".color-dot").forEach(b => b.classList.remove("active"));
+    const targetBtn = container.querySelector(`[data-color="${CSS.escape(color)}"]`);
+    if (targetBtn) targetBtn.classList.add("active");
+  }
+};
+
+window.saveEditCartItem = function(e, idx) {
+  e.preventDefault();
+  const item = cart[idx];
+  if (!item) return;
+
+  const newQty = parseInt(document.getElementById("editItemQty").value) || item.quantity || 50;
+  const newSize = document.getElementById("editItemSize").value;
+  const newColor = document.getElementById("editItemColor").value;
+
+  item.quantity = newQty;
+  item.qty = newQty;
+  item.size = newSize;
+  item.color = newColor;
+
+  saveCart();
+  renderCart();
+  closeEditCartModal();
+
+  if (typeof showToast === "function") {
+    showToast("✓ Cart item updated successfully!", "success");
+  }
+};
+
+window.redirectToReCustomize = function(idx) {
+  const item = cart[idx];
+  if (!item) return;
+  const params = new URLSearchParams({
+    sku: item.sku || "F8-001",
+    color: item.color || "White",
+    size: item.size || "M",
+    qty: item.quantity || item.qty || 50,
+    editCartIndex: idx,
+    _cb: Date.now()
+  });
+  const targetPage = (item.originStudio === "Branding Studio") ? "branding-studio.html" : "product-customizer.html";
+  window.location.href = `${targetPage}?${params.toString()}`;
+};
 
 function addToCart(sku) {
   const selectedProduct = products.find((p) => p.sku === sku);
@@ -636,6 +769,7 @@ function addToCart(sku) {
       quantity,
       color: activeCatalogColor,
       size: selectedSize,
+      originStudio: "Product Catalog",
       customizationType: null,
       embroideryData: null,
       logoData: null
@@ -873,6 +1007,9 @@ document.addEventListener("click", (event) => {
     cart.splice(Number(remove.dataset.remove), 1);
     saveCart();
     renderCart();
+  }
+  if (edit) {
+    openEditCartModal(Number(edit.dataset.edit));
   }
 });
 

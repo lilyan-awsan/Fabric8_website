@@ -659,6 +659,7 @@
       color: state.product.color,
       quantity: state.product.qty || 50,
       price: "Custom Quotation",
+      originStudio: "Branding Studio",
       branding: brandingDesc,
       image: previewUrl || state.product.image,
       customization: {
@@ -678,7 +679,12 @@
       currentCart = [];
     }
 
-    currentCart.push(cartItem);
+    const editCartIdx = new URLSearchParams(window.location.search).get("editCartIndex");
+    if (editCartIdx !== null && !isNaN(parseInt(editCartIdx)) && currentCart[parseInt(editCartIdx)]) {
+      currentCart[parseInt(editCartIdx)] = cartItem;
+    } else {
+      currentCart.push(cartItem);
+    }
 
     try {
       localStorage.setItem("fabric8QuoteCart", JSON.stringify(currentCart));
