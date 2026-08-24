@@ -263,50 +263,11 @@
       });
     });
 
-    // Interactive Canvas Drag & Drop positioning
+    // Fixed Canvas Positioning (Manual Drag Disabled per User Request)
     const canvas = document.getElementById("renderCanvas");
-    let isDragging = false;
-
-    function handleDragStart(e) {
-      if (!state.selectedPlacement) return;
-      isDragging = true;
-      canvas.style.cursor = "grabbing";
-      updatePositionFromEvent(e);
-    }
-
-    function handleDragMove(e) {
-      if (!isDragging || !state.selectedPlacement) return;
-      updatePositionFromEvent(e);
-    }
-
-    function handleDragEnd() {
-      isDragging = false;
-      if (canvas) canvas.style.cursor = "grab";
-    }
-
-    function updatePositionFromEvent(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
-      
-      const x = ((clientX - rect.left) / rect.width) * 100;
-      const y = ((clientY - rect.top) / rect.height) * 100;
-
-      state.selectedPlacement.x = Math.max(10, Math.min(90, x));
-      state.selectedPlacement.y = Math.max(10, Math.min(90, y));
-      drawCanvas();
-    }
 
     if (canvas) {
-      canvas.style.cursor = "grab";
-      canvas.addEventListener("mousedown", handleDragStart);
-      canvas.addEventListener("mousemove", handleDragMove);
-      canvas.addEventListener("mouseup", handleDragEnd);
-      canvas.addEventListener("mouseleave", handleDragEnd);
-
-      canvas.addEventListener("touchstart", handleDragStart, { passive: true });
-      canvas.addEventListener("touchmove", handleDragMove, { passive: true });
-      canvas.addEventListener("touchend", handleDragEnd);
+      canvas.style.cursor = "default";
     }
   }
 

@@ -402,29 +402,13 @@
   }
 
   function startDrag(xPx, yPx) {
-    const targetX = state.currentMode === "logo" ? (state.artwork.x / 100) * 800 : (state.text.x / 100) * 800;
-    const targetY = state.currentMode === "logo" ? (state.artwork.y / 100) * 800 : (state.text.y / 100) * 800;
-    const dist = Math.hypot(xPx - targetX, yPx - targetY);
-
-    if (dist < 180) {
-      state.canvas.isDragging = true;
-      state.canvas.dragOffsetX = xPx - targetX;
-      state.canvas.dragOffsetY = yPx - targetY;
-    }
+    // Manual canvas dragging disabled per user specification
+    return;
   }
 
   function dragTo(xPx, yPx) {
-    const newX = Math.max(0, Math.min(800, xPx - state.canvas.dragOffsetX));
-    const newY = Math.max(0, Math.min(800, yPx - state.canvas.dragOffsetY));
-
-    if (state.currentMode === "logo") {
-      state.artwork.x = (newX / 800) * 100;
-      state.artwork.y = (newY / 800) * 100;
-    } else {
-      state.text.x = (newX / 800) * 100;
-      state.text.y = (newY / 800) * 100;
-    }
-    drawCanvas();
+    // Manual canvas dragging disabled per user specification
+    return;
   }
 
   function handleMouseUp() {
