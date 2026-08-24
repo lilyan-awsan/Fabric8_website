@@ -1141,17 +1141,22 @@ if (saveVisualEditorBtn) {
         const statusEl = document.getElementById('visualEditorStatus');
         if (statusEl) statusEl.style.display = 'block';
         showToast("Success! Changes published to GitHub.\nNote: Vercel takes ~30-45s to complete the build for live site.", "success", 10000);
+        alert("✅ Success! Your changes were saved and published to GitHub.\n\nNote: Vercel will update the live production site in ~30-45 seconds.");
         setTimeout(() => { if (statusEl) statusEl.style.display = 'none'; }, 6000);
+        
+        // Refresh preview iframe with cache-buster timestamp
+        setTimeout(() => {
+          if (iframe) iframe.src = currentVisualPage + '?t=' + Date.now();
+        }, 1200);
       } else {
-        showToast("Error saving layout: " + data.message, "error");
+        showToast("Error saving layout: " + (data.message || "Unknown error"), "error");
+        alert("❌ Error saving layout: " + (data.message || "Unknown error"));
       }
     } catch(err) {
       console.error(err);
-      if (err.name === 'AbortError') {
-        showToast("Request timed out. Please try saving again.", "error");
-      } else {
-        showToast("Failed to save layout: " + err.message, "error");
-      }
+      const errMsg = err.name === 'AbortError' ? "Request timed out. Please try saving again." : (err.message || "Failed to communicate with server");
+      showToast("Failed to save layout: " + errMsg, "error");
+      alert("❌ Failed to save layout: " + errMsg);
     } finally {
       saveVisualEditorBtn.textContent = 'Publish Changes';
       saveVisualEditorBtn.disabled = false;
