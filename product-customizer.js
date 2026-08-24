@@ -98,33 +98,33 @@
       if (!p || !p.name) return p;
       const lower = p.name.toLowerCase();
       
-      // Automatically enforce accurate anatomical placement coordinates on the garment image
+      // Automatically enforce accurate anatomical placement coordinates on the garment image (scaled 10% smaller)
       if (lower.includes("left hip")) {
-        return { ...p, x: 62, y: 26, w: 15, h: 15, r: 0 };
+        return { ...p, x: 62, y: 26, w: 13.5, h: 13.5, r: 0 };
       } else if (lower.includes("right hip")) {
-        return { ...p, x: 38, y: 26, w: 15, h: 15, r: 0 };
+        return { ...p, x: 38, y: 26, w: 13.5, h: 13.5, r: 0 };
       } else if (lower.includes("left cargo")) {
-        return { ...p, x: 65, y: 48, w: 16, h: 16, r: 0 };
+        return { ...p, x: 65, y: 48, w: 14.4, h: 14.4, r: 0 };
       } else if (lower.includes("right cargo")) {
-        return { ...p, x: 35, y: 48, w: 16, h: 16, r: 0 };
+        return { ...p, x: 35, y: 48, w: 14.4, h: 14.4, r: 0 };
       } else if (lower.includes("front center panel") || (lower.includes("cap") && lower.includes("front"))) {
-        return { ...p, x: 55, y: 58, w: 22, h: 22, r: 3 };
+        return { ...p, x: 55, y: 58, w: 19.8, h: 19.8, r: 3 };
       } else if (lower.includes("side panel") || (lower.includes("cap") && lower.includes("side"))) {
-        return { ...p, x: 33, y: 56, w: 16, h: 16, r: -12 };
+        return { ...p, x: 33, y: 56, w: 14.4, h: 14.4, r: -12 };
       } else if (lower.includes("left chest pocket") || lower.includes("chest pocket")) {
-        return { ...p, x: 64, y: 46, w: 16, h: 16, r: 0 };
+        return { ...p, x: 64, y: 46, w: 14.4, h: 14.4, r: 0 };
       } else if (lower.includes("left chest")) {
-        return { ...p, x: 63, y: 44, w: 18, h: 18, r: 0 };
+        return { ...p, x: 63, y: 44, w: 16.2, h: 16.2, r: 0 };
       } else if (lower.includes("right chest")) {
-        return { ...p, x: 37, y: 44, w: 18, h: 18, r: 0 };
+        return { ...p, x: 37, y: 44, w: 16.2, h: 16.2, r: 0 };
       } else if (lower.includes("back") || lower.includes("center")) {
-        return { ...p, x: 50, y: 52, w: 42, h: 42, r: 0 };
+        return { ...p, x: 50, y: 52, w: 37.8, h: 37.8, r: 0 };
       } else if (lower.includes("left sleeve") || lower.includes("upper sleeve") || (lower.includes("sleeve") && !lower.includes("right"))) {
-        return { ...p, x: 76, y: 48, w: 14, h: 14, r: 8 };
+        return { ...p, x: 76, y: 48, w: 12.6, h: 12.6, r: 8 };
       } else if (lower.includes("right sleeve")) {
-        return { ...p, x: 24, y: 48, w: 14, h: 14, r: -8 };
+        return { ...p, x: 24, y: 48, w: 12.6, h: 12.6, r: -8 };
       } else if (lower.includes("collar") || lower.includes("neck")) {
-        return { ...p, x: 50, y: 34, w: 20, h: 12, r: 0 };
+        return { ...p, x: 50, y: 34, w: 18, h: 10.8, r: 0 };
       }
       return p;
     }
@@ -137,27 +137,29 @@
       const name = (state.product.name || "").toLowerCase();
       if (cat.includes("bottom") || name.includes("pant") || name.includes("trouser") || name.includes("short") || name.includes("skirt")) {
         state.product.placements = [
-          { name: "Left Hip Pocket", x: 62, y: 26, w: 15, h: 15, r: 0 },
-          { name: "Right Hip Pocket", x: 38, y: 26, w: 15, h: 15, r: 0 },
-          { name: "Left Cargo Pocket / Leg", x: 65, y: 48, w: 16, h: 16, r: 0 },
-          { name: "Right Cargo Pocket / Leg", x: 35, y: 48, w: 16, h: 16, r: 0 }
+          { name: "Left Hip Pocket", x: 62, y: 26, w: 13.5, h: 13.5, r: 0 },
+          { name: "Right Hip Pocket", x: 38, y: 26, w: 13.5, h: 13.5, r: 0 },
+          { name: "Left Cargo Pocket / Leg", x: 65, y: 48, w: 14.4, h: 14.4, r: 0 },
+          { name: "Right Cargo Pocket / Leg", x: 35, y: 48, w: 14.4, h: 14.4, r: 0 }
         ];
       } else if (cat.includes("head") || name.includes("cap") || name.includes("hat") || name.includes("beanie") || name.includes("beret")) {
         state.product.placements = [
-          { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
-          { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
+          { name: "Front Center Panel", x: 55, y: 58, w: 19.8, h: 19.8, r: 3 },
+          { name: "Side Panel", x: 33, y: 56, w: 14.4, h: 14.4, r: -12 }
         ];
       } else {
         state.product.placements = [
-          { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
-          { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
-          { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 },
-          { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+          { name: "Left Chest", x: 63, y: 44, w: 16.2, h: 16.2, r: 0 },
+          { name: "Right Chest", x: 37, y: 44, w: 16.2, h: 16.2, r: 0 },
+          { name: "Full Back", x: 50, y: 52, w: 37.8, h: 37.8, r: 0 },
+          { name: "Upper Sleeve", x: 76, y: 48, w: 12.6, h: 12.6, r: 8 }
         ];
       }
     }
 
-    state.selectedPlacement = state.product.placements[0];
+    // Default placement: prioritize "Front" if available
+    const frontPlacement = state.product.placements.find(p => p.name && p.name.toLowerCase().includes("front"));
+    state.selectedPlacement = frontPlacement || state.product.placements[0];
   }
 
   // Set up Header, Rules Matrix, and Placement Dropdown
@@ -212,19 +214,29 @@
       const validPlacements = allPlacements.filter(p => allowedNames.includes(p.name));
       const displayList = validPlacements.length > 0 ? validPlacements : allPlacements;
 
-      displayList.forEach((p) => {
+      // If Embroidery is active, prioritize "Front" placement if available
+      let defaultIdx = 0;
+      if (state.currentFinish === "Embroidery") {
+        const frontIdx = displayList.findIndex(p => p.name && p.name.toLowerCase().includes("front"));
+        if (frontIdx !== -1) defaultIdx = frontIdx;
+      }
+
+      displayList.forEach((p, idx) => {
         const opt = document.createElement("option");
         opt.value = allPlacements.indexOf(p);
         opt.textContent = p.name || "Placement Zone";
-        if (state.selectedPlacement && state.selectedPlacement.name === p.name) {
+        if (idx === defaultIdx && (!state.selectedPlacement || !displayList.find(x => x.name === state.selectedPlacement.name))) {
+          opt.selected = true;
+          state.selectedPlacement = p;
+        } else if (state.selectedPlacement && state.selectedPlacement.name === p.name) {
           opt.selected = true;
         }
         sel.appendChild(opt);
       });
 
       if (!state.selectedPlacement || !displayList.find(p => p.name === state.selectedPlacement.name)) {
-        state.selectedPlacement = displayList[0];
-        if (sel.options.length > 0) sel.options[0].selected = true;
+        state.selectedPlacement = displayList[defaultIdx] || displayList[0];
+        if (sel.options.length > defaultIdx) sel.options[defaultIdx].selected = true;
       }
     };
     updatePlacementDropdown();

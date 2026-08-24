@@ -17,8 +17,8 @@
       "2XL"
     ],
     "colors": [
-      "American Blue",
       "White",
+      "American Blue",
       "Army Green",
       "Beige",
       "Black",
@@ -137,7 +137,7 @@
       "assets/products/Polo Deep Turquoise.jpg",
       "assets/products/Polo Yellow 4.png"
     ],
-    "image": "assets/products/Polo American Blue 3.png"
+    "image": "assets/products/Polo White Side.png"
   },
   {
     "sku": "F8-002",
@@ -155,12 +155,12 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Vest Black.png",
+    "image": "assets/products/Vest White Back.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -345,8 +345,8 @@
       "2XL"
     ],
     "colors": [
-      "Grey",
-      "White"
+      "White",
+      "Grey"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -356,7 +356,7 @@
       "assets/products/Chef Hat Grey -.png",
       "assets/products/Chef Hat white -.png"
     ],
-    "image": "assets/products/Chef Hat Grey -.png",
+    "image": "assets/products/Chef Hat white -.png",
     "supportedFinishes": [],
     "supportedPlacements": [
       "Front Center Panel",
@@ -406,12 +406,12 @@
       "2XL"
     ],
     "colors": [
+      "White",
       "Black",
-      "Grey",
-      "White"
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Beret Hat Black.png",
+    "image": "assets/products/Beret Hat White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -468,12 +468,12 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Chef Bandana Black.png",
+    "image": "assets/products/Chef Bandana White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -531,11 +531,11 @@
       "2XL"
     ],
     "colors": [
-      "Grey",
-      "White"
+      "White",
+      "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Lab Coat grey.png",
+    "image": "assets/products/Lab Coat White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -813,8 +813,8 @@
       "5XL"
     ],
     "colors": [
-      "American Blue",
       "White",
+      "American Blue",
       "Black",
       "Brown",
       "Burgundy",
@@ -885,7 +885,7 @@
       "assets/products/Cap White.png",
       "assets/products/Cap Yellow 2.png"
     ],
-    "image": "assets/products/Cap American Blue.png"
+    "image": "assets/products/Cap White Side.png"
   },
   {
     "sku": "F8-011",
@@ -903,12 +903,12 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Chef Jacket Black.png",
+    "image": "assets/products/Chef Jacket White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -987,8 +987,8 @@
       "2XL"
     ],
     "colors": [
-      "Beige",
       "White",
+      "Beige",
       "Black",
       "Burgundy",
       "Charcoal",
@@ -999,7 +999,7 @@
       "Olive Green"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Scrub Navy Set.png",
+    "image": "assets/products/Scrub White Set.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1182,8 +1182,8 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey",
       "Black Striped"
     ],
@@ -1199,7 +1199,7 @@
       "assets/products/Full Apron Striped Black.png",
       "assets/products/Full Apron White.png"
     ],
-    "image": "assets/products/Full Apron Black.png",
+    "image": "assets/products/Full Apron White Side.png",
     "supportedFinishes": [
       "Embroidery",
       "DTF"
@@ -1256,13 +1256,13 @@
       "2XL"
     ],
     "colors": [
-      "Grey",
       "White",
+      "Grey",
       "Black",
       "Black Striped"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Full Apron W pocket Grey.png",
+    "image": "assets/products/Full Apron W pocket White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1351,8 +1351,8 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey"
     ],
     "fabric": "Premium Poly-Cotton Blend",
@@ -1408,7 +1408,7 @@
       "assets/products/Half Apron Grey.png",
       "assets/products/Half Apron White.png"
     ],
-    "image": "assets/products/Half Apron Black.png"
+    "image": "assets/products/Half Apron White Back.png"
   },
   {
     "sku": "F8-017",
@@ -1426,13 +1426,13 @@
       "2XL"
     ],
     "colors": [
+      "White",
       "Black",
       "Grey",
-      "Black Striped",
-      "White"
+      "Black Striped"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Half Apron W Pocket Black.png",
+    "image": "assets/products/Half Apron W Pocket White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1519,8 +1519,8 @@
       "2XL"
     ],
     "colors": [
-      "American Blue",
       "White",
+      "American Blue",
       "Army Green",
       "Black",
       "Burgundy",
@@ -1529,7 +1529,7 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/T-shirt American Blue.png",
+    "image": "assets/products/T-shirt White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1622,12 +1622,12 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Oversize Tshirt Black 1.png",
+    "image": "assets/products/Oversize Tshirt White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1714,8 +1714,8 @@
       "2XL"
     ],
     "colors": [
-      "Baby Blue",
       "White",
+      "Baby Blue",
       "Black",
       "Blue",
       "Green",
@@ -1724,7 +1724,7 @@
       "Yellow"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Dri Fit Tshirt Baby Blue.png",
+    "image": "assets/products/Dri Fit Tshirt White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1817,8 +1817,8 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Blue",
       "Green",
       "Grey",
@@ -1827,7 +1827,7 @@
       "Yellow"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Dri Fit Black Polo.png",
+    "image": "assets/products/Dri Fit Polo White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1920,14 +1920,14 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey",
       "Light Blue",
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Shirt Black.png",
+    "image": "assets/products/Shirt White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -2017,13 +2017,13 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Grey",
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Hoodie Black.png",
+    "image": "assets/products/Hoodie White Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -2114,14 +2114,14 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Charcoal",
       "Light Grey",
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Zip up Black -.png",
+    "image": "assets/products/Zip up white Side.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -2305,10 +2305,10 @@
       "2XL"
     ],
     "colors": [
+      "White",
       "Striped",
       "Grey",
-      "Black",
-      "White"
+      "Black"
     ],
     "fabric": "100% Polyester",
     "gsm": "220 GSM",
@@ -2378,6 +2378,6 @@
       "assets/products/1786489445652_Black_Skirt.jpg",
       "assets/products/1786489446396_White_Skirt.jpg"
     ],
-    "image": "assets/products/1786489443792_Striped_Skirt.jpg"
+    "image": "assets/products/1786489446396_White_Skirt.jpg"
   }
 ]

@@ -1154,8 +1154,9 @@ input.error, select.error, textarea.error {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  text-align: left;
-  align-items: flex-start;
+  text-align: center !important;
+  align-items: center !important;
+  justify-content: center !important;
   background: transparent !important;
   border: none !important;
 }
@@ -1167,6 +1168,12 @@ input.error, select.error, textarea.error {
   color: var(--green);
   font-weight: 700;
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .product-card-title {
@@ -1175,6 +1182,7 @@ input.error, select.error, textarea.error {
   margin: 0 0 10px 0;
   line-height: 1.25;
   color: var(--ink);
+  text-align: center;
 }
 
 .product-card-btn {

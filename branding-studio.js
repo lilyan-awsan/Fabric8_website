@@ -264,7 +264,7 @@
 
     const xPx = (state.artwork.x / 100) * 800;
     const yPx = (state.artwork.y / 100) * 800;
-    const boxW = ((state.selectedPlacement ? state.selectedPlacement.w : 20) / 100) * 800;
+    const boxW = ((state.selectedPlacement ? state.selectedPlacement.w : 20) / 100) * 800 * 0.9;
     const aspect = img.naturalWidth / img.naturalHeight || 1;
     let drawW = boxW * state.artwork.scale;
     let drawH = drawW / aspect;
@@ -285,7 +285,7 @@
 
     const xPx = (state.text.x / 100) * 800;
     const yPx = (state.text.y / 100) * 800;
-    const baseSize = 22;
+    const baseSize = 20; // 10% smaller than 22px
 
     ctx.save();
     ctx.translate(xPx, yPx);
@@ -314,8 +314,8 @@
 
     const xPx = (state.selectedPlacement.x / 100) * 800;
     const yPx = (state.selectedPlacement.y / 100) * 800;
-    const wPx = (state.selectedPlacement.w / 100) * 800;
-    const hPx = (state.selectedPlacement.h / 100) * 800;
+    const wPx = (state.selectedPlacement.w / 100) * 800 * 0.9;
+    const hPx = (state.selectedPlacement.h / 100) * 800 * 0.9;
 
     ctx.save();
     ctx.translate(xPx, yPx);
