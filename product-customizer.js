@@ -607,8 +607,9 @@
         currentOffsetY += 28;
       }
 
+      // Line 3: Fixed at 10px scale ratio (~20px canvas)
       if (l3) {
-        ctx.font = `800 24px ${state.text.fontFamily}`;
+        ctx.font = `800 20px ${state.text.fontFamily}`;
         if (state.text.fontStyle === "Block") {
           ctx.fillText(l3, 0, currentOffsetY);
         } else {

@@ -353,32 +353,39 @@
 
   function drawText() {
     const ctx = state.canvas.ctx;
-    if (!state.text.line1 && !state.text.line2 && !state.text.line3) {
+    const l1 = (state.text.line1 || "").trim();
+    const l2 = (state.text.line2 || "").trim();
+    const l3 = (state.text.line3 || "").trim();
+
+    if (!l1 && !l2 && !l3) {
       drawPlacementGuide(false);
       return;
     }
 
     const xPx = (state.text.x / 100) * 800;
     const yPx = (state.text.y / 100) * 800;
-    const baseSize = 20; // 10% smaller than 22px
 
     ctx.save();
     ctx.translate(xPx, yPx);
     ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    const lines = [state.text.line1, state.text.line2, state.text.line3].filter(Boolean);
-    const lineSpacing = baseSize * 1.35;
-    const totalHeight = (lines.length - 1) * lineSpacing;
-    let startY = -totalHeight / 2;
-
-    ctx.font = `900 ${baseSize}px ${state.text.fontStyle || "'Century Gothic', sans-serif"}`;
+    ctx.textBaseline = "top";
     ctx.fillStyle = state.text.swatchHex || "#111111";
 
-    lines.forEach(l => {
-      ctx.fillText(l, 0, startY);
-      startY += lineSpacing;
-    });
+    let currentOffsetY = -30;
+    if (l1) {
+      ctx.font = `900 28px ${state.text.fontStyle || "'Century Gothic', sans-serif"}`;
+      ctx.fillText(l1, 0, currentOffsetY);
+      currentOffsetY += 32;
+    }
+    if (l2) {
+      ctx.font = `800 24px ${state.text.fontStyle || "'Century Gothic', sans-serif"}`;
+      ctx.fillText(l2, 0, currentOffsetY);
+      currentOffsetY += 26;
+    }
+    if (l3) {
+      ctx.font = `800 20px ${state.text.fontStyle || "'Century Gothic', sans-serif"}`;
+      ctx.fillText(l3, 0, currentOffsetY);
+    }
 
     ctx.restore();
   }
