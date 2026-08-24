@@ -1309,7 +1309,8 @@ function initProductPage(sku) {
   }
   
   document.getElementById('productName').textContent = p.name;
-  document.getElementById('productCategory').textContent = p.category;
+  const catEl = document.getElementById('productCategory');
+  if (catEl) catEl.textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
   
   const custSection = document.getElementById("productCustomizationSection");
