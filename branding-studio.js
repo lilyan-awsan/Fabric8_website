@@ -69,9 +69,73 @@
     buildThreadSwatches();
     setupEventListeners();
     setupGarmentSwitcher();
+    initializeBrandingStudioParams();
     renderPlacementOptions();
     drawCanvas();
   });
+
+  function initializeBrandingStudioParams() {
+    const params = new URLSearchParams(window.location.search);
+    const sku = params.get("sku");
+    const color = params.get("color");
+    const size = params.get("size");
+    const qty = params.get("qty");
+    const editIdx = params.get("editCartIndex");
+
+    if (editIdx !== null) {
+      try {
+        const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
+        if (rawCart) {
+          const parsedCart = JSON.parse(rawCart);
+          const cartItem = parsedCart[parseInt(editIdx)];
+          if (cartItem) {
+            if (cartItem.sku) state.product.sku = cartItem.sku;
+            if (cartItem.name) state.product.name = cartItem.name;
+            if (cartItem.color) state.product.color = cartItem.color;
+            if (cartItem.size) state.product.size = cartItem.size;
+            if (cartItem.quantity || cartItem.qty) state.product.qty = cartItem.quantity || cartItem.qty;
+            if (cartItem.image) state.product.image = cartItem.image;
+          }
+        }
+      } catch(e) {
+        console.warn("Error reading editCartIndex in branding studio", e);
+      }
+
+      const submitBtn = document.getElementById("mainAddToCartBtn");
+      if (submitBtn) submitBtn.textContent = "UPDATE CART ITEM";
+      const confirmBtn = document.getElementById("confirmAddToCartBtn");
+      if (confirmBtn) confirmBtn.textContent = "SAVE & UPDATE CART ITEM";
+    } else {
+      if (sku) state.product.sku = sku;
+      if (color) state.product.color = color;
+      if (size) state.product.size = size;
+      if (qty) state.product.qty = parseInt(qty) || 50;
+    }
+
+    const garmentBtns = document.querySelectorAll(".garment-btn");
+    garmentBtns.forEach(btn => {
+      if (btn.dataset.sku === state.product.sku || btn.dataset.color === state.product.color) {
+        garmentBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        if (btn.dataset.name) state.product.name = btn.dataset.name;
+        if (btn.dataset.img) state.product.image = btn.dataset.img;
+      }
+    });
+
+    const nameEl = document.getElementById("headerProdName");
+    const imgEl = document.getElementById("headerProdImg");
+    const skuEl = document.getElementById("headerProdSku");
+    const colorEl = document.getElementById("headerProdColor");
+    const sizeEl = document.getElementById("headerProdSize");
+    const qtyEl = document.getElementById("headerProdQty");
+
+    if (nameEl) nameEl.textContent = state.product.name;
+    if (imgEl && state.product.image) imgEl.src = state.product.image;
+    if (skuEl) skuEl.textContent = `SKU: ${state.product.sku}`;
+    if (colorEl) colorEl.textContent = `Color: ${state.product.color}`;
+    if (sizeEl && state.product.size) sizeEl.textContent = `Size: ${state.product.size}`;
+    if (qtyEl && state.product.qty) qtyEl.textContent = `Qty: ${state.product.qty} Pcs`;
+  }
 
   function setupGarmentSwitcher() {
     const garmentBtns = document.querySelectorAll(".garment-btn");
@@ -653,6 +717,7 @@
       : `Text Embroidery: "${state.text.line1}" (${state.text.swatchName} - ${placementName})`;
 
     const cartItem = {
+      id: "BS-" + Date.now(),
       sku: state.product.sku,
       name: state.product.name,
       size: state.product.size,
@@ -660,6 +725,7 @@
       quantity: state.product.qty || 50,
       price: "Custom Quotation",
       originStudio: "Branding Studio",
+      isBrandingStudio: true,
       branding: brandingDesc,
       image: previewUrl || state.product.image,
       customization: {

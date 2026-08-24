@@ -735,7 +735,13 @@ window.redirectToReCustomize = function(idx) {
     editCartIndex: idx,
     _cb: Date.now()
   });
-  const targetPage = (item.originStudio === "Branding Studio") ? "branding-studio.html" : "product-customizer.html";
+  const isBrandingStudio = item.originStudio === "Branding Studio" || 
+                           item.isBrandingStudio === true || 
+                           (item.branding && item.branding.includes("Custom Logo:")) ||
+                           (item.id && String(item.id).startsWith("BS-")) ||
+                           ["F8-010", "F8-007", "F8-005", "F8-003"].includes(item.sku);
+
+  const targetPage = isBrandingStudio ? "branding-studio.html" : "product-customizer.html";
   window.location.href = `${targetPage}?${params.toString()}`;
 };
 
