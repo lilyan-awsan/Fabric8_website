@@ -109,10 +109,10 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Polo White Front.png",
       "assets/products/Polo American Blue 3.png",
       "assets/products/Polo White Side.png",
       "assets/products/Polo White Back.png",
-      "assets/products/Polo White Front.png",
       "assets/products/Polo Army Green 3.png",
       "assets/products/Polo Beige 2.png",
       "assets/products/Polo Black 3.png",
@@ -137,7 +137,7 @@
       "assets/products/Polo Deep Turquoise.jpg",
       "assets/products/Polo Yellow 4.png"
     ],
-    "image": "assets/products/Polo White Side.png"
+    "image": "assets/products/Polo White Front.png"
   },
   {
     "sku": "F8-002",
@@ -160,7 +160,7 @@
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Vest White Back.png",
+    "image": "assets/products/Vest White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -169,10 +169,10 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Vest White.png",
       "assets/products/Vest Black.png",
       "assets/products/Vest White Back.png",
-      "assets/products/Vest Grey.png",
-      "assets/products/Vest White.png"
+      "assets/products/Vest Grey.png"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -473,7 +473,7 @@
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Chef Bandana White Side.png",
+    "image": "assets/products/Chef Bandana White Front.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -482,9 +482,9 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Chef Bandana White Front.png",
       "assets/products/Chef Bandana Black.png",
       "assets/products/Chef Bandana White Side.png",
-      "assets/products/Chef Bandana White Front.png",
       "assets/products/Chef Bandana Grey.png",
       "assets/products/Chef Bandana White.png"
     ],
@@ -535,7 +535,7 @@
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Lab Coat White Side.png",
+    "image": "assets/products/Lab Coat White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -544,10 +544,10 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Lab Coat White.png",
       "assets/products/Lab Coat grey.png",
       "assets/products/Lab Coat White Side.png",
-      "assets/products/Lab Coat White Back.png",
-      "assets/products/Lab Coat White.png"
+      "assets/products/Lab Coat White Back.png"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -734,9 +734,9 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Trousers Navy Front.png",
       "assets/products/Trousers Beige.png",
       "assets/products/Trousers Black back.png",
-      "assets/products/Trousers Navy Front.png",
       "assets/products/Trousers Black.png",
       "assets/products/Trousers Charcoal.png"
     ],
@@ -870,6 +870,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap White.png",
       "assets/products/Cap American Blue.png",
       "assets/products/Cap White Side.png",
       "assets/products/Cap White Back.png",
@@ -882,10 +883,9 @@
       "assets/products/Cap Light Grey.png",
       "assets/products/Cap Navy.png",
       "assets/products/Cap Red.png",
-      "assets/products/Cap White.png",
       "assets/products/Cap Yellow 2.png"
     ],
-    "image": "assets/products/Cap White Side.png"
+    "image": "assets/products/Cap White.png"
   },
   {
     "sku": "F8-011",
@@ -908,7 +908,7 @@
       "Grey"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Chef Jacket White Side.png",
+    "image": "assets/products/Chef jacket white.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -917,11 +917,11 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Chef jacket white.png",
       "assets/products/Chef Jacket Black.png",
       "assets/products/Chef Jacket White Side.png",
       "assets/products/Chef Jacket White Back.png",
-      "assets/products/Chef Jacket Grey 3.png",
-      "assets/products/Chef jacket white.png"
+      "assets/products/Chef Jacket Grey 3.png"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -1192,14 +1192,14 @@
     "leadTime": "14-21 Business Days",
     "moq": "0",
     "images": [
+      "assets/products/Full Apron White.png",
       "assets/products/Full Apron Black.png",
       "assets/products/Full Apron White Side.png",
       "assets/products/Full Apron White Back.png",
       "assets/products/Full Apron Grey.png",
-      "assets/products/Full Apron Striped Black.png",
-      "assets/products/Full Apron White.png"
+      "assets/products/Full Apron Striped Black.png"
     ],
-    "image": "assets/products/Full Apron White Side.png",
+    "image": "assets/products/Full Apron White.png",
     "supportedFinishes": [
       "Embroidery",
       "DTF"
@@ -1271,8 +1271,8 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
-      "assets/products/Full Apron W pocket Grey.png",
       "assets/products/Full Apron W pocket White.png",
+      "assets/products/Full Apron W pocket Grey.png",
       "assets/products/Full W pocket Apron Black.png",
       "assets/products/Full W pocket Striped Black.png"
     ],
@@ -1403,12 +1403,12 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Half Apron White.png",
       "assets/products/Half Apron Black.png",
       "assets/products/Half Apron White Back.png",
-      "assets/products/Half Apron Grey.png",
-      "assets/products/Half Apron White.png"
+      "assets/products/Half Apron Grey.png"
     ],
-    "image": "assets/products/Half Apron White Back.png"
+    "image": "assets/products/Half Apron White.png"
   },
   {
     "sku": "F8-017",
@@ -1441,10 +1441,10 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Half Apron W Pocket White.png",
       "assets/products/Half Apron W Pocket Black.png",
       "assets/products/Half Apron W Pocket Grey.png",
-      "assets/products/Half Apron W Pocket Striped Black.png",
-      "assets/products/Half Apron W Pocket White.png"
+      "assets/products/Half Apron W Pocket Striped Black.png"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -1529,7 +1529,7 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/T-shirt White Side.png",
+    "image": "assets/products/T-shirt White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1538,6 +1538,7 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/T-shirt White.png",
       "assets/products/T-shirt American Blue.png",
       "assets/products/T-shirt White Side.png",
       "assets/products/T-shirt White Back.png",
@@ -1546,8 +1547,7 @@
       "assets/products/T-shirt Burgundy.png",
       "assets/products/T-shirt Charcoal.png",
       "assets/products/T-shirt Light Blue.png",
-      "assets/products/T-shirt Navy.png",
-      "assets/products/T-shirt White.png"
+      "assets/products/T-shirt Navy.png"
     ],
     "supportedFinishes": [
       "DTF"
@@ -1724,7 +1724,7 @@
       "Yellow"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Dri Fit Tshirt White Side.png",
+    "image": "assets/products/Dri Fit Tshirt White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1733,6 +1733,7 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Dri Fit Tshirt White.png",
       "assets/products/Dri Fit Tshirt Baby Blue.png",
       "assets/products/Dri Fit Tshirt White Side.png",
       "assets/products/Dri Fit Tshirt White Back.png",
@@ -1741,7 +1742,6 @@
       "assets/products/Dri Fit Tshirt Green 1.png",
       "assets/products/Dri Fit Tshirt Grey 2.png",
       "assets/products/Dri Fit Tshirt Red.png",
-      "assets/products/Dri Fit Tshirt White.png",
       "assets/products/Dri Fit Tshirt Yellow.png"
     ],
     "supportedFinishes": [
@@ -1827,7 +1827,7 @@
       "Yellow"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Dri Fit Polo White Side.png",
+    "image": "assets/products/Dri Fit Polo White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1836,6 +1836,7 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Dri Fit Polo White.png",
       "assets/products/Dri Fit Black Polo.png",
       "assets/products/Dri Fit Polo White Side.png",
       "assets/products/Dri Fit Polo White Back.png",
@@ -1844,7 +1845,6 @@
       "assets/products/Dri Fit Green Polo.png",
       "assets/products/Dri Fit Light Blue Polo 1.png",
       "assets/products/Dri Fit polo Red 3.png",
-      "assets/products/Dri Fit Polo White.png",
       "assets/products/Dri Fit Polo Yellow 3.png"
     ],
     "supportedFinishes": [
@@ -1927,7 +1927,7 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Shirt White Side.png",
+    "image": "assets/products/Shirt White.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -1936,13 +1936,13 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Shirt White.png",
       "assets/products/Shirt Black.png",
       "assets/products/Shirt White Side.png",
       "assets/products/Shirt White Back.png",
       "assets/products/Shirt grey.png",
       "assets/products/Shirt Light blue.png",
-      "assets/products/Shirt Navy.png",
-      "assets/products/Shirt White.png"
+      "assets/products/Shirt Navy.png"
     ],
     "supportedFinishes": [
       "Embroidery"
@@ -2023,7 +2023,7 @@
       "Navy"
     ],
     "gender": "Men / Women / Unisex",
-    "image": "assets/products/Hoodie White Side.png",
+    "image": "assets/products/Hoodie White Front.png",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "moq": "50 pieces",
@@ -2032,10 +2032,10 @@
     "branding": "Embroidery, Screen Print, Heat Transfer",
     "availability": "In Stock",
     "images": [
+      "assets/products/Hoodie White Front.png",
       "assets/products/Hoodie Black.png",
       "assets/products/Hoodie White Side.png",
       "assets/products/Hoodie White Back.png",
-      "assets/products/Hoodie White Front.png",
       "assets/products/Hoodie grey.png",
       "assets/products/Hoodie Navy.png",
       "assets/products/Hoodie White.png"

@@ -451,9 +451,9 @@ function renderProducts() {
         </div>
         <div class="product-card-info" style="text-align: center; align-items: center;">
           <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
-            <span>${p.category} | ${p.sku}</span>
+            <span>${p.category}</span>
             ${p.gender ? `<span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">${p.gender}</span>` : ''}
-            ${p.sectors ? `<span style="width: 100%; font-size: 10px; color: var(--muted); text-transform: capitalize; margin-top: 2px; text-align: center;">Sectors: ${p.sectors}</span>` : ''}
+            ${(p.short || p.description) ? `<span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">${p.short || p.description}</span>` : ''}
           </p>
           <h3 class="product-card-title" style="text-align: center;">${p.name}</h3>
         </div>
@@ -1366,13 +1366,26 @@ function getImagesForColor(product, targetColor) {
     }
   });
 
+  let matchedImgs = [];
   if (colorMap.has(targetColor) && colorMap.get(targetColor).length > 0) {
-    return colorMap.get(targetColor);
+    matchedImgs = colorMap.get(targetColor);
+  } else {
+    const tokens = normalizeForMatch(targetColor).split(/\s+|[-/]/).filter(t => t.length > 0);
+    const fallback = product.images.filter(img => tokens.every(t => normalizeForMatch(img).includes(t)));
+    matchedImgs = fallback.length > 0 ? fallback : [product.image || product.images[0]];
   }
 
-  const tokens = normalizeForMatch(targetColor).split(/\s+|[-/]/).filter(t => t.length > 0);
-  const fallback = product.images.filter(img => tokens.every(t => normalizeForMatch(img).includes(t)));
-  return fallback.length > 0 ? fallback : [product.image || product.images[0]];
+  matchedImgs.sort((a, b) => {
+    const aNorm = a.toLowerCase();
+    const bNorm = b.toLowerCase();
+    const aIsFront = aNorm.includes("front") || (aNorm.includes("white.png") && !aNorm.includes("side") && !aNorm.includes("back"));
+    const bIsFront = bNorm.includes("front") || (bNorm.includes("white.png") && !bNorm.includes("side") && !bNorm.includes("back"));
+    if (aIsFront && !bIsFront) return -1;
+    if (!aIsFront && bIsFront) return 1;
+    return 0;
+  });
+
+  return matchedImgs;
 }
 
 function updateGalleryForColor(product, targetColor) {
@@ -1404,7 +1417,7 @@ function updateGalleryForColor(product, targetColor) {
     }
     if (thumbnailsContainer) {
       thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
-        return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === 0 ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === 0 ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
+        return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
       }).join("");
     }
   } else {
@@ -1603,12 +1616,11 @@ function initProductPage(sku) {
 
     const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
     
-    let targetImg = prod.image || "assets/products/Polo White Front.png?v=5";
-    if (prod.images && prod.images.length > 0) {
-      const colorMatch = prod.images.find(img => img.toLowerCase().includes(selectedColor.toLowerCase()));
-      if (colorMatch) targetImg = colorMatch;
-      else targetImg = prod.images[0];
-    }
+    let targetImg = (typeof currentCarouselImages !== 'undefined' && currentCarouselImages[activeCarouselIdx])
+      ? currentCarouselImages[activeCarouselIdx]
+      : (typeof currentCarouselImages !== 'undefined' && currentCarouselImages[0])
+        ? currentCarouselImages[0]
+        : (prod.image || "assets/products/Polo White Front.png?v=5");
     
     let targetSize = sizeDetailsList.length > 0 ? sizeDetailsList.join(", ") : "Standard Commercial Spec";
 
@@ -2109,21 +2121,21 @@ function openTextWizard() {
   const colorContainer = document.getElementById("wizardThreadColors");
   if (colorContainer) {
     colorContainer.innerHTML = threadColors.map(c => 
-      `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-thread-color="${c.name}"></span>`
+      `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: none; border-radius: 50%; width: 30px; height: 30px;" data-thread-color="${c.name}"></span>`
     ).join("");
   }
 
   const bgContainer = document.getElementById("wizardBgColors");
   if (bgContainer) {
     bgContainer.innerHTML = threadColors.map(c => 
-      `<span class="color-dot bg-color-dot ${c.name === embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-bg-color="${c.name}"></span>`
+      `<span class="color-dot bg-color-dot ${c.name === embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: none; border-radius: 50%; width: 30px; height: 30px;" data-bg-color="${c.name}"></span>`
     ).join("");
   }
 
   const borderContainer = document.getElementById("wizardBorderColors");
   if (borderContainer) {
     borderContainer.innerHTML = threadColors.map(c => 
-      `<span class="color-dot border-color-dot ${c.name === embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: 1px solid var(--line); border-radius: 50%; width: 30px; height: 30px;" data-border-color="${c.name}"></span>`
+      `<span class="color-dot border-color-dot ${c.name === embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: none; border-radius: 50%; width: 30px; height: 30px;" data-border-color="${c.name}"></span>`
     ).join("");
   }
   
