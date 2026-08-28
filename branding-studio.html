@@ -679,6 +679,18 @@
           </div>
         </div>
 
+        <div class="form-section" id="logoScaleSection" style="margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="section-label" for="logoScaleInput" style="margin: 0;">Logo Size / Scale</label>
+            <span id="logoScaleValue" style="font-size: 12px; font-weight: 800; color: var(--green, #2f873d);">100%</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" id="btnScaleDown" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--line, #ccc); background: #fff; font-weight: bold; cursor: pointer; display: grid; place-items: center; font-size: 16px;">-</button>
+            <input type="range" id="logoScaleInput" min="40" max="250" value="100" style="flex: 1; accent-color: var(--ink, #111); cursor: pointer;" />
+            <button type="button" id="btnScaleUp" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--line, #ccc); background: #fff; font-weight: bold; cursor: pointer; display: grid; place-items: center; font-size: 16px;">+</button>
+          </div>
+        </div>
+
         <div class="form-section">
           <label class="section-label">Select Finish Technique</label>
           <div class="toggle-grid" id="finishToggleGrid">

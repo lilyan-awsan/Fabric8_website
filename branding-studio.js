@@ -403,31 +403,16 @@
     ctx.translate(xPx, yPx);
     ctx.rotate(((state.selectedPlacement.r || 0) * Math.PI) / 180);
 
-    ctx.strokeStyle = "#3e8e42";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6, 6]);
-    ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
-
     if (withSampleLogo && state.artwork.sampleImg && state.artwork.sampleImg.complete) {
       const sImg = state.artwork.sampleImg;
       const aspect = sImg.naturalWidth / sImg.naturalHeight || 1;
-      let sW = wPx * 0.8;
+      let sW = wPx * 0.8 * (state.artwork.scale || 1);
       let sH = sW / aspect;
-      if (sH > hPx * 0.7) {
-        sH = hPx * 0.7;
+      if (sH > hPx * 0.7 * (state.artwork.scale || 1)) {
+        sH = hPx * 0.7 * (state.artwork.scale || 1);
         sW = sH * aspect;
       }
       ctx.drawImage(sImg, -sW / 2, -sH / 2, sW, sH);
-
-      ctx.fillStyle = "#3e8e42";
-      ctx.font = "bold 11px 'Century Gothic', sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("📍 BRANDING ZONE (SAMPLE LOGO)", 0, hPx / 2 + 16);
-    } else {
-      ctx.fillStyle = "#3e8e42";
-      ctx.font = "bold 13px 'Century Gothic', sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("📍 BRANDING ZONE", 0, 0);
     }
 
     ctx.restore();
@@ -444,6 +429,13 @@
       y: (clientY - rect.top) * scaleY
     };
   }
+
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let startArtX = 0;
+  let startArtY = 0;
+  let startTextX = 0;
+  let startTextY = 0;
 
   function handleMouseDown(e) {
     e.preventDefault();
@@ -473,17 +465,34 @@
   }
 
   function startDrag(xPx, yPx) {
-    // Manual canvas dragging disabled per user specification
-    return;
+    state.canvas.isDragging = true;
+    dragStartX = xPx;
+    dragStartY = yPx;
+    startArtX = state.artwork.x;
+    startArtY = state.artwork.y;
+    startTextX = state.text.x;
+    startTextY = state.text.y;
+    const canvasEl = document.getElementById("renderCanvas");
+    if (canvasEl) canvasEl.style.cursor = "grabbing";
   }
 
   function dragTo(xPx, yPx) {
-    // Manual canvas dragging disabled per user specification
-    return;
+    if (!state.canvas.isDragging) return;
+    const dxPct = ((xPx - dragStartX) / 800) * 100;
+    const dyPct = ((yPx - dragStartY) / 800) * 100;
+
+    state.artwork.x = startArtX + dxPct;
+    state.artwork.y = startArtY + dyPct;
+    state.text.x = startTextX + dxPct;
+    state.text.y = startTextY + dyPct;
+
+    drawCanvas();
   }
 
   function handleMouseUp() {
     state.canvas.isDragging = false;
+    const canvasEl = document.getElementById("renderCanvas");
+    if (canvasEl) canvasEl.style.cursor = "grab";
   }
 
   function setupEventListeners() {
@@ -504,6 +513,31 @@
         const qtyBadge = document.getElementById("headerProdQty");
         if (qtyBadge) qtyBadge.textContent = `Qty: ${val} Pcs`;
       });
+    }
+
+    // Logo scale controls setup
+    const scaleInput = document.getElementById("logoScaleInput");
+    const scaleValText = document.getElementById("logoScaleValue");
+    const btnScaleDown = document.getElementById("btnScaleDown");
+    const btnScaleUp = document.getElementById("btnScaleUp");
+
+    function updateStudioScale(val) {
+      const clampedScale = Math.min(Math.max(0.4, val), 2.5);
+      state.artwork.scale = clampedScale;
+      const pct = Math.round(clampedScale * 100);
+      if (scaleInput) scaleInput.value = pct;
+      if (scaleValText) scaleValText.textContent = `${pct}%`;
+      drawCanvas();
+    }
+
+    if (scaleInput) {
+      scaleInput.addEventListener("input", (e) => updateStudioScale(parseFloat(e.target.value) / 100));
+    }
+    if (btnScaleDown) {
+      btnScaleDown.addEventListener("click", () => updateStudioScale((state.artwork.scale || 1.0) - 0.1));
+    }
+    if (btnScaleUp) {
+      btnScaleUp.addEventListener("click", () => updateStudioScale((state.artwork.scale || 1.0) + 0.1));
     }
 
     // Mode switcher

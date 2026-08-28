@@ -43,7 +43,12 @@
       swatchName: "Classic Black",
       swatchHex: "#111111"
     },
-    garmentImgObj: null
+    garmentImgObj: null,
+    customPos: null,
+    scale: 1.0,
+    isDragging: false,
+    dragStart: { x: 0, y: 0 },
+    posStart: { x: 0, y: 0 }
   };
 
   // Realistic commercial thread swatches
@@ -325,27 +330,99 @@
         const idx = parseInt(e.target.value);
         const placements = state.product.placements || [];
         state.selectedPlacement = placements[idx];
+        state.customPos = null; // Reset custom drag position when dropdown zone changes
         drawCanvas();
       });
     }
 
-    // File Upload Handler with Auto-Background Removal
-    const fileInput = document.getElementById("logoFileInput");
-    fileInput.addEventListener("change", handleLogoUpload);
+    // Logo scale controls setup
+    const scaleInput = document.getElementById("logoScaleInput");
+    const scaleValText = document.getElementById("logoScaleValue");
+    const btnScaleDown = document.getElementById("btnScaleDown");
+    const btnScaleUp = document.getElementById("btnScaleUp");
 
-    // Text input event listeners
-    ["textLine1", "textLine2", "textLine3"].forEach(id => {
-      document.getElementById(id).addEventListener("input", function (e) {
-        state.text[id.replace("text", "").toLowerCase()] = e.target.value;
-        drawCanvas();
-      });
-    });
+    function updateScale(newVal) {
+      const clamped = Math.min(Math.max(40, newVal), 250);
+      state.scale = clamped / 100;
+      if (scaleInput) scaleInput.value = clamped;
+      if (scaleValText) scaleValText.textContent = `${clamped}%`;
+      drawCanvas();
+    }
 
-    // Fixed Canvas Positioning (Manual Drag Disabled per User Request)
+    if (scaleInput) {
+      scaleInput.addEventListener("input", (e) => updateScale(parseInt(e.target.value) || 100));
+    }
+    if (btnScaleDown) {
+      btnScaleDown.addEventListener("click", () => updateScale(Math.round(state.scale * 100) - 10));
+    }
+    if (btnScaleUp) {
+      btnScaleUp.addEventListener("click", () => updateScale(Math.round(state.scale * 100) + 10));
+    }
+
+    // Interactive Drag & Drop + Wheel Resize Canvas Engine
     const canvas = document.getElementById("renderCanvas");
-
     if (canvas) {
-      canvas.style.cursor = "default";
+      canvas.style.cursor = "grab";
+
+      function getCanvasCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: (clientX - rect.left) * (canvas.width / rect.width),
+          y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
+      }
+
+      function startDrag(e) {
+        const coords = getCanvasCoords(e);
+        state.isDragging = true;
+        state.dragStart = coords;
+
+        const p = state.selectedPlacement || { x: 50, y: 44 };
+        const defaultX = (p.x / 100) * canvas.width;
+        const defaultY = (p.y / 100) * canvas.height;
+
+        state.posStart = {
+          x: state.customPos ? state.customPos.x : defaultX,
+          y: state.customPos ? state.customPos.y : defaultY
+        };
+        canvas.style.cursor = "grabbing";
+      }
+
+      function doDrag(e) {
+        if (!state.isDragging) return;
+        if (e.cancelable) e.preventDefault();
+        const coords = getCanvasCoords(e);
+        const dx = coords.x - state.dragStart.x;
+        const dy = coords.y - state.dragStart.y;
+
+        state.customPos = {
+          x: state.posStart.x + dx,
+          y: state.posStart.y + dy
+        };
+        drawCanvas();
+      }
+
+      function stopDrag() {
+        state.isDragging = false;
+        canvas.style.cursor = "grab";
+      }
+
+      canvas.addEventListener("mousedown", startDrag);
+      canvas.addEventListener("mousemove", doDrag);
+      canvas.addEventListener("mouseup", stopDrag);
+      canvas.addEventListener("mouseleave", stopDrag);
+
+      canvas.addEventListener("touchstart", startDrag, { passive: false });
+      canvas.addEventListener("touchmove", doDrag, { passive: false });
+      canvas.addEventListener("touchend", stopDrag);
+
+      canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 10 : -10;
+        updateScale(Math.round(state.scale * 100) + delta);
+      }, { passive: false });
     }
   }
 
@@ -548,8 +625,10 @@
 
     // Get active placement bounds
     const p = state.selectedPlacement || { name: "Left Chest", x: 65, y: 36, w: 18, h: 18, r: 0 };
-    const anchorX = (p.x / 100) * w;
-    const anchorY = (p.y / 100) * h;
+    const defaultAnchorX = (p.x / 100) * w;
+    const defaultAnchorY = (p.y / 100) * h;
+    const anchorX = state.customPos ? state.customPos.x : defaultAnchorX;
+    const anchorY = state.customPos ? state.customPos.y : defaultAnchorY;
     const rotDeg = p.r || 0;
 
     ctx.save();
@@ -560,38 +639,24 @@
 
     const isLogoEmpty = state.currentMode === "logo" && !state.artwork.processedImage;
     const isTextEmpty = state.currentMode === "text" && !state.text.line1.trim() && !state.text.line2.trim() && !state.text.line3.trim();
+    const currentScale = state.scale || 1.0;
 
     if (isLogoEmpty || isTextEmpty) {
       const wPx = ((p.w || 20) / 100) * w;
       const hPx = ((p.h || 20) / 100) * h;
-      ctx.strokeStyle = "#3e8e42";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([6, 6]);
-      ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
 
       if (isLogoEmpty && state.sampleLogoImg && state.sampleLogoImg.complete) {
         const sImg = state.sampleLogoImg;
         const aspect = sImg.naturalWidth / sImg.naturalHeight || 1;
-        let sW = wPx * 0.8;
-        let sH = sW / aspect;
-        if (sH > hPx * 0.7) {
-          sH = hPx * 0.7;
+        let sW = wPx * 0.8 * currentScale;
+        let sH = (sW / aspect);
+        if (sH > hPx * 0.7 * currentScale && !state.customPos) {
+          sH = hPx * 0.7 * currentScale;
           sW = sH * aspect;
         }
         ctx.drawImage(sImg, -sW / 2, -sH / 2, sW, sH);
-
-        ctx.fillStyle = "#3e8e42";
-        ctx.font = "bold 11px 'Century Gothic', sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("📍 BRANDING ZONE (SAMPLE LOGO)", 0, hPx / 2 + 16);
-      } else {
-        ctx.fillStyle = "#3e8e42";
-        ctx.font = "bold 13px 'Century Gothic', sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("📍 BRANDING ZONE", 0, 0);
       }
     } else if (state.currentMode === "logo" && state.artwork.processedImage) {
-      // MODE A: Fixed Placement Sizing Metrics (No user size sliders)
       let targetWRatio = 0.18; // Default chest ~18%
       const pName = p.name ? p.name.toLowerCase() : "";
 
@@ -603,7 +668,7 @@
         targetWRatio = 0.19; // 3.5" - 4.0" width
       }
 
-      const logoW = w * targetWRatio;
+      const logoW = w * targetWRatio * currentScale;
       const aspect = state.artwork.processedImage.height / state.artwork.processedImage.width;
       const logoH = logoW * aspect;
 
