@@ -242,7 +242,7 @@ async function loadProducts() {
   }
 
   try {
-    const res = await fetch('data/products.json');
+    const res = await fetch('data/products.json?t=' + Date.now());
     if (!res.ok) throw new Error("Failed to load products");
     products = await res.json();
     products.sort((a, b) => a.name.localeCompare(b.name));
@@ -548,10 +548,16 @@ function openProductModal(sku) {
   
   $("#modalProductFabric").textContent = selected.fabric || "N/A";
   $("#modalProductGsm").textContent = selected.gsm || "N/A";
-  $("#modalProductMoq").textContent = selected.moq || "N/A";
-  $("#minQtyLabel").textContent = selected.moq ? selected.moq.replace(/[^0-9]/g, '') || "50" : "50";
-  $("#modalProductQuantity").min = $("#minQtyLabel").textContent;
-  $("#modalProductQuantity").value = $("#minQtyLabel").textContent;
+  const moqVal = selected.moq ? selected.moq.replace(/[^0-9]/g, '') || "50" : "50";
+  const maxQtyVal = selected.maxQty || selected.max || "";
+  $("#modalProductMoq").textContent = selected.moq ? `${selected.moq}${maxQtyVal ? ` (Max: ${maxQtyVal})` : ''}` : "N/A";
+  if ($("#minQtyLabel")) $("#minQtyLabel").textContent = moqVal;
+  if ($("#modalProductQuantity")) {
+    $("#modalProductQuantity").min = moqVal;
+    if (maxQtyVal) $("#modalProductQuantity").max = maxQtyVal;
+    else $("#modalProductQuantity").removeAttribute("max");
+    $("#modalProductQuantity").value = moqVal;
+  }
 
   $("#modalProductLeadTime").textContent = selected.leadTime || "N/A";
   $("#modalProductAvailability").textContent = selected.availability || "N/A";
@@ -1644,7 +1650,8 @@ function initProductPage(sku) {
   const matrix = document.getElementById("sizeQtyMatrix");
   const minQtyLabel = document.getElementById("minQtyLabel");
   const moqVal = p.moq ? p.moq.replace(/[^0-9]/g, '') || "50" : "50";
-  if (minQtyLabel) minQtyLabel.textContent = moqVal;
+  const maxQtyVal = p.maxQty || p.max || "";
+  if (minQtyLabel) minQtyLabel.textContent = `${moqVal}${maxQtyVal ? ` | Max: ${maxQtyVal}` : ''}`;
   
   if (matrix) {
     const isOneSize = p.category === "Head Wear" || p.name.toLowerCase().includes("apron");
@@ -1656,7 +1663,7 @@ function initProductPage(sku) {
           <span>${size}</span>
           <span class="chk-indicator" style="font-size: 11px; color: var(--muted);">○</span>
         </button>
-        <input type="number" min="0" placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 8px; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-family: inherit; font-size: 14px; transition: all 0.2s ease;" />
+        <input type="number" min="0" ${maxQtyVal ? `max="${maxQtyVal}"` : ''} placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 8px; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-family: inherit; font-size: 14px; transition: all 0.2s ease;" />
       </div>
     `).join("");
 

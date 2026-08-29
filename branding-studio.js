@@ -214,7 +214,21 @@
       const confirmBtn = document.getElementById("confirmAddToCartBtn");
       if (confirmBtn) confirmBtn.textContent = "SAVE & UPDATE CART ITEM";
     } else {
-      if (sku) state.product.sku = sku;
+      if (sku) {
+        state.product.sku = sku;
+        fetch('data/products.json?t=' + Date.now()).then(r => r.json()).then(catalog => {
+          const item = catalog.find(p => p.sku === sku);
+          if (item) {
+            state.product.name = item.name;
+            if (!color && item.colors && item.colors.length > 0) state.product.color = item.colors[0];
+            if (item.image) state.product.image = item.image;
+            const nameEl = document.getElementById("headerProdName");
+            const imgEl = document.getElementById("headerProdImg");
+            if (nameEl) nameEl.textContent = state.product.name;
+            if (imgEl && state.product.image) imgEl.src = state.product.image;
+          }
+        }).catch(e => console.warn(e));
+      }
       if (color) state.product.color = color;
       if (size) state.product.size = size;
       if (qty) state.product.qty = parseInt(qty) || 50;

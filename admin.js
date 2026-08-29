@@ -216,6 +216,7 @@ function renderTable() {
           document.getElementById("gsm").value = productToDuplicate.gsm || "";
           document.getElementById("leadTime").value = productToDuplicate.leadTime || "";
           document.getElementById("moq").value = productToDuplicate.moq || "";
+          if (document.getElementById("maxQty")) document.getElementById("maxQty").value = productToDuplicate.maxQty || productToDuplicate.max || "";
           document.getElementById("availability").value = productToDuplicate.availability || "";
           document.getElementById("care").value = productToDuplicate.care || "";
           document.getElementById("sketch").value = productToDuplicate.sketch || "";
@@ -541,6 +542,7 @@ function openModal(docId = null) {
       document.getElementById("gsm").value = p.gsm || "";
       document.getElementById("leadTime").value = p.leadTime || "";
       document.getElementById("moq").value = p.moq || "";
+      if (document.getElementById("maxQty")) document.getElementById("maxQty").value = p.maxQty || p.max || "";
       document.getElementById("availability").value = p.availability || "";
       document.getElementById("care").value = p.care || "";
       document.getElementById("sketch").value = p.sketch || "";
@@ -662,6 +664,7 @@ productForm.addEventListener("submit", async (e) => {
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
     moq: document.getElementById("moq").value,
+    maxQty: document.getElementById("maxQty")?.value || "",
     availability: document.getElementById("availability").value,
     care: document.getElementById("care").value,
     sketch: pendingSketchFile ? "PENDING_UPLOAD" : document.getElementById("sketch").value,

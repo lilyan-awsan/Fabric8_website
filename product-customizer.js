@@ -164,7 +164,7 @@
     // Fetch full catalog product details from data/products.json
     let catalogProduct = null;
     try {
-      const res = await fetch('data/products.json');
+      const res = await fetch('data/products.json?t=' + Date.now());
       if (res.ok) {
         const catalog = await res.json();
         let targetSku = paramSku;
