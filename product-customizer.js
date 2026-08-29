@@ -175,16 +175,26 @@
     if (!targetSku && savedState && savedState.sku) targetSku = savedState.sku;
     if (!targetSku) targetSku = "F8-001";
 
-    // Fetch full catalog product details from data/products.json
+    // Fetch full catalog product details from cache or data/products.json
     let catalogProduct = null;
     try {
-      const res = await fetch('data/products.json?t=' + Date.now());
-      if (res.ok) {
-        const catalog = await res.json();
-        catalogProduct = catalog.find(p => p.sku === targetSku);
+      const cached = localStorage.getItem("fabric8_products_cache");
+      if (cached) {
+        const catalog = JSON.parse(cached);
+        if (Array.isArray(catalog)) catalogProduct = catalog.find(p => p.sku === targetSku);
       }
-    } catch (err) {
-      console.warn("Could not fetch data/products.json in customizer", err);
+    } catch (e) {}
+
+    if (!catalogProduct) {
+      try {
+        const res = await fetch('data/products.json?t=' + Date.now());
+        if (res.ok) {
+          const catalog = await res.json();
+          catalogProduct = catalog.find(p => p.sku === targetSku);
+        }
+      } catch (err) {
+        console.warn("Could not fetch data/products.json in customizer", err);
+      }
     }
 
     if (catalogProduct) {

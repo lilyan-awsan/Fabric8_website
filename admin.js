@@ -289,13 +289,19 @@ async function syncWithGithub(action, product) {
     if (data.success) {
       if (data.products) {
         productsList = data.products;
-        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
+        try { 
+          localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); 
+          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+        } catch (e) {}
       }
       if (action === "save_settings" && product) {
-        try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(product)); } catch (e) {}
+        try { 
+          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(product));
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch (e) {}
       }
       renderTable();
-      showToast(`Success! Changes saved successfully.\nNOTE: It takes ~30 seconds to sync globally. Your changes are live on this device immediately.`, "success", 8000);
+      showToast(`Success! Changes saved successfully.\nNOTE: Your changes are live on this device immediately and syncing globally.`, "success", 8000);
       return true;
     } else {
       if (data.message === "Unauthorized") {

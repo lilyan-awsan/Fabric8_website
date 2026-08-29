@@ -262,10 +262,17 @@ async function loadProducts() {
       applySiteSettings();
     }
     if (productsData && Array.isArray(productsData) && productsData.length > 0) {
-      products = productsData;
-      products.sort((a, b) => a.name.localeCompare(b.name));
-      try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
-      initSite();
+      const cacheTimeStr = localStorage.getItem("fabric8_products_cache_time");
+      const cacheTime = cacheTimeStr ? parseInt(cacheTimeStr, 10) : 0;
+      const isRecentAdminSave = (Date.now() - cacheTime) < 900000; // 15-minute protection window
+
+      // Only adopt server response if no recent local admin save is active or server matches/exceeds local count
+      if (!isRecentAdminSave || productsData.length >= (products ? products.length : 0)) {
+        products = productsData;
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
+        initSite();
+      }
     } else if (!products || products.length === 0) {
       initSite();
     }

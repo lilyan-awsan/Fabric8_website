@@ -219,7 +219,8 @@
     } else {
       if (sku) {
         state.product.sku = sku;
-        fetch('data/products.json?t=' + Date.now()).then(r => r.json()).then(catalog => {
+        const loadCatalogItem = (catalog) => {
+          if (!Array.isArray(catalog)) return;
           const item = catalog.find(p => p.sku === sku);
           if (item) {
             state.product.name = item.name;
@@ -230,6 +231,15 @@
             if (nameEl) nameEl.textContent = state.product.name;
             if (imgEl && state.product.image) imgEl.src = state.product.image;
           }
+        };
+
+        try {
+          const cached = localStorage.getItem("fabric8_products_cache");
+          if (cached) loadCatalogItem(JSON.parse(cached));
+        } catch (e) {}
+
+        fetch('data/products.json?t=' + Date.now()).then(r => r.json()).then(catalog => {
+          loadCatalogItem(catalog);
         }).catch(e => console.warn(e));
       }
       if (params.get("name")) state.product.name = params.get("name");
