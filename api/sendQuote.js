@@ -158,8 +158,8 @@ export default async function handler(req, res) {
           let imgExtension = 'jpeg';
           if (fullImgUrl.toLowerCase().endsWith('.png')) imgExtension = 'png';
 
-          const resImg = await fetch(fullImgUrl);
-          if (resImg.ok) {
+          const resImg = await fetch(fullImgUrl, { signal: AbortSignal.timeout(2000) }).catch(() => null);
+          if (resImg && resImg.ok) {
             const arrayBuf = await resImg.arrayBuffer();
             imgBuffer = Buffer.from(arrayBuf);
           }

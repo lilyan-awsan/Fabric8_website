@@ -328,6 +328,21 @@ function saveCart() {
   localStorage.setItem("cart", serialized);
 }
 
+function loadCart() {
+  try {
+    const raw = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        cart.length = 0;
+        cart.push(...parsed);
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to load cart from localStorage", e);
+  }
+}
+
 
 let activeSectorFilter = "All";
 let activeCategoryFilter = "All";
@@ -589,6 +604,7 @@ function colorButton(color) {
 }
 
 function renderCart() {
+  loadCart();
   const count = $("#cartCount");
   const items = $("#cartItems");
   if (count) count.textContent = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 0), 0);
@@ -621,6 +637,8 @@ function renderCart() {
 }
 
 window.openEditCartModal = function(idx) {
+  editingCartIndex = idx;
+  loadCart();
   const item = cart[idx];
   if (!item) return;
 
@@ -708,6 +726,7 @@ window.selectEditColor = function(color) {
 
 window.saveEditCartItem = function(e, idx) {
   e.preventDefault();
+  loadCart();
   const item = cart[idx];
   if (!item) return;
 
@@ -718,7 +737,21 @@ window.saveEditCartItem = function(e, idx) {
   item.quantity = newQty;
   item.qty = newQty;
   item.size = newSize;
-  item.color = newColor;
+
+  if (item.color !== newColor) {
+    item.color = newColor;
+    const pDef = products.find(p => p.sku === item.sku);
+    if (pDef && pDef.images && pDef.images.length > 0) {
+      const matchCol = pDef.images.find(img => img.toLowerCase().includes(newColor.toLowerCase()));
+      if (matchCol) {
+        item.baseGarmentImage = matchCol;
+        if (!item.customizedImage || item.customizedImage === item.image) {
+          item.image = matchCol;
+          item.customizedImage = matchCol;
+        }
+      }
+    }
+  }
 
   saveCart();
   renderCart();
@@ -728,6 +761,7 @@ window.saveEditCartItem = function(e, idx) {
     showToast("✓ Cart item updated successfully!", "success");
   }
 };
+
 
 window.redirectToReCustomize = function(idx) {
   const item = cart[idx];
@@ -1101,6 +1135,42 @@ function triggerMailtoFallback(customerInfo, cart) {
   `;
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
+
+async function compressBase64Image(dataUrl, maxDim = 400, quality = 0.8) {
+  return new Promise((resolve) => {
+    if (!dataUrl || typeof dataUrl !== 'string') return resolve(null);
+    if (!dataUrl.startsWith('data:image/')) {
+      return resolve(dataUrl.includes('base64,') ? dataUrl.split('base64,')[1] : dataUrl);
+    }
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedData = canvas.toDataURL("image/jpeg", quality);
+      resolve(compressedData.split(',')[1]);
+    };
+    img.onerror = () => {
+      resolve(dataUrl.includes('base64,') ? dataUrl.split('base64,')[1] : null);
+    };
+    img.src = dataUrl;
+  });
+}
+
 $("#quoteForm")?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.target;
@@ -1137,30 +1207,31 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     attachments.push({ filename: fileName, content: base64File });
   }
 
-  // Attach customized product mockup pictures and uploaded logo files from cart
-  cart.forEach((item, index) => {
+  // Compress & attach customized product mockup pictures and uploaded logo files from cart
+  for (let index = 0; index < cart.length; index++) {
+    const item = cart[index];
     const mockupImg = item.customizedImage || item.image;
     if (typeof mockupImg === 'string' && mockupImg.startsWith('data:image/')) {
-      const rawBase64 = mockupImg.split(',')[1];
-      if (rawBase64) {
+      const compressedMockup = await compressBase64Image(mockupImg, 400, 0.8);
+      if (compressedMockup) {
         attachments.push({
-          filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.png`,
-          content: rawBase64
+          filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.jpg`,
+          content: compressedMockup
         });
       }
     }
 
     const logoContent = item.artworkSrc || (typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData);
     if (typeof logoContent === 'string' && logoContent.trim() !== '') {
-      const rawLogoBase64 = logoContent.includes('base64,') ? logoContent.split(',')[1] : logoContent;
-      if (rawLogoBase64) {
+      const compressedLogo = await compressBase64Image(logoContent, 400, 0.8);
+      if (compressedLogo) {
         attachments.push({
-          filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.png`,
-          content: rawLogoBase64
+          filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.jpg`,
+          content: compressedLogo
         });
       }
     }
-  });
+  }
 
   const payload = {
     customerInfo,
@@ -1168,12 +1239,17 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     attachments: attachments
   };
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second request timeout safeguard
+
   try {
     const res = await fetch('/api/sendQuote', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
     
     if (res.ok) {
       showToast("Quote request and Excel spreadsheet sent successfully to hello@thefabric8.com!", "success", 8000);
@@ -1189,8 +1265,13 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       triggerMailtoFallback(customerInfo, cart);
     }
   } catch (err) {
-    console.error("Network error:", err);
-    showToast("Vercel Serverless Connection Notice: Could not reach the automated Excel email server (Note: Serverless Excel generation requires testing on your LIVE Vercel web domain rather than local PC preview).\n\nDisplaying backup manual text draft.", "warning", 8000);
+    clearTimeout(timeoutId);
+    console.error("Network or timeout error:", err);
+    if (err.name === 'AbortError') {
+      showToast("Request Timeout Notice: Server response took longer than 10s. Displaying backup quotation draft.", "warning", 8000);
+    } else {
+      showToast("Vercel Serverless Connection Notice: Could not reach automated email server. Displaying backup manual text draft.", "warning", 8000);
+    }
     triggerMailtoFallback(customerInfo, cart);
   } finally {
     if (submitBtn) {
@@ -2586,13 +2667,47 @@ window.openEditBasicDetails = function() {
     if (activeBtn) activeBtn.classList.add("active");
   }
   const qtyInput = document.getElementById("editBasicQty");
-  if (qtyInput) qtyInput.value = item.quantity;
+  if (qtyInput) qtyInput.value = item.quantity || item.qty || 50;
   document.getElementById("editOrderSummaryModal").style.display = "none";
   document.getElementById("editBasicDetailsModal").style.display = "flex";
 }
+
 window.openEditBranding = function() {
+  loadCart();
   const item = cart[editingCartIndex];
   if (!item) return;
+
+  if (!item.customizationType && item.customization) {
+    if (item.customization.type === "Text Embroidery" || item.customization.textDetails) {
+      item.customizationType = "text_embroidery";
+    } else {
+      item.customizationType = "upload_logo";
+    }
+  }
+  if (item.customizationType === "text_embroidery" && !item.embroideryData) {
+    item.embroideryData = {
+      type: "embroidery",
+      size: item.customization?.size || "medium",
+      fontStyle: item.customization?.textDetails?.font?.toLowerCase() || "block",
+      threadColor: item.customization?.textDetails?.threadColor || "Black",
+      lineCount: (item.customization?.textDetails?.line3 ? 3 : (item.customization?.textDetails?.line2 ? 2 : 1)),
+      position: item.customization?.placement || "left_chest",
+      textLines: {
+        line1: item.customization?.textDetails?.line1 || "",
+        line2: item.customization?.textDetails?.line2 || "",
+        line3: item.customization?.textDetails?.line3 || ""
+      }
+    };
+  }
+  if (item.customizationType === "upload_logo" && !item.logoData) {
+    item.logoData = {
+      placement: item.customization?.placement || "left-chest",
+      size: "4",
+      finish: item.customization?.finish || "Embroidery",
+      imageSrc: item.artworkSrc || item.customizedImage || ""
+    };
+  }
+
   const product = products.find(p => p.sku === item.sku);
   document.getElementById("editOrderSummaryModal").style.display = "none";
   if (item.customizationType === "text_embroidery" && item.embroideryData) {
@@ -2703,6 +2818,53 @@ document.addEventListener("click", (e) => {
       }, 100);
     }
   }
+  if (e.target.id === "editBasicDetailsBtn") {
+    const item = cart[editingCartIndex];
+    if (item) {
+      document.getElementById("editBasicQty").value = item.quantity || item.qty || 50;
+      document.getElementById("editBasicSize").value = item.size || "M";
+      const filter = document.getElementById("editBasicColorFilter");
+      const pDef = products.find(p => p.sku === item.sku) || item;
+      const availableColors = pDef.colors || [item.color || "White"];
+      if (filter) {
+        filter.innerHTML = availableColors.map(c => 
+          `<button class="color-dot ${c === item.color ? 'active' : ''}" type="button" data-color="${c}" title="${c}" onclick="selectEditColor('${c}')" style="--swatch:${colorStyle(c)}"><span>${c}</span></button>`
+        ).join("");
+      }
+    }
+    document.getElementById("editOrderSummaryModal").style.display = "none";
+    document.getElementById("editBasicDetailsModal").style.display = "flex";
+  }
+  if (e.target.id === "openEditBrandingBtn") {
+    openEditBranding();
+  }
+  if (e.target.dataset.editThreadColor) {
+    document.querySelectorAll("#editTextThreadColors .color-dot").forEach(dot => dot.classList.remove("active"));
+    e.target.classList.add("active");
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.threadColor = e.target.dataset.editThreadColor;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+    }
+  }
+  if (e.target.dataset.editBgColor) {
+    document.querySelectorAll("#editTextBgColors .color-dot").forEach(dot => dot.classList.remove("active"));
+    e.target.classList.add("active");
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.bgColor = e.target.dataset.editBgColor;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+    }
+  }
+  if (e.target.dataset.editBorderColor) {
+    document.querySelectorAll("#editTextBorderColors .color-dot").forEach(dot => dot.classList.remove("active"));
+    e.target.classList.add("active");
+    const item = cart[editingCartIndex];
+    if (item && item.embroideryData) {
+      item.embroideryData.borderColor = e.target.dataset.editBorderColor;
+      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
+    }
+  }
   if (e.target.id === "closeEditBasicDetails") {
     document.getElementById("editBasicDetailsModal").style.display = "none";
     document.getElementById("editOrderSummaryModal").style.display = "flex";
@@ -2721,46 +2883,30 @@ document.addEventListener("click", (e) => {
     parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
     editColorDot.classList.add("active");
   }
-  const editThreadDot = e.target.closest("#editTextThreadColors .color-dot");
-  if (editThreadDot) {
-    const parent = editThreadDot.parentElement;
-    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
-    editThreadDot.classList.add("active");
-    const item = cart[editingCartIndex];
-    if (item && item.embroideryData) {
-      item.embroideryData.threadColor = editThreadDot.dataset.editThreadColor;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
-    }
-  }
-  const editBgDot = e.target.closest("#editTextBgColors .color-dot");
-  if (editBgDot) {
-    const parent = editBgDot.parentElement;
-    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
-    editBgDot.classList.add("active");
-    const item = cart[editingCartIndex];
-    if (item && item.embroideryData) {
-      item.embroideryData.bgColor = editBgDot.dataset.editBgColor;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
-    }
-  }
-  const editBorderDot = e.target.closest("#editTextBorderColors .color-dot");
-  if (editBorderDot) {
-    const parent = editBorderDot.parentElement;
-    parent.querySelectorAll(".color-dot").forEach((btn) => btn.classList.remove("active"));
-    editBorderDot.classList.add("active");
-    const item = cart[editingCartIndex];
-    if (item && item.embroideryData) {
-      item.embroideryData.borderColor = editBorderDot.dataset.editBorderColor;
-      renderTextPreview(document.getElementById("editTextPreviewBox"), item.embroideryData, true);
-    }
-  }
   if (e.target.id === "saveEditBasicBtn") {
     const item = cart[editingCartIndex];
     if (item) {
       item.size = document.getElementById("editBasicSize").value;
       item.quantity = parseInt(document.getElementById("editBasicQty").value) || item.quantity;
+      item.qty = item.quantity;
       const activeColorDot = document.querySelector("#editBasicColorFilter .color-dot.active");
-      if (activeColorDot) item.color = activeColorDot.dataset.color;
+      if (activeColorDot) {
+        const newCol = activeColorDot.dataset.color;
+        if (item.color !== newCol) {
+          item.color = newCol;
+          const pDef = products.find(p => p.sku === item.sku);
+          if (pDef && pDef.images && pDef.images.length > 0) {
+            const matchCol = pDef.images.find(img => img.toLowerCase().includes(newCol.toLowerCase()));
+            if (matchCol) {
+              item.baseGarmentImage = matchCol;
+              if (!item.customizedImage || item.customizedImage === item.image) {
+                item.image = matchCol;
+                item.customizedImage = matchCol;
+              }
+            }
+          }
+        }
+      }
       saveCart();
       renderCart();
     }
@@ -2769,17 +2915,24 @@ document.addEventListener("click", (e) => {
   }
   if (e.target.id === "saveEditTextBtn") {
     const item = cart[editingCartIndex];
-    if (item && item.customizationType === "text_embroidery") {
+    if (item && (item.customizationType === "text_embroidery" || item.embroideryData)) {
       const activeThreadDot = document.querySelector("#editTextThreadColors .color-dot.active");
       if (activeThreadDot) item.embroideryData.threadColor = activeThreadDot.dataset.editThreadColor;
       document.querySelectorAll(".edit-text-input").forEach(input => {
         const lineNum = input.dataset.line;
-        item.embroideryData.textLines[`line${lineNum}`] = input.value;
+        if (item.embroideryData.textLines) item.embroideryData.textLines[`line${lineNum}`] = input.value;
       });
       let linesText = [];
       for (let i = 1; i <= item.embroideryData.lineCount; i++) linesText.push(item.embroideryData.textLines[`line${i}`]);
       const emblemColorsStr = item.embroideryData.type === "emblem" ? `, Bg: ${item.embroideryData.bgColor}, Border: ${item.embroideryData.borderColor}` : "";
-      item.branding = `Text Embroidery (${item.embroideryData.type}), ${item.embroideryData.selectedStyleSku}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread${emblemColorsStr}, Pos: ${item.embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
+      item.branding = `Text Embroidery (${item.embroideryData.type || 'direct'}), ${item.embroideryData.selectedStyleSku || 'Standard'}, ${item.embroideryData.fontStyle} font, ${item.embroideryData.threadColor} thread${emblemColorsStr}, Pos: ${item.embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
+      if (item.customization) {
+        if (!item.customization.textDetails) item.customization.textDetails = {};
+        item.customization.textDetails.line1 = item.embroideryData.textLines.line1 || "";
+        item.customization.textDetails.line2 = item.embroideryData.textLines.line2 || "";
+        item.customization.textDetails.line3 = item.embroideryData.textLines.line3 || "";
+        item.customization.textDetails.threadColor = item.embroideryData.threadColor;
+      }
       saveCart();
       renderCart();
     }
@@ -2788,11 +2941,16 @@ document.addEventListener("click", (e) => {
   }
   if (e.target.id === "saveEditLogoBtn") {
     const item = cart[editingCartIndex];
-    if (item && item.customizationType === "upload_logo") {
+    if (item && (item.customizationType === "upload_logo" || item.logoData)) {
+      if (!item.logoData) item.logoData = {};
       item.logoData.placement = document.getElementById("editLogoPlacement").value;
       item.logoData.size = document.getElementById("editLogoSize").value;
       item.logoData.finish = document.getElementById("editLogoFinish").value;
       item.branding = `Upload Logo, Placement: ${item.logoData.placement}, Size: ${item.logoData.size}in, Finish: ${item.logoData.finish}`;
+      if (item.customization) {
+        item.customization.placement = item.logoData.placement;
+        item.customization.finish = item.logoData.finish;
+      }
       saveCart();
       renderCart();
     }

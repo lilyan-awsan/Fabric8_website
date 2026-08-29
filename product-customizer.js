@@ -89,7 +89,63 @@
     setupUI();
     loadGarmentImage();
     renderSwatches();
+    syncUIWithState();
   });
+
+  // Sync DOM controls to current state (used when restoring editCartIndex item)
+  function syncUIWithState() {
+    renderSwatches();
+    if (typeof window.switchCustomizerMode === "function") {
+      window.switchCustomizerMode(state.currentMode || "logo");
+    }
+    
+    // Sync text inputs
+    ["line1", "line2", "line3"].forEach(key => {
+      const num = key.replace("line", "");
+      const inp = document.getElementById("textLine" + num);
+      if (inp) inp.value = state.text[key] || "";
+    });
+
+    // Sync font style buttons
+    if (state.text.fontStyle) {
+      document.querySelectorAll(".font-toggle-grid .font-btn").forEach(btn => {
+        const btnText = btn.textContent.trim().toLowerCase();
+        if (btnText.includes(state.text.fontStyle.toLowerCase())) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+    }
+
+    // Sync thread swatches
+    if (state.text.swatchName) {
+      document.querySelectorAll("#swatchesContainer .thread-swatch").forEach(dot => {
+        if (dot.title && dot.title.toLowerCase() === state.text.swatchName.toLowerCase()) {
+          dot.classList.add("active");
+        } else {
+          dot.classList.remove("active");
+        }
+      });
+      const swatchLbl = document.getElementById("selectedSwatchName");
+      if (swatchLbl) swatchLbl.textContent = state.text.swatchName;
+    }
+
+    // Sync scale UI
+    if (state.scale) {
+      const scaleInp = document.getElementById("logoScaleInput");
+      const scaleVal = document.getElementById("logoScaleValue");
+      if (scaleInp) scaleInp.value = Math.round(state.scale * 100);
+      if (scaleVal) scaleVal.textContent = `${Math.round(state.scale * 100)}%`;
+    }
+
+    // Sync finish
+    if (typeof window.selectFinish === "function" && state.currentFinish) {
+      window.selectFinish(state.currentFinish);
+    }
+
+    drawCanvas();
+  }
 
   // Load customizer state from localStorage or fallback query params
   async function initializeState() {
@@ -113,7 +169,7 @@
         const catalog = await res.json();
         let targetSku = paramSku;
         if (!targetSku && editIdx !== null) {
-          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
+          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
           if (rawCart) {
             const parsedCart = JSON.parse(rawCart);
             const cartItem = parsedCart[parseInt(editIdx)];
@@ -180,16 +236,12 @@
               }
               if (cartItem.scale) {
                 state.scale = cartItem.scale;
-                const scaleInp = document.getElementById("logoScaleInput");
-                const scaleVal = document.getElementById("logoScaleValue");
-                if (scaleInp) scaleInp.value = Math.round(cartItem.scale * 100);
-                if (scaleVal) scaleVal.textContent = `${Math.round(cartItem.scale * 100)}%`;
               }
 
               // Restore artwork image if uploaded
               if (cartItem.artworkSrc) {
                 state.artwork.src = cartItem.artworkSrc;
-                state.artwork.fileName = cartItem.customization?.artworkFile || "artwork.png";
+                state.artwork.fileName = cartItem.customization?.artworkFile || cartItem.logoData?.fileName || "artwork.png";
                 const img = new Image();
                 img.onload = () => {
                   state.artwork.rawImage = img;
@@ -199,25 +251,39 @@
                 img.src = cartItem.artworkSrc;
               }
 
+              // Restore text embroidery data if present (from site.js Text Wizard)
+              if (cartItem.embroideryData) {
+                state.currentMode = "text";
+                state.text.line1 = cartItem.embroideryData.textLines?.line1 || "";
+                state.text.line2 = cartItem.embroideryData.textLines?.line2 || "";
+                state.text.line3 = cartItem.embroideryData.textLines?.line3 || "";
+                state.text.fontStyle = cartItem.embroideryData.fontStyle || "Block";
+                state.text.swatchName = cartItem.embroideryData.threadColor || "Classic Black";
+                const sw = THREAD_SWATCHES.find(s => s.name.toLowerCase() === state.text.swatchName.toLowerCase());
+                if (sw) state.text.swatchHex = sw.hex;
+              }
+
+              // Restore customization object if present
               if (cartItem.customization) {
-                if (cartItem.customization.type === "Text Embroidery") {
+                if (cartItem.customization.type === "Text Embroidery" || cartItem.customizationType === "text_embroidery") {
                   state.currentMode = "text";
                   if (cartItem.customization.textDetails) {
-                    state.text.line1 = cartItem.customization.textDetails.line1 || "";
-                    state.text.line2 = cartItem.customization.textDetails.line2 || "";
-                    state.text.line3 = cartItem.customization.textDetails.line3 || "";
-                    state.text.fontStyle = cartItem.customization.textDetails.font || "Block";
-                    state.text.swatchName = cartItem.customization.textDetails.threadColor || "Classic Black";
-
-                    ["line1", "line2", "line3"].forEach(key => {
-                      const inp = document.getElementById("textLine" + key.replace("line", ""));
-                      if (inp) inp.value = state.text[key];
-                    });
+                    state.text.line1 = cartItem.customization.textDetails.line1 || state.text.line1;
+                    state.text.line2 = cartItem.customization.textDetails.line2 || state.text.line2;
+                    state.text.line3 = cartItem.customization.textDetails.line3 || state.text.line3;
+                    state.text.fontStyle = cartItem.customization.textDetails.font || state.text.fontStyle;
+                    state.text.swatchName = cartItem.customization.textDetails.threadColor || state.text.swatchName;
+                    const sw = THREAD_SWATCHES.find(s => s.name.toLowerCase() === state.text.swatchName.toLowerCase());
+                    if (sw) state.text.swatchHex = sw.hex;
                   }
                 } else {
                   state.currentMode = "logo";
                 }
                 state.currentFinish = cartItem.customization.finish || "Embroidery";
+              }
+
+              if (cartItem.selectedPlacement) {
+                state.selectedPlacement = cartItem.selectedPlacement;
               }
             }
           }
@@ -854,6 +920,7 @@
       customPos: state.customPos ? { ...state.customPos } : null,
       scale: state.scale || 1.0,
       selectedPlacement: state.selectedPlacement || null,
+      customizationType: state.currentMode === "logo" ? "upload_logo" : "text_embroidery",
       customization: {
         type: state.currentMode === "logo" ? "Logo Upload" : "Text Embroidery",
         finish: state.currentFinish,
@@ -866,7 +933,27 @@
           font: state.text.fontStyle,
           threadColor: state.text.swatchName
         } : null
-      }
+      },
+      embroideryData: state.currentMode === "text" ? {
+        type: "embroidery",
+        size: state.product.size,
+        fontStyle: state.text.fontStyle,
+        threadColor: state.text.swatchName,
+        lineCount: (state.text.line3 ? 3 : (state.text.line2 ? 2 : 1)),
+        selectedStyleSku: "",
+        position: placementName,
+        textLines: {
+          line1: state.text.line1,
+          line2: state.text.line2,
+          line3: state.text.line3
+        }
+      } : null,
+      logoData: state.currentMode === "logo" ? {
+        placement: placementName,
+        size: "4",
+        finish: state.currentFinish,
+        imageSrc: state.artwork.src || previewUrl || ""
+      } : null
     };
 
     // Push into localStorage cart array (syncing across fabric8QuoteCart, fabric8_cart, and legacy cart)
