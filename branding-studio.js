@@ -417,7 +417,6 @@
     canvasEl.addEventListener("touchend", handleMouseUp);
 
     state.artwork.sampleImg = new Image();
-    state.artwork.sampleImg.crossOrigin = "anonymous";
     state.artwork.sampleImg.onload = drawCanvas;
     state.artwork.sampleImg.src = "assets/fabric8_logo_noneedle_cropped.png";
 
@@ -426,7 +425,9 @@
 
   function loadBaseImage() {
     state.canvas.baseImage = new Image();
-    state.canvas.baseImage.crossOrigin = "anonymous";
+    if (state.product.image && state.product.image.startsWith("http") && !state.product.image.includes(window.location.hostname)) {
+      state.canvas.baseImage.crossOrigin = "anonymous";
+    }
     state.canvas.baseImage.onload = drawCanvas;
     state.canvas.baseImage.onerror = () => {
       console.warn("Could not load base image:", state.product.image);

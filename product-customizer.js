@@ -732,7 +732,6 @@
 
   function loadGarmentImage() {
     state.sampleLogoImg = new Image();
-    state.sampleLogoImg.crossOrigin = "anonymous";
     state.sampleLogoImg.onload = function() { drawCanvas(); };
     const pColor = (state.product.color || "").toLowerCase();
     if (pColor.includes("navy") || pColor.includes("black") || pColor.includes("dark") || pColor.includes("charcoal")) {
@@ -742,13 +741,14 @@
     }
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
+    if (state.product.image && state.product.image.startsWith("http") && !state.product.image.includes(window.location.hostname)) {
+      img.crossOrigin = "anonymous";
+    }
     img.onload = function () {
       state.garmentImgObj = img;
       drawCanvas();
     };
     img.onerror = function () {
-      // Fallback if cross-origin or load fail
       img.src = "assets/fabric8_logo_noneedle_cropped.png";
     };
     img.src = state.product.image || "assets/products/Polo American Blue 3.png?v=5";
