@@ -232,9 +232,18 @@ function applySiteSettings() {
 
 async function loadProducts() {
   try {
+    const cachedSettings = localStorage.getItem("fabric8_admin_settings_cache");
+    if (cachedSettings) {
+      siteSettings = JSON.parse(cachedSettings);
+      applySiteSettings();
+    }
+  } catch (e) {}
+
+  try {
     const settingsRes = await fetch('data/admin_settings.json?t=' + Date.now());
     if (settingsRes.ok) {
       siteSettings = await settingsRes.json();
+      try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
       applySiteSettings();
     }
   } catch (err) {
@@ -242,15 +251,33 @@ async function loadProducts() {
   }
 
   try {
+    const cachedProducts = localStorage.getItem("fabric8_products_cache");
+    if (cachedProducts) {
+      const parsed = JSON.parse(cachedProducts);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        products = parsed;
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        initSite();
+      }
+    }
+  } catch (e) {}
+
+  try {
     const res = await fetch('data/products.json?t=' + Date.now());
-    if (!res.ok) throw new Error("Failed to load products");
-    products = await res.json();
-    products.sort((a, b) => a.name.localeCompare(b.name));
-    initSite();
+    if (res.ok) {
+      const serverProducts = await res.json();
+      if (Array.isArray(serverProducts) && serverProducts.length > 0) {
+        products = serverProducts;
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
+        initSite();
+      }
+    }
   } catch (err) {
-    console.error("Error loading products:", err);
-    // Even if it fails, try to init the site to not leave it blank
-    initSite();
+    console.error("Error loading products from server:", err);
+    if (!products || products.length === 0) {
+      initSite();
+    }
   }
 }
 

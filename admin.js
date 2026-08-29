@@ -137,16 +137,31 @@ logoutBtn.addEventListener("click", () => {
 
 // --- GitHub CMS CRUD ---
 async function fetchProducts() {
-  productTableBody.innerHTML = "<tr><td colspan='5'>Loading product catalog...</td></tr>";
+  try {
+    const cached = localStorage.getItem("fabric8_products_cache");
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        productsList = parsed;
+        productsList.sort((a, b) => a.name.localeCompare(b.name));
+        renderTable();
+      }
+    }
+  } catch (e) {}
+
   try {
     const res = await fetch('data/products.json?t=' + Date.now());
-    if (!res.ok) throw new Error("Failed to read products.json");
-    productsList = await res.json();
-    productsList.sort((a, b) => a.name.localeCompare(b.name));
-    renderTable();
+    if (res.ok) {
+      productsList = await res.json();
+      productsList.sort((a, b) => a.name.localeCompare(b.name));
+      try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
+      renderTable();
+    }
   } catch (error) {
     console.error("Error fetching products:", error);
-    productTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading database. Please check your network or try refreshing the page.</td></tr>";
+    if (!productsList || productsList.length === 0) {
+      productTableBody.innerHTML = "<tr><td colspan='5' style='color:red;'>Error loading database. Please check your network or try refreshing the page.</td></tr>";
+    }
   }
 }
 
@@ -272,9 +287,15 @@ async function syncWithGithub(action, product) {
     
     const data = await res.json();
     if (data.success) {
-      productsList = data.products;
+      if (data.products) {
+        productsList = data.products;
+        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
+      }
+      if (action === "save_settings" && product) {
+        try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(product)); } catch (e) {}
+      }
       renderTable();
-      showToast(`Success! Changes saved successfully.\nNOTE: It takes ~45 seconds to update the live website. Your changes will be live shortly.`, "success", 8000);
+      showToast(`Success! Changes saved successfully.\nNOTE: It takes ~30 seconds to sync globally. Your changes are live on this device immediately.`, "success", 8000);
       return true;
     } else {
       if (data.message === "Unauthorized") {
