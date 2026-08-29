@@ -2400,7 +2400,8 @@
       "Black",
       "White",
       "Navy",
-      "Grey"
+      "Grey",
+      "Orange"
     ],
     "fabric": "",
     "gsm": "",
@@ -2467,7 +2468,9 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "images": [],
+    "images": [
+      "assets/white.png"
+    ],
     "image": "assets/white.png"
   }
 ]
