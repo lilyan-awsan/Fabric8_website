@@ -783,11 +783,14 @@ window.redirectToReCustomize = function(idx) {
   loadCart();
   const item = cart[idx];
   if (!item) return;
+  const cleanImage = (item.baseGarmentImage && !item.baseGarmentImage.startsWith("data:")) ? item.baseGarmentImage : ((item.image && !item.image.startsWith("data:")) ? item.image : "");
   const params = new URLSearchParams({
     sku: item.sku || "F8-001",
+    name: item.name ? item.name.replace(" [Customized]", "") : "",
     color: item.color || "White",
     size: item.size || "M",
     qty: item.quantity || item.qty || 50,
+    img: cleanImage,
     editCartIndex: idx,
     _cb: Date.now()
   });

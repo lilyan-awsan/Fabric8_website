@@ -228,9 +228,15 @@
               if (cartItem.baseGarmentImage && !cartItem.baseGarmentImage.startsWith("data:")) {
                 state.product.baseGarmentImage = cartItem.baseGarmentImage;
                 state.product.image = cartItem.baseGarmentImage;
+              } else if (cartItem.image && !cartItem.image.startsWith("data:")) {
+                state.product.baseGarmentImage = cartItem.image;
+                state.product.image = cartItem.image;
               } else if (catalogProduct && catalogProduct.image) {
                 state.product.baseGarmentImage = catalogProduct.image;
                 state.product.image = catalogProduct.image;
+              } else if (params.get("img")) {
+                state.product.baseGarmentImage = params.get("img");
+                state.product.image = params.get("img");
               }
 
               // Restore custom logo drag position & scale multiplier

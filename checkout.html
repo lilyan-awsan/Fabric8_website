@@ -199,12 +199,14 @@
       const city = document.getElementById(prefix + 'City');
       const state = document.getElementById(prefix + 'State');
       const zip = document.getElementById(prefix + 'Zip');
+      const zipRow = zip ? zip.parentElement : null;
 
       if (!isUS && countrySelect.value !== '') {
-        // Hide US-specific fields
+        // Hide US-specific fields for international locations
         if (addr2) addr2.style.display = 'none';
         if (cityStateRow) cityStateRow.style.display = 'none';
         if (zip) zip.style.display = 'none';
+        if (zipRow) zipRow.style.gridTemplateColumns = '1fr';
         
         // Remove required attributes
         if (city) city.removeAttribute('required');
@@ -212,12 +214,13 @@
         if (zip) zip.removeAttribute('required');
 
         // Update Address 1 placeholder
-        if (addr1) addr1.placeholder = 'Full Address Description*';
+        if (addr1) addr1.placeholder = prefix === 'ship' ? 'Full Street Address / Location Details*' : 'Full Billing Address / Location Details*';
       } else {
-        // Show fields for US
+        // Show structured fields for US
         if (addr2) addr2.style.display = 'block';
         if (cityStateRow) cityStateRow.style.display = 'grid';
         if (zip) zip.style.display = 'block';
+        if (zipRow) zipRow.style.gridTemplateColumns = '1fr 1fr';
 
         // Add required attributes back for shipping
         if (prefix === 'ship') {

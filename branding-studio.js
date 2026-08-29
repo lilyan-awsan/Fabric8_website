@@ -158,6 +158,9 @@
             if (cartItem.baseGarmentImage && !cartItem.baseGarmentImage.startsWith("data:")) {
               state.product.baseGarmentImage = cartItem.baseGarmentImage;
               state.product.image = cartItem.baseGarmentImage;
+            } else if (cartItem.image && !cartItem.image.startsWith("data:")) {
+              state.product.baseGarmentImage = cartItem.image;
+              state.product.image = cartItem.image;
             }
             if (cartItem.customPos) {
               state.artwork.x = cartItem.customPos.x;
