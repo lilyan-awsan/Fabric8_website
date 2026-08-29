@@ -1164,37 +1164,66 @@ function triggerMailtoFallback(customerInfo, cart) {
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-async function compressBase64Image(dataUrl, maxDim = 400, quality = 0.8) {
+async function compressBase64Image(dataUrl, maxDim = 350, quality = 0.7) {
   return new Promise((resolve) => {
     if (!dataUrl || typeof dataUrl !== 'string') return resolve(null);
     if (!dataUrl.startsWith('data:image/')) {
       return resolve(dataUrl.includes('base64,') ? dataUrl.split('base64,')[1] : dataUrl);
     }
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      let width = img.width;
-      let height = img.height;
-      if (width > maxDim || height > maxDim) {
-        if (width > height) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
-        }
+
+    let settled = false;
+    const timeout = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        const parts = dataUrl.split('base64,');
+        resolve(parts[1] || null);
       }
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-      const compressedData = canvas.toDataURL("image/jpeg", quality);
-      resolve(compressedData.split(',')[1]);
+    }, 1000);
+
+    const img = new Image();
+    // Do NOT set crossOrigin on data: URLs as it causes browsers to stall or block onload
+    if (!dataUrl.startsWith('data:')) {
+      img.crossOrigin = "anonymous";
+    }
+
+    img.onload = () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      try {
+        let width = img.width || 350;
+        let height = img.height || 350;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedData = canvas.toDataURL("image/jpeg", quality);
+        const parts = compressedData.split('base64,');
+        resolve(parts[1] || parts[0]);
+      } catch (err) {
+        const parts = dataUrl.split('base64,');
+        resolve(parts[1] || null);
+      }
     };
+
     img.onerror = () => {
-      resolve(dataUrl.includes('base64,') ? dataUrl.split('base64,')[1] : null);
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      const parts = dataUrl.split('base64,');
+      resolve(parts[1] || null);
     };
+
     img.src = dataUrl;
   });
 }
@@ -1280,7 +1309,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   };
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second request timeout safeguard
+  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second request timeout safeguard
 
   try {
     const res = await fetch('/api/sendQuote', {
@@ -1308,7 +1337,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     clearTimeout(timeoutId);
     console.error("Network or timeout error:", err);
     if (err.name === 'AbortError') {
-      showToast("Request Timeout Notice: Server response took longer than 10s. Displaying backup quotation draft.", "warning", 8000);
+      showToast("Request Timeout Notice: Server response took longer than expected. Displaying backup quotation draft.", "warning", 8000);
     } else {
       showToast("Vercel Serverless Connection Notice: Could not reach automated email server. Displaying backup manual text draft.", "warning", 8000);
     }
