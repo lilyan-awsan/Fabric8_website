@@ -674,7 +674,7 @@ window.openEditCartModal = function(idx) {
         </div>
       </div>
 
-      <form id="editCartItemForm" onsubmit="saveEditCartItem(event, ${idx})">
+      <form id="editCartItemForm" onsubmit="saveEditCartItem(event, ${idx}); return false;">
         <div style="margin-bottom: 18px;">
           <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Quantity (Min: ${moqVal})</label>
           <input type="number" id="editItemQty" value="${item.quantity || item.qty || 50}" min="${moqVal}" required style="width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px; font-weight: 700; font-family: inherit;" />
@@ -705,7 +705,7 @@ window.openEditCartModal = function(idx) {
 
         <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 18px;">
           <button type="button" onclick="closeEditCartModal()" style="padding: 12px 22px; background: transparent; border: 1px solid var(--line); border-radius: 9999px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cancel</button>
-          <button type="submit" style="padding: 12px 30px; background: var(--green, #2f873d); color: #fff; border: none; border-radius: 9999px; font-size: 13px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;">Save Changes</button>
+          <button type="button" onclick="saveEditCartItem(event, ${idx})" style="padding: 12px 30px; background: var(--green, #2f873d); color: #fff; border: none; border-radius: 9999px; font-size: 13px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;">Save Changes</button>
         </div>
       </form>
     </div>
@@ -731,29 +731,39 @@ window.selectEditColor = function(color) {
 };
 
 window.saveEditCartItem = function(e, idx) {
-  e.preventDefault();
+  if (e && e.preventDefault) e.preventDefault();
   loadCart();
-  const item = cart[idx];
-  if (!item) return;
+  const targetIdx = parseInt(idx);
+  const item = cart[targetIdx];
+  if (!item) {
+    closeEditCartModal();
+    return;
+  }
 
-  const newQty = parseInt(document.getElementById("editItemQty").value) || item.quantity || 50;
-  const newSize = document.getElementById("editItemSize").value;
-  const newColor = document.getElementById("editItemColor").value;
+  const qtyEl = document.getElementById("editItemQty");
+  const sizeEl = document.getElementById("editItemSize");
+  const colorEl = document.getElementById("editItemColor");
+
+  const newQty = qtyEl ? (parseInt(qtyEl.value) || item.quantity || 50) : (item.quantity || 50);
+  const newSize = sizeEl ? sizeEl.value : (item.size || "M");
+  const newColor = colorEl ? colorEl.value : (item.color || "White");
 
   item.quantity = newQty;
   item.qty = newQty;
   item.size = newSize;
 
-  if (item.color !== newColor) {
+  if (newColor && item.color !== newColor) {
     item.color = newColor;
-    const pDef = products.find(p => p.sku === item.sku);
-    if (pDef && pDef.images && pDef.images.length > 0) {
-      const matchCol = pDef.images.find(img => img.toLowerCase().includes(newColor.toLowerCase()));
-      if (matchCol) {
-        item.baseGarmentImage = matchCol;
-        if (!item.customizedImage || item.customizedImage === item.image) {
-          item.image = matchCol;
-          item.customizedImage = matchCol;
+    if (Array.isArray(products) && products.length > 0) {
+      const pDef = products.find(p => p.sku === item.sku);
+      if (pDef && pDef.images && pDef.images.length > 0) {
+        const matchCol = pDef.images.find(img => img.toLowerCase().includes(newColor.toLowerCase()));
+        if (matchCol) {
+          item.baseGarmentImage = matchCol;
+          if (!item.customizedImage || item.customizedImage === item.image) {
+            item.image = matchCol;
+            item.customizedImage = matchCol;
+          }
         }
       }
     }
