@@ -2379,5 +2379,95 @@
       "assets/products/1786489446396_White_Skirt.jpg"
     ],
     "image": "assets/products/1786489446396_White_Skirt.jpg"
+  },
+  {
+    "id": "F8-TEST99",
+    "sku": "F8-TEST99",
+    "name": "Test Operational Vest",
+    "category": "Outer Wear",
+    "gender": "Unisex",
+    "sectors": "Corporate, Hospitality",
+    "short": "High visibility utility vest for testing",
+    "long": "This is a detailed long description for the test operational vest.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey"
+    ],
+    "fabric": "",
+    "gsm": "",
+    "leadTime": "",
+    "moq": "",
+    "availability": "",
+    "care": "",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [],
+    "image": "assets/white.png"
   }
 ]
