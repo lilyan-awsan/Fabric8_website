@@ -161,24 +161,26 @@
     const paramSku = params.get("sku");
     const editIdx = params.get("editCartIndex");
 
+    let targetSku = paramSku;
+    if (!targetSku && editIdx !== null) {
+      try {
+        const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
+        if (rawCart) {
+          const parsedCart = JSON.parse(rawCart);
+          const cartItem = parsedCart[parseInt(editIdx)];
+          if (cartItem && cartItem.sku) targetSku = cartItem.sku;
+        }
+      } catch (e) {}
+    }
+    if (!targetSku && savedState && savedState.sku) targetSku = savedState.sku;
+    if (!targetSku) targetSku = "F8-001";
+
     // Fetch full catalog product details from data/products.json
     let catalogProduct = null;
     try {
       const res = await fetch('data/products.json?t=' + Date.now());
       if (res.ok) {
         const catalog = await res.json();
-        let targetSku = paramSku;
-        if (!targetSku && editIdx !== null) {
-          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
-          if (rawCart) {
-            const parsedCart = JSON.parse(rawCart);
-            const cartItem = parsedCart[parseInt(editIdx)];
-            if (cartItem && cartItem.sku) targetSku = cartItem.sku;
-          }
-        }
-        if (!targetSku && savedState && savedState.sku) targetSku = savedState.sku;
-        if (!targetSku) targetSku = "F8-001";
-
         catalogProduct = catalog.find(p => p.sku === targetSku);
       }
     } catch (err) {
@@ -197,18 +199,19 @@
       }
     }
 
-    if (savedState && savedState.sku && editIdx === null) {
+    if (savedState && savedState.sku && savedState.sku === targetSku && editIdx === null) {
       state.product = Object.assign(state.product, savedState);
-    } else {
-      if (params.get("sku")) state.product.sku = params.get("sku");
-      if (params.get("name")) state.product.name = params.get("name");
-      if (params.get("color")) state.product.color = params.get("color");
-      if (params.get("size")) state.product.size = params.get("size");
-      if (params.get("qty")) state.product.qty = parseInt(params.get("qty")) || 50;
-      if (params.get("img")) state.product.image = params.get("img");
-      if (params.get("cust")) state.product.capability = params.get("cust");
+    }
 
-      if (editIdx !== null) {
+    if (params.get("sku")) state.product.sku = params.get("sku");
+    if (params.get("name")) state.product.name = params.get("name");
+    if (params.get("color")) state.product.color = params.get("color");
+    if (params.get("size")) state.product.size = params.get("size");
+    if (params.get("qty")) state.product.qty = parseInt(params.get("qty")) || 50;
+    if (params.get("img")) state.product.image = params.get("img");
+    if (params.get("cust")) state.product.capability = params.get("cust");
+
+    if (editIdx !== null) {
         try {
           const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
           if (rawCart) {
@@ -291,7 +294,6 @@
           console.warn("Failed loading editCartIndex item", e);
         }
       }
-    }
 
     if (catalogProduct && catalogProduct.images && state.product.color) {
       const matchCol = catalogProduct.images.find(img => img.toLowerCase().includes(state.product.color.toLowerCase()));
@@ -855,8 +857,6 @@
           ctx.font = `800 ${Math.round(20 * currentScale)}px ${fontFam}`;
           ctx.fillText(l3, 0, currentOffsetY);
         }
-      }
-    }
       }
     }
 

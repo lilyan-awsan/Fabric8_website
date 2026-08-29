@@ -229,6 +229,8 @@
           }
         }).catch(e => console.warn(e));
       }
+      if (params.get("name")) state.product.name = params.get("name");
+      if (params.get("img")) state.product.image = params.get("img");
       if (color) state.product.color = color;
       if (size) state.product.size = size;
       if (qty) state.product.qty = parseInt(qty) || 50;
