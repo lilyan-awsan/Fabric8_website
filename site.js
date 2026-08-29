@@ -1273,7 +1273,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     clearTimeout(timeoutId);
     
     if (res.ok) {
-      showToast("Quote request and Excel spreadsheet sent successfully to hello@thefabric8.com!", "success", 8000);
+      showToast("Order submitted successfully to hello@thefabric8.com! Our team will contact you shortly.", "success", 8000);
       cart.splice(0, cart.length);
       saveCart();
       renderCart();
