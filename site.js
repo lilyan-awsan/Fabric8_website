@@ -1216,31 +1216,43 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     attachments.push({ filename: fileName, content: base64File });
   }
 
-  // Compress & attach customized product mockup pictures and uploaded logo files from cart
-  for (let index = 0; index < cart.length; index++) {
-    const item = cart[index];
+  // Fast parallel compression for customized product mockup pictures and uploaded logo files
+  const attachmentPromises = cart.flatMap((item, index) => {
+    const itemPromises = [];
     const mockupImg = item.customizedImage || item.image;
     if (typeof mockupImg === 'string' && mockupImg.startsWith('data:image/')) {
-      const compressedMockup = await compressBase64Image(mockupImg, 400, 0.8);
-      if (compressedMockup) {
-        attachments.push({
-          filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.jpg`,
-          content: compressedMockup
-        });
-      }
+      itemPromises.push(
+        compressBase64Image(mockupImg, 350, 0.7).then(compressedMockup => {
+          if (compressedMockup) {
+            return {
+              filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.jpg`,
+              content: compressedMockup
+            };
+          }
+          return null;
+        })
+      );
     }
 
     const logoContent = item.artworkSrc || (typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData);
-    if (typeof logoContent === 'string' && logoContent.trim() !== '') {
-      const compressedLogo = await compressBase64Image(logoContent, 400, 0.8);
-      if (compressedLogo) {
-        attachments.push({
-          filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.jpg`,
-          content: compressedLogo
-        });
-      }
+    if (typeof logoContent === 'string' && logoContent.startsWith('data:image/')) {
+      itemPromises.push(
+        compressBase64Image(logoContent, 350, 0.7).then(compressedLogo => {
+          if (compressedLogo) {
+            return {
+              filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.jpg`,
+              content: compressedLogo
+            };
+          }
+          return null;
+        })
+      );
     }
-  }
+    return itemPromises;
+  });
+
+  const resolvedAttachments = (await Promise.all(attachmentPromises)).filter(Boolean);
+  attachments.push(...resolvedAttachments);
 
   const payload = {
     customerInfo,

@@ -151,34 +151,6 @@ export default async function handler(req, res) {
         }
       });
 
-      // Concurrently attempt visual thumbnail overlay whenever binary image formats (.jpg/.png) are supported by ExcelJS
-      try {
-        if (fullImgUrl && !fullImgUrl.toLowerCase().endsWith('.webp') && !fullImgUrl.toLowerCase().endsWith('.gif')) {
-          let imgBuffer = null;
-          let imgExtension = 'jpeg';
-          if (fullImgUrl.toLowerCase().endsWith('.png')) imgExtension = 'png';
-
-          const resImg = await fetch(fullImgUrl, { signal: AbortSignal.timeout(2000) }).catch(() => null);
-          if (resImg && resImg.ok) {
-            const arrayBuf = await resImg.arrayBuffer();
-            imgBuffer = Buffer.from(arrayBuf);
-          }
-
-          if (imgBuffer) {
-            const imageId = workbook.addImage({
-              buffer: imgBuffer,
-              extension: imgExtension,
-            });
-            sheet.addImage(imageId, {
-              tl: { col: 1.1, row: row.number - 1 + 0.1 },
-              br: { col: 1.9, row: row.number - 0.1 },
-              editAs: 'oneCell'
-            });
-          }
-        }
-      } catch (imgErr) {
-        console.warn(`Could not overlay picture bitmap for SKU ${item.sku}:`, imgErr.message);
-      }
     }
 
     const endRow = tableHeaderRow.number + cart.length;
