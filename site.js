@@ -764,6 +764,7 @@ window.saveEditCartItem = function(e, idx) {
 
 
 window.redirectToReCustomize = function(idx) {
+  loadCart();
   const item = cart[idx];
   if (!item) return;
   const params = new URLSearchParams({
@@ -774,11 +775,19 @@ window.redirectToReCustomize = function(idx) {
     editCartIndex: idx,
     _cb: Date.now()
   });
-  const isBrandingStudio = item.originStudio === "Branding Studio" || 
-                           item.isBrandingStudio === true || 
-                           (item.branding && item.branding.includes("Custom Logo:")) ||
-                           (item.id && String(item.id).startsWith("BS-")) ||
-                           ["F8-010", "F8-007", "F8-005", "F8-003"].includes(item.sku);
+
+  let isBrandingStudio = false;
+  if (item.originStudio === "Branding Studio") {
+    isBrandingStudio = true;
+  } else if (item.originStudio === "Product Customizer") {
+    isBrandingStudio = false;
+  } else if (item.isBrandingStudio === true || (item.id && String(item.id).startsWith("BS-"))) {
+    isBrandingStudio = true;
+  } else if (item.branding && (item.branding.toLowerCase().includes("branding studio") || item.branding.toLowerCase().includes("custom logo:"))) {
+    isBrandingStudio = true;
+  } else {
+    isBrandingStudio = false;
+  }
 
   const targetPage = isBrandingStudio ? "branding-studio.html" : "product-customizer.html";
   window.location.href = `${targetPage}?${params.toString()}`;
@@ -2674,8 +2683,10 @@ window.openEditBasicDetails = function() {
 
 window.openEditBranding = function() {
   loadCart();
-  const item = cart[editingCartIndex];
-  if (!item) return;
+  if (editingCartIndex >= 0 && cart[editingCartIndex]) {
+    redirectToReCustomize(editingCartIndex);
+    return;
+  }
 
   if (!item.customizationType && item.customization) {
     if (item.customization.type === "Text Embroidery" || item.customization.textDetails) {
