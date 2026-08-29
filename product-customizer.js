@@ -39,7 +39,7 @@
       line2: "",
       line3: "",
       fontStyle: "Block", // "Block", "Serif", "Script"
-      fontFamily: "'Acumin Variable Concept', system-ui, sans-serif",
+      fontFamily: "'Century Gothic', Arial, sans-serif",
       swatchName: "Classic Black",
       swatchHex: "#111111"
     },
@@ -50,6 +50,22 @@
     dragStart: { x: 0, y: 0 },
     posStart: { x: 0, y: 0 }
   };
+
+  function getCartPreviewThumbnail() {
+    try {
+      const canvas = document.getElementById("renderCanvas");
+      if (!canvas) return "";
+      const thumbCanvas = document.createElement("canvas");
+      thumbCanvas.width = 300;
+      thumbCanvas.height = 300;
+      const tCtx = thumbCanvas.getContext("2d");
+      tCtx.drawImage(canvas, 0, 0, 300, 300);
+      return thumbCanvas.toDataURL("image/jpeg", 0.85);
+    } catch (e) {
+      const canvas = document.getElementById("renderCanvas");
+      return canvas ? canvas.toDataURL("image/png") : "";
+    }
+  }
 
   // Realistic commercial thread swatches
   const THREAD_SWATCHES = [
@@ -138,7 +154,7 @@
 
       if (editIdx !== null) {
         try {
-          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
+          const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
           if (rawCart) {
             const parsedCart = JSON.parse(rawCart);
             const cartItem = parsedCart[parseInt(editIdx)];
@@ -148,7 +164,41 @@
               state.product.color = cartItem.color || state.product.color;
               state.product.size = cartItem.size || state.product.size;
               state.product.qty = cartItem.qty || cartItem.quantity || 50;
-              if (cartItem.image) state.product.image = cartItem.image;
+
+              // Base garment image MUST be clean garment (never base64 DataURL preview)
+              if (cartItem.baseGarmentImage && !cartItem.baseGarmentImage.startsWith("data:")) {
+                state.product.baseGarmentImage = cartItem.baseGarmentImage;
+                state.product.image = cartItem.baseGarmentImage;
+              } else if (catalogProduct && catalogProduct.image) {
+                state.product.baseGarmentImage = catalogProduct.image;
+                state.product.image = catalogProduct.image;
+              }
+
+              // Restore custom logo drag position & scale multiplier
+              if (cartItem.customPos) {
+                state.customPos = { ...cartItem.customPos };
+              }
+              if (cartItem.scale) {
+                state.scale = cartItem.scale;
+                const scaleInp = document.getElementById("logoScaleInput");
+                const scaleVal = document.getElementById("logoScaleValue");
+                if (scaleInp) scaleInp.value = Math.round(cartItem.scale * 100);
+                if (scaleVal) scaleVal.textContent = `${Math.round(cartItem.scale * 100)}%`;
+              }
+
+              // Restore artwork image if uploaded
+              if (cartItem.artworkSrc) {
+                state.artwork.src = cartItem.artworkSrc;
+                state.artwork.fileName = cartItem.customization?.artworkFile || "artwork.png";
+                const img = new Image();
+                img.onload = () => {
+                  state.artwork.rawImage = img;
+                  state.artwork.processedImage = img;
+                  drawCanvas();
+                };
+                img.src = cartItem.artworkSrc;
+              }
+
               if (cartItem.customization) {
                 if (cartItem.customization.type === "Text Embroidery") {
                   state.currentMode = "text";
@@ -158,6 +208,11 @@
                     state.text.line3 = cartItem.customization.textDetails.line3 || "";
                     state.text.fontStyle = cartItem.customization.textDetails.font || "Block";
                     state.text.swatchName = cartItem.customization.textDetails.threadColor || "Classic Black";
+
+                    ["line1", "line2", "line3"].forEach(key => {
+                      const inp = document.getElementById("textLine" + key.replace("line", ""));
+                      if (inp) inp.value = state.text[key];
+                    });
                   }
                 } else {
                   state.currentMode = "logo";
@@ -335,6 +390,23 @@
       });
     }
 
+    // Logo upload input listener
+    const logoFileInp = document.getElementById("logoFileInput");
+    if (logoFileInp) {
+      logoFileInp.addEventListener("change", handleLogoUpload);
+    }
+
+    // Text inputs listeners
+    ["line1", "line2", "line3"].forEach((lineKey, index) => {
+      const inp = document.getElementById(`textLine${index + 1}`);
+      if (inp) {
+        inp.addEventListener("input", (e) => {
+          state.text[lineKey] = e.target.value;
+          drawCanvas();
+        });
+      }
+    });
+
     // Logo scale controls setup
     const scaleInput = document.getElementById("logoScaleInput");
     const scaleValText = document.getElementById("logoScaleValue");
@@ -475,9 +547,9 @@
     document.querySelectorAll(".font-toggle-grid .font-btn").forEach(btn => btn.classList.remove("active"));
     btnEl.classList.add("active");
 
-    if (styleName === "Block") state.text.fontFamily = "'Acumin Variable Concept', system-ui, sans-serif";
-    else if (styleName === "Serif") state.text.fontFamily = "'Times New Roman', serif";
-    else if (styleName === "Script") state.text.fontFamily = "'Brush Script MT', cursive";
+    if (styleName === "Block") state.text.fontFamily = "'Century Gothic', Arial, sans-serif";
+    else if (styleName === "Serif") state.text.fontFamily = "'Times New Roman', Georgia, serif";
+    else if (styleName === "Script") state.text.fontFamily = "'Brush Script MT', cursive, sans-serif";
 
     drawCanvas();
   };
@@ -515,6 +587,7 @@
     state.artwork.fileName = file.name;
     const reader = new FileReader();
     reader.onload = function (e) {
+      state.artwork.src = e.target.result;
       const img = new Image();
       img.onload = function () {
         state.artwork.rawImage = img;
@@ -637,15 +710,17 @@
       ctx.rotate((rotDeg * Math.PI) / 180);
     }
 
-    const isLogoEmpty = state.currentMode === "logo" && !state.artwork.processedImage;
-    const isTextEmpty = state.currentMode === "text" && !state.text.line1.trim() && !state.text.line2.trim() && !state.text.line3.trim();
+    const isLogoMode = state.currentMode === "logo";
+    const isTextMode = state.currentMode === "text";
+    const isLogoEmpty = isLogoMode && !state.artwork.processedImage;
+    const isTextEmpty = isTextMode && !state.text.line1.trim() && !state.text.line2.trim() && !state.text.line3.trim();
     const currentScale = state.scale || 1.0;
 
-    if (isLogoEmpty || isTextEmpty) {
+    if (isLogoMode && isLogoEmpty) {
       const wPx = ((p.w || 20) / 100) * w;
       const hPx = ((p.h || 20) / 100) * h;
 
-      if (isLogoEmpty && state.sampleLogoImg && state.sampleLogoImg.complete) {
+      if (state.sampleLogoImg && state.sampleLogoImg.complete) {
         const sImg = state.sampleLogoImg;
         const aspect = sImg.naturalWidth / sImg.naturalHeight || 1;
         let sW = wPx * 0.8 * currentScale;
@@ -656,7 +731,7 @@
         }
         ctx.drawImage(sImg, -sW / 2, -sH / 2, sW, sH);
       }
-    } else if (state.currentMode === "logo" && state.artwork.processedImage) {
+    } else if (isLogoMode && state.artwork.processedImage) {
       let targetWRatio = 0.18; // Default chest ~18%
       const pName = p.name ? p.name.toLowerCase() : "";
 
@@ -675,54 +750,47 @@
       // Draw centered on anchor
       ctx.drawImage(state.artwork.processedImage, -logoW / 2, -logoH / 2, logoW, logoH);
 
-    } else if (state.currentMode === "text") {
+    } else if (isTextMode) {
       // MODE B: Text Embroidery Workflow - Strict sizing & straight line lock
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // Thread shadow texture effect
       ctx.shadowColor = "rgba(0,0,0,0.35)";
       ctx.shadowBlur = 3;
       ctx.shadowOffsetX = 1.5;
       ctx.shadowOffsetY = 1.5;
 
-      ctx.fillStyle = state.text.swatchHex;
+      ctx.fillStyle = state.text.swatchHex || "#111111";
 
-      const l1 = state.text.line1.trim();
-      const l2 = state.text.line2.trim();
-      const l3 = state.text.line3.trim();
+      const l1 = (state.text.line1 || "").trim();
+      const l2 = (state.text.line2 || "").trim();
+      const l3 = (state.text.line3 || "").trim();
 
-      // Line 1: Fixed at 14px scale ratio (~28px canvas)
-      let currentOffsetY = 0;
-      if (l1) {
-        ctx.font = `900 28px ${state.text.fontFamily}`;
-        if (state.text.fontStyle === "Block") {
+      if (!l1 && !l2 && !l3) {
+        ctx.font = `bold ${Math.round(24 * currentScale)}px 'Century Gothic', Arial, sans-serif`;
+        ctx.fillStyle = "rgba(80, 80, 80, 0.55)";
+        ctx.fillText("[ YOUR TEXT HERE ]", 0, 0);
+      } else {
+        let currentOffsetY = 0;
+        const fontFam = state.text.fontFamily || "'Century Gothic', Arial, sans-serif";
+        if (l1) {
+          ctx.font = `900 ${Math.round(28 * currentScale)}px ${fontFam}`;
           ctx.fillText(l1, 0, currentOffsetY);
-        } else {
-          ctx.fillText(l1, 0, currentOffsetY);
+          currentOffsetY += Math.round(32 * currentScale);
         }
-        currentOffsetY += 32;
-      }
 
-      // Lines 2 & 3: Fixed at 12px scale ratio (~24px canvas)
-      if (l2) {
-        ctx.font = `800 24px ${state.text.fontFamily}`;
-        if (state.text.fontStyle === "Block") {
+        if (l2) {
+          ctx.font = `800 ${Math.round(24 * currentScale)}px ${fontFam}`;
           ctx.fillText(l2, 0, currentOffsetY);
-        } else {
-          ctx.fillText(l2, 0, currentOffsetY);
+          currentOffsetY += Math.round(28 * currentScale);
         }
-        currentOffsetY += 28;
-      }
 
-      // Line 3: Fixed at 10px scale ratio (~20px canvas)
-      if (l3) {
-        ctx.font = `800 20px ${state.text.fontFamily}`;
-        if (state.text.fontStyle === "Block") {
-          ctx.fillText(l3, 0, currentOffsetY);
-        } else {
+        if (l3) {
+          ctx.font = `800 ${Math.round(20 * currentScale)}px ${fontFam}`;
           ctx.fillText(l3, 0, currentOffsetY);
         }
+      }
+    }
       }
     }
 
@@ -731,6 +799,7 @@
 
   // Summary Modal controls
   window.openSummaryModal = function () {
+    drawCanvas();
     const canvas = document.getElementById("renderCanvas");
     const previewUrl = canvas.toDataURL("image/png");
 
@@ -750,18 +819,27 @@
   };
 
   window.confirmAndAddToCart = function () {
-    const canvas = document.getElementById("renderCanvas");
-    const previewUrl = canvas.toDataURL("image/png");
+    drawCanvas();
+    const previewUrl = getCartPreviewThumbnail();
     const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Default";
 
     const brandingDesc = state.currentMode === "logo" 
       ? `Custom Logo (${state.currentFinish} on ${placementName})`
       : `Text Embroidery (${state.text.fontStyle} font, ${state.text.swatchName} thread on ${placementName})`;
 
+    // Determine clean base garment image
+    let cleanGarment = state.product.baseGarmentImage;
+    if (!cleanGarment || cleanGarment.startsWith("data:")) {
+      cleanGarment = state.product.image;
+    }
+    if (!cleanGarment || cleanGarment.startsWith("data:")) {
+      cleanGarment = "assets/products/Polo White Front.png?v=5";
+    }
+
     const cartItem = {
       id: "F8-CUST-" + Date.now(),
       sku: state.product.sku,
-      name: `${state.product.name} [Customized]`,
+      name: state.product.name.includes("[Customized]") ? state.product.name : `${state.product.name} [Customized]`,
       color: state.product.color,
       size: state.product.size,
       qty: parseInt(state.product.qty || 50),
@@ -769,7 +847,13 @@
       price: "Custom Quotation",
       originStudio: "Product Customizer",
       branding: brandingDesc,
-      image: previewUrl || state.product.image,
+      baseGarmentImage: cleanGarment,
+      image: previewUrl || cleanGarment,
+      customizedImage: previewUrl || cleanGarment,
+      artworkSrc: state.artwork.src || null,
+      customPos: state.customPos ? { ...state.customPos } : null,
+      scale: state.scale || 1.0,
+      selectedPlacement: state.selectedPlacement || null,
       customization: {
         type: state.currentMode === "logo" ? "Logo Upload" : "Text Embroidery",
         finish: state.currentFinish,
@@ -796,7 +880,7 @@
     }
 
     const editCartIdx = new URLSearchParams(window.location.search).get("editCartIndex");
-    if (editCartIdx !== null && !isNaN(parseInt(editCartIdx)) && currentCart[parseInt(editCartIdx)]) {
+    if (editCartIdx !== null && !isNaN(parseInt(editCartIdx)) && parseInt(editCartIdx) >= 0 && parseInt(editCartIdx) < currentCart.length) {
       currentCart[parseInt(editCartIdx)] = cartItem;
     } else {
       currentCart.push(cartItem);
@@ -812,14 +896,14 @@
 
     // Non-blocking user feedback
     if (typeof window.showToast === "function") {
-      window.showToast("🎉 Customized Prototype added to cart! Redirecting to checkout...", "success");
+      window.showToast("🎉 Cart item updated successfully! Redirecting to checkout...", "success");
     } else {
       console.log("Customized Prototype added to cart! Redirecting to checkout...");
     }
 
     setTimeout(() => {
       window.location.href = "checkout.html";
-    }, 600);
+    }, 500);
   };
 
 })();

@@ -322,7 +322,10 @@ const colorMap = {
 };
 
 function saveCart() {
-  localStorage.setItem("fabric8QuoteCart", JSON.stringify(cart));
+  const serialized = JSON.stringify(cart);
+  localStorage.setItem("fabric8QuoteCart", serialized);
+  localStorage.setItem("fabric8_cart", serialized);
+  localStorage.setItem("cart", serialized);
 }
 
 
@@ -591,28 +594,30 @@ function renderCart() {
   if (count) count.textContent = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 0), 0);
   if (!items) return;
   if (!cart.length) {
-    items.innerHTML = "<p>No products selected yet.</p>";
+    items.innerHTML = "<p style='color: var(--muted); padding: 12px 0;'>No products selected yet.</p>";
     return;
   }
-  items.innerHTML = cart.map((item, index) => `
-    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px;">
-      ${item.image ? `<div style="flex-shrink: 0; width: 70px; height: 70px; background: #fff; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; padding: 4px;"><img src="${item.image}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain; mix-blend-mode: multiply;" /></div>` : ''}
+  items.innerHTML = cart.map((item, index) => {
+    const thumbImg = item.customizedImage || item.image;
+    return `
+    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 10px; border: 1px solid var(--line); margin-bottom: 8px;">
+      ${thumbImg ? `<div style="flex-shrink: 0; width: 75px; height: 75px; background: #faf9f5; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; padding: 4px;"><img src="${thumbImg}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : ''}
       <div class="cart-item-info" style="flex: 1;">
-        <h4 style="margin: 0 0 8px 0; font-size: 14px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
           <span>${item.name}</span>
-          <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Catalog"}</span>
+          <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Customizer"}</span>
         </h4>
-        <p style="margin: 0 0 10px 0; color: var(--muted); line-height: 1.5; font-size: 13px;">Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity || item.qty || 1} | ${item.branding || "No branding selected"}</p>
+        <p style="margin: 0 0 8px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">Size: <strong>${item.size || "N/A"}</strong> | Color: <strong>${item.color || "Standard"}</strong> | Qty: <strong>${item.quantity || item.qty || 1} Pcs</strong> | ${item.branding || "No branding selected"}</p>
         <div style="display: flex; gap: 12px; align-items: center;">
           <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
           </button>
           <span style="color: var(--line, #ccc);">|</span>
           <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
         </div>
       </div>
     </div>
-  `).join("");
+  `}).join("");
 }
 
 window.openEditCartModal = function(idx) {
@@ -1132,12 +1137,27 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     attachments.push({ filename: fileName, content: base64File });
   }
 
-  // Attach auto-transparent logos from the cart
+  // Attach customized product mockup pictures and uploaded logo files from cart
   cart.forEach((item, index) => {
-    if (item.logoData) {
-      const logoContent = typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData;
-      if (typeof logoContent === 'string' && logoContent.trim() !== '') {
-        attachments.push({ filename: `${item.sku}_Logo_${index + 1}.png`, content: logoContent });
+    const mockupImg = item.customizedImage || item.image;
+    if (typeof mockupImg === 'string' && mockupImg.startsWith('data:image/')) {
+      const rawBase64 = mockupImg.split(',')[1];
+      if (rawBase64) {
+        attachments.push({
+          filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.png`,
+          content: rawBase64
+        });
+      }
+    }
+
+    const logoContent = item.artworkSrc || (typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData);
+    if (typeof logoContent === 'string' && logoContent.trim() !== '') {
+      const rawLogoBase64 = logoContent.includes('base64,') ? logoContent.split(',')[1] : logoContent;
+      if (rawLogoBase64) {
+        attachments.push({
+          filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.png`,
+          content: rawLogoBase64
+        });
       }
     }
   });

@@ -84,7 +84,7 @@
 
     if (editIdx !== null) {
       try {
-        const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart");
+        const rawCart = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
         if (rawCart) {
           const parsedCart = JSON.parse(rawCart);
           const cartItem = parsedCart[parseInt(editIdx)];
@@ -94,7 +94,53 @@
             if (cartItem.color) state.product.color = cartItem.color;
             if (cartItem.size) state.product.size = cartItem.size;
             if (cartItem.quantity || cartItem.qty) state.product.qty = cartItem.quantity || cartItem.qty;
-            if (cartItem.image) state.product.image = cartItem.image;
+            
+            if (cartItem.baseGarmentImage && !cartItem.baseGarmentImage.startsWith("data:")) {
+              state.product.baseGarmentImage = cartItem.baseGarmentImage;
+              state.product.image = cartItem.baseGarmentImage;
+            }
+            if (cartItem.customPos) {
+              state.artwork.x = cartItem.customPos.x;
+              state.artwork.y = cartItem.customPos.y;
+              state.text.x = cartItem.customPos.x;
+              state.text.y = cartItem.customPos.y;
+            }
+            if (cartItem.scale) {
+              state.artwork.scale = cartItem.scale;
+              const scaleInp = document.getElementById("logoScaleInput");
+              const scaleVal = document.getElementById("logoScaleValue");
+              if (scaleInp) scaleInp.value = Math.round(cartItem.scale * 100);
+              if (scaleVal) scaleVal.textContent = `${Math.round(cartItem.scale * 100)}%`;
+            }
+            if (cartItem.artworkSrc) {
+              state.artwork.src = cartItem.artworkSrc;
+              state.artwork.fileName = cartItem.customization?.artworkFile || "artwork.png";
+              const img = new Image();
+              img.onload = () => {
+                state.artwork.imageObj = img;
+                drawCanvas();
+              };
+              img.src = cartItem.artworkSrc;
+            }
+            if (cartItem.customization) {
+              if (cartItem.customization.type === "Text Embroidery") {
+                state.currentMode = "text";
+                if (cartItem.customization.textDetails) {
+                  state.text.line1 = cartItem.customization.textDetails.line1 || "";
+                  state.text.line2 = cartItem.customization.textDetails.line2 || "";
+                  state.text.line3 = cartItem.customization.textDetails.line3 || "";
+                  state.text.fontStyle = cartItem.customization.textDetails.font || "Block";
+                  state.text.swatchName = cartItem.customization.textDetails.threadColor || "Classic Black";
+                  ["line1", "line2", "line3"].forEach(key => {
+                    const inp = document.getElementById("textLine" + key.replace("line", ""));
+                    if (inp) inp.value = state.text[key];
+                  });
+                }
+              } else {
+                state.currentMode = "logo";
+              }
+              state.currentFinish = cartItem.customization.finish || "Embroidery";
+            }
           }
         }
       } catch(e) {
@@ -595,6 +641,7 @@
     function handleFileRead(file) {
       const reader = new FileReader();
       reader.onload = (evt) => {
+        state.artwork.src = evt.target.result;
         const img = new Image();
         img.onload = () => {
           state.artwork.imageObj = img;
@@ -750,30 +797,69 @@
     }
   }
 
+  function getCartPreviewThumbnail() {
+    try {
+      const canvas = document.getElementById("renderCanvas");
+      if (!canvas) return "";
+      const thumbCanvas = document.createElement("canvas");
+      thumbCanvas.width = 300;
+      thumbCanvas.height = 300;
+      const tCtx = thumbCanvas.getContext("2d");
+      tCtx.drawImage(canvas, 0, 0, 300, 300);
+      return thumbCanvas.toDataURL("image/jpeg", 0.85);
+    } catch (e) {
+      const canvas = document.getElementById("renderCanvas");
+      return canvas ? canvas.toDataURL("image/png") : "";
+    }
+  }
+
   function handleAddToCart() {
-    const previewUrl = document.getElementById("renderCanvas").toDataURL();
+    drawCanvas();
+    const previewUrl = getCartPreviewThumbnail();
     const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Custom";
     let brandingDesc = state.currentMode === "logo" 
       ? `Custom Logo: ${state.artwork.fileName || "Uploaded"} (${state.currentFinish} - ${placementName})`
       : `Text Embroidery: "${state.text.line1}" (${state.text.swatchName} - ${placementName})`;
 
+    let cleanGarment = state.product.baseGarmentImage;
+    if (!cleanGarment || cleanGarment.startsWith("data:")) {
+      cleanGarment = state.product.image;
+    }
+    if (!cleanGarment || cleanGarment.startsWith("data:")) {
+      cleanGarment = "assets/products/Polo White Front.png?v=5";
+    }
+
     const cartItem = {
       id: "BS-" + Date.now(),
       sku: state.product.sku,
-      name: state.product.name,
+      name: state.product.name.includes("[Customized]") ? state.product.name : `${state.product.name} [Customized]`,
       size: state.product.size,
       color: state.product.color,
       quantity: state.product.qty || 50,
+      qty: state.product.qty || 50,
       price: "Custom Quotation",
       originStudio: "Branding Studio",
       isBrandingStudio: true,
       branding: brandingDesc,
-      image: previewUrl || state.product.image,
+      baseGarmentImage: cleanGarment,
+      image: previewUrl || cleanGarment,
+      customizedImage: previewUrl || cleanGarment,
+      artworkSrc: state.artwork.src || null,
+      customPos: { x: state.artwork.x, y: state.artwork.y },
+      scale: state.artwork.scale || 1.0,
+      selectedPlacement: state.selectedPlacement || null,
       customization: {
         type: state.currentMode === "logo" ? "Logo Upload" : "Text Embroidery",
         finish: state.currentFinish,
         placement: placementName,
-        artworkFile: state.currentMode === "logo" ? state.artwork.fileName : "N/A"
+        artworkFile: state.currentMode === "logo" ? state.artwork.fileName : "N/A",
+        textDetails: state.currentMode === "text" ? {
+          line1: state.text.line1,
+          line2: state.text.line2,
+          line3: state.text.line3,
+          font: state.text.fontStyle,
+          threadColor: state.text.swatchName
+        } : null
       }
     };
 
@@ -787,7 +873,7 @@
     }
 
     const editCartIdx = new URLSearchParams(window.location.search).get("editCartIndex");
-    if (editCartIdx !== null && !isNaN(parseInt(editCartIdx)) && currentCart[parseInt(editCartIdx)]) {
+    if (editCartIdx !== null && !isNaN(parseInt(editCartIdx)) && parseInt(editCartIdx) >= 0 && parseInt(editCartIdx) < currentCart.length) {
       currentCart[parseInt(editCartIdx)] = cartItem;
     } else {
       currentCart.push(cartItem);
@@ -802,12 +888,12 @@
     }
 
     if (typeof window.showToast === "function") {
-      window.showToast("🎉 Customized prototype added to cart! Redirecting to checkout...", "success");
+      window.showToast("🎉 Cart item updated successfully! Redirecting to checkout...", "success");
     }
 
     setTimeout(() => {
       window.location.href = "checkout.html";
-    }, 600);
+    }, 500);
   }
 
 })();
