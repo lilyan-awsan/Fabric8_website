@@ -240,17 +240,6 @@ async function loadProducts() {
   } catch (e) {}
 
   try {
-    const settingsRes = await fetch('data/admin_settings.json?t=' + Date.now());
-    if (settingsRes.ok) {
-      siteSettings = await settingsRes.json();
-      try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
-      applySiteSettings();
-    }
-  } catch (err) {
-    console.warn("Could not load admin settings.");
-  }
-
-  try {
     const cachedProducts = localStorage.getItem("fabric8_products_cache");
     if (cachedProducts) {
       const parsed = JSON.parse(cachedProducts);
@@ -262,23 +251,27 @@ async function loadProducts() {
     }
   } catch (e) {}
 
-  try {
-    const res = await fetch('data/products.json?t=' + Date.now());
-    if (res.ok) {
-      const serverProducts = await res.json();
-      if (Array.isArray(serverProducts) && serverProducts.length > 0) {
-        products = serverProducts;
-        products.sort((a, b) => a.name.localeCompare(b.name));
-        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
-        initSite();
-      }
+  // Parallel network fetch for maximum speed
+  Promise.all([
+    fetch('data/admin_settings.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/products.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([settingsData, productsData]) => {
+    if (settingsData) {
+      siteSettings = settingsData;
+      try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
+      applySiteSettings();
     }
-  } catch (err) {
-    console.error("Error loading products from server:", err);
-    if (!products || products.length === 0) {
+    if (productsData && Array.isArray(productsData) && productsData.length > 0) {
+      products = productsData;
+      products.sort((a, b) => a.name.localeCompare(b.name));
+      try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
+      initSite();
+    } else if (!products || products.length === 0) {
       initSite();
     }
-  }
+  }).catch(() => {
+    if (!products || products.length === 0) initSite();
+  });
 }
 
 // Start loading
