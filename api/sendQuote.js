@@ -201,8 +201,8 @@ export default async function handler(req, res) {
     const replyTo = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'] || 'hello@thefabric8.com';
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // Set destination email address (defaults to hello@thefabric8.com or environment variable)
-    const targetEmails = [process.env.RESEND_TO_EMAIL || 'hello@thefabric8.com'];
+    // Set destination email address (defaults to RESEND_TO_EMAIL or lilyanawsan@gmail.com)
+    const targetEmails = [process.env.RESEND_TO_EMAIL || 'lilyanawsan@gmail.com'];
 
     const attachments = [
       {
