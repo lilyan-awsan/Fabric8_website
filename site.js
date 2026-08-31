@@ -1335,11 +1335,18 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     if (value instanceof File) {
       if (value.name && value.size > 0) {
         fileName = value.name;
-        base64File = await new Promise((resolve) => {
+        const rawDataUrl = await new Promise((resolve) => {
           const reader = new FileReader();
-          reader.onload = () => resolve(reader.result.split(',')[1]);
+          reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(value);
         });
+
+        if (value.type.startsWith('image/')) {
+          const compressed = await compressBase64Image(rawDataUrl, 800, 0.75);
+          base64File = compressed || (rawDataUrl.includes('base64,') ? rawDataUrl.split('base64,')[1] : rawDataUrl);
+        } else {
+          base64File = rawDataUrl.includes('base64,') ? rawDataUrl.split('base64,')[1] : rawDataUrl;
+        }
       }
     } else {
       customerInfo[key] = value;
