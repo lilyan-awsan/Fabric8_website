@@ -1636,9 +1636,11 @@
     ]
   },
   {
+    "id": "F8-020",
     "sku": "F8-020",
     "name": "Dri-Fit T-shirt",
     "category": "Top Wear",
+    "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Moisture-wicking tee for active or outdoor roles.",
     "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
@@ -1660,37 +1662,21 @@
       "Red",
       "Yellow"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Dri Fit Tshirt White.webp",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "50 pieces",
+    "maxQty": "",
     "availability": "In Stock",
-    "images": [
-      "assets/products/Dri Fit Tshirt White.webp",
-      "assets/products/Dri Fit Tshirt Baby Blue.webp",
-      "assets/products/Dri Fit Tshirt White Side.webp",
-      "assets/products/Dri Fit Tshirt White Back.webp",
-      "assets/products/Dri Fit Tshirt Black 2.webp",
-      "assets/products/Dri Fit Tshirt Blue 2.webp",
-      "assets/products/Dri Fit Tshirt Green 1.webp",
-      "assets/products/Dri Fit Tshirt Grey 2.webp",
-      "assets/products/Dri Fit Tshirt Red.webp",
-      "assets/products/Dri Fit Tshirt Yellow.webp"
-    ],
-    "supportedFinishes": [
-      "DTF"
-    ],
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
     ],
-    "customizationCapability": "DTF",
     "placements": [
       {
         "name": "Left Chest",
@@ -1736,7 +1722,25 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Dri Fit Tshirt White.webp",
+      "assets/products/Dri Fit Tshirt Baby Blue.webp",
+      "assets/products/Dri Fit Tshirt White Side.webp",
+      "assets/products/Dri Fit Tshirt White Back.webp",
+      "assets/products/Dri Fit Tshirt Black 2.webp",
+      "assets/products/Dri Fit Tshirt Blue 2.webp",
+      "assets/products/Dri Fit Tshirt Green 1.webp",
+      "assets/products/Dri Fit Tshirt Grey 2.webp",
+      "assets/products/Dri Fit Tshirt Red.webp",
+      "assets/products/Dri Fit Tshirt Yellow.webp"
+    ],
+    "image": "assets/products/Dri Fit Tshirt White.webp"
   },
   {
     "sku": "F8-021",
