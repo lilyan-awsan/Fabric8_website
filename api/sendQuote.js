@@ -198,7 +198,8 @@ export default async function handler(req, res) {
     emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review customized product line items, clickable photo links, quantities, sizes, colors, and to complete the empty Product Price column—your line totals and Grand Total will compute automatically.</p>`;
     emailHtml += `<div style="margin-top: 36px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #999; text-align: center;">Fabric 8 Custom Atelier System &copy; 2026. All rights reserved.</div></div>`;
 
-    const replyTo = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'] || 'hello@thefabric8.com';
+    const customerEmail = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'];
+    const replyTo = (customerEmail && customerEmail.includes('@')) ? customerEmail : undefined;
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
     // Set destination email address (defaults to RESEND_TO_EMAIL or lilyanawsan@gmail.com)
