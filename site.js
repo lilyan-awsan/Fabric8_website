@@ -251,15 +251,23 @@ async function loadProducts() {
     }
   } catch (e) {}
 
-  // Parallel network fetch for maximum speed
+  // Parallel network fetch from Firebase Database (with local static fallback)
+  const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   Promise.all([
-    fetch('data/admin_settings.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch('data/products.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null)
+    fetch(`${FIREBASE_DB}/admin_settings.json`).then(r => r.ok ? r.json() : null).catch(() => fetch('data/admin_settings.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null)),
+    fetch(`${FIREBASE_DB}/products.json`).then(r => r.ok ? r.json() : null).catch(() => fetch('data/products.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null))
   ]).then(([settingsData, productsData]) => {
     if (settingsData) {
-      siteSettings = settingsData;
-      try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
-      applySiteSettings();
+      const settingsCacheTimeStr = localStorage.getItem("fabric8_admin_settings_cache_time");
+      const settingsCacheTime = settingsCacheTimeStr ? parseInt(settingsCacheTimeStr, 10) : 0;
+      const isRecentSettingsSave = (Date.now() - settingsCacheTime) < 900000; // 15-minute protection window
+
+      // Only adopt server response if no recent local admin settings save is active
+      if (!isRecentSettingsSave || !localStorage.getItem("fabric8_admin_settings_cache")) {
+        siteSettings = settingsData;
+        try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
+        applySiteSettings();
+      }
     }
     if (productsData && Array.isArray(productsData) && productsData.length > 0) {
       const cacheTimeStr = localStorage.getItem("fabric8_products_cache_time");
@@ -283,6 +291,32 @@ async function loadProducts() {
 
 // Start loading
 loadProducts();
+
+// Real-time cross-tab synchronization listener
+window.addEventListener('storage', (e) => {
+  if (e.key === 'fabric8_admin_settings_cache') {
+    try {
+      if (e.newValue) {
+        siteSettings = JSON.parse(e.newValue);
+        applySiteSettings();
+      }
+    } catch (err) {}
+  }
+  if (e.key === 'fabric8_products_cache') {
+    try {
+      if (e.newValue) {
+        const parsed = JSON.parse(e.newValue);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          products = parsed;
+          products.sort((a, b) => a.name.localeCompare(b.name));
+          if (typeof renderCatalog === 'function') renderCatalog();
+          if (typeof renderShopGrid === 'function') renderShopGrid();
+          if (typeof initProductDetail === 'function') initProductDetail();
+        }
+      }
+    } catch (err) {}
+  }
+});
 
 
 const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
@@ -1041,7 +1075,7 @@ document.addEventListener("click", (event) => {
     }
 
     // Determine exact product photography matching the selected catalog color
-    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.png?v=5';
+    let targetImg = selectedProduct.image || 'assets/products/Polo White Front.webp?v=5';
     if (selectedProduct.images && selectedProduct.images.length > 0) {
       const colorMatch = selectedProduct.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
       if (colorMatch) {
@@ -1818,7 +1852,7 @@ function initProductPage(sku) {
       ? currentCarouselImages[activeCarouselIdx]
       : (typeof currentCarouselImages !== 'undefined' && currentCarouselImages[0])
         ? currentCarouselImages[0]
-        : (prod.image || "assets/products/Polo White Front.png?v=5");
+        : (prod.image || "assets/products/Polo White Front.webp?v=5");
     
     let targetSize = sizeDetailsList.length > 0 ? sizeDetailsList.join(", ") : "Standard Commercial Spec";
 

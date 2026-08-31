@@ -45,13 +45,13 @@
         <div class="main-image-container" style="background: #faf9f5; aspect-ratio: 1/1; max-height: 400px; max-width: 450px; margin: 0 auto; display: grid; place-items: center; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--line);">
           <button type="button" id="carouselPrevBtn" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 20; background: rgba(255,255,255,0.85); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; display: none; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">←</button>
           
-          <img id="productMainImage" src="" alt="Product" style="width: 100%; height: 100%; object-fit: contain; padding: 24px; transition: opacity 0.25s ease;" />
+          <img id="productMainImage" src="" alt="Product" style="width: 100%; height: 100%; object-fit: contain; padding: 24px; transition: opacity 0.25s ease;" / loading="lazy">
           
           <button type="button" id="carouselNextBtn" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); z-index: 20; background: rgba(255,255,255,0.85); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; display: none; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">→</button>
           
           <!-- Customization Previews -->
           <div id="pageLogoPreview" class="logo-preview" style="display: none; position: absolute; z-index: 10; top: 30%; left: 60%; width: 15%; cursor: move; border: 1px dashed rgba(255,255,255,0.5);">
-            <img id="pageLogoPreviewImg" src="" style="width: 100%; display: block;" />
+            <img id="pageLogoPreviewImg" src="" style="width: 100%; display: block;" / loading="lazy">
           </div>
           
           <div id="pageTextPreview" class="text-preview" style="display: none; position: absolute; z-index: 10; top: 30%; left: 60%; cursor: move; border: 1px dashed rgba(255,255,255,0.5); padding: 4px; color: #111; font-weight: 800; font-size: 14px; text-shadow: 0 1px 2px rgba(255,255,255,0.8);">
@@ -112,7 +112,7 @@
             <summary style="padding: 10px 0; font-weight: 800; font-size: 13px; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none;"><span>Technical Sketch</span> <span class="acc-icon" style="font-size: 18px; font-weight: 400; font-family: inherit;">+</span></summary>
             <div style="padding-bottom: 12px; display: grid; place-items: center; background: #fafafa; border-radius: 8px; padding: 12px; text-align: center;">
               <p id="noSketchMsg" style="display: none; font-size: 12px; color: var(--muted); margin: 0;">Technical CAD sketch available upon quote confirmation.</p>
-              <img id="productSketch" src="" alt="Technical Sketch" style="max-height: 200px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;" />
+              <img id="productSketch" src="" alt="Technical Sketch" style="max-height: 200px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply;" / loading="lazy">
               <p id="productSketchDesc" style="margin: 10px 0 0 0; font-size: 13px; color: var(--ink); line-height: 1.5; display: none; text-align: left; width: 100%; background: #fff; padding: 10px; border: 1px solid var(--line); border-radius: 6px;"></p>
             </div>
           </details>

@@ -918,7 +918,7 @@
       cleanGarment = state.product.image;
     }
     if (!cleanGarment || cleanGarment.startsWith("data:")) {
-      cleanGarment = "assets/products/Polo White Front.png?v=5";
+      cleanGarment = "assets/products/Polo White Front.webp?v=5";
     }
 
     const cartItem = {

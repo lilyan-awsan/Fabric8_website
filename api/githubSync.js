@@ -195,6 +195,17 @@ export default async function handler(req, res) {
         const err = await updateRes.json();
         throw new Error("Failed to save settings to server: " + err.message);
       }
+      // Sync settings to Firebase Realtime Database
+      try {
+        await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(product)
+        });
+      } catch (fbErr) {
+        console.error("Firebase Settings Sync Error:", fbErr);
+      }
+
       return res.status(200).json({ success: true, message: 'Settings saved successfully' });
     } else if (action === "save") {
       delete product.existingImages;
@@ -214,10 +225,21 @@ export default async function handler(req, res) {
       productsList = productsList.filter(p => p.id !== product.id && p.sku !== product.sku);
     }
 
-    // 4. Save the updated products.json back to GitHub
+    // 4. Save the updated products.json back to GitHub & Firebase
     if (action === "save" || action === "delete") {
       const newContentStr = JSON.stringify(productsList, null, 2);
       const newContentBase64 = Buffer.from(newContentStr).toString('base64');
+
+      // Sync to Firebase Realtime Database
+      try {
+        await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/products.json", {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(productsList)
+        });
+      } catch (fbErr) {
+        console.error("Firebase Products Sync Error:", fbErr);
+      }
 
       const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${jsonPath}`, {
         method: 'PUT',
@@ -241,7 +263,7 @@ export default async function handler(req, res) {
     }
 
   } catch (error) {
-    console.error("GitHub Sync Error:", error);
+    console.error("Sync Error:", error);
     return res.status(500).json({ success: false, message: error.message });
   }
 }

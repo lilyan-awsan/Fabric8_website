@@ -271,8 +271,39 @@ function renderTable() {
   rowCbs.forEach(cb => cb.addEventListener("change", updateBulkDeleteVisibility));
 }
 
+function updateSyncBadge(statusMsg, isSuccess = false, isError = false) {
+  const badge = document.getElementById("syncStatusBadge");
+  const spinner = document.getElementById("syncSpinner");
+  const text = document.getElementById("syncStatusText");
+  if (!badge || !text) return;
+
+  badge.style.display = "inline-flex";
+  text.textContent = statusMsg;
+
+  if (isError) {
+    badge.style.background = "rgba(231, 76, 60, 0.15)";
+    badge.style.color = "#e74c3c";
+    badge.style.borderColor = "rgba(231, 76, 60, 0.3)";
+    if (spinner) spinner.style.display = "none";
+  } else if (isSuccess) {
+    badge.style.background = "rgba(47, 135, 61, 0.15)";
+    badge.style.color = "#2f873d";
+    badge.style.borderColor = "rgba(47, 135, 61, 0.3)";
+    if (spinner) spinner.style.display = "none";
+    setTimeout(() => {
+      badge.style.display = "none";
+    }, 5000);
+  } else {
+    badge.style.background = "rgba(243, 156, 18, 0.15)";
+    badge.style.color = "#f39c12";
+    badge.style.borderColor = "rgba(243, 156, 18, 0.3)";
+    if (spinner) spinner.style.display = "inline-block";
+  }
+}
+
 // --- Sync Helper ---
 async function syncWithGithub(action, product) {
+  updateSyncBadge("Syncing with server...", false, false);
   try {
     const payload = { token: authToken, action, product };
     if (pendingImages.length > 0) {
@@ -301,16 +332,19 @@ async function syncWithGithub(action, product) {
         } catch (e) {}
       }
       renderTable();
+      updateSyncBadge("✅ Synced Live & Saved", true, false);
       showToast(`Success! Changes saved successfully.\nNOTE: Your changes are live on this device immediately and syncing globally.`, "success", 8000);
       return true;
     } else {
       if (data.message === "Unauthorized") {
         logoutBtn.click();
       }
+      updateSyncBadge("❌ Sync Failed", false, true);
       showToast("Error saving: " + data.message, "error", 8000);
       return false;
     }
   } catch (error) {
+    updateSyncBadge("❌ Network Error", false, true);
     showToast("Network error. Ensure you are on Vercel.", "error", 8000);
     return false;
   }
@@ -1178,6 +1212,52 @@ if (saveVisualEditorBtn) {
       // Get raw HTML string
       const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
 
+      // Update local admin settings cache with any cms text changes from the iframe
+      const cmsElements = {
+        cmsHomeHeroTitle: 'homeHeroTitle',
+        cmsHomeHeroSub: 'homeHeroSubtitle',
+        cmsHomeHeroBtn: 'homeHeroBtnText',
+        cmsServicesTitle: 'servicesTitle',
+        cmsServicesSub: 'servicesSub',
+        cmsMethodTitle: 'methodTitle',
+        cmsMethodSub: 'methodSub',
+        cmsSectorsTitle: 'sectorsTitle',
+        cmsSectorsSub: 'sectorsSub',
+        cmsAboutTitle: 'aboutTitle',
+        cmsAboutSub: 'aboutSub',
+        cmsAboutMission: 'aboutMission',
+        cmsAboutVision: 'aboutVision',
+        cmsContactHQText: 'contactHQ',
+        cmsContactUSAText: 'contactUSA',
+        cmsContactJordanText: 'contactJordan',
+        cmsContactEmailText: 'contactEmail'
+      };
+
+      let settingsUpdated = false;
+      let currentSettings = {};
+      try {
+        const cached = localStorage.getItem("fabric8_admin_settings_cache");
+        if (cached) currentSettings = JSON.parse(cached);
+      } catch(e) {}
+      if (!currentSettings.siteContent) currentSettings.siteContent = {};
+
+      Object.entries(cmsElements).forEach(([id, key]) => {
+        const el = cleanDoc.getElementById(id);
+        if (el && el.textContent) {
+          currentSettings.siteContent[key] = el.textContent.trim();
+          settingsUpdated = true;
+        }
+      });
+
+      if (settingsUpdated) {
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch(e) {}
+      }
+
+      updateSyncBadge("Publishing visual page changes...", false, false);
+
       // 15 second fetch timeout controller
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
@@ -1200,6 +1280,7 @@ if (saveVisualEditorBtn) {
       if (data.success) {
         const statusEl = document.getElementById('visualEditorStatus');
         if (statusEl) statusEl.style.display = 'block';
+        updateSyncBadge("✅ Visual Page Published", true, false);
         showToast("Success! Changes published to GitHub.\nNote: Vercel takes ~30-45s to complete the build for live site.", "success", 10000);
         alert("✅ Success! Your changes were saved and published to GitHub.\n\nNote: Vercel will update the live production site in ~30-45 seconds.");
         setTimeout(() => { if (statusEl) statusEl.style.display = 'none'; }, 6000);
@@ -1209,6 +1290,7 @@ if (saveVisualEditorBtn) {
           if (iframe) iframe.src = currentVisualPage + '?t=' + Date.now();
         }, 1200);
       } else {
+        updateSyncBadge("❌ Publishing Failed", false, true);
         showToast("Error saving layout: " + (data.message || "Unknown error"), "error");
         alert("❌ Error saving layout: " + (data.message || "Unknown error"));
       }
