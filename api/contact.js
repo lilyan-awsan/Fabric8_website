@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     const toEmails = [process.env.RESEND_TO_EMAIL || 'hello@thefabric8.com'];
 
     const options = {
-      from: 'Fabric8 Website <onboarding@resend.dev>',
+      from: 'Fabric8 Website <contact@send.thefabric8.com>',
       to: toEmails,
       reply_to: data.email || 'lilyanawsan@gmail.com',
       subject: data.subject ? `[Inquiry: ${data.subject}] from ${data.email || 'Website'}` : `New Fabric8 Inquiry from ${data.firstName ? data.firstName + ' ' + (data.lastName || '') : (data.email || 'Client')}`,
