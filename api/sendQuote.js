@@ -201,8 +201,8 @@ export default async function handler(req, res) {
     const replyTo = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'] || 'hello@thefabric8.com';
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // Set destination exclusively to the verified Resend registered account address
-    const targetEmails = ['lilyanawsan@gmail.com'];
+    // Set destination email address (defaults to hello@thefabric8.com or environment variable)
+    const targetEmails = [process.env.RESEND_TO_EMAIL || 'hello@thefabric8.com'];
 
     const attachments = [
       {

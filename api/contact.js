@@ -25,8 +25,8 @@ export default async function handler(req, res) {
     }
     emailHtml += `</ul></div>`;
 
-    // Set destination exclusively to the verified Resend registered account address
-    const toEmails = [process.env.RESEND_TO_EMAIL || 'lilyanawsan@gmail.com'];
+    // Set destination email address (defaults to hello@thefabric8.com or environment variable)
+    const toEmails = [process.env.RESEND_TO_EMAIL || 'hello@thefabric8.com'];
 
     const options = {
       from: 'Fabric8 Website <onboarding@resend.dev>',
