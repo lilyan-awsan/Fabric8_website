@@ -1028,15 +1028,15 @@ function renderBrandLogosGrid() {
 
   brandLogosList.forEach((brand, idx) => {
     const card = document.createElement("div");
-    card.style.cssText = "position: relative; width: 200px; height: 140px; border: 1px solid var(--line); border-radius: 12px; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: transform 0.2s ease;";
+    card.style.cssText = "position: relative; width: 160px; height: 120px; border: 1px solid var(--line); border-radius: 12px; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: transform 0.2s ease;";
     
     card.innerHTML = `
-      <div class="delete-brand-circle-btn" data-index="${idx}" style="position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); line-height: 1; user-select: none; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" title="Delete ${brand.name} Logo">&minus;</div>
+      <div class="delete-brand-circle-btn" data-index="${idx}" style="position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); line-height: 1; user-select: none; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" title="Delete ${brand.name} Logo">&minus;</div>
       
       <div style="flex: 1; width: 100%; display: flex; align-items: center; justify-content: center;">
-        <img src="${brand.src}" alt="${brand.name}" style="max-height: 80px; max-width: 170px; object-fit: contain;">
+        <img src="${brand.src}" alt="${brand.name}" style="max-height: 55px; max-width: 130px; object-fit: contain;">
       </div>
-      <span style="font-size: 12px; font-weight: 700; color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; margin-top: 6px;">${brand.name}</span>
+      <span style="font-size: 11px; font-weight: 700; color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; margin-top: 6px;">${brand.name}</span>
     `;
     
     brandLogosGrid.appendChild(card);
@@ -1132,7 +1132,7 @@ if (tabProducts && tabSettings) {
     
     productsSection.style.display = 'none';
     if(tableContainer) tableContainer.style.display = 'none';
-    settingsSection.style.display = 'flex';
+    settingsSection.style.display = 'block';
     renderBrandLogosGrid();
   });
 }
