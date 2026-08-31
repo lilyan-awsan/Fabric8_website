@@ -242,7 +242,6 @@ export default async function handler(req, res) {
     const options = {
       from: 'Fabric8 Orders <onboarding@resend.dev>',
       to: targetEmails,
-      reply_to: replyTo,
       subject: `[New Order & Quote] Fabric 8 Request from ${customerName}`,
       html: emailHtml,
       attachments: attachments
