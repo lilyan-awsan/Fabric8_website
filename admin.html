@@ -48,6 +48,7 @@
         <h1 style="margin: 0;">Admin Dashboard</h1>
         <div class="admin-tabs" style="display: flex; gap: 10px; margin-left: 20px;">
           <button id="tabProducts" class="tab-btn active" style="padding: 8px 16px; border: none; background: var(--green); color: white; border-radius: 4px; cursor: pointer; font-weight: bold;">Products</button>
+          <button id="tabBrandLogos" class="tab-btn" style="padding: 8px 16px; border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 4px; cursor: pointer; font-weight: bold;">Brand Logos</button>
           <button id="tabSettings" class="tab-btn" style="padding: 8px 16px; border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 4px; cursor: pointer; font-weight: bold;">Site Settings</button>
         </div>
       </div>
@@ -121,6 +122,21 @@
           </div>
         </div>
       </div> <!-- End Settings Tab -->
+
+      <!-- BRAND LOGOS TAB -->
+      <div id="brandLogosSection" style="display: none; margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 24px;">
+          <div>
+            <h2 style="margin: 0; font-size: 20px;">Brands That Trust Us (Client Logos)</h2>
+            <p style="color: var(--muted); font-size: 13px; margin: 4px 0 0;">Add, manage, or remove client brand logos shown on the live homepage marquee belt.</p>
+          </div>
+          <button id="addBrandLogoBtn" class="button primary" style="padding: 10px 20px; font-weight: 700;">+ Add New Brand Logo</button>
+        </div>
+
+        <div id="brandLogosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+          <!-- Injected dynamically by JS -->
+        </div>
+      </div>
 
     </main>
   </div>
@@ -329,6 +345,40 @@
         <div class="modal-actions">
           <button type="button" id="cancelModalBtn" class="button outline">Cancel</button>
           <button type="submit" id="saveProductBtn" class="button primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Brand Logo Modal -->
+  <div id="brandLogoModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 id="brandModalTitle">Add Client Brand Logo</h2>
+        <button id="closeBrandModalBtn" class="close-btn">&times;</button>
+      </div>
+      <form id="brandLogoForm">
+        <div style="display: flex; flex-direction: column; gap: 16px; padding: 10px 0;">
+          <div class="input-group">
+            <label style="font-weight: 700;">Brand Name</label>
+            <input type="text" id="brandNameInput" placeholder="e.g. Blaze & Pull, District, Four Seasons" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px;">
+          </div>
+          
+          <div class="input-group">
+            <label style="font-weight: 700;">Upload Logo Image File (PNG, SVG, JPG, WEBP)</label>
+            <input type="file" id="brandLogoFileInput" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px;">
+            <p style="font-size: 11px; color: var(--muted); margin-top: 4px;">Recommended: Transparent PNG or SVG with padded edges.</p>
+          </div>
+
+          <div id="brandLogoPreviewContainer" style="display: none; text-align: center; background: #f8f8f8; padding: 16px; border-radius: 8px; border: 1px dashed #ccc;">
+            <p style="font-size: 11px; font-weight: 700; color: #666; margin-top: 0;">PREVIEW</p>
+            <img id="brandLogoPreviewImg" src="" alt="Preview" style="max-height: 80px; max-width: 200px; object-fit: contain;">
+          </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 20px;">
+          <button type="button" id="cancelBrandModalBtn" class="button outline">Cancel</button>
+          <button type="submit" id="saveBrandLogoBtn" class="button primary">Save Brand Logo</button>
         </div>
       </form>
     </div>

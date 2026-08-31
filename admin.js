@@ -976,32 +976,257 @@ const productsSection = document.getElementById('productsSection');
 const tableContainer = document.querySelector('.table-container');
 const settingsSection = document.getElementById('settingsSection');
 
+const tabBrandLogos = document.getElementById('tabBrandLogos');
+const brandLogosSection = document.getElementById('brandLogosSection');
+
 if (tabProducts && tabSettings) {
+  const setActiveTab = (activeBtn) => {
+    [tabProducts, tabBrandLogos, tabSettings].forEach(btn => {
+      if (!btn) return;
+      if (btn === activeBtn) {
+        btn.classList.add('active');
+        btn.style.background = 'var(--green)';
+        btn.style.color = 'white';
+      } else {
+        btn.classList.remove('active');
+        btn.style.background = 'white';
+        btn.style.color = 'var(--ink)';
+      }
+    });
+  };
+
   tabProducts.addEventListener('click', () => {
-    tabProducts.classList.add('active');
-    tabProducts.style.background = 'var(--green)';
-    tabProducts.style.color = 'white';
-    tabSettings.classList.remove('active');
-    tabSettings.style.background = 'white';
-    tabSettings.style.color = 'var(--ink)';
-    
+    setActiveTab(tabProducts);
     productsSection.style.display = 'block';
     if(tableContainer) tableContainer.style.display = 'block';
-    settingsSection.style.display = 'none';
+    if(settingsSection) settingsSection.style.display = 'none';
+    if(brandLogosSection) brandLogosSection.style.display = 'none';
   });
   
   tabSettings.addEventListener('click', () => {
-    tabSettings.classList.add('active');
-    tabSettings.style.background = 'var(--green)';
-    tabSettings.style.color = 'white';
-    tabProducts.classList.remove('active');
-    tabProducts.style.background = 'white';
-    tabProducts.style.color = 'var(--ink)';
-    
+    setActiveTab(tabSettings);
     productsSection.style.display = 'none';
     if(tableContainer) tableContainer.style.display = 'none';
-    settingsSection.style.display = 'block';
+    if(settingsSection) settingsSection.style.display = 'block';
+    if(brandLogosSection) brandLogosSection.style.display = 'none';
   });
+
+  if (tabBrandLogos) {
+    tabBrandLogos.addEventListener('click', () => {
+      setActiveTab(tabBrandLogos);
+      productsSection.style.display = 'none';
+      if(tableContainer) tableContainer.style.display = 'none';
+      if(settingsSection) settingsSection.style.display = 'none';
+      if(brandLogosSection) brandLogosSection.style.display = 'block';
+      loadBrandLogosManager();
+    });
+  }
+}
+
+// --- Brand Logos Manager ---
+let brandLogosList = [
+  { name: 'The Ritz-Carlton', image: 'assets/logo-ritz.svg' },
+  { name: 'Four Seasons', image: 'assets/fourseasons.svg' },
+  { name: 'Emirates Group', image: 'assets/emirates.svg' },
+  { name: 'Marriott Int.', image: 'assets/marriott.svg' },
+  { name: 'Cleveland Clinic', image: 'assets/site_images/1788110043030_img.png' }
+];
+
+async function loadBrandLogosManager() {
+  const grid = document.getElementById('brandLogosGrid');
+  if (!grid) return;
+
+  // Attempt to load current logos from index.html
+  try {
+    const res = await fetch('index.html?t=' + Date.now());
+    if (res.ok) {
+      const htmlText = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const set1Imgs = doc.querySelectorAll('.marquee-content div img');
+      if (set1Imgs.length > 0) {
+        const foundLogos = [];
+        const seen = new Set();
+        set1Imgs.forEach(img => {
+          const src = img.getAttribute('src');
+          const alt = img.getAttribute('alt') || 'Brand Logo';
+          if (src && !seen.has(src)) {
+            seen.add(src);
+            foundLogos.push({ name: alt, image: src });
+          }
+        });
+        if (foundLogos.length > 0) {
+          brandLogosList = foundLogos;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("Could not parse brand logos from index.html, using fallback:", e);
+  }
+
+  renderBrandLogosGrid();
+}
+
+function renderBrandLogosGrid() {
+  const grid = document.getElementById('brandLogosGrid');
+  if (!grid) return;
+
+  if (brandLogosList.length === 0) {
+    grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; background: white; border-radius: 8px; color: var(--muted);">No brand logos added yet. Click <b>+ Add New Brand Logo</b> to add one.</div>`;
+    return;
+  }
+
+  grid.innerHTML = brandLogosList.map((logo, index) => `
+    <div style="background: white; border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="height: 80px; width: 100%; display: flex; align-items: center; justify-content: center; background: #fafafa; border-radius: 6px; padding: 10px;">
+        <img src="${logo.image}" alt="${logo.name}" style="max-height: 65px; max-width: 100%; object-fit: contain;">
+      </div>
+      <div style="text-align: center; width: 100%;">
+        <span style="font-weight: 700; font-size: 14px; color: var(--ink); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logo.name}</span>
+        <span style="font-size: 11px; color: var(--muted); display: block; margin-top: 2px;">Slot #${index + 1}</span>
+      </div>
+      <button onclick="deleteBrandLogo(${index})" style="width: 100%; padding: 8px; background: #fff; color: #e74c3c; border: 1px solid #e74c3c; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.2s;" onmouseover="this.style.background='#e74c3c'; this.style.color='#fff';" onmouseout="this.style.background='#fff'; this.style.color='#e74c3c';">
+        🗑️ Delete Logo
+      </button>
+    </div>
+  `).join('');
+}
+
+window.deleteBrandLogo = async function(index) {
+  if (!confirm(`Are you sure you want to remove '${brandLogosList[index].name}' from the homepage brand belt?`)) return;
+  
+  brandLogosList.splice(index, 1);
+  renderBrandLogosGrid();
+  await syncBrandLogosToHomepage();
+};
+
+const addBrandLogoBtn = document.getElementById('addBrandLogoBtn');
+const brandLogoModal = document.getElementById('brandLogoModal');
+const closeBrandModalBtn = document.getElementById('closeBrandModalBtn');
+const cancelBrandModalBtn = document.getElementById('cancelBrandModalBtn');
+const brandLogoForm = document.getElementById('brandLogoForm');
+const brandLogoFileInput = document.getElementById('brandLogoFileInput');
+const brandLogoPreviewContainer = document.getElementById('brandLogoPreviewContainer');
+const brandLogoPreviewImg = document.getElementById('brandLogoPreviewImg');
+
+let currentNewBrandBase64 = '';
+
+if (addBrandLogoBtn && brandLogoModal) {
+  addBrandLogoBtn.addEventListener('click', () => {
+    document.getElementById('brandNameInput').value = '';
+    brandLogoFileInput.value = '';
+    currentNewBrandBase64 = '';
+    if (brandLogoPreviewContainer) brandLogoPreviewContainer.style.display = 'none';
+    brandLogoModal.style.display = 'flex';
+  });
+
+  const closeBrandModal = () => { brandLogoModal.style.display = 'none'; };
+  if (closeBrandModalBtn) closeBrandModalBtn.addEventListener('click', closeBrandModal);
+  if (cancelBrandModalBtn) cancelBrandModalBtn.addEventListener('click', closeBrandModal);
+
+  if (brandLogoFileInput) {
+    brandLogoFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e2) => {
+          currentNewBrandBase64 = e2.target.result;
+          brandLogoPreviewImg.src = currentNewBrandBase64;
+          brandLogoPreviewContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  if (brandLogoForm) {
+    brandLogoForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('brandNameInput').value.trim();
+      if (!name) { alert("Please enter a Brand Name."); return; }
+      if (!currentNewBrandBase64) { alert("Please select a logo image file."); return; }
+
+      const newLogoObj = {
+        name: name,
+        image: currentNewBrandBase64,
+        fileName: 'brand_' + Date.now() + '_' + (brandLogoFileInput.files[0]?.name || 'logo.png')
+      };
+
+      brandLogosList.push(newLogoObj);
+      renderBrandLogosGrid();
+      closeBrandModal();
+      await syncBrandLogosToHomepage();
+    });
+  }
+}
+
+async function syncBrandLogosToHomepage() {
+  try {
+    updateSyncBadge("Updating brand logos on homepage...", false, false);
+    showToast("Publishing brand logo changes to GitHub...", "info");
+
+    // Fetch live index.html text
+    const res = await fetch('index.html?t=' + Date.now());
+    if (!res.ok) throw new Error("Could not load index.html");
+    let htmlContent = await res.text();
+
+    // Construct new marquee HTML for set 1 and set 2
+    const buildSetHtml = (isDuplicate = false) => brandLogosList.map(logo => `
+            <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <img src="${logo.image}" alt="${logo.name}" style="max-height: 80px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`).join('');
+
+    const newMarqueeInner = `
+            <!-- Set 1 -->
+${buildSetHtml(false)}
+            
+            <!-- Set 2 for seamless loop -->
+${buildSetHtml(true)}
+          `;
+
+    // Replace inside marquee-content
+    const marqueeRegex = /(<div class="marquee-content"[^>]*>)([\s\S]*?)(<\/div>\s*<\/div>\s*<\/section>)/i;
+    if (marqueeRegex.test(htmlContent)) {
+      htmlContent = htmlContent.replace(marqueeRegex, `$1${newMarqueeInner}</div>\n        </div>\n      </section>`);
+    }
+
+    // Collect new base64 image uploads if any
+    const newSiteImages = [];
+    brandLogosList.forEach(logo => {
+      if (logo.image && logo.image.startsWith('data:image/') && logo.fileName) {
+        newSiteImages.push({
+          name: logo.fileName,
+          base64: logo.image
+        });
+        // Update local reference to site assets path
+        logo.image = 'assets/site_images/' + logo.fileName;
+      }
+    });
+
+    const syncRes = await fetch('/api/githubSync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: authToken,
+        action: "save_html",
+        filename: 'index.html',
+        htmlContent: htmlContent,
+        siteImages: newSiteImages
+      })
+    });
+
+    const syncData = await syncRes.json();
+    if (syncData.success) {
+      updateSyncBadge("✅ Brand Logos Published", true, false);
+      showToast("✅ Success! Brand logo updated and published to live site.", "success");
+    } else {
+      updateSyncBadge("❌ Publishing Failed", false, true);
+      showToast("Error updating brand logos: " + (syncData.message || "Unknown error"), "error");
+    }
+  } catch (err) {
+    console.error("Failed to sync brand logos:", err);
+    showToast("Error syncing brand logos: " + err.message, "error");
+  }
 }
 
 const iframe = document.getElementById('visualEditorIframe');
