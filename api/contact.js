@@ -25,8 +25,8 @@ export default async function handler(req, res) {
     }
     emailHtml += `</ul></div>`;
 
-    // Set destination email address (defaults to RESEND_TO_EMAIL or lilyanawsan@gmail.com)
-    const toEmails = [process.env.RESEND_TO_EMAIL || 'lilyanawsan@gmail.com'];
+    // Set destination email address (defaults to lilyanawsan@gmail.com while domain verification is pending)
+    const toEmails = ['lilyanawsan@gmail.com'];
 
     const options = {
       from: 'Fabric8 Website <onboarding@resend.dev>',
