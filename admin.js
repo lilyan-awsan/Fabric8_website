@@ -1104,47 +1104,36 @@ if (brandForm) {
 }
 
 // Tab Switching
-if (tabProducts && tabSettings && tabBrands) {
-  const resetTabButtons = () => {
-    [tabProducts, tabBrands, tabSettings].forEach(tab => {
-      tab.classList.remove('active');
-      tab.style.background = 'white';
-      tab.style.color = 'var(--ink)';
-      tab.style.border = '1px solid var(--line)';
-    });
-  };
-
-  const setActiveTab = (btn) => {
-    resetTabButtons();
-    btn.classList.add('active');
-    btn.style.background = 'var(--green)';
-    btn.style.color = 'white';
-    btn.style.border = 'none';
-  };
-
+if (tabProducts && tabSettings) {
   tabProducts.addEventListener('click', () => {
-    setActiveTab(tabProducts);
+    tabProducts.classList.add('active');
+    tabProducts.style.background = 'var(--green)';
+    tabProducts.style.color = 'white';
+    tabProducts.style.border = 'none';
+    tabSettings.classList.remove('active');
+    tabSettings.style.background = 'white';
+    tabSettings.style.color = 'var(--ink)';
+    tabSettings.style.border = '1px solid var(--line)';
+    
     productsSection.style.display = 'block';
     if(tableContainer) tableContainer.style.display = 'block';
-    if(brandsSection) brandsSection.style.display = 'none';
     settingsSection.style.display = 'none';
-  });
-
-  tabBrands.addEventListener('click', () => {
-    setActiveTab(tabBrands);
-    productsSection.style.display = 'none';
-    if(tableContainer) tableContainer.style.display = 'none';
-    if(brandsSection) brandsSection.style.display = 'block';
-    settingsSection.style.display = 'none';
-    renderBrandLogosGrid();
   });
   
   tabSettings.addEventListener('click', () => {
-    setActiveTab(tabSettings);
+    tabSettings.classList.add('active');
+    tabSettings.style.background = 'var(--green)';
+    tabSettings.style.color = 'white';
+    tabSettings.style.border = 'none';
+    tabProducts.classList.remove('active');
+    tabProducts.style.background = 'white';
+    tabProducts.style.color = 'var(--ink)';
+    tabProducts.style.border = '1px solid var(--line)';
+    
     productsSection.style.display = 'none';
     if(tableContainer) tableContainer.style.display = 'none';
-    if(brandsSection) brandsSection.style.display = 'none';
-    settingsSection.style.display = 'block';
+    settingsSection.style.display = 'flex';
+    renderBrandLogosGrid();
   });
 }
 
@@ -1235,6 +1224,50 @@ if (iframe && navBtns.length > 0) {
           .editable-image:hover::after { opacity: 1; }
         `;
         doc.head.appendChild(style);
+      }
+
+      // Inject Red (-) and Green (+) buttons onto brand logos inside iframe marquee
+      const iframeMarquee = doc.querySelector('.marquee-content');
+      if (iframeMarquee && !iframeMarquee.getAttribute('data-controls-injected')) {
+        iframeMarquee.setAttribute('data-controls-injected', 'true');
+        
+        // Add Green (+) Add Button to the left of logos marquee in iframe
+        const greenAddBtn = doc.createElement('div');
+        greenAddBtn.style.cssText = 'width: 50px; height: 50px; border-radius: 50%; background: #2ecc71; color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(46,204,113,0.4); flex-shrink: 0; margin-right: 20px; transition: transform 0.2s;';
+        greenAddBtn.title = 'Add Brand Logo';
+        greenAddBtn.innerHTML = '&plus;';
+        greenAddBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (brandForm) brandForm.reset();
+          if (brandLogoPreviewBox) brandLogoPreviewBox.style.display = 'none';
+          if (addBrandModal) addBrandModal.style.display = 'flex';
+        });
+        iframeMarquee.insertBefore(greenAddBtn, iframeMarquee.firstChild);
+
+        // Attach Red (-) Delete buttons to each logo item in iframe preview
+        const logoBoxes = iframeMarquee.querySelectorAll('div:not([title="Add Brand Logo"])');
+        logoBoxes.forEach(box => {
+          box.style.position = 'relative';
+          const redDeleteBtn = doc.createElement('div');
+          redDeleteBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; width: 26px; height: 26px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); z-index: 99; line-height: 1;';
+          redDeleteBtn.title = 'Delete Logo';
+          redDeleteBtn.innerHTML = '&minus;';
+          redDeleteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const imgEl = box.querySelector('img');
+            const logoAlt = imgEl ? imgEl.getAttribute('alt') : 'this logo';
+            if (confirm(`Delete "${logoAlt}" from logo strip?`)) {
+              box.remove();
+              // Also sync brandLogosList
+              brandLogosList = brandLogosList.filter(b => !logoAlt || !b.name.toLowerCase().includes(logoAlt.toLowerCase()));
+              try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(e){}
+              renderBrandLogosGrid();
+            }
+          });
+          box.appendChild(redDeleteBtn);
+        });
       }
       
       // Intercept all link clicks in capture phase to prevent accidental iframe navigation
