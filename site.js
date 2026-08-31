@@ -231,6 +231,9 @@ function applySiteSettings() {
 
 
 async function loadProducts() {
+  let siteInitialized = false;
+
+  // 1. Instant load from localStorage cache if available
   try {
     const cachedSettings = localStorage.getItem("fabric8_admin_settings_cache");
     if (cachedSettings) {
@@ -247,22 +250,42 @@ async function loadProducts() {
         products = parsed;
         products.sort((a, b) => a.name.localeCompare(b.name));
         initSite();
+        siteInitialized = true;
       }
     }
   } catch (e) {}
 
-  // Parallel network fetch from Firebase Database (with local static fallback)
+  // 2. Ultra-fast fetch from local static files (Vercel CDN Edge) if not initialized yet
+  if (!siteInitialized) {
+    try {
+      const [localSettings, localProducts] = await Promise.all([
+        fetch('data/admin_settings.json').then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch('data/products.json').then(r => r.ok ? r.json() : null).catch(() => null)
+      ]);
+      if (localSettings) {
+        siteSettings = localSettings;
+        applySiteSettings();
+      }
+      if (localProducts && Array.isArray(localProducts) && localProducts.length > 0) {
+        products = localProducts;
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        initSite();
+        siteInitialized = true;
+      }
+    } catch (e) {}
+  }
+
+  // 3. Background Async Sync with Firebase Realtime Database (Non-blocking)
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   Promise.all([
-    fetch(`${FIREBASE_DB}/admin_settings.json`).then(r => r.ok ? r.json() : null).catch(() => fetch('data/admin_settings.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null)),
-    fetch(`${FIREBASE_DB}/products.json`).then(r => r.ok ? r.json() : null).catch(() => fetch('data/products.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null))
+    fetch(`${FIREBASE_DB}/admin_settings.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(`${FIREBASE_DB}/products.json`).then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([settingsData, productsData]) => {
     if (settingsData) {
       const settingsCacheTimeStr = localStorage.getItem("fabric8_admin_settings_cache_time");
       const settingsCacheTime = settingsCacheTimeStr ? parseInt(settingsCacheTimeStr, 10) : 0;
-      const isRecentSettingsSave = (Date.now() - settingsCacheTime) < 900000; // 15-minute protection window
+      const isRecentSettingsSave = (Date.now() - settingsCacheTime) < 900000;
 
-      // Only adopt server response if no recent local admin settings save is active
       if (!isRecentSettingsSave || !localStorage.getItem("fabric8_admin_settings_cache")) {
         siteSettings = settingsData;
         try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
@@ -272,20 +295,23 @@ async function loadProducts() {
     if (productsData && Array.isArray(productsData) && productsData.length > 0) {
       const cacheTimeStr = localStorage.getItem("fabric8_products_cache_time");
       const cacheTime = cacheTimeStr ? parseInt(cacheTimeStr, 10) : 0;
-      const isRecentAdminSave = (Date.now() - cacheTime) < 900000; // 15-minute protection window
+      const isRecentAdminSave = (Date.now() - cacheTime) < 900000;
 
-      // Only adopt server response if no recent local admin save is active or server matches/exceeds local count
       if (!isRecentAdminSave || productsData.length >= (products ? products.length : 0)) {
         products = productsData;
         products.sort((a, b) => a.name.localeCompare(b.name));
         try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
-        initSite();
+        if (!siteInitialized) {
+          initSite();
+          siteInitialized = true;
+        }
       }
-    } else if (!products || products.length === 0) {
+    } else if (!siteInitialized) {
       initSite();
+      siteInitialized = true;
     }
   }).catch(() => {
-    if (!products || products.length === 0) initSite();
+    if (!siteInitialized) initSite();
   });
 }
 
