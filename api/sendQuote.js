@@ -196,34 +196,67 @@ export default async function handler(req, res) {
 
     emailHtml += `<h2 style="font-size: 15px; color: #2f873d; border-bottom: 2px solid #2f873d; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 24px;">Ordered Garments & Customizations</h2>`;
     emailHtml += `<table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px;">`;
-    emailHtml += `<tr style="background: #f8f9fa; text-align: left;"><th style="padding: 10px; border-bottom: 2px solid #eee;">#</th><th style="padding: 10px; border-bottom: 2px solid #eee;">Garment Photo</th><th style="padding: 10px; border-bottom: 2px solid #eee;">Specifications</th><th style="padding: 10px; border-bottom: 2px solid #eee; text-align: center;">Qty</th></tr>`;
+    emailHtml += `<tr style="background: #f8f9fa; text-align: left;"><th style="padding: 10px; border-bottom: 2px solid #eee;">#</th><th style="padding: 10px; border-bottom: 2px solid #eee;">Customized Garment Photo</th><th style="padding: 10px; border-bottom: 2px solid #eee;">Garment & Customization Details</th><th style="padding: 10px; border-bottom: 2px solid #eee; text-align: center;">Qty</th></tr>`;
 
     for (let i = 0; i < cart.length; i++) {
       const item = cart[i];
-      const imgRef = item.customizedImage || item.image || (item.images && item.images[0]) || '';
-      let fullImgUrl = "";
-      if (imgRef) {
-        if (imgRef.startsWith('http://') || imgRef.startsWith('https://')) {
-          fullImgUrl = imgRef;
-        } else {
-          fullImgUrl = `${baseUrl}/${imgRef.replace(/^\//, '')}`;
-        }
-      }
+      const customizedImg = item.customizedImage || item.mockupImage || item.previewImage;
+      const baseImg = item.image || (item.images && item.images[0]) || '';
       
-      const photoHtml = fullImgUrl 
-        ? `<a href="${fullImgUrl}" target="_blank" style="text-decoration: none;"><img src="${fullImgUrl}" width="75" height="75" style="object-fit: contain; border-radius: 6px; border: 1px solid #e0e0e0; background: #ffffff; padding: 4px;" alt="${item.name || 'Product'}"></a>`
-        : `<span style="color:#aaa; font-size: 11px;">No Photo</span>`;
+      let photoHtml = "";
+      if (customizedImg && typeof customizedImg === 'string' && customizedImg.startsWith('data:image/')) {
+        // High quality rendered preview with logo/text on garment
+        photoHtml = `<div style="text-align: center;"><img src="${customizedImg}" width="115" style="object-fit: contain; border-radius: 6px; border: 2px solid #2f873d; background: #ffffff; padding: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);" alt="Customized Garment"><div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px;">✦ Customized Preview</div></div>`;
+      } else if (baseImg) {
+        let fullImgUrl = baseImg.startsWith('http') ? baseImg : `${baseUrl}/${baseImg.replace(/^\//, '')}`;
+        photoHtml = `<a href="${fullImgUrl}" target="_blank" style="text-decoration: none;"><img src="${fullImgUrl}" width="85" style="object-fit: contain; border-radius: 6px; border: 1px solid #e0e0e0; background: #ffffff; padding: 4px;" alt="${item.name || 'Product'}"></a>`;
+      } else {
+        photoHtml = `<span style="color:#aaa; font-size: 11px;">No Photo</span>`;
+      }
+
+      // Build Customization summary box (Text Embroidery / Logo Upload / Placement)
+      let customDetailsHtml = "";
+      if (item.customization || item.embroideryData || item.logoData || (item.branding && item.branding !== "None")) {
+        customDetailsHtml += `<div style="margin-top: 8px; padding: 8px 10px; background: #f4fbf6; border-left: 3px solid #2f873d; border-radius: 4px; font-size: 12px;">`;
+        
+        if (item.customizationType === "upload_logo" || item.logoData) {
+          const lData = item.logoData || {};
+          customDetailsHtml += `<div style="font-weight: bold; color: #1a5e2a; font-size: 13px;">🖼️ Logo Customization</div>`;
+          customDetailsHtml += `<div>Placement Zone: <strong>${lData.placement || item.customization?.placement || 'Custom'}</strong></div>`;
+          customDetailsHtml += `<div>Technique / Finish: <strong>${lData.finish || item.customization?.finish || 'Embroidery / DTF Print'}</strong></div>`;
+        } else if (item.customizationType === "text_embroidery" || item.embroideryData || (item.customization && item.customization.textDetails)) {
+          const emb = item.embroideryData || {};
+          const textLines = emb.textLines || (item.customization && item.customization.textDetails) || {};
+          customDetailsHtml += `<div style="font-weight: bold; color: #1a5e2a; font-size: 13px;">✍️ Text Embroidery Details</div>`;
+          if (emb.position || item.customization?.placement) {
+            customDetailsHtml += `<div>Placement Zone: <strong>${emb.position || item.customization?.placement}</strong></div>`;
+          }
+          if (emb.fontStyle || textLines.font) {
+            customDetailsHtml += `<div>Font Style: <strong>${emb.fontStyle || textLines.font || 'Standard'}</strong> | Thread Color: <strong>${emb.threadColor || textLines.threadColor || 'Standard'}</strong></div>`;
+          }
+          if (textLines.line1 || textLines.line2 || textLines.line3 || textLines.line1 === "") {
+            customDetailsHtml += `<div style="margin-top: 4px; font-weight: bold; color: #111;">Embroidery Text:</div>`;
+            if (textLines.line1) customDetailsHtml += `<div style="padding-left: 8px; color: #222;">• Line 1: <em>"${textLines.line1}"</em></div>`;
+            if (textLines.line2) customDetailsHtml += `<div style="padding-left: 8px; color: #222;">• Line 2: <em>"${textLines.line2}"</em></div>`;
+            if (textLines.line3) customDetailsHtml += `<div style="padding-left: 8px; color: #222;">• Line 3: <em>"${textLines.line3}"</em></div>`;
+          }
+        } else if (item.branding && item.branding !== "None") {
+          customDetailsHtml += `<div style="color: #1a5e2a; font-weight: bold;">✦ Branding: ${item.branding}</div>`;
+        }
+        
+        customDetailsHtml += `</div>`;
+      }
 
       emailHtml += `
         <tr style="border-bottom: 1px solid #eee;">
-          <td style="padding: 12px 10px; font-weight: bold; color: #666; vertical-align: middle;">#${i + 1}</td>
-          <td style="padding: 12px 10px; vertical-align: middle;">${photoHtml}</td>
-          <td style="padding: 12px 10px; vertical-align: middle;">
+          <td style="padding: 12px 10px; font-weight: bold; color: #666; vertical-align: top;">#${i + 1}</td>
+          <td style="padding: 12px 10px; vertical-align: top;">${photoHtml}</td>
+          <td style="padding: 12px 10px; vertical-align: top;">
             <div style="font-weight: bold; color: #111; font-size: 14px;">${item.name || 'Custom Garment'}</div>
             <div style="color: #666; font-size: 12px; margin-top: 4px;">SKU: <strong>${item.sku || 'N/A'}</strong> | Size: <strong>${item.size || 'N/A'}</strong> | Color: <strong>${item.color || 'Standard'}</strong></div>
-            ${item.branding && item.branding !== 'None' ? `<div style="color: #2f873d; font-size: 12px; font-weight: bold; margin-top: 4px;">✦ Branding: ${item.branding}</div>` : ''}
+            ${customDetailsHtml}
           </td>
-          <td style="padding: 12px 10px; text-align: center; font-weight: bold; font-size: 15px; color: #111; vertical-align: middle;">${item.quantity || 1}</td>
+          <td style="padding: 12px 10px; text-align: center; font-weight: bold; font-size: 15px; color: #111; vertical-align: top;">${item.quantity || 1}</td>
         </tr>
       `;
     }
