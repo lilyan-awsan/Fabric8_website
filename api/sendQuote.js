@@ -194,8 +194,43 @@ export default async function handler(req, res) {
     }
     emailHtml += `</table>`;
 
-    emailHtml += `<h2 style="font-size: 15px; color: #2f873d; border-bottom: 2px solid #2f873d; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Order Spreadsheet Preview</h2>`;
-    emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review customized product line items, clickable photo links, quantities, sizes, colors, and to complete the empty Product Price column—your line totals and Grand Total will compute automatically.</p>`;
+    emailHtml += `<h2 style="font-size: 15px; color: #2f873d; border-bottom: 2px solid #2f873d; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 24px;">Ordered Garments & Customizations</h2>`;
+    emailHtml += `<table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 13px;">`;
+    emailHtml += `<tr style="background: #f8f9fa; text-align: left;"><th style="padding: 10px; border-bottom: 2px solid #eee;">#</th><th style="padding: 10px; border-bottom: 2px solid #eee;">Garment Photo</th><th style="padding: 10px; border-bottom: 2px solid #eee;">Specifications</th><th style="padding: 10px; border-bottom: 2px solid #eee; text-align: center;">Qty</th></tr>`;
+
+    for (let i = 0; i < cart.length; i++) {
+      const item = cart[i];
+      const imgRef = item.customizedImage || item.image || (item.images && item.images[0]) || '';
+      let fullImgUrl = "";
+      if (imgRef) {
+        if (imgRef.startsWith('http://') || imgRef.startsWith('https://')) {
+          fullImgUrl = imgRef;
+        } else {
+          fullImgUrl = `${baseUrl}/${imgRef.replace(/^\//, '')}`;
+        }
+      }
+      
+      const photoHtml = fullImgUrl 
+        ? `<a href="${fullImgUrl}" target="_blank" style="text-decoration: none;"><img src="${fullImgUrl}" width="75" height="75" style="object-fit: contain; border-radius: 6px; border: 1px solid #e0e0e0; background: #ffffff; padding: 4px;" alt="${item.name || 'Product'}"></a>`
+        : `<span style="color:#aaa; font-size: 11px;">No Photo</span>`;
+
+      emailHtml += `
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 12px 10px; font-weight: bold; color: #666; vertical-align: middle;">#${i + 1}</td>
+          <td style="padding: 12px 10px; vertical-align: middle;">${photoHtml}</td>
+          <td style="padding: 12px 10px; vertical-align: middle;">
+            <div style="font-weight: bold; color: #111; font-size: 14px;">${item.name || 'Custom Garment'}</div>
+            <div style="color: #666; font-size: 12px; margin-top: 4px;">SKU: <strong>${item.sku || 'N/A'}</strong> | Size: <strong>${item.size || 'N/A'}</strong> | Color: <strong>${item.color || 'Standard'}</strong></div>
+            ${item.branding && item.branding !== 'None' ? `<div style="color: #2f873d; font-size: 12px; font-weight: bold; margin-top: 4px;">✦ Branding: ${item.branding}</div>` : ''}
+          </td>
+          <td style="padding: 12px 10px; text-align: center; font-weight: bold; font-size: 15px; color: #111; vertical-align: middle;">${item.quantity || 1}</td>
+        </tr>
+      `;
+    }
+    emailHtml += `</table>`;
+
+    emailHtml += `<h2 style="font-size: 15px; color: #2f873d; border-bottom: 2px solid #2f873d; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Quotation Spreadsheet & Attachments</h2>`;
+    emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review line item details, pricing formulas, and complete the quotation fill-in.</p>`;
     emailHtml += `<div style="margin-top: 36px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #999; text-align: center;">Fabric 8 Custom Atelier System &copy; 2026. All rights reserved.</div></div>`;
 
     const customerEmail = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'];
