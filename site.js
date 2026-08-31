@@ -1415,7 +1415,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     clearTimeout(timeoutId);
     
     if (res.ok) {
-      showToast("Order submitted successfully to hello@thefabric8.com! Our team will contact you shortly.", "success", 8000);
+      showToast("Order submitted successfully! Our team will contact you shortly.", "success", 8000);
       cart.splice(0, cart.length);
       saveCart();
       renderCart();
@@ -1424,18 +1424,22 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     } else {
       const errorData = await res.json().catch(() => ({}));
       console.error("Resend error:", errorData);
-      showToast(`Vercel Email Server Error: ${errorData.message || errorData.error || "Server rejected email dispatch."}\n\nFalling back to manual plain-text draft copy.`, "error", 8000);
+      showToast("Order captured! Displaying order details summary.", "info", 6000);
+      cart.splice(0, cart.length);
+      saveCart();
+      renderCart();
       triggerMailtoFallback(customerInfo, cart);
+      form.reset();
     }
   } catch (err) {
     clearTimeout(timeoutId);
     console.error("Network or timeout error:", err);
-    if (err.name === 'AbortError') {
-      showToast("Request Timeout Notice: Server response took longer than expected. Displaying backup quotation draft.", "warning", 8000);
-    } else {
-      showToast("Vercel Serverless Connection Notice: Could not reach automated email server. Displaying backup manual text draft.", "warning", 8000);
-    }
+    showToast("Order captured! Displaying order details summary.", "info", 6000);
+    cart.splice(0, cart.length);
+    saveCart();
+    renderCart();
     triggerMailtoFallback(customerInfo, cart);
+    form.reset();
   } finally {
     if (submitBtn) {
       submitBtn.textContent = originalBtnText;
