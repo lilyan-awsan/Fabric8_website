@@ -77,7 +77,7 @@ export default async function handler(req, res) {
     // Configure exact 9 client required column widths
     sheet.columns = [
       { key: 'index', width: 6 },      // 1. #
-      { key: 'photo', width: 34 },     // 2. Photo (Expanded for large clear preview)
+      { key: 'photo', width: 55 },     // 2. Photo (Super Large & High Resolution Preview)
       { key: 'sku', width: 16 },       // 3. Product SKU
       { key: 'name', width: 38 },      // 4. Product Name
       { key: 'qty', width: 10 },       // 5. QTY
@@ -129,7 +129,7 @@ export default async function handler(req, res) {
 
       const row = sheet.addRow([
         i + 1,                   // 1. #
-        photoCellVal,            // 2. Photo (Live Hyperlink or Embedded HD Image)
+        photoCellVal,            // 2. Photo (Live Hyperlink or Large Embedded HD Image)
         item.sku || 'N/A',       // 3. Product SKU
         productName,             // 4. Product Name
         Number(item.quantity) || 1, // 5. QTY (Numeric)
@@ -151,8 +151,8 @@ export default async function handler(req, res) {
               extension: format,
             });
             sheet.addImage(imageId, {
-              tl: { col: 1, row: row.number - 1 },
-              ext: { width: 110, height: 85 },
+              tl: { col: 1.08, row: (row.number - 1) + 0.08 },
+              ext: { width: 240, height: 180 },
               editAs: 'oneCell'
             });
           }
@@ -161,7 +161,7 @@ export default async function handler(req, res) {
         }
       }
 
-      row.height = 95; // Expanded row height for clean, large visual preview
+      row.height = 165; // Super large row height for clear, high-res visual inspection
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
         cell.border = borderStyle;
         cell.font = { name: 'Arial', size: 11 };

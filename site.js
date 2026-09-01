@@ -1440,12 +1440,16 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     ])).filter(Boolean);
     attachments.push(...resolvedAttachments);
 
-    // Clean cart items to prevent 4.5MB Vercel Serverless payload overflow
-    const sanitizedCart = (cart || []).map(item => {
+    // Clean & compress cart items to prevent Vercel payload overflow while preserving customized mockup images
+    const sanitizedCart = await Promise.all((cart || []).map(async (item) => {
       const cleanItem = { ...item };
-      delete cleanItem.customizedImage;
-      delete cleanItem.mockupImage;
-      delete cleanItem.previewImage;
+      const rawCustomImg = item.customizedImage || item.mockupImage || item.previewImage;
+      if (typeof rawCustomImg === 'string' && rawCustomImg.startsWith('data:image/')) {
+        const compressedBase64 = await compressBase64Image(rawCustomImg, 450, 0.75);
+        if (compressedBase64) {
+          cleanItem.customizedImage = `data:image/jpeg;base64,${compressedBase64}`;
+        }
+      }
       if (typeof cleanItem.logoData === 'object' && cleanItem.logoData) {
         const cleanLogo = { ...cleanItem.logoData };
         delete cleanLogo.imageSrc;
@@ -1453,7 +1457,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
         cleanItem.logoData = cleanLogo;
       }
       return cleanItem;
-    });
+    }));
 
     const payload = {
       customerInfo,
