@@ -1421,17 +1421,35 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     return itemPromises;
   });
 
-  const resolvedAttachments = (await Promise.all(attachmentPromises)).filter(Boolean);
+  const resolvedAttachments = (await Promise.race([
+    Promise.all(attachmentPromises),
+    new Promise(resolve => setTimeout(() => resolve([]), 3000))
+  ])).filter(Boolean);
   attachments.push(...resolvedAttachments);
+
+  // Clean cart items to prevent 4.5MB Vercel Serverless payload overflow
+  const sanitizedCart = cart.map(item => {
+    const cleanItem = { ...item };
+    delete cleanItem.customizedImage;
+    delete cleanItem.mockupImage;
+    delete cleanItem.previewImage;
+    if (typeof cleanItem.logoData === 'object' && cleanItem.logoData) {
+      const cleanLogo = { ...cleanItem.logoData };
+      delete cleanLogo.imageSrc;
+      delete cleanLogo.data;
+      cleanItem.logoData = cleanLogo;
+    }
+    return cleanItem;
+  });
 
   const payload = {
     customerInfo,
-    cart,
+    cart: sanitizedCart,
     attachments: attachments
   };
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second request timeout safeguard
+  const timeoutId = setTimeout(() => controller.abort(), 6000); // 6-second request timeout safeguard
 
   try {
     const res = await fetch('/api/sendQuote', {
@@ -1450,23 +1468,21 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       form.reset();
       if (typeof initClientDetailsPersistence === 'function') initClientDetailsPersistence();
     } else {
-      const errorData = await res.json().catch(() => ({}));
-      console.error("Resend error:", errorData);
       showToast("Order captured! Displaying order details summary.", "info", 6000);
+      triggerMailtoFallback(customerInfo, cart);
       cart.splice(0, cart.length);
       saveCart();
       renderCart();
-      triggerMailtoFallback(customerInfo, cart);
       form.reset();
     }
   } catch (err) {
     clearTimeout(timeoutId);
     console.error("Network or timeout error:", err);
     showToast("Order captured! Displaying order details summary.", "info", 6000);
+    triggerMailtoFallback(customerInfo, cart);
     cart.splice(0, cart.length);
     saveCart();
     renderCart();
-    triggerMailtoFallback(customerInfo, cart);
     form.reset();
   } finally {
     if (submitBtn) {
