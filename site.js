@@ -1320,6 +1320,26 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   const form = event.target;
   const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('button');
   const originalBtnText = submitBtn ? submitBtn.textContent : "Submit Request";
+
+  // Validate delivery date (must be today or future date)
+  const dateInput = form.querySelector('input[type="date"]');
+  if (dateInput && dateInput.value) {
+    const todayObj = new Date();
+    const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+    if (dateInput.value < todayStr) {
+      if (typeof showToast === "function") {
+        showToast("⚠️ Required delivery date cannot be in the past. Please select today or a future date.", "warning");
+      } else {
+        alert("Required delivery date cannot be in the past. Please select today or a future date.");
+      }
+      if (submitBtn) {
+        submitBtn.textContent = originalBtnText;
+        submitBtn.disabled = false;
+      }
+      dateInput.focus();
+      return;
+    }
+  }
   
   if (submitBtn) {
     submitBtn.textContent = "Sending Request...";
@@ -3374,6 +3394,23 @@ document.addEventListener('DOMContentLoaded', () => {
   setupContactForm('aboutForm', 'About Us Page');
   setupContactForm('contactForm', 'Contact Us Page');
   initCapabilityBelt();
+
+  // Enforce min delivery date (today or future date only)
+  const todayObj = new Date();
+  const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+  document.querySelectorAll('input[type="date"]').forEach(dInput => {
+    dInput.setAttribute('min', todayStr);
+    dInput.addEventListener('change', () => {
+      if (dInput.value && dInput.value < todayStr) {
+        if (typeof showToast === 'function') {
+          showToast("⚠️ Delivery date cannot be in the past. Automatically set to today.", "warning");
+        } else {
+          alert("Delivery date cannot be in the past. Automatically set to today.");
+        }
+        dInput.value = todayStr;
+      }
+    });
+  });
 });
 
 
