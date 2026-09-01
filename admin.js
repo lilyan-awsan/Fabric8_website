@@ -1452,6 +1452,7 @@ if (saveVisualEditorBtn) {
 
       // Update local admin settings cache with any cms text changes from the iframe
       const cmsElements = {
+        cmsHomeHeroTag: 'homeHeroTag',
         cmsHomeHeroTitle: 'homeHeroTitle',
         cmsHomeHeroSub: 'homeHeroSubtitle',
         cmsHomeHeroBtn: 'homeHeroBtnText',
@@ -1477,6 +1478,13 @@ if (saveVisualEditorBtn) {
         const cached = localStorage.getItem("fabric8_admin_settings_cache");
         if (cached) currentSettings = JSON.parse(cached);
       } catch(e) {}
+
+      if (!currentSettings.siteContent) {
+        try {
+          const resSetting = await fetch('data/admin_settings.json?t=' + Date.now());
+          if (resSetting.ok) currentSettings = await resSetting.json();
+        } catch(e) {}
+      }
       if (!currentSettings.siteContent) currentSettings.siteContent = {};
 
       Object.entries(cmsElements).forEach(([id, key]) => {
@@ -1491,6 +1499,19 @@ if (saveVisualEditorBtn) {
         try {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
           localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch(e) {}
+
+        // Persist updated settings to GitHub data/admin_settings.json & Firebase Realtime Database
+        try {
+          fetch('/api/githubSync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token: authToken,
+              action: "save_settings",
+              product: currentSettings
+            })
+          }).catch(err => console.warn("Background settings sync error:", err));
         } catch(e) {}
       }
 

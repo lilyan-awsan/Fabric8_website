@@ -66,6 +66,10 @@ function applySiteSettings() {
   
   const sc = siteSettings.siteContent || {};
   // 1. Homepage Engine
+  if (sc.homeHeroTag) {
+    const heroTag = document.getElementById('cmsHomeHeroTag');
+    if (heroTag) heroTag.textContent = sc.homeHeroTag;
+  }
   if (sc.homeHeroTitle) {
     const heroTitle = document.getElementById('cmsHomeHeroTitle');
     if (heroTitle) heroTitle.textContent = sc.homeHeroTitle;
