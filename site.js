@@ -709,8 +709,8 @@ function renderCart() {
   items.innerHTML = cart.map((item, index) => {
     const thumbImg = item.customizedImage || item.image;
     return `
-    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 10px; border: 1px solid var(--line); margin-bottom: 8px;">
-      ${thumbImg ? `<div style="flex-shrink: 0; width: 75px; height: 75px; background: #faf9f5; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; overflow: hidden; padding: 4px;"><img src="${thumbImg}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : ''}
+    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 12px; border: 1px solid var(--line); margin-bottom: 8px;">
+      ${thumbImg ? `<div style="flex-shrink: 0; width: 85px; height: 85px; background: #ffffff; border-radius: 8px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px;"><img src="${thumbImg}" alt="${item.name}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; background: #ffffff;" /></div>` : ''}
       <div class="cart-item-info" style="flex: 1;">
         <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
           <span>${item.name}</span>
@@ -917,15 +917,23 @@ function addToCart(sku) {
     return;
   }
 
+  let matchedImage = selectedProduct.image;
+  if (activeCatalogColor && Array.isArray(selectedProduct.images) && selectedProduct.images.length > 0) {
+    const match = selectedProduct.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+    if (match) matchedImage = match;
+  }
+
   const existing = cart.find(
     (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize
   );
 
   if (existing) {
     existing.quantity += quantity;
+    existing.image = matchedImage;
   } else {
     cart.push({
       ...selectedProduct,
+      image: matchedImage,
       quantity,
       color: activeCatalogColor,
       size: selectedSize,

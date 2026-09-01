@@ -1478,7 +1478,7 @@ if (saveVisualEditorBtn) {
       if (!currentSettings.siteContent) currentSettings.siteContent = {};
 
       Object.entries(cmsElements).forEach(([id, key]) => {
-        const el = cleanDoc.getElementById(id);
+        const el = cleanDoc.querySelector('#' + id);
         if (el && el.textContent) {
           currentSettings.siteContent[key] = el.textContent.trim();
           settingsUpdated = true;
