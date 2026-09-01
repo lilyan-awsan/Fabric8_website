@@ -192,7 +192,9 @@
       const countrySelect = document.getElementById(prefix + 'Country');
       if (!countrySelect) return;
       
-      const isUS = countrySelect.value === 'United States';
+      const val = (countrySelect.value || '').trim();
+      const isUS = val === 'United States' || val === 'US' || val.toLowerCase().includes('united states');
+      
       const addr1 = document.getElementById(prefix + 'Addr1');
       const addr2 = document.getElementById(prefix + 'Addr2');
       const cityStateRow = document.getElementById(prefix + 'CityStateRow');
@@ -201,14 +203,14 @@
       const zip = document.getElementById(prefix + 'Zip');
       const zipRow = zip ? zip.parentElement : null;
 
-      if (!isUS && countrySelect.value !== '') {
-        // Hide US-specific fields for international locations
-        if (addr2) addr2.style.display = 'none';
-        if (cityStateRow) cityStateRow.style.display = 'none';
-        if (zip) zip.style.display = 'none';
+      if (!isUS) {
+        // Hide US-specific fields for UAE, Jordan, and all international locations
+        if (addr2) addr2.style.setProperty('display', 'none', 'important');
+        if (cityStateRow) cityStateRow.style.setProperty('display', 'none', 'important');
+        if (zip) zip.style.setProperty('display', 'none', 'important');
         if (zipRow) zipRow.style.gridTemplateColumns = '1fr';
         
-        // Remove required attributes
+        // Remove required attributes from hidden fields
         if (city) city.removeAttribute('required');
         if (state) state.removeAttribute('required');
         if (zip) zip.removeAttribute('required');
@@ -217,9 +219,9 @@
         if (addr1) addr1.placeholder = prefix === 'ship' ? 'Full Street Address / Location Details*' : 'Full Billing Address / Location Details*';
       } else {
         // Show structured fields for US
-        if (addr2) addr2.style.display = 'block';
-        if (cityStateRow) cityStateRow.style.display = 'grid';
-        if (zip) zip.style.display = 'block';
+        if (addr2) addr2.style.setProperty('display', 'block', 'important');
+        if (cityStateRow) cityStateRow.style.setProperty('display', 'grid', 'important');
+        if (zip) zip.style.setProperty('display', 'block', 'important');
         if (zipRow) zipRow.style.gridTemplateColumns = '1fr 1fr';
 
         // Add required attributes back for shipping
@@ -234,18 +236,18 @@
       }
     }
 
-    // Attach listeners
+    // Attach listeners and run updates
     const shipCountry = document.getElementById('shipCountry');
     const billCountry = document.getElementById('billCountry');
     
     if (shipCountry) {
       shipCountry.addEventListener('change', () => updateAddressFields('ship'));
-      updateAddressFields('ship');
+      shipCountry.addEventListener('input', () => updateAddressFields('ship'));
     }
     
     if (billCountry) {
       billCountry.addEventListener('change', () => updateAddressFields('bill'));
-      updateAddressFields('bill');
+      billCountry.addEventListener('input', () => updateAddressFields('bill'));
     }
 
     // Sync header country selector to shipping country
@@ -254,17 +256,19 @@
       headerCountry.addEventListener('change', function() {
         if (this.value === 'US') shipCountry.value = 'United States';
         else if (this.value === 'JO') shipCountry.value = 'Jordan';
-        else shipCountry.value = 'Other International';
+        else shipCountry.value = 'United Arab Emirates';
         updateAddressFields('ship');
       });
-      
-      // Initialize based on current global country if set
-      const currentCountry = localStorage.getItem('fabric8_country') || 'US';
-      if (currentCountry === 'US') shipCountry.value = 'United States';
-      else if (currentCountry === 'JO') shipCountry.value = 'Jordan';
-      else shipCountry.value = 'Other International';
-      updateAddressFields('ship');
     }
+
+    // Run updates immediately on load & DOMReady
+    function triggerInitialAddressCheck() {
+      updateAddressFields('ship');
+      updateAddressFields('bill');
+    }
+    triggerInitialAddressCheck();
+    document.addEventListener('DOMContentLoaded', triggerInitialAddressCheck);
+    setTimeout(triggerInitialAddressCheck, 500);
   </script>
 </body>
 </html>
