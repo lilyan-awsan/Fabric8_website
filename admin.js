@@ -1500,26 +1500,13 @@ if (saveVisualEditorBtn) {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
           localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
         } catch(e) {}
-
-        // Persist updated settings to GitHub data/admin_settings.json & Firebase Realtime Database
-        try {
-          fetch('/api/githubSync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              token: authToken,
-              action: "save_settings",
-              product: currentSettings
-            })
-          }).catch(err => console.warn("Background settings sync error:", err));
-        } catch(e) {}
       }
 
       updateSyncBadge("Publishing visual page changes...", false, false);
 
-      // 15 second fetch timeout controller
+      // 45 second fetch timeout controller for full payload & API sync
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
 
       const res = await fetch('/api/githubSync', {
         method: 'POST',
@@ -1530,7 +1517,8 @@ if (saveVisualEditorBtn) {
           action: "save_html",
           filename: currentVisualPage,
           htmlContent: rawHtml,
-          siteImages: newSiteImages
+          siteImages: newSiteImages,
+          siteSettingsPayload: settingsUpdated ? currentSettings : null
         })
       });
       clearTimeout(timeoutId);

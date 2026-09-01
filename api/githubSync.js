@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   try {
     // Immediate handler for save_html action to avoid unnecessary products.json fetches
     if (action === "save_html") {
-      const { filename, htmlContent, siteImages } = req.body;
+      const { filename, htmlContent, siteImages, siteSettingsPayload } = req.body;
       
       let finalHtml = htmlContent;
       if (siteImages && Array.isArray(siteImages)) {
@@ -70,6 +70,62 @@ export default async function handler(req, res) {
         const err = await updateRes.json();
         throw new Error("Failed to save HTML to server: " + err.message);
       }
+
+      // If siteSettingsPayload is provided, update data/admin_settings.json & Firebase atomically
+      if (siteSettingsPayload && typeof siteSettingsPayload === 'object') {
+        try {
+          const settingsPath = "data/admin_settings.json";
+          let currentSettingsSha = null;
+          let existingSettings = {};
+
+          const settingsFileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+            headers: { 'Authorization': `Bearer ${githubToken}` }
+          });
+          if (settingsFileRes.ok) {
+            const fileData = await settingsFileRes.json();
+            currentSettingsSha = fileData.sha;
+            try {
+              const str = Buffer.from(fileData.content, 'base64').toString('utf-8');
+              existingSettings = JSON.parse(str);
+            } catch(e) {}
+          }
+
+          const mergedSettings = {
+            ...existingSettings,
+            ...siteSettingsPayload,
+            siteContent: {
+              ...(existingSettings.siteContent || {}),
+              ...(siteSettingsPayload.siteContent || {})
+            }
+          };
+
+          const newSettingsStr = JSON.stringify(mergedSettings, null, 2);
+          const newSettingsBase64 = Buffer.from(newSettingsStr).toString('base64');
+
+          const settingsPayload = {
+            message: 'Update admin settings from Visual Editor',
+            content: newSettingsBase64
+          };
+          if (currentSettingsSha) settingsPayload.sha = currentSettingsSha;
+
+          await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(settingsPayload)
+          });
+
+          // Sync to Firebase Realtime DB
+          await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(mergedSettings)
+          }).catch(e => console.error("Firebase sync error:", e));
+
+        } catch (sErr) {
+          console.warn("Could not save updated settings alongside HTML:", sErr);
+        }
+      }
+
       return res.status(200).json({ success: true, message: 'HTML layout saved successfully' });
     }
 
