@@ -12,14 +12,12 @@
   --white: #ffffff;
 }
 
-html, body {
+html {
   scroll-behavior: smooth;
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: hidden !important; 
-  background-color: #0b0f17 !important;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
@@ -28,15 +26,15 @@ html, body {
 
 /* Resets to prevent browser zoom edge gap glitches or horizontal scrolling */
 body {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Outer Container (Background): Forced to break out and touch absolute edges of viewport */
+/* Outer Container (Background): Always stretches width: 100% or 100vw to browser edges */
 .full-bleed,
 section,
 header,
@@ -47,14 +45,9 @@ footer,
 .fashion-hero,
 .landing,
 .section-full-bleed {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw !important;
-  margin-right: -50vw !important;
-  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -1832,20 +1825,18 @@ input.error, select.error, textarea.error {
    ========================================================================= */
 
 html, body {
-  width: 100vw !important;
-  max-width: 100vw !important;
+  overflow-x: hidden;
+  width: 100% !important;
+  max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow-x: hidden !important; 
-  background-color: #0b0f17 !important;
 }
 
 body {
-  width: 100vw !important;
-  max-width: 100vw !important;
+  width: 100% !important;
+  max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow-x: hidden !important;
   box-sizing: border-box !important;
 }
 
