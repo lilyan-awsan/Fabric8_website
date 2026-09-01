@@ -173,9 +173,10 @@ body {
 }
 
 .admin-main {
-  max-width: 1200px;
+  max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
-  padding: 40px 32px;
+  padding: 30px 40px;
 }
 
 .admin-topbar {
