@@ -1944,3 +1944,60 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(calc(-50% - 30px)); /* -50% shifts it exactly halfway, -30px accounts for half the 60px gap so it loops seamlessly */ }
 }
+
+/* Size & Quantity Matrix Styling Reset */
+.size-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #ffffff !important;
+  padding: 6px 10px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px !important;
+  transition: all 0.25s ease !important;
+  box-sizing: border-box !important;
+}
+
+.size-select-btn {
+  flex: 1 !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 10px !important;
+  background: transparent !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 6px !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  color: var(--ink) !important;
+  box-sizing: border-box !important;
+}
+
+.matrix-qty-input {
+  width: 90px !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  padding: 0 8px !important;
+  text-align: center !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 6px !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  background: #ffffff !important;
+}
+
+.matrix-qty-input:focus {
+  outline: none !important;
+  border-color: var(--ink) !important;
+  box-shadow: 0 0 0 2px rgba(35, 31, 32, 0.12) !important;
+}
+

@@ -1870,12 +1870,12 @@ function initProductPage(sku) {
     let displaySizes = isOneSize ? ["ONE SIZE"] : (p.sizes || ["S", "M", "L", "XL", "2XL"]);
     
     matrix.innerHTML = displaySizes.map(size => `
-      <div class="size-row" style="display: flex; align-items: center; gap: 12px; background: #fff; padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; transition: all 0.25s ease;">
-        <button type="button" class="size-select-btn" data-size="${size}" style="flex: 1; padding: 10px 14px; background: transparent; border: 1px solid var(--line); border-radius: 6px; font-weight: 800; font-size: 13px; text-align: left; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center; color: var(--ink);">
+      <div class="size-row">
+        <button type="button" class="size-select-btn" data-size="${size}">
           <span>${size}</span>
           <span class="chk-indicator" style="font-size: 11px; color: var(--muted);">○</span>
         </button>
-        <input type="number" min="0" ${maxQtyVal ? `max="${maxQtyVal}"` : ''} placeholder="QTY" class="matrix-qty-input" data-size="${size}" style="width: 100px; padding: 8px; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-family: inherit; font-size: 14px; transition: all 0.2s ease;" />
+        <input type="number" min="0" ${maxQtyVal ? `max="${maxQtyVal}"` : ''} placeholder="QTY" class="matrix-qty-input" data-size="${size}" />
       </div>
     `).join("");
 
