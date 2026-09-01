@@ -270,8 +270,8 @@ export default async function handler(req, res) {
     const replyTo = (customerEmail && customerEmail.includes('@')) ? customerEmail : undefined;
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // Set destination email address (defaults to lilyanawsan@gmail.com while domain verification is pending)
-    const targetEmails = ['lilyanawsan@gmail.com'];
+    // Set destination email address
+    const targetEmails = ['lilyanawsan@gmail.com', 'hello@thefabric8.com'];
 
     const attachments = [
       {

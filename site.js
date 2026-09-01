@@ -1233,15 +1233,22 @@ function triggerMailtoFallback(customerInfo, cart) {
     bodyText += `- No products selected.\n`;
   } else {
     cart.forEach(item => {
-      bodyText += `- ${item.name} (${item.sku})\n  Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity}\n  Branding: ${item.branding || "None"}\n\n`;
+      bodyText += `- ${item.name || 'Product'} (${item.sku || 'N/A'})\n  Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity || 1}\n  Branding: ${item.branding || "None"}\n\n`;
     });
   }
   
-  // 1. Try to open the user's email client
-  const mailtoLink = `mailto:hello@thefabric8.com?subject=${encodeURIComponent('New Fabric8 Quote Request')}&body=${encodeURIComponent(bodyText)}`;
-  window.location.href = mailtoLink;
+  // 1. Try to open the user's email client safely
+  try {
+    const mailtoLink = `mailto:hello@thefabric8.com?subject=${encodeURIComponent('New Fabric8 Quote Request')}&body=${encodeURIComponent(bodyText)}`;
+    window.location.href = mailtoLink;
+  } catch (e) {
+    console.warn("Mailto link trigger skipped or blocked", e);
+  }
 
   // 2. Also show a modal with the draft on screen just in case mailto fails
+  const existingModal = document.getElementById('emailDraftModal');
+  if (existingModal) existingModal.remove();
+
   const modalHtml = `
     <div id="emailDraftModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
       <div style="background: white; border-radius: 8px; width: 100%; max-width: 600px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; position: relative;">
@@ -1276,7 +1283,6 @@ async function compressBase64Image(dataUrl, maxDim = 350, quality = 0.7) {
     }, 1000);
 
     const img = new Image();
-    // Do NOT set crossOrigin on data: URLs as it causes browsers to stall or block onload
     if (!dataUrl.startsWith('data:')) {
       img.crossOrigin = "anonymous";
     }
@@ -1356,120 +1362,135 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     submitBtn.disabled = true;
   }
 
-  const data = new FormData(form);
-  const customerInfo = {};
-  let base64File = null;
-  let fileName = null;
-
-  for (const [key, value] of data.entries()) {
-    if (value instanceof File) {
-      if (value.name && value.size > 0) {
-        fileName = value.name;
-        const rawDataUrl = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.readAsDataURL(value);
-        });
-
-        if (value.type.startsWith('image/')) {
-          const compressed = await compressBase64Image(rawDataUrl, 800, 0.75);
-          base64File = compressed || (rawDataUrl.includes('base64,') ? rawDataUrl.split('base64,')[1] : rawDataUrl);
-        } else {
-          base64File = rawDataUrl.includes('base64,') ? rawDataUrl.split('base64,')[1] : rawDataUrl;
-        }
-      }
-    } else {
-      customerInfo[key] = value;
-    }
-  }
-
-  const attachments = [];
-  if (base64File) {
-    attachments.push({ filename: fileName, content: base64File });
-  }
-
-  // Fast parallel compression for customized product mockup pictures and uploaded logo files
-  const attachmentPromises = cart.flatMap((item, index) => {
-    const itemPromises = [];
-    const mockupImg = item.customizedImage || item.image;
-    if (typeof mockupImg === 'string' && mockupImg.startsWith('data:image/')) {
-      itemPromises.push(
-        compressBase64Image(mockupImg, 350, 0.7).then(compressedMockup => {
-          if (compressedMockup) {
-            return {
-              filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.jpg`,
-              content: compressedMockup
-            };
-          }
-          return null;
-        })
-      );
-    }
-
-    const logoContent = item.artworkSrc || (typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData);
-    if (typeof logoContent === 'string' && logoContent.startsWith('data:image/')) {
-      itemPromises.push(
-        compressBase64Image(logoContent, 350, 0.7).then(compressedLogo => {
-          if (compressedLogo) {
-            return {
-              filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.jpg`,
-              content: compressedLogo
-            };
-          }
-          return null;
-        })
-      );
-    }
-    return itemPromises;
-  });
-
-  const resolvedAttachments = (await Promise.race([
-    Promise.all(attachmentPromises),
-    new Promise(resolve => setTimeout(() => resolve([]), 3000))
-  ])).filter(Boolean);
-  attachments.push(...resolvedAttachments);
-
-  // Clean cart items to prevent 4.5MB Vercel Serverless payload overflow
-  const sanitizedCart = cart.map(item => {
-    const cleanItem = { ...item };
-    delete cleanItem.customizedImage;
-    delete cleanItem.mockupImage;
-    delete cleanItem.previewImage;
-    if (typeof cleanItem.logoData === 'object' && cleanItem.logoData) {
-      const cleanLogo = { ...cleanItem.logoData };
-      delete cleanLogo.imageSrc;
-      delete cleanLogo.data;
-      cleanItem.logoData = cleanLogo;
-    }
-    return cleanItem;
-  });
-
-  const payload = {
-    customerInfo,
-    cart: sanitizedCart,
-    attachments: attachments
-  };
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 6000); // 6-second request timeout safeguard
+  let customerInfo = {};
 
   try {
-    const res = await fetch('/api/sendQuote', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal
+    const data = new FormData(form);
+    let base64File = null;
+    let fileName = null;
+
+    for (const [key, value] of data.entries()) {
+      if (value instanceof File) {
+        if (value.name && value.size > 0) {
+          fileName = value.name;
+          const rawDataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result || null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(value);
+          });
+
+          if (rawDataUrl && typeof rawDataUrl === 'string') {
+            if (value.type.startsWith('image/')) {
+              const compressed = await compressBase64Image(rawDataUrl, 800, 0.75);
+              base64File = compressed || (rawDataUrl.includes('base64,') ? rawDataUrl.split('base64,')[1] : rawDataUrl);
+            } else {
+              base64File = rawDataUrl.includes('base64,') ? rawDataUrl.split('base64,')[1] : rawDataUrl;
+            }
+          }
+        }
+      } else {
+        customerInfo[key] = value;
+      }
+    }
+
+    const attachments = [];
+    if (base64File && fileName) {
+      attachments.push({ filename: fileName, content: base64File });
+    }
+
+    // Fast parallel compression for customized product mockup pictures and uploaded logo files
+    const attachmentPromises = (cart || []).flatMap((item, index) => {
+      const itemPromises = [];
+      const mockupImg = item.customizedImage || item.image;
+      if (typeof mockupImg === 'string' && mockupImg.startsWith('data:image/')) {
+        itemPromises.push(
+          compressBase64Image(mockupImg, 350, 0.7).then(compressedMockup => {
+            if (compressedMockup) {
+              return {
+                filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.jpg`,
+                content: compressedMockup
+              };
+            }
+            return null;
+          }).catch(() => null)
+        );
+      }
+
+      const logoContent = item.artworkSrc || (typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData);
+      if (typeof logoContent === 'string' && logoContent.startsWith('data:image/')) {
+        itemPromises.push(
+          compressBase64Image(logoContent, 350, 0.7).then(compressedLogo => {
+            if (compressedLogo) {
+              return {
+                filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.jpg`,
+                content: compressedLogo
+              };
+            }
+            return null;
+          }).catch(() => null)
+        );
+      }
+      return itemPromises;
     });
-    clearTimeout(timeoutId);
-    
-    if (res.ok) {
-      showToast("Order submitted successfully! Our team will contact you shortly.", "success", 8000);
-      cart.splice(0, cart.length);
-      saveCart();
-      renderCart();
-      form.reset();
-      if (typeof initClientDetailsPersistence === 'function') initClientDetailsPersistence();
-    } else {
+
+    const resolvedAttachments = (await Promise.race([
+      Promise.all(attachmentPromises),
+      new Promise(resolve => setTimeout(() => resolve([]), 3000))
+    ])).filter(Boolean);
+    attachments.push(...resolvedAttachments);
+
+    // Clean cart items to prevent 4.5MB Vercel Serverless payload overflow
+    const sanitizedCart = (cart || []).map(item => {
+      const cleanItem = { ...item };
+      delete cleanItem.customizedImage;
+      delete cleanItem.mockupImage;
+      delete cleanItem.previewImage;
+      if (typeof cleanItem.logoData === 'object' && cleanItem.logoData) {
+        const cleanLogo = { ...cleanItem.logoData };
+        delete cleanLogo.imageSrc;
+        delete cleanLogo.data;
+        cleanItem.logoData = cleanLogo;
+      }
+      return cleanItem;
+    });
+
+    const payload = {
+      customerInfo,
+      cart: sanitizedCart,
+      attachments: attachments
+    };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second request timeout safeguard
+
+    try {
+      const res = await fetch('/api/sendQuote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      
+      if (res.ok) {
+        showToast("Order submitted successfully! Our team will contact you shortly.", "success", 8000);
+        cart.splice(0, cart.length);
+        saveCart();
+        renderCart();
+        form.reset();
+        if (typeof initClientDetailsPersistence === 'function') initClientDetailsPersistence();
+      } else {
+        showToast("Order captured! Displaying order details summary.", "info", 6000);
+        triggerMailtoFallback(customerInfo, cart);
+        cart.splice(0, cart.length);
+        saveCart();
+        renderCart();
+        form.reset();
+      }
+    } catch (fetchErr) {
+      clearTimeout(timeoutId);
+      console.error("Network or timeout error:", fetchErr);
       showToast("Order captured! Displaying order details summary.", "info", 6000);
       triggerMailtoFallback(customerInfo, cart);
       cart.splice(0, cart.length);
@@ -1478,13 +1499,14 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       form.reset();
     }
   } catch (err) {
-    clearTimeout(timeoutId);
-    console.error("Network or timeout error:", err);
+    console.error("Quote submission error:", err);
     showToast("Order captured! Displaying order details summary.", "info", 6000);
-    triggerMailtoFallback(customerInfo, cart);
-    cart.splice(0, cart.length);
-    saveCart();
-    renderCart();
+    try {
+      triggerMailtoFallback(customerInfo || {}, cart || []);
+    } catch (e) {}
+    if (cart && Array.isArray(cart)) cart.splice(0, cart.length);
+    if (typeof saveCart === 'function') saveCart();
+    if (typeof renderCart === 'function') renderCart();
     form.reset();
   } finally {
     if (submitBtn) {
