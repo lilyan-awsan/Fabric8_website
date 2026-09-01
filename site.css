@@ -1826,13 +1826,18 @@ input.error, select.error, textarea.error {
 
 html, body {
   overflow-x: hidden;
-  width: 100%;
-  max-width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 body {
-  max-width: 1600px !important;
-  margin: 0 auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 /* 1. Universal Table Responsive Overflow Protection */
