@@ -1,105 +1,105 @@
 {
   "banners": {
-    "home": "",
-    "shop": "",
-    "services": "",
-    "sectors": "",
-    "method": "",
     "about": "",
-    "contact": ""
-  },
-  "footerLegal": "© 2026 Fabric8 Workwear. All rights reserved. Professional High-Performance Uniform & Custom Workwear Manufacturing.",
-  "categories1stLayer": [
-    {
-      "name": "Food & beverage",
-      "enabled": true
-    },
-    {
-      "name": "Hospitality",
-      "enabled": true
-    },
-    {
-      "name": "Corporate",
-      "enabled": true
-    },
-    {
-      "name": "Healthcare",
-      "enabled": true
-    },
-    {
-      "name": "Industrial",
-      "enabled": true
-    },
-    {
-      "name": "Education",
-      "enabled": false
-    },
-    {
-      "name": "Aviation",
-      "enabled": false
-    }
-  ],
-  "categories2ndLayer": [
-    {
-      "name": "HEAD WEAR",
-      "enabled": true
-    },
-    {
-      "name": "TOP WEAR",
-      "enabled": true
-    },
-    {
-      "name": "BOTTOM WEAR",
-      "enabled": true
-    },
-    {
-      "name": "OUTER WEAR",
-      "enabled": true
-    },
-    {
-      "name": "ACCESSORIES",
-      "enabled": true
-    }
-  ],
-  "siteContent": {
-    "homeHeroTag": "Corporate couture for working teams",
-    "homeHeroTitle": "Engineered for Comfort, Designed to Inspire",
-    "homeHeroBtnText": "EXPLORE THE COLLECTION",
-    "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
-    "aboutText": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.",
-    "methodLeafletUrl": "assets/needs/Product Data General Sheet (1).xlsx",
-    "heroImage": "",
-    "promoImage": "",
-    "aboutImage": "assets/people_meeting_drive_success.webp",
-    "servicesTitle": "Service uniforms, designed like fashion.",
-    "servicesSub": "Fabric8 manages the full uniform lifecycle from textile advice to branded delivery.",
-    "servicesConsultImg": "",
-    "servicesBrandImg": "",
-    "servicesProdImg": "",
-    "methodTitle": "Eight steps to partner success.",
-    "methodSub": "The operational backbone behind every Fabric8 uniform engagement.",
-    "methodBrochure": "assets/needs/Fabric8_Leaflet.pdf",
-    "sectorsTitle": "Uniform concepts for every business environment.",
-    "sectorsSub": "Explore Our Sector Capabilities",
-    "sectorsHeroImg": "",
-    "aboutTitle": "Our Story, Behind the Craft",
-    "aboutSub": "B2B uniform solutions for clients who demand brand, purpose, performance, and reliability.",
-    "aboutMission": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.",
-    "aboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.",
-    "contactHQ": "6290 Jimmy Carter Blvd Suite 202\nNorcross, GA 30071\nUnited States",
-    "contactUSA": "+1 770-710-2286",
-    "contactJordan": "+962 796 788 240",
-    "contactEmail": "hello@thefabric8.com",
-    "socialInstagram": "",
-    "socialFacebook": "",
-    "socialLinkedIn": ""
-  },
-  "legalContent": {
-    "termsText": "By accessing and using the Fabric8 website and Branding Atelier, you agree to abide by our manufacturing timelines, minimum order quantities (MOQ), and intellectual property warranty requirements when uploading custom company logos and artwork.",
-    "privacyText": "We rigorously respect corporate client privacy. All design specifications, technical CAD sketches, and logo attachments submitted through our quotation engine remain confidential between Fabric8 and your enterprise."
+    "contact": "",
+    "home": "",
+    "method": "",
+    "sectors": "",
+    "services": "",
+    "shop": ""
   },
   "brandingSettings": {
     "dtfHelperNote": "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.",
     "embroideryHelperNote": "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics."
+  },
+  "categories1stLayer": [
+    {
+      "enabled": true,
+      "name": "Food & beverage"
+    },
+    {
+      "enabled": true,
+      "name": "Hospitality"
+    },
+    {
+      "enabled": true,
+      "name": "Corporate"
+    },
+    {
+      "enabled": true,
+      "name": "Healthcare"
+    },
+    {
+      "enabled": true,
+      "name": "Industrial"
+    },
+    {
+      "enabled": false,
+      "name": "Education"
+    },
+    {
+      "enabled": false,
+      "name": "Aviation"
+    }
+  ],
+  "categories2ndLayer": [
+    {
+      "enabled": true,
+      "name": "HEAD WEAR"
+    },
+    {
+      "enabled": true,
+      "name": "TOP WEAR"
+    },
+    {
+      "enabled": true,
+      "name": "BOTTOM WEAR"
+    },
+    {
+      "enabled": true,
+      "name": "OUTER WEAR"
+    },
+    {
+      "enabled": true,
+      "name": "ACCESSORIES"
+    }
+  ],
+  "footerLegal": "© 2026 Fabric8 Workwear. All rights reserved. Professional High-Performance Uniform & Custom Workwear Manufacturing.",
+  "legalContent": {
+    "privacyText": "We rigorously respect corporate client privacy. All design specifications, technical CAD sketches, and logo attachments submitted through our quotation engine remain confidential between Fabric8 and your enterprise.",
+    "termsText": "By accessing and using the Fabric8 website and Branding Atelier, you agree to abide by our manufacturing timelines, minimum order quantities (MOQ), and intellectual property warranty requirements when uploading custom company logos and artwork."
+  },
+  "siteContent": {
+    "aboutImage": "assets/people_meeting_drive_success.webp",
+    "aboutMission": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.",
+    "aboutSub": "B2B uniform solutions for clients who demand brand, purpose, performance, and reliability.",
+    "aboutText": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.",
+    "aboutTitle": "Our Story, Behind the Craft",
+    "aboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.",
+    "contactEmail": "hello@thefabric8.com",
+    "contactHQ": "6290 Jimmy Carter Blvd Suite 202\nNorcross, GA 30071\nUnited States",
+    "contactJordan": "+962 796 788 240",
+    "contactUSA": "+1 770-710-2286",
+    "heroImage": "",
+    "homeHeroBtnText": "EXPLORE THE COLLECTION",
+    "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
+    "homeHeroTitle": "Engineered for Comfort, Designed to Inspire",
+    "methodBrochure": "assets/needs/Fabric8_Leaflet.pdf",
+    "methodLeafletUrl": "assets/needs/Product Data General Sheet (1).xlsx",
+    "methodSub": "The operational backbone behind every Fabric8 uniform engagement.",
+    "methodTitle": "Eight steps to partner success.",
+    "promoImage": "",
+    "sectorsHeroImg": "",
+    "sectorsSub": "Explore Our Sector Capabilities",
+    "sectorsTitle": "Uniform concepts for every business environment.",
+    "servicesBrandImg": "",
+    "servicesConsultImg": "",
+    "servicesProdImg": "",
+    "servicesSub": "Fabric8 manages the full uniform lifecycle from textile advice to branded delivery.",
+    "servicesTitle": "Service uniforms, designed like fashion.",
+    "socialFacebook": "",
+    "socialInstagram": "",
+    "socialLinkedIn": "",
+    "homeHeroTag": "Corporate couture for working teams"
   }
 }
