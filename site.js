@@ -1301,6 +1301,8 @@ async function compressBase64Image(dataUrl, maxDim = 350, quality = 0.7) {
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
         ctx.drawImage(img, 0, 0, width, height);
         const compressedData = canvas.toDataURL("image/jpeg", quality);
         const parts = compressedData.split('base64,');
@@ -2344,10 +2346,17 @@ function initProductPage(sku) {
     
     let brandingDesc = "Blank";
     
+    let matchedImage = p.image;
+    if (activeCatalogColor && Array.isArray(p.images) && p.images.length > 0) {
+      const match = p.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+      if (match) matchedImage = match;
+    }
+
     // Add items for each size
     for (const [size, qty] of Object.entries(sizes)) {
       cart.push({
         ...p,
+        image: matchedImage,
         quantity: qty,
         color: activeCatalogColor,
         size: size,

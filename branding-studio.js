@@ -897,6 +897,8 @@
       thumbCanvas.width = 300;
       thumbCanvas.height = 300;
       const tCtx = thumbCanvas.getContext("2d");
+      tCtx.fillStyle = "#ffffff";
+      tCtx.fillRect(0, 0, 300, 300);
       tCtx.drawImage(canvas, 0, 0, 300, 300);
       return thumbCanvas.toDataURL("image/jpeg", 0.85);
     } catch (e) {
@@ -914,6 +916,10 @@
       : `Text Embroidery: "${state.text.line1}" (${state.text.swatchName} - ${placementName})`;
 
     let cleanGarment = state.product.baseGarmentImage;
+    if (state.product.color && Array.isArray(state.product.images) && state.product.images.length > 0) {
+      const match = state.product.images.find(img => img.toLowerCase().includes(state.product.color.toLowerCase()));
+      if (match) cleanGarment = match;
+    }
     if (!cleanGarment || cleanGarment.startsWith("data:")) {
       cleanGarment = state.product.image;
     }
