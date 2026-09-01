@@ -107,23 +107,29 @@ export default async function handler(req, res) {
         productName += ` [Branding: ${item.branding}]`;
       }
 
-      // Resolve Vercel CDN or local HTTP asset link
+      // Resolve Vercel CDN or local HTTP asset link safely
       let photoCellVal = "";
-      const imgRef = item.image || (item.images && item.images[0]) || '';
+      const rawImgRef = item.customizedImage || item.mockupImage || item.previewImage || item.image || (item.images && item.images[0]) || '';
+      const cleanBaseImg = item.image || (item.images && item.images[0]) || '';
+      
       let fullImgUrl = "";
-      if (imgRef) {
-        if (imgRef.startsWith('http://') || imgRef.startsWith('https://')) {
-          fullImgUrl = imgRef;
-        } else {
-          fullImgUrl = `${baseUrl}/${imgRef.replace(/^\//, '')}`;
-        }
-        // Insert interactive clickable formula link in Photo cell (guaranteed to work across all Excel versions & formats like .webp)
+      if (cleanBaseImg && typeof cleanBaseImg === 'string' && !cleanBaseImg.startsWith('data:image/')) {
+        fullImgUrl = cleanBaseImg.startsWith('http://') || cleanBaseImg.startsWith('https://')
+          ? cleanBaseImg
+          : `${baseUrl}/${cleanBaseImg.replace(/^\//, '')}`;
         photoCellVal = { formula: `HYPERLINK("${fullImgUrl}", "VIEW PHOTO 🔗")` };
+      } else if (rawImgRef && typeof rawImgRef === 'string' && !rawImgRef.startsWith('data:image/')) {
+        fullImgUrl = rawImgRef.startsWith('http://') || rawImgRef.startsWith('https://')
+          ? rawImgRef
+          : `${baseUrl}/${rawImgRef.replace(/^\//, '')}`;
+        photoCellVal = { formula: `HYPERLINK("${fullImgUrl}", "VIEW PHOTO 🔗")` };
+      } else {
+        photoCellVal = "Customized";
       }
 
       const row = sheet.addRow([
         i + 1,                   // 1. #
-        photoCellVal,            // 2. Photo (Live Hyperlink)
+        photoCellVal,            // 2. Photo (Live Hyperlink or Embedded)
         item.sku || 'N/A',       // 3. Product SKU
         productName,             // 4. Product Name
         Number(item.quantity) || 1, // 5. QTY (Numeric)
@@ -132,6 +138,28 @@ export default async function handler(req, res) {
         "",                      // 8. Product Price (Empty as required for quotation fill-in)
         { formula: `IF(ISBLANK(H${tableHeaderRow.number + 1 + i}), "", E${tableHeaderRow.number + 1 + i} * H${tableHeaderRow.number + 1 + i})` } // 9. Total (Live Calculation Formula)
       ]);
+
+      // Try embedding base64 mockup thumbnail into Excel cell if available
+      const embedImg = rawImgRef && typeof rawImgRef === 'string' && rawImgRef.startsWith('data:image/') ? rawImgRef : null;
+      if (embedImg) {
+        try {
+          const match = embedImg.match(/^data:image\/(png|jpeg|jpg|webp);base64,(.*)$/);
+          if (match) {
+            const format = (match[1] === 'jpg' || match[1] === 'webp') ? 'jpeg' : match[1];
+            const imageId = workbook.addImage({
+              base64: match[2],
+              extension: format,
+            });
+            sheet.addImage(imageId, {
+              tl: { col: 1, row: row.number - 1 },
+              ext: { width: 50, height: 50 },
+              editAs: 'oneCell'
+            });
+          }
+        } catch (imgErr) {
+          console.warn("ExcelJS image embed skipped:", imgErr);
+        }
+      }
 
       row.height = 55; // Expand row height for clean visual preview and layout
       row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
@@ -142,7 +170,11 @@ export default async function handler(req, res) {
           cell.alignment = { vertical: 'middle', horizontal: 'center' };
         } else if (colNumber === 2) {
           cell.alignment = { vertical: 'middle', horizontal: 'center' };
-          cell.font = { name: 'Arial', size: 10, color: { argb: 'FF0052CC' }, underline: true };
+          if (typeof cell.value === 'object' && cell.value && cell.value.formula) {
+            cell.font = { name: 'Arial', size: 10, color: { argb: 'FF0052CC' }, underline: true };
+          } else {
+            cell.font = { name: 'Arial', size: 10, color: { argb: 'FF555555' }, bold: true };
+          }
         } else if (colNumber === 8 || colNumber === 9) {
           cell.alignment = { vertical: 'middle', horizontal: 'right' };
           cell.numFmt = '$#,##0.00';
