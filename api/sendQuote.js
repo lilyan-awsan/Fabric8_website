@@ -312,6 +312,25 @@ export default async function handler(req, res) {
       }
     ];
 
+    // Automatically convert & attach all customized garment mockup images as standalone HD JPG email attachments
+    cart.forEach((item, idx) => {
+      const mockup = item.customizedImage || item.mockupImage || item.previewImage;
+      if (mockup && typeof mockup === 'string' && mockup.includes('base64,')) {
+        const cleanBase64 = mockup.split('base64,')[1];
+        if (cleanBase64 && cleanBase64.trim() !== '') {
+          const itemSku = (item.sku || `Item_${idx + 1}`).replace(/[^a-zA-Z0-9_-]/g, '_');
+          const fileName = `Item_${idx + 1}_${itemSku}_Customized_Design.jpg`;
+          // Avoid duplicate attachment names
+          if (!attachments.some(a => a.filename === fileName)) {
+            attachments.push({
+              filename: fileName,
+              content: cleanBase64
+            });
+          }
+        }
+      }
+    });
+
     // Preserve and sanitize customer uploaded logo assets if present
     if (data.attachments && Array.isArray(data.attachments)) {
       data.attachments.forEach(att => {
