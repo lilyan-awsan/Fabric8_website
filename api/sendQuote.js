@@ -308,7 +308,7 @@ export default async function handler(req, res) {
     }
 
     const options = {
-      from: 'Fabric8 Orders <onboarding@resend.dev>',
+      from: 'Fabric8 Orders <hello@thefabric8.com>',
       to: targetEmails,
       subject: `[New Order & Quote] Fabric 8 Request from ${customerName}`,
       html: emailHtml,
