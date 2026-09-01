@@ -212,6 +212,67 @@ export default async function handler(req, res) {
 
     const excelBuffer = await workbook.xlsx.writeBuffer();
 
+    const customerEmail = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'];
+    const replyTo = (customerEmail && customerEmail.includes('@')) ? customerEmail : undefined;
+    const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
+
+    // 1. Prepare attachments array with Excel & CID Mockup attachments
+    const attachments = [
+      {
+        filename: `Fabric8_Order_Quote_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`,
+        content: Buffer.from(excelBuffer).toString('base64')
+      }
+    ];
+
+    // Process cart items to assign Content-IDs (CID) for native inline email rendering
+    const itemCids = {};
+    cart.forEach((item, idx) => {
+      const customizedImg = item.customizedImage || item.mockupImage || item.previewImage;
+      if (customizedImg && typeof customizedImg === 'string' && customizedImg.includes('base64,')) {
+        const cleanBase64 = customizedImg.split('base64,')[1];
+        if (cleanBase64 && cleanBase64.trim() !== '') {
+          const cidName = `mockup_${idx}_${Date.now()}`;
+          const itemSku = (item.sku || `Item_${idx + 1}`).replace(/[^a-zA-Z0-9_-]/g, '_');
+          const fileName = `Item_${idx + 1}_${itemSku}_Customized_Design.jpg`;
+          
+          attachments.push({
+            filename: fileName,
+            content: cleanBase64,
+            content_id: cidName,
+            disposition: 'inline'
+          });
+          itemCids[idx] = cidName;
+        }
+      }
+    });
+
+    // Preserve and sanitize customer uploaded logo assets if present
+    if (data.attachments && Array.isArray(data.attachments)) {
+      data.attachments.forEach(att => {
+        if (!att.filename?.includes(".xlsx") && att.content) {
+          let rawContent = att.content;
+          if (typeof rawContent === 'object' && !Buffer.isBuffer(rawContent) && !Array.isArray(rawContent) && !(rawContent instanceof ArrayBuffer)) {
+            rawContent = rawContent.imageSrc || rawContent.data || null;
+          }
+          if (rawContent) {
+            let cleanContent = typeof rawContent === 'string' ? rawContent : Buffer.from(rawContent).toString('base64');
+            // Strip any data:image/...;base64, header prefix to satisfy Resend strict base64 requirement
+            if (cleanContent.includes('base64,')) {
+              cleanContent = cleanContent.split('base64,')[1];
+            } else if (cleanContent.startsWith('data:')) {
+              cleanContent = cleanContent.split(',')[1];
+            }
+            if (cleanContent && cleanContent.trim() !== '') {
+              attachments.push({
+                filename: att.filename || `Attachment_${Date.now()}.png`,
+                content: cleanContent
+              });
+            }
+          }
+        }
+      });
+    }
+
     // ==========================================
     // 2. RESEND EMAIL DELIVERY ARCHITECTURE
     // ==========================================
@@ -232,16 +293,26 @@ export default async function handler(req, res) {
 
     for (let i = 0; i < cart.length; i++) {
       const item = cart[i];
-      const customizedImg = item.customizedImage || item.mockupImage || item.previewImage;
       const baseImg = item.image || (item.images && item.images[0]) || '';
       
+      let fullBaseUrl = "";
+      if (baseImg && typeof baseImg === 'string' && !baseImg.startsWith('data:image/')) {
+        fullBaseUrl = baseImg.startsWith('http://') || baseImg.startsWith('https://')
+          ? baseImg
+          : `${baseUrl}/${baseImg.replace(/^\//, '')}`;
+      }
+
       let photoHtml = "";
-      if (customizedImg && typeof customizedImg === 'string' && customizedImg.startsWith('data:image/')) {
-        // High quality rendered preview with logo/text on garment
-        photoHtml = `<div style="text-align: center;"><img src="${customizedImg}" width="115" style="object-fit: contain; border-radius: 6px; border: 2px solid #2f873d; background: #ffffff; padding: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);" alt="Customized Garment"><div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px;">✦ Customized Preview</div></div>`;
-      } else if (baseImg) {
-        let fullImgUrl = baseImg.startsWith('http') ? baseImg : `${baseUrl}/${baseImg.replace(/^\//, '')}`;
-        photoHtml = `<a href="${fullImgUrl}" target="_blank" style="text-decoration: none;"><img src="${fullImgUrl}" width="85" style="object-fit: contain; border-radius: 6px; border: 1px solid #e0e0e0; background: #ffffff; padding: 4px;" alt="${item.name || 'Product'}"></a>`;
+      if (itemCids[i]) {
+        // Native inline CID image rendering for Gmail, Outlook & Apple Mail
+        const imgTag = `<img src="cid:${itemCids[i]}" width="130" style="object-fit: contain; border-radius: 8px; border: 2px solid #2f873d; background: #ffffff; padding: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);" alt="Customized Garment">`;
+        if (fullBaseUrl) {
+          photoHtml = `<a href="${fullBaseUrl}" target="_blank" style="text-decoration: none;">${imgTag}</a><div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px; text-align: center;">✦ Customized Preview</div>`;
+        } else {
+          photoHtml = `<div style="text-align: center;">${imgTag}<div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px;">✦ Customized Preview</div></div>`;
+        }
+      } else if (fullBaseUrl) {
+        photoHtml = `<a href="${fullBaseUrl}" target="_blank" style="text-decoration: none;"><img src="${fullBaseUrl}" width="110" style="object-fit: contain; border-radius: 8px; border: 1px solid #e0e0e0; background: #ffffff; padding: 4px;" alt="${item.name || 'Product'}"></a>`;
       } else {
         photoHtml = `<span style="color:#aaa; font-size: 11px;">No Photo</span>`;
       }
@@ -298,38 +369,8 @@ export default async function handler(req, res) {
     emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review line item details, pricing formulas, and complete the quotation fill-in.</p>`;
     emailHtml += `<div style="margin-top: 36px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #999; text-align: center;">Fabric 8 Custom Atelier System &copy; 2026. All rights reserved.</div></div>`;
 
-    const customerEmail = customerInfo['Email'] || customerInfo['email'] || customerInfo['Email Address'];
-    const replyTo = (customerEmail && customerEmail.includes('@')) ? customerEmail : undefined;
-    const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
-
     // Set destination email address
     const targetEmails = ['lilyanawsan@gmail.com', 'hello@thefabric8.com'];
-
-    const attachments = [
-      {
-        filename: `Fabric8_Order_Quote_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`,
-        content: Buffer.from(excelBuffer).toString('base64')
-      }
-    ];
-
-    // Automatically convert & attach all customized garment mockup images as standalone HD JPG email attachments
-    cart.forEach((item, idx) => {
-      const mockup = item.customizedImage || item.mockupImage || item.previewImage;
-      if (mockup && typeof mockup === 'string' && mockup.includes('base64,')) {
-        const cleanBase64 = mockup.split('base64,')[1];
-        if (cleanBase64 && cleanBase64.trim() !== '') {
-          const itemSku = (item.sku || `Item_${idx + 1}`).replace(/[^a-zA-Z0-9_-]/g, '_');
-          const fileName = `Item_${idx + 1}_${itemSku}_Customized_Design.jpg`;
-          // Avoid duplicate attachment names
-          if (!attachments.some(a => a.filename === fileName)) {
-            attachments.push({
-              filename: fileName,
-              content: cleanBase64
-            });
-          }
-        }
-      }
-    });
 
     // Preserve and sanitize customer uploaded logo assets if present
     if (data.attachments && Array.isArray(data.attachments)) {
