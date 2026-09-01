@@ -1416,9 +1416,11 @@ if (saveVisualEditorBtn) {
       const editableImages = cleanDoc.querySelectorAll('.editable-image');
       editableImages.forEach(el => el.classList.remove('editable-image'));
       
-      const editableBgs = cleanDoc.querySelectorAll('[data-editable-bg]');
-      editableBgs.forEach(el => el.removeAttribute('data-editable-bg'));
+      cleanDoc.querySelectorAll('[data-editable-bg]').forEach(el => el.removeAttribute('data-editable-bg'));
       cleanDoc.querySelectorAll('[data-editor-click-handled]').forEach(el => el.removeAttribute('data-editor-click-handled'));
+      cleanDoc.querySelectorAll('[data-controls-injected]').forEach(el => el.removeAttribute('data-controls-injected'));
+      cleanDoc.querySelectorAll('[data-click-intercepted]').forEach(el => el.removeAttribute('data-click-intercepted'));
+      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"]').forEach(el => el.remove());
 
       const injectedStyleTag = cleanDoc.querySelector('#visual-editor-style');
       if (injectedStyleTag) injectedStyleTag.remove();

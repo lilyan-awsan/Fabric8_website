@@ -12,10 +12,79 @@
   --white: #ffffff;
 }
 
-* { box-sizing: border-box; }
 html {
   scroll-behavior: smooth;
   background-color: #ffffff;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   FULL-BLEED LAYOUT SYSTEM (Edge-to-Edge Backgrounds & Centered Content)
+   ========================================================================== */
+
+/* Resets to prevent browser zoom edge gap glitches or horizontal scrolling */
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Outer Container (Background): Always stretches width: 100% or 100vw to browser edges */
+.full-bleed,
+section,
+header,
+footer,
+.topline,
+.header,
+.page-hero,
+.fashion-hero,
+.landing,
+.section-full-bleed {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Inner Container (Content): Set max-width (1200px) and center with margin: 0 auto */
+.container,
+.site-container,
+.inner-container,
+.content-wrap,
+.section-inner,
+.hero-inner,
+.catalog-inner,
+.service-inner {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+/* Background Images: Ensure dynamic scaling without exposing background layer */
+.page-hero,
+.shop-hero,
+.about-hero,
+.services-hero,
+.sectors-hero,
+.method-hero,
+.contact-hero,
+.fashion-hero,
+.landing-bg,
+.fashion-slide {
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
 }
 @font-face {
   font-family: 'Acumin Variable Concept';
