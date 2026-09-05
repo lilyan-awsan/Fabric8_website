@@ -904,7 +904,9 @@ window.redirectToReCustomize = function(idx) {
 };
 
 function addToCart(sku) {
+  loadCart();
   const selectedProduct = products.find((p) => p.sku === sku);
+  if (!selectedProduct) return;
   const quantity = parseInt($("#modalProductQuantity")?.value || 50);
   const selectedSize = $("#modalSizeSelect")?.value;
 
@@ -928,19 +930,24 @@ function addToCart(sku) {
   }
 
   const existing = cart.find(
-    (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize
+    (item) => item.sku === selectedProduct.sku && item.color === activeCatalogColor && item.size === selectedSize && (item.branding === "Blank" || !item.branding)
   );
 
   if (existing) {
-    existing.quantity += quantity;
+    existing.quantity = (existing.quantity || existing.qty || 0) + quantity;
+    existing.qty = existing.quantity;
     existing.image = matchedImage;
+    existing.baseGarmentImage = matchedImage;
   } else {
     cart.push({
       ...selectedProduct,
       image: matchedImage,
+      baseGarmentImage: matchedImage,
       quantity,
+      qty: quantity,
       color: activeCatalogColor,
       size: selectedSize,
+      branding: "Blank",
       originStudio: "Product Catalog",
       customizationType: null,
       embroideryData: null,
@@ -2357,6 +2364,7 @@ function initProductPage(sku) {
 
   // Add to Cart
   document.getElementById("pageAddToCart")?.addEventListener("click", () => {
+    loadCart();
 
     let totalQty = 0;
     const sizes = {};
@@ -2382,18 +2390,32 @@ function initProductPage(sku) {
       if (match) matchedImage = match;
     }
 
-    // Add items for each size
+    // Add or merge items for each size
     for (const [size, qty] of Object.entries(sizes)) {
-      cart.push({
-        ...p,
-        image: matchedImage,
-        quantity: qty,
-        color: activeCatalogColor,
-        size: size,
-        branding: brandingDesc,
-        customizationType: null,
-        logoData: null
-      });
+      const existing = cart.find(
+        (item) => item.sku === p.sku && item.color === activeCatalogColor && item.size === size && (item.branding === brandingDesc || !item.branding || item.branding === "Blank")
+      );
+
+      if (existing) {
+        existing.quantity = (existing.quantity || existing.qty || 0) + qty;
+        existing.qty = existing.quantity;
+        existing.image = matchedImage;
+        existing.baseGarmentImage = matchedImage;
+      } else {
+        cart.push({
+          ...p,
+          image: matchedImage,
+          baseGarmentImage: matchedImage,
+          quantity: qty,
+          qty: qty,
+          color: activeCatalogColor,
+          size: size,
+          branding: brandingDesc,
+          originStudio: "Product Catalog",
+          customizationType: null,
+          logoData: null
+        });
+      }
     }
     
     saveCart();
