@@ -2086,16 +2086,25 @@ function initProductPage(sku) {
     }
   }
 
-  // Bind color clicks and hovers for product page with cinematic transitions
+  // Bind color clicks and hovers for product page: hover previews color image without selecting, click chooses it
   colorFilter.querySelectorAll('.color-dot').forEach(dot => {
-    const triggerColorSwitch = () => {
+    dot.addEventListener('mouseenter', () => {
+      // Preview picture of hovered color without changing the chosen selection
+      updateGalleryForColor(p, dot.dataset.color);
+    });
+
+    dot.addEventListener('click', () => {
+      // Permanently choose color only when pressed/clicked
       colorFilter.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
       dot.classList.add("active");
       activeCatalogColor = dot.dataset.color;
       updateGalleryForColor(p, activeCatalogColor);
-    };
-    dot.addEventListener('click', triggerColorSwitch);
-    dot.addEventListener('mouseenter', triggerColorSwitch);
+    });
+  });
+
+  colorFilter.addEventListener('mouseleave', () => {
+    // Revert back to the chosen color image if user leaves without clicking
+    updateGalleryForColor(p, activeCatalogColor);
   });
 
   // Accordions logic with symbols only
