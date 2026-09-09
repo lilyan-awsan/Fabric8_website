@@ -279,37 +279,30 @@ async function loadProducts() {
     } catch (e) {}
   }
 
-  // 3. Background Async Sync with Firebase Realtime Database (Non-blocking)
+  // 3. Background Async Sync with Firebase Realtime Database (Instant Realtime Sync)
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+  const freshTime = Date.now();
   Promise.all([
-    fetch(`${FIREBASE_DB}/admin_settings.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch(`${FIREBASE_DB}/products.json`).then(r => r.ok ? r.json() : null).catch(() => null)
+    fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
   ]).then(([settingsData, productsData]) => {
     if (settingsData) {
-      const settingsCacheTimeStr = localStorage.getItem("fabric8_admin_settings_cache_time");
-      const settingsCacheTime = settingsCacheTimeStr ? parseInt(settingsCacheTimeStr, 10) : 0;
-      const isRecentSettingsSave = (Date.now() - settingsCacheTime) < 900000;
-
-      if (!isRecentSettingsSave || !localStorage.getItem("fabric8_admin_settings_cache")) {
-        siteSettings = settingsData;
-        try { localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings)); } catch (e) {}
-        applySiteSettings();
-      }
+      siteSettings = settingsData;
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch (e) {}
+      applySiteSettings();
     }
     if (productsData && Array.isArray(productsData) && productsData.length > 0) {
-      const cacheTimeStr = localStorage.getItem("fabric8_products_cache_time");
-      const cacheTime = cacheTimeStr ? parseInt(cacheTimeStr, 10) : 0;
-      const isRecentAdminSave = (Date.now() - cacheTime) < 900000;
-
-      if (!isRecentAdminSave || productsData.length >= (products ? products.length : 0)) {
-        products = productsData;
-        products.sort((a, b) => a.name.localeCompare(b.name));
-        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(products)); } catch (e) {}
-        if (!siteInitialized) {
-          initSite();
-          siteInitialized = true;
-        }
-      }
+      products = productsData;
+      products.sort((a, b) => a.name.localeCompare(b.name));
+      try {
+        localStorage.setItem("fabric8_products_cache", JSON.stringify(products));
+        localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+      } catch (e) {}
+      initSite();
+      siteInitialized = true;
     } else if (!siteInitialized) {
       initSite();
       siteInitialized = true;
@@ -1861,12 +1854,28 @@ function initProductPage(sku) {
 
   updateGalleryForColor(p, activeCatalogColor);
   
-  // Colors
+  // Colors & Label
+  const updateColorLabel = (colorName, isPreview = false) => {
+    const labelEl = document.getElementById("productColorLabelName");
+    if (labelEl) {
+      if (isPreview) {
+        labelEl.innerHTML = `${colorName} <span style="font-size: 11px; font-weight: 600; opacity: 0.65; text-transform: uppercase;">(Preview)</span>`;
+      } else {
+        labelEl.textContent = colorName;
+      }
+    }
+  };
+
   const colorFilter = document.getElementById("productColorFilter");
   if (colorFilter && p.colors) {
     colorFilter.innerHTML = p.colors.map(c => colorButton(c)).join("");
-    const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
+    let activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
+    if (!activeBtn && colorFilter.querySelector('.color-dot')) {
+      activeBtn = colorFilter.querySelector('.color-dot');
+      activeCatalogColor = activeBtn.dataset.color;
+    }
     if (activeBtn) activeBtn.classList.add("active");
+    updateColorLabel(activeCatalogColor, false);
   }
 
   // Size / Qty Matrix
@@ -2086,26 +2095,58 @@ function initProductPage(sku) {
     }
   }
 
-  // Bind color clicks and hovers for product page: hover previews color image without selecting, click chooses it
-  colorFilter.querySelectorAll('.color-dot').forEach(dot => {
-    dot.addEventListener('mouseenter', () => {
-      // Preview picture of hovered color without changing the chosen selection
-      updateGalleryForColor(p, dot.dataset.color);
+  // "Hover to see, click to choose":
+  // When hovering on a color dot, preview that color.
+  // When the cursor is NOT on a color dot, return to the chosen color.
+  // Clicking is required to choose a color.
+  if (colorFilter) {
+    let hoverRevertTimer = null;
+    let isMouseOverAnyDot = false;
+    const colorDots = colorFilter.querySelectorAll('.color-dot');
+
+    colorDots.forEach(dot => {
+      // 1. Mouse enters color dot: preview color image immediately
+      dot.addEventListener('mouseenter', () => {
+        clearTimeout(hoverRevertTimer);
+        isMouseOverAnyDot = true;
+        const hoverColor = dot.dataset.color;
+        updateGalleryForColor(p, hoverColor);
+        updateColorLabel(hoverColor, hoverColor !== activeCatalogColor);
+      });
+
+      // 2. Mouse leaves color dot: if not immediately entering another dot, return to the chosen color
+      dot.addEventListener('mouseleave', () => {
+        isMouseOverAnyDot = false;
+        clearTimeout(hoverRevertTimer);
+        hoverRevertTimer = setTimeout(() => {
+          if (!isMouseOverAnyDot) {
+            updateGalleryForColor(p, activeCatalogColor);
+            updateColorLabel(activeCatalogColor, false);
+          }
+        }, 50);
+      });
+
+      // 3. Click to choose: permanently select color
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearTimeout(hoverRevertTimer);
+        isMouseOverAnyDot = false;
+        activeCatalogColor = dot.dataset.color;
+        colorDots.forEach((b) => b.classList.remove("active"));
+        dot.classList.add("active");
+        updateGalleryForColor(p, activeCatalogColor);
+        updateColorLabel(activeCatalogColor, false);
+      });
     });
 
-    dot.addEventListener('click', () => {
-      // Permanently choose color only when pressed/clicked
-      colorFilter.querySelectorAll(".color-dot").forEach((b) => b.classList.remove("active"));
-      dot.classList.add("active");
-      activeCatalogColor = dot.dataset.color;
+    // 4. Container mouseleave safety net
+    colorFilter.addEventListener('mouseleave', () => {
+      clearTimeout(hoverRevertTimer);
+      isMouseOverAnyDot = false;
       updateGalleryForColor(p, activeCatalogColor);
+      updateColorLabel(activeCatalogColor, false);
     });
-  });
-
-  colorFilter.addEventListener('mouseleave', () => {
-    // Revert back to the chosen color image if user leaves without clicking
-    updateGalleryForColor(p, activeCatalogColor);
-  });
+  }
 
   // Accordions logic with symbols only
   document.querySelectorAll('details.accordion summary').forEach(summary => {

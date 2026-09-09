@@ -6,7 +6,7 @@
   <title>Fabric8 | Product</title>
 
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
-    <link rel="stylesheet" href="site.css?v=12" />
+    <link rel="stylesheet" href="site.css?v=13" />
 </head>
 <body>
   <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
@@ -62,7 +62,10 @@
           <!-- Thumbnails injected via JS -->
         </div>
         <div style="margin-top: 24px; padding: 16px; background: #faf9f4; border-radius: 8px; border: 1px solid var(--line); position: relative; z-index: 10;">
-          <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 12px;">Select Color*</label>
+          <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <span>Select Color*</span>
+            <span id="productColorLabelName" style="font-size: 12px; font-weight: 800; color: var(--ink); text-transform: none; letter-spacing: normal;"></span>
+          </label>
           <div id="productColorFilter" class="color-filter"></div>
         </div>
         <p class="mockup-disclaimer" style="margin: 16px 0 0 0; font-size: 11px; color: #a55;">Mockup previews are approximate. Final thread colors and print dimensions will be scaled to match your chosen garment size specifications.</p>
@@ -178,6 +181,6 @@
       </div>
     </footer>
 
-  <script src="site.js?v=21"></script>
+  <script src="site.js?v=22"></script>
 </body>
 </html>

@@ -821,12 +821,21 @@ input, select, textarea, button { font: inherit; }
   color: #fff;
   box-shadow: none;
 }
+.color-dot:not(.active):hover {
+  transform: scale(1.12);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 5;
+}
 .color-dot.active {
   transform: scale(1.18);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-  z-index: 2;
+  box-shadow: 0 0 0 2px #faf9f4, 0 0 0 4px var(--ink, #111), 0 4px 14px rgba(0,0,0,0.25) !important;
+  z-index: 4;
   outline: none;
   border: none !important;
+}
+.color-dot[data-color="White"].active,
+.color-dot[data-color="white"].active {
+  box-shadow: 0 0 0 2px #faf9f4, 0 0 0 4px #111, 0 4px 14px rgba(0,0,0,0.25) !important;
 }
 .color-dot span {
   position: absolute;
