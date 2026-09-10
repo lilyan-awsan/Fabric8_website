@@ -5,16 +5,22 @@
     "ignore": [
       "firebase.json",
       "**/.*",
+      ".git/**",
+      "**/.git/**",
+      ".firebase/**",
+      "**/.firebase/**",
+      ".idea/**",
+      "**/.idea/**",
       "**/node_modules/**",
       "functions/**",
       "updates/**",
       "api/**",
       "__pycache__/**",
-      ".idea/**",
       "*.py",
       "*.bat",
       "*.log",
-      "README.md"
+      "README.md",
+      "**/*.docx"
     ],
     "cleanUrls": true,
     "headers": [

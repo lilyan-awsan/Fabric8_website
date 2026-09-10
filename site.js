@@ -1680,9 +1680,16 @@ function normalizeForMatch(str) {
     .replace(/\s+/g, " ");
 }
 
+const colorMatchCache = new Map();
+
 function getImagesForColor(product, targetColor) {
   if (!product.images || !product.images.length) return [product.image || 'White Polo Shirt.png'];
   if (!product.colors || !product.colors.length) return [...product.images];
+
+  const cacheKey = `${product.sku || product.id}_${targetColor}`;
+  if (colorMatchCache.has(cacheKey)) {
+    return colorMatchCache.get(cacheKey);
+  }
 
   const colorMap = new Map();
   product.images.forEach(img => {
@@ -1729,6 +1736,7 @@ function getImagesForColor(product, targetColor) {
     return 0;
   });
 
+  colorMatchCache.set(cacheKey, matchedImgs);
   return matchedImgs;
 }
 
@@ -1759,15 +1767,15 @@ function updateGalleryForColor(product, targetColor) {
         window.updateMainImageSmooth(currentCarouselImages[activeCarouselIdx], activeCarouselIdx);
       };
     }
-    if (thumbnailsContainer) {
-      thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
-        return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
-      }).join("");
-    }
   } else {
     if (prevBtn) prevBtn.style.display = 'none';
     if (nextBtn) nextBtn.style.display = 'none';
-    if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
+  }
+
+  if (thumbnailsContainer) {
+    thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
+      return `<img src="${img}" alt="Thumbnail" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
+    }).join("");
   }
 }
 
@@ -2100,38 +2108,46 @@ function initProductPage(sku) {
   // When the cursor is NOT on a color dot, return to the chosen color.
   // Clicking is required to choose a color.
   if (colorFilter) {
+    let hoverPreviewTimer = null;
     let hoverRevertTimer = null;
-    let isMouseOverAnyDot = false;
+    let currentlyDisplayedColor = activeCatalogColor;
     const colorDots = colorFilter.querySelectorAll('.color-dot');
 
     colorDots.forEach(dot => {
-      // 1. Mouse enters color dot: preview color image immediately
+      // 1. Mouse enters color dot: preview color image with subtle debounce to prevent jitter
       dot.addEventListener('mouseenter', () => {
         clearTimeout(hoverRevertTimer);
-        isMouseOverAnyDot = true;
+        clearTimeout(hoverPreviewTimer);
         const hoverColor = dot.dataset.color;
-        updateGalleryForColor(p, hoverColor);
-        updateColorLabel(hoverColor, hoverColor !== activeCatalogColor);
+        if (hoverColor === currentlyDisplayedColor) return;
+
+        hoverPreviewTimer = setTimeout(() => {
+          currentlyDisplayedColor = hoverColor;
+          updateGalleryForColor(p, hoverColor);
+          updateColorLabel(hoverColor, hoverColor !== activeCatalogColor);
+        }, 25);
       });
 
-      // 2. Mouse leaves color dot: if not immediately entering another dot, return to the chosen color
+      // 2. Mouse leaves color dot: if not entering another dot, revert to chosen color
       dot.addEventListener('mouseleave', () => {
-        isMouseOverAnyDot = false;
+        clearTimeout(hoverPreviewTimer);
         clearTimeout(hoverRevertTimer);
         hoverRevertTimer = setTimeout(() => {
-          if (!isMouseOverAnyDot) {
+          if (currentlyDisplayedColor !== activeCatalogColor) {
+            currentlyDisplayedColor = activeCatalogColor;
             updateGalleryForColor(p, activeCatalogColor);
             updateColorLabel(activeCatalogColor, false);
           }
-        }, 50);
+        }, 60);
       });
 
       // 3. Click to choose: permanently select color
       dot.addEventListener('click', (e) => {
         e.stopPropagation();
+        clearTimeout(hoverPreviewTimer);
         clearTimeout(hoverRevertTimer);
-        isMouseOverAnyDot = false;
         activeCatalogColor = dot.dataset.color;
+        currentlyDisplayedColor = activeCatalogColor;
         colorDots.forEach((b) => b.classList.remove("active"));
         dot.classList.add("active");
         updateGalleryForColor(p, activeCatalogColor);
@@ -2141,10 +2157,13 @@ function initProductPage(sku) {
 
     // 4. Container mouseleave safety net
     colorFilter.addEventListener('mouseleave', () => {
+      clearTimeout(hoverPreviewTimer);
       clearTimeout(hoverRevertTimer);
-      isMouseOverAnyDot = false;
-      updateGalleryForColor(p, activeCatalogColor);
-      updateColorLabel(activeCatalogColor, false);
+      if (currentlyDisplayedColor !== activeCatalogColor) {
+        currentlyDisplayedColor = activeCatalogColor;
+        updateGalleryForColor(p, activeCatalogColor);
+        updateColorLabel(activeCatalogColor, false);
+      }
     });
   }
 
