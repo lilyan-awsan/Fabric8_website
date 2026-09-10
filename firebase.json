@@ -4,13 +4,19 @@
     "public": ".",
     "ignore": [
       "firebase.json",
-      "**/.*",
       ".git/**",
       "**/.git/**",
       ".firebase/**",
       "**/.firebase/**",
       ".idea/**",
       "**/.idea/**",
+      ".vscode/**",
+      "**/.vscode/**",
+      ".agents/**",
+      "**/.agents/**",
+      ".gitignore",
+      "**/.env*",
+      "!**/.well-known/**",
       "**/node_modules/**",
       "functions/**",
       "updates/**",
@@ -28,6 +34,19 @@
     ],
     "cleanUrls": true,
     "headers": [
+      {
+        "source": "/.well-known/**",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/plain; charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
       {
         "source": "/data/**",
         "headers": [
