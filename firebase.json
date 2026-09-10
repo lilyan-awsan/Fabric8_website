@@ -20,7 +20,11 @@
       "*.bat",
       "*.log",
       "README.md",
-      "**/*.docx"
+      "**/*.docx",
+      "Fabric8_sector_logos/**",
+      "**/Fabric8_sector_logos/**",
+      "assets/needs/**",
+      "**/needs/**"
     ],
     "cleanUrls": true,
     "headers": [
