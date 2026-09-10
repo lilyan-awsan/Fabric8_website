@@ -114,6 +114,49 @@
           </div>
         </div>
 
+        <!-- FOOTER & COMPANY CONTACT SETTINGS -->
+        <div id="footerSettingsSection" style="background: white; border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); width: 100%;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--line); padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h2 style="margin: 0; font-size: 18px; color: var(--ink);">Footer & Company Information</h2>
+              <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--muted);">Edit the global footer copyright legal notice, company address, phone numbers, contact email, and social links shown across all pages.</p>
+            </div>
+            <button id="saveFooterSettingsBtn" class="button primary" style="font-size: 13px; padding: 8px 18px; background: var(--green); color: white;">Publish Footer Changes</button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+            <div style="grid-column: 1 / -1;">
+              <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink);">Footer Copyright / Legal Notice (Displays on bottom of all pages)</label>
+              <textarea id="adminFooterLegal" rows="2" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical;" placeholder="e.g. © 2026 Fabric8 Workwear. All rights reserved. Professional High-Performance Uniform & Custom Workwear Manufacturing."></textarea>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink);">Headquarters Address (HQ)</label>
+              <textarea id="adminContactHQ" rows="3" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical;" placeholder="e.g. 6290 Jimmy Carter Blvd Suite 202&#10;Norcross, GA 30071&#10;United States"></textarea>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink);">Contact / Inquiries Email</label>
+              <input type="email" id="adminContactEmail" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; margin-bottom: 12px;" placeholder="hello@thefabric8.com">
+
+              <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink);">USA Phone Number</label>
+              <input type="text" id="adminContactUSA" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px;" placeholder="+1 770-710-2286">
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink);">Jordan Phone Number</label>
+              <input type="text" id="adminContactJordan" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; margin-bottom: 12px;" placeholder="+962 796 788 240">
+
+              <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--ink);">Social Media Links</label>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <input type="url" id="adminSocialLinkedIn" style="width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px;" placeholder="LinkedIn URL (e.g. https://linkedin.com/...)">
+                <input type="url" id="adminSocialFacebook" style="width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px;" placeholder="Facebook URL (e.g. https://facebook.com/...)">
+                <input type="url" id="adminSocialInstagram" style="width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px;" placeholder="Instagram URL (e.g. https://instagram.com/...)">
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div style="display: flex; gap: 20px; width: 100%; min-height: 750px; height: calc(100vh - 280px);">
           <!-- Sidebar -->
           <div style="width: 240px; min-width: 240px; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); flex-shrink: 0;">
@@ -388,7 +431,7 @@
   </div>
 
   <!-- Firebase SDK via CDN -->
-  <script type="module" src="admin.js?v=20"></script>
+  <script type="module" src="admin.js?v=25"></script>
 </body>
 </html>
 

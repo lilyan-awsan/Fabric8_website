@@ -65,7 +65,6 @@
         ]
       }
     ],
-    "cleanUrls": true,
     "rewrites": [
       {
         "source": "/api/**",

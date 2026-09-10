@@ -194,6 +194,26 @@ function applySiteSettings() {
       el.textContent = sc.contactEmail;
       el.href = `mailto:${sc.contactEmail}`;
     }
+    document.querySelectorAll('footer a[href^="mailto:"]').forEach(a => {
+      a.href = `mailto:${sc.contactEmail}`;
+    });
+  }
+
+  // Global Footers Contact Block across all pages
+  if (sc.contactHQ || sc.contactUSA || sc.contactJordan) {
+    document.querySelectorAll('footer h4').forEach(h4 => {
+      if (h4.textContent.trim().toLowerCase().includes('contact details')) {
+        const p = h4.nextElementSibling;
+        if (p && p.tagName === 'P') {
+          let html = '';
+          if (sc.contactHQ) html += sc.contactHQ.replace(/\n/g, '<br>') + '<br><br>';
+          if (sc.contactUSA) html += `USA: ${sc.contactUSA}<br>`;
+          if (sc.contactJordan) html += `Jordan: ${sc.contactJordan}<br>`;
+          html += `<a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
+          p.innerHTML = html;
+        }
+      }
+    });
   }
 
   // Social Links Engine

@@ -68,6 +68,7 @@ function checkAuth() {
     loginScreen.style.display = "none";
     dashboardScreen.style.display = "block";
     fetchProducts();
+    loadSiteSettings();
   } else {
     loginScreen.style.display = "flex";
     dashboardScreen.style.display = "none";
@@ -104,7 +105,7 @@ async function handleLogin() {
       loginError.textContent = "Invalid password. Please try again.";
     }
   } catch (error) {
-    loginError.textContent = "Server error. Ensure you are on Vercel and ADMIN_PASSWORD is set.";
+    loginError.textContent = "Server error. Please check your network and password.";
   }
 }
 
@@ -345,7 +346,7 @@ async function syncWithGithub(action, product) {
     }
   } catch (error) {
     updateSyncBadge("❌ Network Error", false, true);
-    showToast("Network error. Ensure you are on Vercel.", "error", 8000);
+    showToast("Network error. Please try again.", "error", 8000);
     return false;
   }
 }
@@ -1134,6 +1135,7 @@ if (tabProducts && tabSettings) {
     if(tableContainer) tableContainer.style.display = 'none';
     settingsSection.style.display = 'block';
     renderBrandLogosGrid();
+    loadSiteSettings();
   });
 }
 
@@ -1192,6 +1194,138 @@ ${logoItemsHtml}
     } finally {
       saveBrandsBtn.textContent = 'Publish Brand Changes';
       saveBrandsBtn.disabled = false;
+    }
+  });
+}
+
+// --- Footer & Company Information Manager ---
+let currentSiteSettings = {};
+
+async function loadSiteSettings() {
+  try {
+    const cached = localStorage.getItem("fabric8_admin_settings_cache");
+    if (cached) {
+      currentSiteSettings = JSON.parse(cached);
+      populateSettingsForm();
+    }
+  } catch (e) {}
+
+  try {
+    const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+    const res = await fetch(`${FIREBASE_DB}/admin_settings.json?t=` + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data === 'object') {
+        currentSiteSettings = data;
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch (e) {}
+        populateSettingsForm();
+        return;
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const res = await fetch('data/admin_settings.json?t=' + Date.now());
+    if (res.ok) {
+      currentSiteSettings = await res.json();
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch (e) {}
+      populateSettingsForm();
+    }
+  } catch (e) {}
+}
+
+function populateSettingsForm() {
+  const footerLegalInput = document.getElementById('adminFooterLegal');
+  const contactHQInput = document.getElementById('adminContactHQ');
+  const contactUSAInput = document.getElementById('adminContactUSA');
+  const contactJordanInput = document.getElementById('adminContactJordan');
+  const contactEmailInput = document.getElementById('adminContactEmail');
+  const socialLinkedInInput = document.getElementById('adminSocialLinkedIn');
+  const socialFacebookInput = document.getElementById('adminSocialFacebook');
+  const socialInstagramInput = document.getElementById('adminSocialInstagram');
+
+  const sc = currentSiteSettings.siteContent || {};
+
+  if (footerLegalInput && currentSiteSettings.footerLegal) footerLegalInput.value = currentSiteSettings.footerLegal;
+  if (contactHQInput && sc.contactHQ) contactHQInput.value = sc.contactHQ;
+  if (contactUSAInput && sc.contactUSA) contactUSAInput.value = sc.contactUSA;
+  if (contactJordanInput && sc.contactJordan) contactJordanInput.value = sc.contactJordan;
+  if (contactEmailInput && sc.contactEmail) contactEmailInput.value = sc.contactEmail;
+  if (socialLinkedInInput && sc.socialLinkedIn) socialLinkedInInput.value = sc.socialLinkedIn;
+  if (socialFacebookInput && sc.socialFacebook) socialFacebookInput.value = sc.socialFacebook;
+  if (socialInstagramInput && sc.socialInstagram) socialInstagramInput.value = sc.socialInstagram;
+}
+
+const saveFooterSettingsBtn = document.getElementById('saveFooterSettingsBtn');
+if (saveFooterSettingsBtn) {
+  saveFooterSettingsBtn.addEventListener('click', async () => {
+    try {
+      saveFooterSettingsBtn.textContent = 'Saving & Syncing...';
+      saveFooterSettingsBtn.disabled = true;
+
+      if (!currentSiteSettings.siteContent) currentSiteSettings.siteContent = {};
+
+      const footerLegalInput = document.getElementById('adminFooterLegal');
+      const contactHQInput = document.getElementById('adminContactHQ');
+      const contactUSAInput = document.getElementById('adminContactUSA');
+      const contactJordanInput = document.getElementById('adminContactJordan');
+      const contactEmailInput = document.getElementById('adminContactEmail');
+      const socialLinkedInInput = document.getElementById('adminSocialLinkedIn');
+      const socialFacebookInput = document.getElementById('adminSocialFacebook');
+      const socialInstagramInput = document.getElementById('adminSocialInstagram');
+
+      if (footerLegalInput) currentSiteSettings.footerLegal = footerLegalInput.value.trim();
+      if (contactHQInput) currentSiteSettings.siteContent.contactHQ = contactHQInput.value.trim();
+      if (contactUSAInput) currentSiteSettings.siteContent.contactUSA = contactUSAInput.value.trim();
+      if (contactJordanInput) currentSiteSettings.siteContent.contactJordan = contactJordanInput.value.trim();
+      if (contactEmailInput) currentSiteSettings.siteContent.contactEmail = contactEmailInput.value.trim();
+      if (socialLinkedInInput) currentSiteSettings.siteContent.socialLinkedIn = socialLinkedInInput.value.trim();
+      if (socialFacebookInput) currentSiteSettings.siteContent.socialFacebook = socialFacebookInput.value.trim();
+      if (socialInstagramInput) currentSiteSettings.siteContent.socialInstagram = socialInstagramInput.value.trim();
+
+      updateSyncBadge("Saving footer settings...", false, false);
+
+      const res = await fetch('/api/githubSync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: authToken,
+          action: 'save_settings',
+          product: currentSiteSettings
+        })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch (e) {}
+        updateSyncBadge("✅ Footer Settings Synced Live", true, false);
+        showToast("✅ Footer & Company information published successfully live!", "success", 8000);
+        alert("✅ Success! Footer & Company information was saved and synced live across the website.");
+        if (iframe) {
+          try { iframe.contentWindow.location.reload(); } catch(e) { iframe.src = currentVisualPage; }
+        }
+      } else {
+        updateSyncBadge("❌ Sync Failed", false, true);
+        showToast("❌ Failed to save footer settings: " + (data.message || "Unknown error"), "error");
+        alert("❌ Failed to save footer settings: " + (data.message || "Unknown error"));
+      }
+    } catch (err) {
+      console.error(err);
+      updateSyncBadge("❌ Network Error", false, true);
+      showToast("❌ Error saving settings: " + err.message, "error");
+      alert("❌ Error saving settings: " + err.message);
+    } finally {
+      saveFooterSettingsBtn.textContent = 'Publish Footer Changes';
+      saveFooterSettingsBtn.disabled = false;
     }
   });
 }
@@ -1495,6 +1629,16 @@ if (saveVisualEditorBtn) {
         }
       });
 
+      // Extract footer legal text if edited in iframe
+      const footerLegalEl = cleanDoc.querySelector('footer > div:last-child, .site-footer-bottom p, #cmsFooterLegal');
+      if (footerLegalEl && footerLegalEl.innerHTML) {
+        const cleanFooter = footerLegalEl.innerHTML.trim();
+        if (cleanFooter && cleanFooter !== currentSettings.footerLegal) {
+          currentSettings.footerLegal = cleanFooter;
+          settingsUpdated = true;
+        }
+      }
+
       if (settingsUpdated) {
         try {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
@@ -1528,13 +1672,19 @@ if (saveVisualEditorBtn) {
         const statusEl = document.getElementById('visualEditorStatus');
         if (statusEl) statusEl.style.display = 'block';
         updateSyncBadge("✅ Visual Page Published", true, false);
-        showToast("Success! Changes published to GitHub.\nNote: Vercel takes ~30-45s to complete the build for live site.", "success", 10000);
-        alert("✅ Success! Your changes were saved and published to GitHub.\n\nNote: Vercel will update the live production site in ~30-45 seconds.");
+        showToast("✅ Success! Changes published live to GitHub & Firebase.", "success", 8000);
+        alert("✅ Success! Your changes were saved and published live to GitHub & Firebase.");
         setTimeout(() => { if (statusEl) statusEl.style.display = 'none'; }, 6000);
         
-        // Refresh preview iframe with cache-buster timestamp
+        // Refresh preview iframe cleanly without redirect loops
         setTimeout(() => {
-          if (iframe) iframe.src = currentVisualPage + '?t=' + Date.now();
+          if (iframe) {
+            try {
+              iframe.contentWindow.location.reload();
+            } catch(e) {
+              iframe.src = currentVisualPage;
+            }
+          }
         }, 1200);
       } else {
         updateSyncBadge("❌ Publishing Failed", false, true);

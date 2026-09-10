@@ -217,6 +217,7 @@ export default async function handler(req, res) {
 
       const settingsPath = "data/admin_settings.json";
       let currentSettingsSha = null;
+      let existingSettings = {};
       try {
         const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
           headers: { 'Authorization': `Bearer ${githubToken}` }
@@ -224,10 +225,23 @@ export default async function handler(req, res) {
         if (fileRes.ok) {
           const fileData = await fileRes.json();
           currentSettingsSha = fileData.sha;
+          try {
+            const str = Buffer.from(fileData.content, 'base64').toString('utf-8');
+            existingSettings = JSON.parse(str);
+          } catch(e) {}
         }
       } catch (e) {}
 
-      const newContentStr = JSON.stringify(product, null, 2); // 'product' holds settings payload here
+      const mergedSettings = {
+        ...existingSettings,
+        ...product,
+        siteContent: {
+          ...(existingSettings.siteContent || {}),
+          ...(product?.siteContent || {})
+        }
+      };
+
+      const newContentStr = JSON.stringify(mergedSettings, null, 2);
       const newContentBase64 = Buffer.from(newContentStr).toString('base64');
       const bodyPayload = {
         message: 'Update admin settings',
@@ -252,7 +266,7 @@ export default async function handler(req, res) {
         await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(product)
+          body: JSON.stringify(mergedSettings)
         });
       } catch (fbErr) {
         console.error("Firebase Settings Sync Error:", fbErr);
