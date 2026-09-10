@@ -1173,6 +1173,17 @@ ${logoItemsHtml}
         htmlText = '<!DOCTYPE html>\n<html>\n' + tempDoc.documentElement.innerHTML + '\n</html>';
       }
 
+      // Extract base64 images for backend upload
+      const siteImages = [];
+      brandLogosList.forEach((b, idx) => {
+        if (b.src && b.src.startsWith('data:image')) {
+          siteImages.push({
+            name: 'brand_logo_' + idx + '_' + Date.now() + '.png',
+            base64: b.src
+          });
+        }
+      });
+
       // Publish to GitHub via /api/githubSync
       const syncRes = await fetch('/api/githubSync', {
         method: 'POST',
@@ -1181,7 +1192,8 @@ ${logoItemsHtml}
           token: authToken,
           action: 'save_html',
           filename: 'index.html',
-          htmlContent: htmlText
+          htmlContent: htmlText,
+          siteImages: siteImages
         })
       });
 
@@ -1524,11 +1536,9 @@ if (saveVisualEditorBtn) {
         
         newSiteImages.push({
           name: img.getAttribute('data-new-upload'),
-          base64: img.src,
-          newPath: newPath
+          base64: img.src
         });
         
-        img.src = newPath;
         img.removeAttribute('data-new-upload');
       });
       
@@ -1540,15 +1550,9 @@ if (saveVisualEditorBtn) {
 
         newSiteImages.push({
           name: bg.getAttribute('data-new-bg-upload'),
-          base64: b64,
-          newPath: newPath
+          base64: b64
         });
         
-        let currentStyle = bg.getAttribute('style') || '';
-        if (currentStyle && b64) {
-          bg.setAttribute('style', currentStyle.replace(b64, newPath));
-        }
-
         bg.removeAttribute('data-new-bg-upload');
         bg.removeAttribute('data-new-bg-base64');
       });
