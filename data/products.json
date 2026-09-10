@@ -1847,9 +1847,11 @@
     ]
   },
   {
+    "id": "F8-022",
     "sku": "F8-022",
     "name": "Shirts",
     "category": "Top Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Versatile button-up for a polished corporate look.",
     "long": "A clean, professional button-up shirt suited for office, retail, or client-facing roles.",
@@ -1866,36 +1868,24 @@
       "Black",
       "Grey",
       "Light Blue",
-      "Navy"
+      "Navy",
+      "red"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Shirt White.webp",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "50 pieces",
+    "maxQty": "",
     "availability": "In Stock",
-    "images": [
-      "assets/products/Shirt White.webp",
-      "assets/products/Shirt Black.webp",
-      "assets/products/Shirt White Side.webp",
-      "assets/products/Shirt White Back.webp",
-      "assets/products/Shirt grey.webp",
-      "assets/products/Shirt Light blue.webp",
-      "assets/products/Shirt Navy.webp"
-    ],
-    "supportedFinishes": [
-      "Embroidery"
-    ],
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
     ],
-    "customizationCapability": "Embroidery",
     "placements": [
       {
         "name": "Left Chest",
@@ -1941,7 +1931,22 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Shirt White.webp",
+      "assets/products/Shirt Black.webp",
+      "assets/products/Shirt White Side.webp",
+      "assets/products/Shirt White Back.webp",
+      "assets/products/Shirt grey.webp",
+      "assets/products/Shirt Light blue.webp",
+      "assets/products/Shirt Navy.webp"
+    ],
+    "image": "assets/products/Shirt White.webp"
   },
   {
     "sku": "F8-023",
