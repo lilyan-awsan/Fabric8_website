@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fabric8 | Page Not Found</title>
+  <link rel="icon" type="image/png" href="assets/favicon2.png?v=3">
+  <link rel="stylesheet" href="site.css">
+  <style>
+    .not-found-container {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .not-found-code {
+      font-size: clamp(60px, 12vw, 120px);
+      font-weight: 900;
+      color: var(--yellow, #ffd700);
+      margin: 0;
+      line-height: 1;
+    }
+    .not-found-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 15px 0 25px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .not-found-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #111;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .not-found-btn:hover {
+      background: var(--yellow, #ffd700);
+      color: #111;
+    }
+  </style>
+</head>
+<body class="page-ready">
+  <header class="header">
+    <a class="logo-wrapper" href="index.html" title="Fabric 8 Home">
+      <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo" class="logo-icon-default">
+    </a>
+  </header>
+  <main class="not-found-container">
+    <h1 class="not-found-code">404</h1>
+    <h2 class="not-found-title">Page Not Found</h2>
+    <p style="color: #666; max-width: 480px; margin-bottom: 30px; font-size: 15px;">The page you are looking for might have been moved or does not exist.</p>
+    <a href="index.html" class="not-found-btn">Back to Home</a>
+  </main>
+</body>
+</html>

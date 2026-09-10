@@ -65,10 +65,67 @@
         ]
       }
     ],
+    "cleanUrls": true,
     "rewrites": [
       {
         "source": "/api/**",
         "function": "api"
+      },
+      {
+        "source": "/admin",
+        "destination": "/admin.html"
+      },
+      {
+        "source": "/about",
+        "destination": "/about.html"
+      },
+      {
+        "source": "/services",
+        "destination": "/services.html"
+      },
+      {
+        "source": "/sectors",
+        "destination": "/sectors.html"
+      },
+      {
+        "source": "/method",
+        "destination": "/method.html"
+      },
+      {
+        "source": "/shop",
+        "destination": "/shop.html"
+      },
+      {
+        "source": "/contact",
+        "destination": "/contact.html"
+      },
+      {
+        "source": "/checkout",
+        "destination": "/checkout.html"
+      },
+      {
+        "source": "/branding",
+        "destination": "/product-customizer.html"
+      },
+      {
+        "source": "/product",
+        "destination": "/product.html"
+      },
+      {
+        "source": "/product-customizer",
+        "destination": "/product-customizer.html"
+      },
+      {
+        "source": "/visual-editor",
+        "destination": "/visual-editor.html"
+      },
+      {
+        "source": "/privacy",
+        "destination": "/privacy.html"
+      },
+      {
+        "source": "/terms",
+        "destination": "/terms.html"
       }
     ]
   },
