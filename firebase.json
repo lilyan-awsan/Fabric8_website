@@ -32,7 +32,6 @@
       "assets/needs/**",
       "**/needs/**"
     ],
-    "cleanUrls": true,
     "headers": [
       {
         "source": "/.well-known/**",

@@ -259,12 +259,26 @@ async function loadProducts() {
     }
   } catch (e) {}
 
-  // 2. Ultra-fast fetch from local static files (Vercel CDN Edge) if not initialized yet
+  const needsProducts = document.getElementById('productsGrid') || 
+                        document.getElementById('productList') || 
+                        document.getElementById('productTitle') ||
+                        document.querySelector('.shop-container') || 
+                        document.querySelector('.product-card') ||
+                        window.location.pathname.includes('shop') ||
+                        window.location.pathname.includes('product') ||
+                        window.location.pathname.includes('checkout');
+
+  if (!needsProducts && !siteInitialized) {
+    initSite();
+    siteInitialized = true;
+  }
+
+  // 2. Ultra-fast fetch from local static files if not initialized yet
   if (!siteInitialized) {
     try {
       const [localSettings, localProducts] = await Promise.all([
         fetch('data/admin_settings.json').then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch('data/products.json').then(r => r.ok ? r.json() : null).catch(() => null)
+        needsProducts ? fetch('data/products.json').then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null)
       ]);
       if (localSettings) {
         siteSettings = localSettings;
@@ -1209,16 +1223,6 @@ document.addEventListener("change", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("page-ready");
   if (typeof initHeaderSearch === "function") initHeaderSearch();
-});
-
-document.addEventListener("click", (event) => {
-  const link = event.target.closest("a[href$='.html'], a[href*='.html#']");
-  if (!link || link.target || event.metaKey || event.ctrlKey) return;
-  const url = new URL(link.href, location.href);
-  if (url.origin !== location.origin) return;
-  event.preventDefault();
-  document.body.classList.add("silk-leaving");
-  setTimeout(() => { location.href = link.href; }, 340);
 });
 
 $("#clearCart")?.addEventListener("click", () => {
