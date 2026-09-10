@@ -20,10 +20,8 @@ export default async function handler(req, res) {
       let finalHtml = htmlContent;
       if (siteImages && Array.isArray(siteImages)) {
         for (const img of siteImages) {
-          if (img && img.base64 && img.name) {
-            const ext = img.name.split('.').pop() || 'png';
-            const imgPath = `assets/site_images/${Date.now()}_img.${ext}`;
-            const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
+          if (img && img.base64 && img.name && img.newPath) {
+            const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${img.newPath}`, {
               method: 'PUT',
               headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -31,9 +29,7 @@ export default async function handler(req, res) {
                 content: img.base64.split(',')[1]
               })
             });
-            if (imgRes.ok) {
-              finalHtml = finalHtml.split(img.base64).join(imgPath);
-            }
+            // We no longer modify finalHtml here because the frontend already updated the src attributes
           }
         }
       }

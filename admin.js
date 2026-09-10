@@ -1164,10 +1164,13 @@ ${logoItemsHtml}
 ${logoItemsHtml}
           </div>`;
 
-      // Replace marquee-content block in index.html
-      const marqueeRegex = /<div class="marquee-content"[\s\S]*?<\/div>\s*<\/div>/i;
-      if (marqueeRegex.test(htmlText)) {
-        htmlText = htmlText.replace(marqueeRegex, marqueeReplacement + '\n        </div>');
+      // Replace marquee-content block in index.html using DOMParser to avoid brittle regex
+      const parser = new DOMParser();
+      const tempDoc = parser.parseFromString(htmlText, 'text/html');
+      const marqueeEl = tempDoc.querySelector('.marquee-content');
+      if (marqueeEl) {
+        marqueeEl.outerHTML = marqueeReplacement;
+        htmlText = '<!DOCTYPE html>\n<html>\n' + tempDoc.documentElement.innerHTML + '\n</html>';
       }
 
       // Publish to GitHub via /api/githubSync
@@ -1516,19 +1519,36 @@ if (saveVisualEditorBtn) {
       
       const imgTags = cleanDoc.querySelectorAll('img[data-new-upload]');
       imgTags.forEach(img => {
+        const ext = img.getAttribute('data-new-upload').split('.').pop() || 'png';
+        const newPath = `assets/site_images/${Date.now()}_${Math.floor(Math.random()*1000)}_img.${ext}`;
+        
         newSiteImages.push({
           name: img.getAttribute('data-new-upload'),
-          base64: img.src
+          base64: img.src,
+          newPath: newPath
         });
+        
+        img.src = newPath;
         img.removeAttribute('data-new-upload');
       });
       
       const bgTags = cleanDoc.querySelectorAll('[data-new-bg-upload]');
       bgTags.forEach(bg => {
+        const ext = bg.getAttribute('data-new-bg-upload').split('.').pop() || 'webp';
+        const newPath = `assets/site_images/${Date.now()}_${Math.floor(Math.random()*1000)}_bg.${ext}`;
+        const b64 = bg.getAttribute('data-new-bg-base64');
+
         newSiteImages.push({
           name: bg.getAttribute('data-new-bg-upload'),
-          base64: bg.getAttribute('data-new-bg-base64')
+          base64: b64,
+          newPath: newPath
         });
+        
+        let currentStyle = bg.getAttribute('style') || '';
+        if (currentStyle && b64) {
+          bg.setAttribute('style', currentStyle.replace(b64, newPath));
+        }
+
         bg.removeAttribute('data-new-bg-upload');
         bg.removeAttribute('data-new-bg-base64');
       });
