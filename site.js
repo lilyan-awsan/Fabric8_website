@@ -200,9 +200,18 @@ function applySiteSettings() {
   }
 
   // Global Footers Contact Block across all pages
-  if (sc.contactHQ || sc.contactUSA || sc.contactJordan) {
+  if (sc.footerContactHtml) {
     document.querySelectorAll('footer h4').forEach(h4 => {
-      if (h4.textContent.trim().toLowerCase().includes('contact details')) {
+      if (h4.textContent.trim().toLowerCase().includes('contact')) {
+        const p = h4.nextElementSibling;
+        if (p && p.tagName === 'P') {
+          p.innerHTML = sc.footerContactHtml;
+        }
+      }
+    });
+  } else if (sc.contactHQ || sc.contactUSA || sc.contactJordan) {
+    document.querySelectorAll('footer h4').forEach(h4 => {
+      if (h4.textContent.trim().toLowerCase().includes('contact')) {
         const p = h4.nextElementSibling;
         if (p && p.tagName === 'P') {
           let html = '';
@@ -211,6 +220,30 @@ function applySiteSettings() {
           if (sc.contactJordan) html += `Jordan: ${sc.contactJordan}<br>`;
           html += `<a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
           p.innerHTML = html;
+        }
+      }
+    });
+  }
+
+  // Footer Overview Links across all pages
+  if (sc.footerOverviewHtml) {
+    document.querySelectorAll('footer h4').forEach(h4 => {
+      if (h4.textContent.trim().toLowerCase().includes('overview')) {
+        const p = h4.nextElementSibling;
+        if (p && p.tagName === 'P') {
+          p.innerHTML = sc.footerOverviewHtml;
+        }
+      }
+    });
+  }
+
+  // Footer Legal Links across all pages
+  if (sc.footerLegalLinksHtml) {
+    document.querySelectorAll('footer h4').forEach(h4 => {
+      if (h4.textContent.trim().toLowerCase().includes('legal')) {
+        const p = h4.nextElementSibling;
+        if (p && p.tagName === 'P') {
+          p.innerHTML = sc.footerLegalLinksHtml;
         }
       }
     });

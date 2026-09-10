@@ -1198,7 +1198,7 @@ ${logoItemsHtml}
   });
 }
 
-// --- Footer & Company Information Manager ---
+// --- Site Settings Cache ---
 let currentSiteSettings = {};
 
 async function loadSiteSettings() {
@@ -1206,7 +1206,6 @@ async function loadSiteSettings() {
     const cached = localStorage.getItem("fabric8_admin_settings_cache");
     if (cached) {
       currentSiteSettings = JSON.parse(cached);
-      populateSettingsForm();
     }
   } catch (e) {}
 
@@ -1221,7 +1220,6 @@ async function loadSiteSettings() {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
           localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
         } catch (e) {}
-        populateSettingsForm();
         return;
       }
     }
@@ -1235,99 +1233,8 @@ async function loadSiteSettings() {
         localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
       } catch (e) {}
-      populateSettingsForm();
     }
   } catch (e) {}
-}
-
-function populateSettingsForm() {
-  const footerLegalInput = document.getElementById('adminFooterLegal');
-  const contactHQInput = document.getElementById('adminContactHQ');
-  const contactUSAInput = document.getElementById('adminContactUSA');
-  const contactJordanInput = document.getElementById('adminContactJordan');
-  const contactEmailInput = document.getElementById('adminContactEmail');
-  const socialLinkedInInput = document.getElementById('adminSocialLinkedIn');
-  const socialFacebookInput = document.getElementById('adminSocialFacebook');
-  const socialInstagramInput = document.getElementById('adminSocialInstagram');
-
-  const sc = currentSiteSettings.siteContent || {};
-
-  if (footerLegalInput && currentSiteSettings.footerLegal) footerLegalInput.value = currentSiteSettings.footerLegal;
-  if (contactHQInput && sc.contactHQ) contactHQInput.value = sc.contactHQ;
-  if (contactUSAInput && sc.contactUSA) contactUSAInput.value = sc.contactUSA;
-  if (contactJordanInput && sc.contactJordan) contactJordanInput.value = sc.contactJordan;
-  if (contactEmailInput && sc.contactEmail) contactEmailInput.value = sc.contactEmail;
-  if (socialLinkedInInput && sc.socialLinkedIn) socialLinkedInInput.value = sc.socialLinkedIn;
-  if (socialFacebookInput && sc.socialFacebook) socialFacebookInput.value = sc.socialFacebook;
-  if (socialInstagramInput && sc.socialInstagram) socialInstagramInput.value = sc.socialInstagram;
-}
-
-const saveFooterSettingsBtn = document.getElementById('saveFooterSettingsBtn');
-if (saveFooterSettingsBtn) {
-  saveFooterSettingsBtn.addEventListener('click', async () => {
-    try {
-      saveFooterSettingsBtn.textContent = 'Saving & Syncing...';
-      saveFooterSettingsBtn.disabled = true;
-
-      if (!currentSiteSettings.siteContent) currentSiteSettings.siteContent = {};
-
-      const footerLegalInput = document.getElementById('adminFooterLegal');
-      const contactHQInput = document.getElementById('adminContactHQ');
-      const contactUSAInput = document.getElementById('adminContactUSA');
-      const contactJordanInput = document.getElementById('adminContactJordan');
-      const contactEmailInput = document.getElementById('adminContactEmail');
-      const socialLinkedInInput = document.getElementById('adminSocialLinkedIn');
-      const socialFacebookInput = document.getElementById('adminSocialFacebook');
-      const socialInstagramInput = document.getElementById('adminSocialInstagram');
-
-      if (footerLegalInput) currentSiteSettings.footerLegal = footerLegalInput.value.trim();
-      if (contactHQInput) currentSiteSettings.siteContent.contactHQ = contactHQInput.value.trim();
-      if (contactUSAInput) currentSiteSettings.siteContent.contactUSA = contactUSAInput.value.trim();
-      if (contactJordanInput) currentSiteSettings.siteContent.contactJordan = contactJordanInput.value.trim();
-      if (contactEmailInput) currentSiteSettings.siteContent.contactEmail = contactEmailInput.value.trim();
-      if (socialLinkedInInput) currentSiteSettings.siteContent.socialLinkedIn = socialLinkedInInput.value.trim();
-      if (socialFacebookInput) currentSiteSettings.siteContent.socialFacebook = socialFacebookInput.value.trim();
-      if (socialInstagramInput) currentSiteSettings.siteContent.socialInstagram = socialInstagramInput.value.trim();
-
-      updateSyncBadge("Saving footer settings...", false, false);
-
-      const res = await fetch('/api/githubSync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token: authToken,
-          action: 'save_settings',
-          product: currentSiteSettings
-        })
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        try {
-          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
-          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch (e) {}
-        updateSyncBadge("✅ Footer Settings Synced Live", true, false);
-        showToast("✅ Footer & Company information published successfully live!", "success", 8000);
-        alert("✅ Success! Footer & Company information was saved and synced live across the website.");
-        if (iframe) {
-          try { iframe.contentWindow.location.reload(); } catch(e) { iframe.src = currentVisualPage; }
-        }
-      } else {
-        updateSyncBadge("❌ Sync Failed", false, true);
-        showToast("❌ Failed to save footer settings: " + (data.message || "Unknown error"), "error");
-        alert("❌ Failed to save footer settings: " + (data.message || "Unknown error"));
-      }
-    } catch (err) {
-      console.error(err);
-      updateSyncBadge("❌ Network Error", false, true);
-      showToast("❌ Error saving settings: " + err.message, "error");
-      alert("❌ Error saving settings: " + err.message);
-    } finally {
-      saveFooterSettingsBtn.textContent = 'Publish Footer Changes';
-      saveFooterSettingsBtn.disabled = false;
-    }
-  });
 }
 
 const iframe = document.getElementById('visualEditorIframe');
@@ -1436,6 +1343,42 @@ if (iframe && navBtns.length > 0) {
           });
         }
       });
+
+      // Explicitly ensure all footer text and links are editable
+      const footerEl = doc.querySelector('footer');
+      if (footerEl) {
+        footerEl.querySelectorAll('p, a, h4, div').forEach(el => {
+          if (el.children.length === 0 || el.tagName === 'P' || el.tagName === 'H4' || el.tagName === 'A') {
+            el.setAttribute('contenteditable', 'true');
+          }
+        });
+
+        // Make footer social icons visible and clickable to set URL in visual editor
+        const socialIcons = footerEl.querySelectorAll('#cmsSocialLinkedIn, #cmsSocialFacebook, #cmsSocialInstagram, a[href*="linkedin"], a[href*="facebook"], a[href*="instagram"]');
+        socialIcons.forEach(icon => {
+          icon.style.display = 'inline-flex';
+          icon.style.alignItems = 'center';
+          icon.style.justifyContent = 'center';
+          icon.style.cursor = 'pointer';
+          icon.title = 'Click to edit social media link';
+          if (!icon.getAttribute('data-social-click-handled')) {
+            icon.setAttribute('data-social-click-handled', 'true');
+            icon.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const platform = icon.id.replace('cmsSocial', '') || 'Social';
+              const cur = icon.getAttribute('data-updated-href') || icon.getAttribute('href') || '';
+              const val = prompt(`Enter ${platform} Profile URL (or leave blank to hide):`, cur === '#' ? '' : cur);
+              if (val !== null) {
+                const cleanVal = val.trim();
+                icon.setAttribute('data-updated-href', cleanVal);
+                icon.setAttribute('href', cleanVal || '#');
+                alert(`✅ ${platform} URL updated!`);
+              }
+            });
+          }
+        });
+      }
       
       // Make images editable
       const images = doc.querySelectorAll('img');
@@ -1554,6 +1497,15 @@ if (saveVisualEditorBtn) {
       cleanDoc.querySelectorAll('[data-editor-click-handled]').forEach(el => el.removeAttribute('data-editor-click-handled'));
       cleanDoc.querySelectorAll('[data-controls-injected]').forEach(el => el.removeAttribute('data-controls-injected'));
       cleanDoc.querySelectorAll('[data-click-intercepted]').forEach(el => el.removeAttribute('data-click-intercepted'));
+      cleanDoc.querySelectorAll('[data-social-click-handled]').forEach(el => el.removeAttribute('data-social-click-handled'));
+      cleanDoc.querySelectorAll('[data-updated-href]').forEach(el => {
+        const updated = el.getAttribute('data-updated-href');
+        if (updated) {
+          el.setAttribute('href', updated);
+          el.style.display = 'inline-flex';
+        }
+        el.removeAttribute('data-updated-href');
+      });
       cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"]').forEach(el => el.remove());
 
       const injectedStyleTag = cleanDoc.querySelector('#visual-editor-style');
@@ -1629,22 +1581,100 @@ if (saveVisualEditorBtn) {
         }
       });
 
-      // Extract footer legal text if edited in iframe
+      // Extract all footer elements so direct visual edits persist globally across the whole website:
+      // 1. Footer Legal / Copyright notice
       const footerLegalEl = cleanDoc.querySelector('footer > div:last-child, .site-footer-bottom p, #cmsFooterLegal');
       if (footerLegalEl && footerLegalEl.innerHTML) {
         const cleanFooter = footerLegalEl.innerHTML.trim();
-        if (cleanFooter && cleanFooter !== currentSettings.footerLegal) {
+        if (cleanFooter) {
           currentSettings.footerLegal = cleanFooter;
           settingsUpdated = true;
         }
       }
 
-      if (settingsUpdated) {
-        try {
-          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
-          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch(e) {}
+      // 2. Footer Contact Details block
+      const contactH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+        h4.textContent.trim().toLowerCase().includes('contact')
+      );
+      if (contactH4 && contactH4.nextElementSibling) {
+        const contactP = contactH4.nextElementSibling;
+        const cleanContactHtml = contactP.innerHTML.trim();
+        if (cleanContactHtml) {
+          currentSettings.siteContent.footerContactHtml = cleanContactHtml;
+          settingsUpdated = true;
+
+          // Parse granular fields for backward compatibility
+          const fullText = contactP.innerText || contactP.textContent || '';
+          const usaMatch = fullText.match(/USA:\s*([^\r\n<]+)/i);
+          if (usaMatch) currentSettings.siteContent.contactUSA = usaMatch[1].trim();
+          
+          const jordanMatch = fullText.match(/Jordan:\s*([^\r\n<]+)/i);
+          if (jordanMatch) currentSettings.siteContent.contactJordan = jordanMatch[1].trim();
+
+          const mailto = contactP.querySelector('a[href^="mailto:"]');
+          if (mailto) {
+            currentSettings.siteContent.contactEmail = mailto.getAttribute('href').replace(/^mailto:/i, '').trim();
+          }
+        }
       }
+
+      // 3. Footer Overview Links block
+      const overviewH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+        h4.textContent.trim().toLowerCase().includes('overview')
+      );
+      if (overviewH4 && overviewH4.nextElementSibling) {
+        const overviewP = overviewH4.nextElementSibling;
+        const cleanOverviewHtml = overviewP.innerHTML.trim();
+        if (cleanOverviewHtml) {
+          currentSettings.siteContent.footerOverviewHtml = cleanOverviewHtml;
+          settingsUpdated = true;
+        }
+      }
+
+      // 4. Footer Legal Links block
+      const legalH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+        h4.textContent.trim().toLowerCase().includes('legal')
+      );
+      if (legalH4 && legalH4.nextElementSibling) {
+        const legalP = legalH4.nextElementSibling;
+        const cleanLegalHtml = legalP.innerHTML.trim();
+        if (cleanLegalHtml) {
+          currentSettings.siteContent.footerLegalLinksHtml = cleanLegalHtml;
+          settingsUpdated = true;
+        }
+      }
+
+      // 5. Footer Social Media Links
+      const linkedinA = cleanDoc.querySelector('#cmsSocialLinkedIn, footer a[href*="linkedin"]');
+      if (linkedinA) {
+        const href = linkedinA.getAttribute('data-updated-href') || linkedinA.getAttribute('href');
+        if (href && href !== '#' && !href.startsWith('javascript:')) {
+          currentSettings.siteContent.socialLinkedIn = href.trim();
+          settingsUpdated = true;
+        }
+      }
+      const fbA = cleanDoc.querySelector('#cmsSocialFacebook, footer a[href*="facebook"]');
+      if (fbA) {
+        const href = fbA.getAttribute('data-updated-href') || fbA.getAttribute('href');
+        if (href && href !== '#' && !href.startsWith('javascript:')) {
+          currentSettings.siteContent.socialFacebook = href.trim();
+          settingsUpdated = true;
+        }
+      }
+      const instaA = cleanDoc.querySelector('#cmsSocialInstagram, footer a[href*="instagram"]');
+      if (instaA) {
+        const href = instaA.getAttribute('data-updated-href') || instaA.getAttribute('href');
+        if (href && href !== '#' && !href.startsWith('javascript:')) {
+          currentSettings.siteContent.socialInstagram = href.trim();
+          settingsUpdated = true;
+        }
+      }
+
+      // Always save to local cache
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch(e) {}
 
       updateSyncBadge("Publishing visual page changes...", false, false);
 
@@ -1662,7 +1692,7 @@ if (saveVisualEditorBtn) {
           filename: currentVisualPage,
           htmlContent: rawHtml,
           siteImages: newSiteImages,
-          siteSettingsPayload: settingsUpdated ? currentSettings : null
+          siteSettingsPayload: currentSettings
         })
       });
       clearTimeout(timeoutId);
