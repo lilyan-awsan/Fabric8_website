@@ -2146,9 +2146,11 @@
     "image": "assets/products/Zip up Black -.webp"
   },
   {
+    "id": "F8-025",
     "sku": "F8-025",
     "name": "Puffer Jacket",
     "category": "Outer Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Insulated outerwear for cold-weather work environments.",
     "long": "A lightweight quilted jacket with water-resistant fabric and insulated construction for outdoor or cold conditions.",
@@ -2164,32 +2166,21 @@
       "Black",
       "Navy"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Puff Jacket Black.webp",
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "8 pieces",
+    "maxQty": "",
     "availability": "In Stock",
-    "images": [
-      "assets/products/Puff Jacket Black.webp",
-      "assets/products/Puff Jacket Black Side.webp",
-      "assets/products/Puff Jacket Black Back.webp",
-      "assets/products/Puff Jacket Navy.webp"
-    ],
-    "supportedFinishes": [
-      "Embroidery",
-      "DTF"
-    ],
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
     ],
-    "customizationCapability": "Both",
     "placements": [
       {
         "name": "Left Chest",
@@ -2235,6 +2226,18 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Puff Jacket Black.webp",
+      "assets/products/Puff Jacket Black Side.webp",
+      "assets/products/Puff Jacket Black Back.webp",
+      "assets/products/Puff Jacket Navy.webp"
+    ],
+    "image": "assets/products/Puff Jacket Black.webp"
   }
 ]
