@@ -140,12 +140,6 @@
       "id": "brand_visiotech",
       "name": "VISIOTECH",
       "src": "assets/site_images/visiotech.png"
-    },
-    {
-      "id": "brand_1789165952457",
-      "name": "test",
-      "src": "assets/site_images/1789165956887_7_test.webp",
-      "fileName": "fabric8-textile-logistics.webp"
     }
   ]
 }
