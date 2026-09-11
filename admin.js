@@ -990,6 +990,8 @@ const brandLogoFileInput = document.getElementById('brandLogoFileInput');
 const brandLogoUrlInput = document.getElementById('brandLogoUrlInput');
 const brandLogoPreviewBox = document.getElementById('brandLogoPreviewBox');
 const brandLogoPreviewImg = document.getElementById('brandLogoPreviewImg');
+const brandModalTitle = document.getElementById('brandModalTitle');
+let editingBrandIndex = -1;
 
 let brandLogosList = [
   { id: "brand_district", name: "DISTRICT", src: "assets/site_images/district.png" },
@@ -1078,6 +1080,24 @@ async function loadBrandLogos() {
   renderBrandLogosGrid();
 }
 
+
+function updateIframeMarquee() {
+  if (!iframe) return;
+  try {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    if (!doc) return;
+    const marquee = doc.querySelector('.marquee-content');
+    if (!marquee) return;
+
+    const logoItemsHtml = brandLogosList.map(b => `
+            <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
+              <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`).join('\n');
+
+    marquee.innerHTML = `<!-- Set 1 -->\n${logoItemsHtml}\n            \n<!-- Set 2 for seamless loop -->\n${logoItemsHtml}`;
+  } catch(e) {}
+}
+
 function renderBrandLogosGrid() {
   if (!brandLogosGrid) return;
   
@@ -1091,6 +1111,9 @@ function renderBrandLogosGrid() {
   const newAddBtn = document.getElementById("addNewBrandCardBtn");
   if (newAddBtn) {
     newAddBtn.addEventListener("click", () => {
+      editingBrandIndex = -1;
+      if (brandModalTitle) brandModalTitle.textContent = "Add Client Brand Logo";
+      if (saveBrandBtn) saveBrandBtn.textContent = "Add Logo";
       if (brandForm) brandForm.reset();
       if (brandLogoPreviewBox) brandLogoPreviewBox.style.display = "none";
       if (addBrandModal) addBrandModal.style.display = "flex";
@@ -1099,7 +1122,10 @@ function renderBrandLogosGrid() {
 
   brandLogosList.forEach((brand, idx) => {
     const card = document.createElement("div");
-    card.style.cssText = "position: relative; width: 160px; height: 120px; border: 1px solid var(--line); border-radius: 12px; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: transform 0.2s ease;";
+    card.style.cssText = "position: relative; width: 160px; height: 120px; border: 1px solid var(--line); border-radius: 12px; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); transition: all 0.2s ease; cursor: pointer;";
+    card.title = "Click to edit or change this logo";
+    card.onmouseover = () => { card.style.borderColor = '#2ecc71'; card.style.boxShadow = '0 6px 16px rgba(46,204,113,0.2)'; };
+    card.onmouseout = () => { card.style.borderColor = 'var(--line)'; card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.04)'; };
     
     card.innerHTML = `
       <div class="delete-brand-circle-btn" data-index="${idx}" style="position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); line-height: 1; user-select: none; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" title="Delete ${brand.name} Logo">&minus;</div>
@@ -1109,6 +1135,19 @@ function renderBrandLogosGrid() {
       </div>
       <span style="font-size: 11px; font-weight: 700; color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; margin-top: 6px;">${brand.name}</span>
     `;
+
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".delete-brand-circle-btn")) return;
+      editingBrandIndex = idx;
+      const targetBrand = brandLogosList[idx];
+      if (brandModalTitle) brandModalTitle.textContent = "Edit / Replace Brand Logo";
+      if (saveBrandBtn) saveBrandBtn.textContent = "Save Changes";
+      if (brandNameInput) brandNameInput.value = targetBrand.name || "";
+      if (brandLogoUrlInput) brandLogoUrlInput.value = targetBrand.src || "";
+      if (brandLogoPreviewImg) brandLogoPreviewImg.src = targetBrand.src;
+      if (brandLogoPreviewBox) brandLogoPreviewBox.style.display = "block";
+      if (addBrandModal) addBrandModal.style.display = "flex";
+    });
     
     brandLogosGrid.appendChild(card);
   });
@@ -1122,6 +1161,7 @@ function renderBrandLogosGrid() {
         brandLogosList.splice(index, 1);
         try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
         renderBrandLogosGrid();
+        updateIframeMarquee();
         if (window.showToast) window.showToast(`Deleted ${targetBrand?.name || 'Logo'}. Click 'Publish Brand Changes' to save live!`, 'warning');
       }
     });
@@ -1160,7 +1200,7 @@ if (brandLogoUrlInput) {
   });
 }
 
-// Save Brand Form
+// Save Brand Form (Add & Edit)
 if (brandForm) {
   brandForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -1168,6 +1208,24 @@ if (brandForm) {
     const src = brandLogoUrlInput.value.trim();
     if (!name || !src) return alert("Please provide both a brand name and logo image!");
 
+    if (editingBrandIndex >= 0) {
+      // Edit existing brand logo
+      const existing = brandLogosList[editingBrandIndex];
+      existing.name = name;
+      existing.src = src;
+      if (currentUploadedBrandFileName) {
+        existing.fileName = currentUploadedBrandFileName;
+      }
+      currentUploadedBrandFileName = '';
+      try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
+      renderBrandLogosGrid();
+      updateIframeMarquee();
+      addBrandModal.style.display = 'none';
+      if (window.showToast) window.showToast(`Updated "${name}"! Click 'Publish Brand Changes' to save live.`, 'success');
+      return;
+    }
+
+    // Add new brand logo
     brandLogosList.push({
       id: 'brand_' + Date.now(),
       name,
@@ -1177,8 +1235,9 @@ if (brandForm) {
     currentUploadedBrandFileName = '';
     try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
     renderBrandLogosGrid();
+    updateIframeMarquee();
     addBrandModal.style.display = 'none';
-    if (window.showToast) window.showToast(`Added ${name}! Click 'Publish Brand Changes' to deploy to live site.`, 'success');
+    if (window.showToast) window.showToast(`Added "${name}"! Click 'Publish Brand Changes' to deploy to live site.`, 'success');
   });
 }
 
@@ -1648,6 +1707,9 @@ if (saveVisualEditorBtn) {
         img.removeAttribute('data-new-upload');
       });
       
+      // Remove floating editor buttons before saving HTML
+      cleanDoc.querySelectorAll('.editor-change-bg-btn').forEach(el => el.remove());
+
       const bgTags = cleanDoc.querySelectorAll('[data-new-bg-upload]');
       bgTags.forEach((bg, idx) => {
         const origName = bg.getAttribute('data-new-bg-upload') || 'hero.webp';
@@ -1656,27 +1718,59 @@ if (saveVisualEditorBtn) {
         const newPath = `assets/site_images/${Date.now()}_bg_${idx}_${cleanName}`;
         const b64 = bg.getAttribute('data-new-bg-base64');
 
-        newSiteImages.push({
-          name: cleanName,
-          base64: b64,
-          newPath: newPath
-        });
-        
-        let currentStyle = bg.getAttribute('style') || '';
-        if (currentStyle && b64) {
-          bg.setAttribute('style', currentStyle.replace(b64, newPath));
+        if (b64) {
+          newSiteImages.push({
+            name: cleanName,
+            base64: b64,
+            newPath: newPath
+          });
         }
+        
+        bg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${newPath}")`;
+        bg.style.backgroundSize = 'cover';
+        bg.style.backgroundPosition = 'center';
 
         bg.removeAttribute('data-new-bg-upload');
         bg.removeAttribute('data-new-bg-base64');
+        bg.removeAttribute('data-editable-bg');
+
+        if (currentVisualPage === 'index.html' && bg.classList.contains('page-hero')) {
+          currentSettings.siteContent.heroImage = newPath;
+          settingsUpdated = true;
+        } else if (currentVisualPage === 'about.html') {
+          currentSettings.siteContent.aboutImage = newPath;
+          settingsUpdated = true;
+        } else if (currentVisualPage === 'sectors.html') {
+          currentSettings.siteContent.sectorsHeroImg = newPath;
+          settingsUpdated = true;
+        }
       });
+
+      // Process any pending base64 brand logos in brandLogosList
+      const pendingBrandImages = [];
+      brandLogosList = brandLogosList.map((b, idx) => {
+        if (b.src && b.src.startsWith('data:image')) {
+          const ext = (b.fileName || 'logo.png').split('.').pop() || 'png';
+          const cleanName = (b.name || 'brand').toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 30);
+          const newPath = `assets/site_images/${Date.now()}_brand_${idx}_${cleanName}.${ext}`;
+          pendingBrandImages.push({
+            name: `${cleanName}.${ext}`,
+            base64: b.src,
+            newPath: newPath
+          });
+          return { ...b, src: newPath };
+        }
+        return b;
+      });
+
+      const allSiteImages = [...newSiteImages, ...pendingBrandImages];
+      currentSettings.brandLogos = brandLogosList;
 
       // Keep brand logos marquee updated in index.html so saving from Visual Editor never wipes out newly added logos
       if (currentVisualPage === 'index.html') {
         const marqueeEl = cleanDoc.querySelector('.marquee-content');
-        const logosToUse = (Array.isArray(brandLogosList) && brandLogosList.length > 0) ? brandLogosList : ((currentSiteSettings && currentSiteSettings.brandLogos) || []);
-        if (marqueeEl && logosToUse.length > 0) {
-          const logoItemsHtml = logosToUse.map(b => `
+        if (marqueeEl && brandLogosList.length > 0) {
+          const logoItemsHtml = brandLogosList.map(b => `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
               <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
             </div>`).join('\n');
@@ -1843,7 +1937,7 @@ if (saveVisualEditorBtn) {
           action: "save_html",
           filename: currentVisualPage,
           htmlContent: rawHtml,
-          siteImages: newSiteImages,
+          siteImages: allSiteImages,
           siteSettingsPayload: currentSettings
         })
       });
@@ -1851,6 +1945,9 @@ if (saveVisualEditorBtn) {
       
       const data = await res.json();
       if (data.success) {
+        localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+        renderBrandLogosGrid();
+        updateIframeMarquee();
         const statusEl = document.getElementById('visualEditorStatus');
         if (statusEl) statusEl.style.display = 'block';
         updateSyncBadge("✅ Visual Page Published", true, false);

@@ -10,6 +10,26 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 const router = express.Router();
 
+// Dynamic Asset Fallback Proxy: streams newly uploaded site & product images directly from GitHub if not yet cached on CDN
+router.get(["/assets/site_images/*", "/assets/products/*"], async (req, res) => {
+  try {
+    const rawPath = req.path.replace(/^\/api/, "");
+    const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main${rawPath}`;
+    const ghRes = await fetch(ghUrl);
+    if (!ghRes.ok) {
+      return res.status(404).send("Image not found");
+    }
+    const contentType = ghRes.headers.get("content-type") || "image/png";
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Cache-Control", "public, max-age=86400, s-maxage=86400");
+    const arrayBuffer = await ghRes.arrayBuffer();
+    return res.send(Buffer.from(arrayBuffer));
+  } catch (err) {
+    console.error("Asset Fallback Proxy Error:", err);
+    return res.status(500).send("Error fetching asset");
+  }
+});
+
 router.post("/contact", (req, res, next) => {
   import("./contact.js").then(m => m.default(req, res, next)).catch(next);
 });

@@ -71,6 +71,14 @@
         "function": "api"
       },
       {
+        "source": "/assets/site_images/**",
+        "function": "api"
+      },
+      {
+        "source": "/assets/products/**",
+        "function": "api"
+      },
+      {
         "source": "/admin",
         "destination": "/admin.html"
       },
