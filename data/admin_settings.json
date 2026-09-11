@@ -137,6 +137,12 @@
       "id": "brand_visiotech",
       "name": "VISIOTECH",
       "src": "assets/site_images/visiotech.png"
+    },
+    {
+      "id": "brand_1789148401072",
+      "name": "test",
+      "src": "assets/site_images/1789148596975_7_test.png",
+      "fileName": "favicon2.png"
     }
   ]
 }
