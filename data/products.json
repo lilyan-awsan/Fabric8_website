@@ -1128,25 +1128,16 @@
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "0",
-    "images": [
-      "assets/products/Full Apron White.webp",
-      "assets/products/Full Apron Black.webp",
-      "assets/products/Full Apron White Side.webp",
-      "assets/products/Full Apron White Back.webp",
-      "assets/products/Full Apron Grey.webp",
-      "assets/products/Full Apron Striped Black.webp"
-    ],
-    "image": "assets/products/Full Apron White.webp",
-    "supportedFinishes": [
-      "Embroidery",
-      "DTF"
-    ],
+    "moq": "24",
+    "maxQty": "",
+    "availability": "",
+    "care": "",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Bottom Left Corner",
       "Bottom Right Corner"
     ],
-    "customizationCapability": "Both",
     "placements": [
       {
         "name": "Bottom Left Corner",
@@ -1176,7 +1167,21 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Full Apron White.webp",
+      "assets/products/Full Apron Black.webp",
+      "assets/products/Full Apron White Side.webp",
+      "assets/products/Full Apron White Back.webp",
+      "assets/products/Full Apron Grey.webp",
+      "assets/products/Full Apron Striped Black.webp"
+    ],
+    "image": "assets/products/Full Apron White.webp"
   },
   {
     "id": "F8-015",
