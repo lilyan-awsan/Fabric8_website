@@ -101,5 +101,42 @@
     "socialInstagram": "",
     "socialLinkedIn": "",
     "homeHeroTag": "Corporate couture for working teams"
-  }
+  },
+  "brandLogos": [
+    {
+      "id": "brand_district",
+      "name": "DISTRICT",
+      "src": "assets/site_images/district.png"
+    },
+    {
+      "id": "brand_alibi",
+      "name": "ALIBI",
+      "src": "assets/site_images/alibi.png"
+    },
+    {
+      "id": "brand_cewas",
+      "name": "CEWAS",
+      "src": "assets/site_images/cewas.png"
+    },
+    {
+      "id": "brand_blaze_n_puff",
+      "name": "BLAZE N PUFF",
+      "src": "assets/site_images/blaze_n_puff.png"
+    },
+    {
+      "id": "brand_royal",
+      "name": "ROYAL",
+      "src": "assets/site_images/royal.png"
+    },
+    {
+      "id": "brand_mazaj_resto_cafe",
+      "name": "MAZAJ Resto Cafe",
+      "src": "assets/site_images/mazaj_resto_cafe.png"
+    },
+    {
+      "id": "brand_visiotech",
+      "name": "VISIOTECH",
+      "src": "assets/site_images/visiotech.png"
+    }
+  ]
 }

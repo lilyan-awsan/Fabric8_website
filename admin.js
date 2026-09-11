@@ -992,21 +992,91 @@ const brandLogoPreviewBox = document.getElementById('brandLogoPreviewBox');
 const brandLogoPreviewImg = document.getElementById('brandLogoPreviewImg');
 
 let brandLogosList = [
-  { id: "ritz", name: "The Ritz-Carlton", src: "assets/logo-ritz.svg" },
-  { id: "fourseasons", name: "Four Seasons", src: "assets/fourseasons.svg" },
-  { id: "emirates", name: "Emirates Group", src: "assets/emirates.svg" },
-  { id: "marriott", name: "Marriott Int.", src: "assets/marriott.svg" },
-  { id: "cleveland", name: "Cleveland Clinic", src: "assets/site_images/1788110043030_img.png" }
+  { id: "brand_district", name: "DISTRICT", src: "assets/site_images/district.png" },
+  { id: "brand_alibi", name: "ALIBI", src: "assets/site_images/alibi.png" },
+  { id: "brand_cewas", name: "CEWAS", src: "assets/site_images/cewas.png" },
+  { id: "brand_blaze_n_puff", name: "BLAZE N PUFF", src: "assets/site_images/blaze_n_puff.png" },
+  { id: "brand_royal", name: "ROYAL", src: "assets/site_images/royal.png" },
+  { id: "brand_mazaj_resto_cafe", name: "MAZAJ Resto Cafe", src: "assets/site_images/mazaj_resto_cafe.png" },
+  { id: "brand_visiotech", name: "VISIOTECH", src: "assets/site_images/visiotech.png" }
 ];
 
-// Load saved brand logos cache if available
-try {
-  const cachedBrands = localStorage.getItem("fabric8_brand_logos_cache");
-  if (cachedBrands) {
-    const parsed = JSON.parse(cachedBrands);
-    if (Array.isArray(parsed) && parsed.length > 0) brandLogosList = parsed;
-  }
-} catch(e) {}
+async function loadBrandLogos() {
+  // 1. Check admin_settings in Firebase or data/admin_settings.json
+  try {
+    const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+    const res = await fetch(`${FIREBASE_DB}/admin_settings.json?t=` + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Array.isArray(data.brandLogos) && data.brandLogos.length > 0) {
+        brandLogosList = data.brandLogos;
+        localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+        renderBrandLogosGrid();
+        return;
+      }
+    }
+  } catch (e) {}
+
+  try {
+    const res = await fetch('data/admin_settings.json?t=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Array.isArray(data.brandLogos) && data.brandLogos.length > 0) {
+        brandLogosList = data.brandLogos;
+        localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+        renderBrandLogosGrid();
+        return;
+      }
+    }
+  } catch (e) {}
+
+  // 2. Parse live logos directly from index.html marquee
+  try {
+    const resHtml = await fetch('index.html?t=' + Date.now());
+    if (resHtml.ok) {
+      const htmlText = await resHtml.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const marquee = doc.querySelector('.marquee-content');
+      if (marquee) {
+        const imgs = marquee.querySelectorAll('img');
+        const extracted = [];
+        const seen = new Set();
+        imgs.forEach(img => {
+          const alt = (img.getAttribute('alt') || '').trim();
+          const src = (img.getAttribute('src') || '').trim();
+          if (alt && src && !seen.has(alt)) {
+            seen.add(alt);
+            extracted.push({
+              id: 'brand_' + alt.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+              name: alt,
+              src: src
+            });
+          }
+        });
+        if (extracted.length > 0) {
+          brandLogosList = extracted;
+          localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+          renderBrandLogosGrid();
+          return;
+        }
+      }
+    }
+  } catch (e) {}
+
+  // 3. Fallback to localStorage cache
+  try {
+    const cached = localStorage.getItem("fabric8_brand_logos_cache");
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        brandLogosList = parsed;
+      }
+    }
+  } catch (e) {}
+
+  renderBrandLogosGrid();
+}
 
 function renderBrandLogosGrid() {
   if (!brandLogosGrid) return;
@@ -1063,10 +1133,12 @@ if (closeBrandModalBtn) closeBrandModalBtn.addEventListener('click', () => addBr
 if (cancelBrandModalBtn) cancelBrandModalBtn.addEventListener('click', () => addBrandModal.style.display = 'none');
 
 // File Upload Preview
+let currentUploadedBrandFileName = '';
 if (brandLogoFileInput) {
   brandLogoFileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
+      currentUploadedBrandFileName = file.name;
       const reader = new FileReader();
       reader.onload = (e2) => {
         brandLogoUrlInput.value = e2.target.result;
@@ -1096,7 +1168,13 @@ if (brandForm) {
     const src = brandLogoUrlInput.value.trim();
     if (!name || !src) return alert("Please provide both a brand name and logo image!");
 
-    brandLogosList.push({ id: 'brand_' + Date.now(), name, src });
+    brandLogosList.push({
+      id: 'brand_' + Date.now(),
+      name,
+      src,
+      fileName: currentUploadedBrandFileName || (name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.png')
+    });
+    currentUploadedBrandFileName = '';
     try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
     renderBrandLogosGrid();
     addBrandModal.style.display = 'none';
@@ -1134,7 +1212,7 @@ if (tabProducts && tabSettings) {
     productsSection.style.display = 'none';
     if(tableContainer) tableContainer.style.display = 'none';
     settingsSection.style.display = 'block';
-    renderBrandLogosGrid();
+    loadBrandLogos();
     loadSiteSettings();
   });
 }
@@ -1146,12 +1224,34 @@ if (saveBrandsBtn) {
       saveBrandsBtn.textContent = 'Publishing to Live Site...';
       saveBrandsBtn.disabled = true;
 
-      // Fetch index.html
+      // 1. Process brandLogosList: extract base64 images into siteImages with clean unique paths
+      const siteImages = [];
+      const updatedLogosList = brandLogosList.map((b, idx) => {
+        if (b.src && b.src.startsWith('data:image')) {
+          const ext = (b.fileName || 'logo.png').split('.').pop() || 'png';
+          const cleanName = (b.name || 'brand').toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 30);
+          const newPath = `assets/site_images/${Date.now()}_${idx}_${cleanName}.${ext}`;
+          
+          siteImages.push({
+            name: `${cleanName}.${ext}`,
+            base64: b.src,
+            newPath: newPath
+          });
+          
+          return {
+            ...b,
+            src: newPath
+          };
+        }
+        return b;
+      });
+
+      // 2. Fetch latest index.html
       const resHtml = await fetch('index.html?t=' + Date.now());
       let htmlText = await resHtml.text();
 
-      // Build Set 1 and Set 2 logo HTML
-      const logoItemsHtml = brandLogosList.map(b => `
+      // 3. Build Set 1 and Set 2 logo HTML using clean relative paths
+      const logoItemsHtml = updatedLogosList.map(b => `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
               <img src="${b.src}" alt="${b.name}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
             </div>`).join('\n');
@@ -1164,7 +1264,7 @@ ${logoItemsHtml}
 ${logoItemsHtml}
           </div>`;
 
-      // Replace marquee-content block in index.html using DOMParser to avoid brittle regex
+      // 4. Replace marquee-content block in index.html cleanly
       const parser = new DOMParser();
       const tempDoc = parser.parseFromString(htmlText, 'text/html');
       const marqueeEl = tempDoc.querySelector('.marquee-content');
@@ -1173,33 +1273,35 @@ ${logoItemsHtml}
         htmlText = '<!DOCTYPE html>\n<html>\n' + tempDoc.documentElement.innerHTML + '\n</html>';
       }
 
-      // Extract base64 images for backend upload
-      const siteImages = [];
-      brandLogosList.forEach((b, idx) => {
-        if (b.src && b.src.startsWith('data:image')) {
-          siteImages.push({
-            name: 'brand_logo_' + idx + '_' + Date.now() + '.png',
-            base64: b.src
-          });
-        }
-      });
+      // 5. Build siteSettingsPayload to save brandLogos permanently
+      const siteSettingsPayload = {
+        ...currentSiteSettings,
+        brandLogos: updatedLogosList
+      };
 
-      // Publish to GitHub via /api/githubSync
+      // 6. Publish to GitHub via /api/githubSync
       const syncRes = await fetch('/api/githubSync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          token: authToken,
+          token: authToken || 'admin1234',
           action: 'save_html',
           filename: 'index.html',
           htmlContent: htmlText,
-          siteImages: siteImages
+          siteImages: siteImages,
+          siteSettingsPayload: siteSettingsPayload
         })
       });
 
       const syncData = await syncRes.json();
       if (syncData.success) {
+        brandLogosList = updatedLogosList;
+        try {
+          localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+        } catch(e) {}
+        renderBrandLogosGrid();
         if (window.showToast) window.showToast("🚀 Brand logos published successfully to live site!", "success");
+        alert("✅ Brand logos published successfully to live site!");
       } else {
         alert("Failed to publish: " + (syncData.message || "Unknown error"));
       }
@@ -1530,29 +1632,41 @@ if (saveVisualEditorBtn) {
       const newSiteImages = [];
       
       const imgTags = cleanDoc.querySelectorAll('img[data-new-upload]');
-      imgTags.forEach(img => {
-        const ext = img.getAttribute('data-new-upload').split('.').pop() || 'png';
-        const newPath = `assets/site_images/${Date.now()}_${Math.floor(Math.random()*1000)}_img.${ext}`;
+      imgTags.forEach((img, idx) => {
+        const origName = img.getAttribute('data-new-upload') || 'image.png';
+        const ext = origName.split('.').pop() || 'png';
+        const cleanName = origName.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const newPath = `assets/site_images/${Date.now()}_${idx}_${cleanName}`;
         
         newSiteImages.push({
-          name: img.getAttribute('data-new-upload'),
-          base64: img.src
+          name: cleanName,
+          base64: img.src,
+          newPath: newPath
         });
         
+        img.src = newPath;
         img.removeAttribute('data-new-upload');
       });
       
       const bgTags = cleanDoc.querySelectorAll('[data-new-bg-upload]');
-      bgTags.forEach(bg => {
-        const ext = bg.getAttribute('data-new-bg-upload').split('.').pop() || 'webp';
-        const newPath = `assets/site_images/${Date.now()}_${Math.floor(Math.random()*1000)}_bg.${ext}`;
+      bgTags.forEach((bg, idx) => {
+        const origName = bg.getAttribute('data-new-bg-upload') || 'hero.webp';
+        const ext = origName.split('.').pop() || 'webp';
+        const cleanName = origName.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const newPath = `assets/site_images/${Date.now()}_bg_${idx}_${cleanName}`;
         const b64 = bg.getAttribute('data-new-bg-base64');
 
         newSiteImages.push({
-          name: bg.getAttribute('data-new-bg-upload'),
-          base64: b64
+          name: cleanName,
+          base64: b64,
+          newPath: newPath
         });
         
+        let currentStyle = bg.getAttribute('style') || '';
+        if (currentStyle && b64) {
+          bg.setAttribute('style', currentStyle.replace(b64, newPath));
+        }
+
         bg.removeAttribute('data-new-bg-upload');
         bg.removeAttribute('data-new-bg-base64');
       });

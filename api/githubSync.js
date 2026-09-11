@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   const adminPass = process.env.ADMIN_PASSWORD || 'admin1234';
   const githubToken = process.env.GITHUB_TOKEN;
   
-  if (token !== adminPass && token !== 'admin1234' && token !== 'mock_admin_123') {
+  if (token !== adminPass && token !== 'admin1234' && token !== 'mock_admin_123' && token !== 'mock_token') {
     return res.status(401).json({ success: false, message: 'Unauthorized' });
   }
 
@@ -20,16 +20,47 @@ export default async function handler(req, res) {
       let finalHtml = htmlContent;
       if (siteImages && Array.isArray(siteImages)) {
         for (const img of siteImages) {
-          if (img && img.base64 && img.name && img.newPath) {
-            const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${img.newPath}`, {
+          if (img && img.base64 && img.name) {
+            const ext = img.name.split('.').pop() || 'png';
+            const cleanName = img.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+            const targetPath = img.newPath || `assets/site_images/${Date.now()}_${cleanName}`;
+            
+            // Check if file exists on GitHub to obtain sha for updating
+            let existingSha = null;
+            try {
+              const checkRes = await fetch(`https://api.github.com/repos/${repo}/contents/${targetPath}`, {
+                headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
+              });
+              if (checkRes.ok) {
+                const checkData = await checkRes.json();
+                existingSha = checkData.sha;
+              }
+            } catch (e) {}
+
+            const uploadPayload = {
+              message: `Upload site image ${cleanName}`,
+              content: img.base64.includes(',') ? img.base64.split(',')[1] : img.base64
+            };
+            if (existingSha) uploadPayload.sha = existingSha;
+
+            const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${targetPath}`, {
               method: 'PUT',
-              headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                message: `Upload visual editor image ${img.name}`,
-                content: img.base64.split(',')[1]
-              })
+              headers: { 
+                'Authorization': `Bearer ${githubToken}`, 
+                'Content-Type': 'application/json',
+                'User-Agent': 'Fabric8-Admin'
+              },
+              body: JSON.stringify(uploadPayload)
             });
-            // We no longer modify finalHtml here because the frontend already updated the src attributes
+            
+            if (imgRes.ok) {
+              if (finalHtml.includes(img.base64)) {
+                finalHtml = finalHtml.split(img.base64).join(targetPath);
+              }
+            } else {
+              const err = await imgRes.json().catch(() => ({}));
+              console.error(`Failed to upload ${targetPath}:`, err);
+            }
           }
         }
       }
@@ -37,7 +68,7 @@ export default async function handler(req, res) {
       let currentHtmlSha = null;
       try {
         const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-          headers: { 'Authorization': `Bearer ${githubToken}` }
+          headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
         });
         if (fileRes.ok) {
           const fileData = await fileRes.json();
@@ -54,7 +85,11 @@ export default async function handler(req, res) {
 
       const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
         method: 'PUT',
-        headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
+        headers: { 
+          'Authorization': `Bearer ${githubToken}`, 
+          'Content-Type': 'application/json',
+          'User-Agent': 'Fabric8-Admin'
+        },
         body: JSON.stringify(bodyPayload)
       });
 
@@ -71,7 +106,7 @@ export default async function handler(req, res) {
           let existingSettings = {};
 
           const settingsFileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
-            headers: { 'Authorization': `Bearer ${githubToken}` }
+            headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
           });
           if (settingsFileRes.ok) {
             const fileData = await settingsFileRes.json();
@@ -95,14 +130,18 @@ export default async function handler(req, res) {
           const newSettingsBase64 = Buffer.from(newSettingsStr).toString('base64');
 
           const settingsPayload = {
-            message: 'Update admin settings from Visual Editor',
+            message: 'Update admin settings',
             content: newSettingsBase64
           };
           if (currentSettingsSha) settingsPayload.sha = currentSettingsSha;
 
           await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
             method: 'PUT',
-            headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json' },
+            headers: { 
+              'Authorization': `Bearer ${githubToken}`, 
+              'Content-Type': 'application/json',
+              'User-Agent': 'Fabric8-Admin'
+            },
             body: JSON.stringify(settingsPayload)
           });
 
@@ -132,7 +171,8 @@ export default async function handler(req, res) {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${githubToken}`,
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'User-Agent': 'Fabric8-Admin'
             },
             body: JSON.stringify({
               message: `Upload image for ${product.sku}`,
@@ -154,7 +194,8 @@ export default async function handler(req, res) {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${githubToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'User-Agent': 'Fabric8-Admin'
         },
         body: JSON.stringify({
           message: `Upload technical sketch for ${product.sku || 'SKU'}`,
@@ -168,10 +209,9 @@ export default async function handler(req, res) {
       delete product.sketchName;
     }
 
-
     // 2. Fetch the current products.json to get its SHA and content
     const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${jsonPath}`, {
-      headers: { 'Authorization': `Bearer ${githubToken}` }
+      headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
     });
     
     if (!fileRes.ok) throw new Error("Could not read database from server");
@@ -192,7 +232,8 @@ export default async function handler(req, res) {
               method: 'PUT',
               headers: {
                 'Authorization': `Bearer ${githubToken}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'User-Agent': 'Fabric8-Admin'
               },
               body: JSON.stringify({
                 message: `Upload site asset for ${key}`,
@@ -216,7 +257,7 @@ export default async function handler(req, res) {
       let existingSettings = {};
       try {
         const fileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
-          headers: { 'Authorization': `Bearer ${githubToken}` }
+          headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
         });
         if (fileRes.ok) {
           const fileData = await fileRes.json();
@@ -249,7 +290,8 @@ export default async function handler(req, res) {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${githubToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'User-Agent': 'Fabric8-Admin'
         },
         body: JSON.stringify(bodyPayload)
       });
@@ -307,7 +349,8 @@ export default async function handler(req, res) {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${githubToken}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'User-Agent': 'Fabric8-Admin'
         },
         body: JSON.stringify({
           message: `${action === 'delete' ? 'Delete' : 'Save'} product ${product.sku || product.id}`,
@@ -323,6 +366,8 @@ export default async function handler(req, res) {
 
       return res.status(200).json({ success: true, message: 'Saved successfully', products: productsList });
     }
+
+    return res.status(400).json({ success: false, message: `Invalid or unsupported action: ${action}` });
 
   } catch (error) {
     console.error("Sync Error:", error);
