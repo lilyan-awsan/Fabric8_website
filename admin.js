@@ -1587,8 +1587,10 @@ if (iframe && navBtns.length > 0) {
       heroes.forEach(hero => {
         if (!hero.getAttribute('data-editable-bg')) {
           hero.setAttribute('data-editable-bg', 'true');
-          hero.addEventListener('dblclick', (e) => {
-            if (e.target !== hero) return;
+          hero.style.position = 'relative';
+
+          const handleBgSelect = (e) => {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.accept = 'image/*';
@@ -1598,17 +1600,41 @@ if (iframe && navBtns.length > 0) {
                 const reader = new FileReader();
                 reader.onload = (e2) => {
                   hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
+                  hero.style.backgroundSize = 'cover';
+                  hero.style.backgroundPosition = 'center';
                   hero.setAttribute('data-new-bg-upload', file.name);
                   hero.setAttribute('data-new-bg-base64', e2.target.result);
+                  if (window.showToast) window.showToast(`Selected "${file.name}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
                 };
                 reader.readAsDataURL(file);
               }
             };
             fileInput.click();
+          };
+
+          // Inject floating "Change Photo" button directly into the hero
+          if (!hero.querySelector('.editor-change-bg-btn')) {
+            const btn = doc.createElement('button');
+            btn.className = 'editor-change-bg-btn';
+            btn.type = 'button';
+            btn.innerHTML = '📷 Change Hero Photo';
+            btn.style.cssText = 'position: absolute; top: 15px; right: 20px; z-index: 999999; background: #111; color: #fff; border: 2px solid #2ecc71; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.6); display: flex; align-items: center; gap: 8px; font-family: inherit; letter-spacing: 0.5px;';
+            btn.onmouseover = () => { btn.style.background = '#2ecc71'; btn.style.color = '#fff'; btn.style.transform = 'scale(1.05)'; };
+            btn.onmouseout = () => { btn.style.background = '#111'; btn.style.color = '#fff'; btn.style.transform = 'scale(1)'; };
+            btn.addEventListener('click', handleBgSelect);
+            hero.appendChild(btn);
+          }
+
+          hero.addEventListener('dblclick', (e) => {
+            if (e.target.closest('[contenteditable="true"]')) return;
+            handleBgSelect(e);
           });
-          hero.title = "Double-click background to change image";
+          hero.title = "Click 'Change Hero Photo' or double-click to change";
         }
       });
+      
+      // Update iframe marquee with brand logos
+      updateIframeMarquee();
 
     } catch(err) {
       console.warn("Could not inject editor script into iframe:", err);
@@ -1651,6 +1677,23 @@ if (saveVisualEditorBtn) {
       } catch(e) {}
       
       // Deep clone document to strip editor attributes without affecting live preview
+      // Load current admin settings first so image and logo updates have access
+
+      // Load current admin settings first so image and logo updates have access
+      let settingsUpdated = false;
+      let currentSettings = {};
+      try {
+        const cached = localStorage.getItem("fabric8_admin_settings_cache");
+        if (cached) currentSettings = JSON.parse(cached);
+      } catch(e) {}
+
+      if (!currentSettings.siteContent) {
+        try {
+          const resSetting = await fetch('data/admin_settings.json?t=' + Date.now());
+          if (resSetting.ok) currentSettings = await resSetting.json();
+        } catch(e) {}
+      }
+      if (!currentSettings.siteContent) currentSettings.siteContent = {};
       const cleanDoc = doc.documentElement.cloneNode(true);
       
       // Cleanup injected styles and classes
@@ -1669,7 +1712,7 @@ if (saveVisualEditorBtn) {
       const editableImages = cleanDoc.querySelectorAll('.editable-image');
       editableImages.forEach(el => el.classList.remove('editable-image'));
       
-      cleanDoc.querySelectorAll('[data-editable-bg]').forEach(el => el.removeAttribute('data-editable-bg'));
+      cleanDoc.querySelectorAll('[data-editable-bg]').forEach(el => { el.removeAttribute('data-editable-bg'); el.removeAttribute('title'); });
       cleanDoc.querySelectorAll('[data-editor-click-handled]').forEach(el => el.removeAttribute('data-editor-click-handled'));
       cleanDoc.querySelectorAll('[data-controls-injected]').forEach(el => el.removeAttribute('data-controls-injected'));
       cleanDoc.querySelectorAll('[data-click-intercepted]').forEach(el => el.removeAttribute('data-click-intercepted'));
@@ -1804,20 +1847,7 @@ if (saveVisualEditorBtn) {
         cmsContactEmailText: 'contactEmail'
       };
 
-      let settingsUpdated = false;
-      let currentSettings = {};
-      try {
-        const cached = localStorage.getItem("fabric8_admin_settings_cache");
-        if (cached) currentSettings = JSON.parse(cached);
-      } catch(e) {}
-
-      if (!currentSettings.siteContent) {
-        try {
-          const resSetting = await fetch('data/admin_settings.json?t=' + Date.now());
-          if (resSetting.ok) currentSettings = await resSetting.json();
-        } catch(e) {}
-      }
-      if (!currentSettings.siteContent) currentSettings.siteContent = {};
+      
 
       Object.entries(cmsElements).forEach(([id, key]) => {
         const el = cleanDoc.querySelector('#' + id);
@@ -1981,5 +2011,48 @@ if (saveVisualEditorBtn) {
     }
   });
 }
+
+// Sidebar button to change hero photo of currently previewed page
+const editorChangeHeroBtn = document.getElementById('editorChangeHeroBtn');
+if (editorChangeHeroBtn) {
+  editorChangeHeroBtn.addEventListener('click', () => {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      const hero = doc.querySelector('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide');
+      if (hero) {
+        const btn = hero.querySelector('.editor-change-bg-btn');
+        if (btn) {
+          btn.click();
+        } else {
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (e2) => {
+                hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
+                hero.style.backgroundSize = 'cover';
+                hero.style.backgroundPosition = 'center';
+                hero.setAttribute('data-new-bg-upload', file.name);
+                hero.setAttribute('data-new-bg-base64', e2.target.result);
+                if (window.showToast) window.showToast(`Selected "${file.name}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+          fileInput.click();
+        }
+      } else {
+        alert("No hero banner was found on the currently previewed page.");
+      }
+    } catch(err) {
+      console.warn("Could not trigger hero image select from sidebar:", err);
+      alert("Please wait for the page to finish loading in the editor before changing photo.");
+    }
+  });
+}
+
 
 
