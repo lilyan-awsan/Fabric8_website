@@ -1105,7 +1105,7 @@ function renderBrandLogosGrid() {
       <div class="delete-brand-circle-btn" data-index="${idx}" style="position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); line-height: 1; user-select: none; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" title="Delete ${brand.name} Logo">&minus;</div>
       
       <div style="flex: 1; width: 100%; display: flex; align-items: center; justify-content: center;">
-        <img src="${brand.src}" alt="${brand.name}" style="max-height: 55px; max-width: 130px; object-fit: contain;">
+        <img src="${brand.src}" alt="${brand.name}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 55px; max-width: 130px; object-fit: contain;">
       </div>
       <span style="font-size: 11px; font-weight: 700; color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; margin-top: 6px;">${brand.name}</span>
     `;
@@ -1253,7 +1253,7 @@ if (saveBrandsBtn) {
       // 3. Build Set 1 and Set 2 logo HTML using clean relative paths
       const logoItemsHtml = updatedLogosList.map(b => `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-              <img src="${b.src}" alt="${b.name}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+              <img src="${b.src}" alt="${b.name}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
             </div>`).join('\n');
 
       const marqueeReplacement = `<div class="marquee-content" style="display: flex; gap: 75px; width: max-content; align-items: center; animation: scrollBelt 25s linear infinite;">
