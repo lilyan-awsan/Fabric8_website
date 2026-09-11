@@ -1671,6 +1671,20 @@ if (saveVisualEditorBtn) {
         bg.removeAttribute('data-new-bg-base64');
       });
 
+      // Keep brand logos marquee updated in index.html so saving from Visual Editor never wipes out newly added logos
+      if (currentVisualPage === 'index.html') {
+        const marqueeEl = cleanDoc.querySelector('.marquee-content');
+        const logosToUse = (Array.isArray(brandLogosList) && brandLogosList.length > 0) ? brandLogosList : ((currentSiteSettings && currentSiteSettings.brandLogos) || []);
+        if (marqueeEl && logosToUse.length > 0) {
+          const logoItemsHtml = logosToUse.map(b => `
+            <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
+              <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`).join('\n');
+
+          marqueeEl.innerHTML = `\n            <!-- Set 1 -->\n${logoItemsHtml}\n            \n            <!-- Set 2 for seamless loop -->\n${logoItemsHtml}\n          `;
+        }
+      }
+
       // Get raw HTML string
       const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
 

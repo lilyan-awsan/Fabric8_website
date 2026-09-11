@@ -284,6 +284,34 @@ function applySiteSettings() {
   if (embSelect && bs.embPlacements) {
     embSelect.innerHTML = bs.embPlacements.map(p => `<option value="${p.toLowerCase().replace(/ /g, '-')}">${p}</option>`).join("");
   }
+
+  // 9. Brand Logos Dynamic Hydration (Homepage Marquee)
+  if (Array.isArray(siteSettings.brandLogos) && siteSettings.brandLogos.length > 0) {
+    const marqueeEl = document.querySelector('.marquee-content');
+    if (marqueeEl) {
+      const logosHtml = siteSettings.brandLogos.map(b => `
+            <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
+              <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`).join('\n');
+      marqueeEl.innerHTML = `<!-- Set 1 -->\n${logosHtml}\n            \n<!-- Set 2 for seamless loop -->\n${logosHtml}`;
+    }
+  }
+
+  // 10. Hero Background Image Fallback
+  const heroEl = document.querySelector('.page-hero');
+  if (heroEl) {
+    const styleBg = heroEl.getAttribute('style') || '';
+    const match = styleBg.match(/url\(["']?(assets\/site_images\/[^"')]+)["']?\)/);
+    if (match && match[1]) {
+      const imgPath = match[1];
+      const testImg = new Image();
+      testImg.onerror = () => {
+        const ghUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + imgPath;
+        heroEl.style.background = heroEl.style.background.replace(imgPath, ghUrl);
+      };
+      testImg.src = imgPath;
+    }
+  }
 }
 
 
@@ -3626,3 +3654,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     
+
+
+// Global automatic GitHub fallback for newly uploaded images before Hosting CDN propagation
+window.addEventListener('error', function(e) {
+  if (e && e.target && e.target.tagName === 'IMG') {
+    const src = e.target.getAttribute('src');
+    if (src && src.startsWith('assets/') && !e.target.dataset.ghFallback) {
+      e.target.dataset.ghFallback = '1';
+      e.target.src = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + src;
+    }
+  }
+}, true);
