@@ -843,27 +843,21 @@ function renderCart() {
           </h4>
         </div>
         
-        <p style="margin: 0 0 8px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">
+        <p style="margin: 0 0 6px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">
           Size: <strong>${item.size || "N/A"}</strong> | Color: <strong>${item.color || "Standard"}</strong> | <span>${item.branding || "Blank"}</span>
         </p>
-        
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-          <!-- Inline Quantity Controller -->
-          <div class="cart-inline-qty" style="display: inline-flex; align-items: center; gap: 4px; background: #faf9f6; padding: 3px 8px; border-radius: 8px; border: 1px solid var(--line);">
-            <span style="font-size: 11px; font-weight: 800; color: var(--ink); text-transform: uppercase; margin-right: 4px;">Qty:</span>
-            <button type="button" class="cart-qty-step" onclick="window.adjustCartItemQty(${index}, -1)" title="Decrease quantity" style="width: 26px; height: 26px; border: 1px solid var(--line); background: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; padding: 0; user-select: none;">-</button>
-            <input type="number" class="cart-qty-inline-input" value="${currentQty}" min="${itemMoq}" onchange="window.updateCartItemQty(${index}, this.value)" onkeydown="if(event.key==='Enter'){this.blur();}" style="width: 58px; height: 26px; border: 1px solid var(--line); border-radius: 4px; text-align: center; font-size: 13px; font-weight: 800; font-family: inherit; background: #fff;" />
-            <button type="button" class="cart-qty-step" onclick="window.adjustCartItemQty(${index}, 1)" title="Increase quantity" style="width: 26px; height: 26px; border: 1px solid var(--line); background: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; padding: 0; user-select: none;">+</button>
-            <span style="font-size: 11px; font-weight: 700; color: var(--muted); margin-left: 2px;">Pcs</span>
-          </div>
 
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
-            </button>
-            <span style="color: var(--line, #ccc);">|</span>
-            <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
-          </div>
+        <p style="margin: 0 0 10px 0; font-size: 13px; color: var(--ink); display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Quantity:</span>
+          <strong style="font-size: 14px; font-weight: 900; color: var(--green, #2f873d); background: #f0fff4; padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(46,204,113,0.3); display: inline-block;">${currentQty} Pcs</strong>
+        </p>
+        
+        <div style="display: flex; gap: 12px; align-items: center; padding-top: 2px;">
+          <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 5px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
+          </button>
+          <span style="color: var(--line, #ccc);">|</span>
+          <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
         </div>
       </div>
     </div>
@@ -938,6 +932,39 @@ window.updateCartItemQty = function(index, val) {
   }
 };
 
+window.distributeTotalToBreakdown = function(totalQty) {
+  const breakdownInputs = Array.from(document.querySelectorAll(".edit-size-breakdown-input"));
+  if (!breakdownInputs.length) return;
+  
+  if (breakdownInputs.length === 1) {
+    breakdownInputs[0].value = totalQty;
+    return;
+  }
+  
+  let currentSum = 0;
+  const activeInputs = [];
+  breakdownInputs.forEach(inp => {
+    const v = parseInt(inp.value) || 0;
+    currentSum += v;
+    if (v > 0) activeInputs.push(inp);
+  });
+  
+  const targets = activeInputs.length > 0 ? activeInputs : breakdownInputs;
+  const baseSum = currentSum > 0 ? currentSum : targets.length;
+  
+  let allocated = 0;
+  targets.forEach((inp, i) => {
+    if (i === targets.length - 1) {
+      inp.value = Math.max(0, totalQty - allocated);
+    } else {
+      const origVal = currentSum > 0 ? (parseInt(inp.value) || 0) : 1;
+      const share = Math.round((origVal / baseSum) * totalQty);
+      inp.value = share;
+      allocated += share;
+    }
+  });
+};
+
 window.stepEditModalQty = function(delta) {
   const qtyInput = document.getElementById("editItemQty");
   if (!qtyInput) return;
@@ -946,10 +973,7 @@ window.stepEditModalQty = function(delta) {
   if (val < min) val = min;
   qtyInput.value = val;
 
-  const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
-  if (breakdownInputs && breakdownInputs.length === 1) {
-    breakdownInputs[0].value = val;
-  }
+  window.distributeTotalToBreakdown(val);
 };
 
 window.syncBreakdownToTotal = function() {
@@ -1069,13 +1093,19 @@ window.openEditCartModal = function(idx) {
     </div>
   `;
 
-  // Attach Enter key handler to save immediately
+  // Attach Enter key handler to save immediately and input listener to distribute to sizes
   const qtyInput = document.getElementById("editItemQty");
   if (qtyInput) {
     qtyInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         window.saveEditCartItem(e, idx);
+      }
+    });
+    qtyInput.addEventListener("input", (e) => {
+      const val = parseInt(qtyInput.value) || 0;
+      if (val > 0) {
+        window.distributeTotalToBreakdown(val);
       }
     });
   }
@@ -1146,7 +1176,19 @@ window.saveEditCartItem = function(e, idx) {
       }
     });
 
-    if (bTotal > 0) {
+    if (bTotal !== newQty && newQty > 0) {
+      window.distributeTotalToBreakdown(newQty);
+      const recheckedInputs = document.querySelectorAll(".edit-size-breakdown-input");
+      const recheckedBreakdown = {};
+      recheckedInputs.forEach(inp => {
+        const q = parseInt(inp.value) || 0;
+        if (q > 0) recheckedBreakdown[inp.dataset.size] = q;
+      });
+      item.sizesBreakdown = recheckedBreakdown;
+      item.quantity = newQty;
+      item.qty = newQty;
+      item.size = Object.entries(recheckedBreakdown).map(([s, q]) => `${s} (${q})`).join(", ");
+    } else if (bTotal > 0) {
       item.sizesBreakdown = updatedBreakdown;
       item.quantity = bTotal;
       item.qty = bTotal;
@@ -1155,11 +1197,15 @@ window.saveEditCartItem = function(e, idx) {
       const fallbackSize = sizeEl ? sizeEl.value : (item.size && !item.size.includes('(') ? item.size : "M");
       item.size = fallbackSize;
       item.sizesBreakdown = { [fallbackSize]: newQty };
+      item.quantity = newQty;
+      item.qty = newQty;
     }
   } else {
     // Single size
     const newSize = sizeEl ? sizeEl.value : (item.size || "M");
     item.size = newSize;
+    item.quantity = newQty;
+    item.qty = newQty;
     if (item.sizesBreakdown && typeof item.sizesBreakdown === "object") {
       item.sizesBreakdown = { [newSize]: newQty };
     }
