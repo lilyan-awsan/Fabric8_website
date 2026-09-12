@@ -766,7 +766,7 @@
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "",
-    "moq": "9",
+    "moq": "8",
     "maxQty": "",
     "availability": "Made to Order",
     "care": "",
@@ -802,11 +802,8 @@
       "Front Center Panel",
       "Side Panel"
     ],
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "customizationCapability": "both",
+    "supportedFinishes": [],
+    "customizationCapability": "none",
     "images": [
       "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
