@@ -56,16 +56,16 @@
       const canvas = document.getElementById("renderCanvas");
       if (!canvas) return "";
       const thumbCanvas = document.createElement("canvas");
-      thumbCanvas.width = 300;
-      thumbCanvas.height = 300;
+      thumbCanvas.width = 240;
+      thumbCanvas.height = 240;
       const tCtx = thumbCanvas.getContext("2d");
       tCtx.fillStyle = "#ffffff";
-      tCtx.fillRect(0, 0, 300, 300);
-      tCtx.drawImage(canvas, 0, 0, 300, 300);
-      return thumbCanvas.toDataURL("image/jpeg", 0.85);
+      tCtx.fillRect(0, 0, 240, 240);
+      tCtx.drawImage(canvas, 0, 0, 240, 240);
+      return thumbCanvas.toDataURL("image/jpeg", 0.8);
     } catch (e) {
       const canvas = document.getElementById("renderCanvas");
-      return canvas ? canvas.toDataURL("image/png") : "";
+      return canvas ? canvas.toDataURL("image/jpeg", 0.8) : "";
     }
   }
 
@@ -321,9 +321,18 @@
     function calibratePlacement(p) {
       if (!p || !p.name) return p;
       const lower = p.name.toLowerCase();
+      const pName = (state.product.name || "").toLowerCase();
+      const isHalfApron = pName.includes("half") || state.product.sku === "F8-016" || state.product.sku === "F8-017";
+      const isApron = pName.includes("apron") || (state.product.category || "").toLowerCase().includes("apron") || isHalfApron;
       
-      // Automatically enforce accurate anatomical placement coordinates on the garment image (scaled 10% smaller)
-      if (lower.includes("left hip")) {
+      // Apron Placements (Full & Half Apron corners and bib)
+      if (lower.includes("bottom left") || (lower.includes("left") && lower.includes("corner"))) {
+        return { ...p, x: isHalfApron ? 41 : 43.5, y: isHalfApron ? 64 : 73.5, w: isHalfApron ? 13 : 12, h: isHalfApron ? 13 : 12, r: 0 };
+      } else if (lower.includes("bottom right") || (lower.includes("right") && lower.includes("corner"))) {
+        return { ...p, x: isHalfApron ? 59 : 56.5, y: isHalfApron ? 64 : 73.5, w: isHalfApron ? 13 : 12, h: isHalfApron ? 13 : 12, r: 0 };
+      } else if (lower.includes("bib") || (isApron && (lower.includes("chest") || lower.includes("center")))) {
+        return { ...p, x: 50, y: 35.5, w: 15, h: 15, r: 0 };
+      } else if (lower.includes("left hip")) {
         return { ...p, x: 62, y: 26, w: 13.5, h: 13.5, r: 0 };
       } else if (lower.includes("right hip")) {
         return { ...p, x: 38, y: 26, w: 13.5, h: 13.5, r: 0 };
@@ -341,7 +350,7 @@
         return { ...p, x: 63, y: 44, w: 16.2, h: 16.2, r: 0 };
       } else if (lower.includes("right chest")) {
         return { ...p, x: 37, y: 44, w: 16.2, h: 16.2, r: 0 };
-      } else if (lower.includes("back") || lower.includes("center")) {
+      } else if (lower.includes("back") || lower.includes("full back")) {
         return { ...p, x: 50, y: 52, w: 37.8, h: 37.8, r: 0 };
       } else if (lower.includes("left sleeve") || lower.includes("upper sleeve") || (lower.includes("sleeve") && !lower.includes("right"))) {
         return { ...p, x: 76, y: 48, w: 12.6, h: 12.6, r: 8 };
@@ -665,7 +674,7 @@
     });
   }
 
-  // Handle Logo Upload and trigger Auto-Background Removal
+  // Handle Logo Upload and trigger Auto-Background Removal with auto-downscaling to prevent storage quota issues
   function handleLogoUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -673,12 +682,31 @@
     state.artwork.fileName = file.name;
     const reader = new FileReader();
     reader.onload = function (e) {
-      state.artwork.src = e.target.result;
       const img = new Image();
       img.onload = function () {
-        state.artwork.rawImage = img;
-        state.artwork.processedImage = img;
-        drawCanvas();
+        // Optimize image size if exceeds 800px to avoid freezing/localStorage quota errors
+        const maxDim = 800;
+        if (img.width > maxDim || img.height > maxDim) {
+          const oc = document.createElement("canvas");
+          const scale = Math.min(maxDim / img.width, maxDim / img.height);
+          oc.width = Math.round(img.width * scale);
+          oc.height = Math.round(img.height * scale);
+          const octx = oc.getContext("2d");
+          octx.drawImage(img, 0, 0, oc.width, oc.height);
+          state.artwork.src = oc.toDataURL(file.type === "image/jpeg" ? "image/jpeg" : "image/png", 0.9);
+          const optImg = new Image();
+          optImg.onload = function() {
+            state.artwork.rawImage = optImg;
+            state.artwork.processedImage = optImg;
+            drawCanvas();
+          };
+          optImg.src = state.artwork.src;
+        } else {
+          state.artwork.src = e.target.result;
+          state.artwork.rawImage = img;
+          state.artwork.processedImage = img;
+          drawCanvas();
+        }
       };
       img.src = e.target.result;
     };
@@ -821,12 +849,18 @@
       let targetWRatio = 0.18; // Default chest ~18%
       const pName = p.name ? p.name.toLowerCase() : "";
 
-      if (pName.includes("center") || pName.includes("back") || pName.includes("full") || pName.includes("front center")) {
+      if (pName.includes("corner")) {
+        targetWRatio = 0.14; // ~3.5" corner placement
+      } else if (pName.includes("bib")) {
+        targetWRatio = 0.18; // ~4.5" bib placement
+      } else if (pName.includes("center back") || pName.includes("full back") || (pName.includes("back") && !pName.includes("pocket"))) {
         targetWRatio = 0.46; // 10" - 12" width
+      } else if (pName.includes("front center") && !pName.includes("panel") && !pName.includes("bib")) {
+        targetWRatio = 0.35;
       } else if (pName.includes("sleeve") || pName.includes("cuff") || pName.includes("pocket") || pName.includes("beret")) {
         targetWRatio = 0.13; // 2.5" width
       } else if (pName.includes("chest") || pName.includes("panel")) {
-        targetWRatio = 0.19; // 3.5" - 4.0" width
+        targetWRatio = 0.18; // 3.5" - 4.0" width
       }
 
       const logoW = w * targetWRatio * currentScale;
@@ -903,6 +937,13 @@
   };
 
   window.confirmAndAddToCart = function () {
+    const btn = document.getElementById("mainAddToCartBtn") || document.getElementById("confirmAddToCartBtn");
+    if (btn) {
+      btn.textContent = "ADDING TO CART...";
+      btn.style.opacity = "0.75";
+      btn.style.pointerEvents = "none";
+    }
+
     drawCanvas();
     const previewUrl = getCartPreviewThumbnail();
     const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Default";
@@ -974,11 +1015,11 @@
         placement: placementName,
         size: "4",
         finish: state.currentFinish,
-        imageSrc: state.artwork.src || previewUrl || ""
+        imageSrc: previewUrl || ""
       } : null
     };
 
-    // Push into localStorage cart array (syncing across fabric8QuoteCart, fabric8_cart, and legacy cart)
+    // Push into localStorage cart array with quota safety
     let currentCart = [];
     try {
       const existing = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
@@ -995,24 +1036,42 @@
       currentCart.push(cartItem);
     }
 
-    try {
-      localStorage.setItem("fabric8QuoteCart", JSON.stringify(currentCart));
-      localStorage.setItem("fabric8_cart", JSON.stringify(currentCart));
-      localStorage.setItem("cart", JSON.stringify(currentCart)); // Legacy support
-    } catch (e) {
-      console.warn("Failed to update cart in localStorage", e);
+    function safeSave(list) {
+      try {
+        const json = JSON.stringify(list);
+        localStorage.setItem("fabric8QuoteCart", json);
+        localStorage.setItem("fabric8_cart", json);
+        localStorage.setItem("cart", json);
+        return true;
+      } catch (e) {
+        console.warn("Storage quota exceeded, trimming heavy data URLs...", e);
+        try {
+          const trimmed = list.map((item) => {
+            const copy = { ...item };
+            if (copy.artworkSrc && copy.artworkSrc.length > 50000) {
+              delete copy.artworkSrc;
+            }
+            return copy;
+          });
+          const json = JSON.stringify(trimmed);
+          localStorage.setItem("fabric8QuoteCart", json);
+          localStorage.setItem("fabric8_cart", json);
+          localStorage.setItem("cart", json);
+          return true;
+        } catch (e2) {
+          console.error("Failed to save cart to localStorage", e2);
+          return false;
+        }
+      }
     }
 
-    // Non-blocking user feedback
+    safeSave(currentCart);
+
     if (typeof window.showToast === "function") {
-      window.showToast("🎉 Cart item updated successfully! Redirecting to checkout...", "success");
-    } else {
-      console.log("Customized Prototype added to cart! Redirecting to checkout...");
+      window.showToast("Item added to cart! Redirecting...", "success", 2000);
     }
 
-    setTimeout(() => {
-      window.location.href = "checkout.html";
-    }, 500);
+    window.location.href = "checkout.html";
   };
 
 })();

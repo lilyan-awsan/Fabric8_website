@@ -83,9 +83,10 @@ function applySiteSettings() {
     if (heroBtn) heroBtn.textContent = sc.homeHeroBtnText;
   }
   if (sc.heroImage && document.getElementById('cmsHomeHeroTitle')) {
-    const heroBg = document.querySelector('.page-hero');
+    const heroBg = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
     if (heroBg) {
       heroBg.style.background = `linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url('${sc.heroImage}') center / cover`;
+      heroBg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url('${sc.heroImage}')`;
     }
   }
   if (sc.promoImage) {
@@ -298,7 +299,7 @@ function applySiteSettings() {
   }
 
   // 10. Hero Background Image Fallback
-  const heroEl = document.querySelector('.page-hero');
+  const heroEl = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
   if (heroEl) {
     const styleBg = heroEl.getAttribute('style') || '';
     const match = styleBg.match(/url\(["']?(assets\/site_images\/[^"')]+)["']?\)/);
@@ -307,13 +308,61 @@ function applySiteSettings() {
       const testImg = new Image();
       testImg.onerror = () => {
         const ghUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + imgPath;
-        heroEl.style.background = heroEl.style.background.replace(imgPath, ghUrl);
+        if (heroEl.style.backgroundImage) {
+          heroEl.style.backgroundImage = heroEl.style.backgroundImage.replace(imgPath, ghUrl);
+        }
+        if (heroEl.style.background) {
+          heroEl.style.background = heroEl.style.background.replace(imgPath, ghUrl);
+        }
       };
       testImg.src = imgPath;
     }
   }
 }
 
+const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
+const $ = (selector) => document.querySelector(selector);
+
+function saveCart() {
+  try {
+    const serialized = JSON.stringify(cart);
+    localStorage.setItem("fabric8QuoteCart", serialized);
+    localStorage.setItem("fabric8_cart", serialized);
+    localStorage.setItem("cart", serialized);
+  } catch (err) {
+    console.warn("Storage quota exceeded in saveCart, compressing cart items...", err);
+    try {
+      const lightweightCart = cart.map(item => {
+        const copy = { ...item };
+        if (copy.artworkSrc && copy.artworkSrc.length > 50000) {
+          delete copy.artworkSrc;
+        }
+        return copy;
+      });
+      const serialized = JSON.stringify(lightweightCart);
+      localStorage.setItem("fabric8QuoteCart", serialized);
+      localStorage.setItem("fabric8_cart", serialized);
+      localStorage.setItem("cart", serialized);
+    } catch (e2) {
+      console.error("Failed to save cart to localStorage", e2);
+    }
+  }
+}
+
+function loadCart() {
+  try {
+    const raw = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        cart.length = 0;
+        cart.push(...parsed);
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to load cart from localStorage", e);
+  }
+}
 
 async function loadProducts() {
   let siteInitialized = false;
@@ -437,8 +486,6 @@ window.addEventListener('storage', (e) => {
 });
 
 
-const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
-const $ = (selector) => document.querySelector(selector);
 let activeCatalogColor = "all";
 let activeStudioColor = "White";
 let selectedProductSku = "F8-001";
@@ -499,28 +546,6 @@ const colorMap = {
   Striped: "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
   "Custom Colors": "linear-gradient(135deg,#2f873d,#75aee0,#e79aa3,#d3d116)"
 };
-
-function saveCart() {
-  const serialized = JSON.stringify(cart);
-  localStorage.setItem("fabric8QuoteCart", serialized);
-  localStorage.setItem("fabric8_cart", serialized);
-  localStorage.setItem("cart", serialized);
-}
-
-function loadCart() {
-  try {
-    const raw = localStorage.getItem("fabric8QuoteCart") || localStorage.getItem("fabric8_cart") || localStorage.getItem("cart");
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) {
-        cart.length = 0;
-        cart.push(...parsed);
-      }
-    }
-  } catch (e) {
-    console.warn("Failed to load cart from localStorage", e);
-  }
-}
 
 
 let activeSectorFilter = "All";
@@ -790,9 +815,12 @@ function colorButton(color) {
 
 function renderCart() {
   loadCart();
-  const count = $("#cartCount");
+  const totalCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity || item.qty) || 0), 0);
+  document.querySelectorAll("#cartCount, .cart-count").forEach(el => {
+    el.textContent = totalCount;
+  });
+  
   const items = $("#cartItems");
-  if (count) count.textContent = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 0), 0);
   if (!items) return;
   if (!cart.length) {
     items.innerHTML = "<p style='color: var(--muted); padding: 12px 0;'>No products selected yet.</p>";
@@ -800,26 +828,141 @@ function renderCart() {
   }
   items.innerHTML = cart.map((item, index) => {
     const thumbImg = item.customizedImage || item.image;
+    const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
+    const itemMoq = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+    const currentQty = parseInt(item.quantity || item.qty || itemMoq) || itemMoq;
+    
     return `
-    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 12px; border: 1px solid var(--line); margin-bottom: 8px;">
+    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 14px; border: 1px solid var(--line); margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
       ${thumbImg ? `<div style="flex-shrink: 0; width: 85px; height: 85px; background: #ffffff; border-radius: 8px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px;"><img src="${thumbImg}" alt="${item.name}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; background: #ffffff;" /></div>` : ''}
       <div class="cart-item-info" style="flex: 1;">
-        <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <span>${item.name}</span>
-          <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Customizer"}</span>
-        </h4>
-        <p style="margin: 0 0 8px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">Size: <strong>${item.size || "N/A"}</strong> | Color: <strong>${item.color || "Standard"}</strong> | Qty: <strong>${item.quantity || item.qty || 1} Pcs</strong> | ${item.branding || "No branding selected"}</p>
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
-          </button>
-          <span style="color: var(--line, #ccc);">|</span>
-          <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+          <h4 style="margin: 0; font-size: 15px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <span>${item.name}</span>
+            <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Customizer"}</span>
+          </h4>
+        </div>
+        
+        <p style="margin: 0 0 8px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">
+          Size: <strong>${item.size || "N/A"}</strong> | Color: <strong>${item.color || "Standard"}</strong> | <span>${item.branding || "Blank"}</span>
+        </p>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <!-- Inline Quantity Controller -->
+          <div class="cart-inline-qty" style="display: inline-flex; align-items: center; gap: 4px; background: #faf9f6; padding: 3px 8px; border-radius: 8px; border: 1px solid var(--line);">
+            <span style="font-size: 11px; font-weight: 800; color: var(--ink); text-transform: uppercase; margin-right: 4px;">Qty:</span>
+            <button type="button" class="cart-qty-step" onclick="window.adjustCartItemQty(${index}, -1)" title="Decrease quantity" style="width: 26px; height: 26px; border: 1px solid var(--line); background: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; padding: 0; user-select: none;">-</button>
+            <input type="number" class="cart-qty-inline-input" value="${currentQty}" min="${itemMoq}" onchange="window.updateCartItemQty(${index}, this.value)" onkeydown="if(event.key==='Enter'){this.blur();}" style="width: 58px; height: 26px; border: 1px solid var(--line); border-radius: 4px; text-align: center; font-size: 13px; font-weight: 800; font-family: inherit; background: #fff;" />
+            <button type="button" class="cart-qty-step" onclick="window.adjustCartItemQty(${index}, 1)" title="Increase quantity" style="width: 26px; height: 26px; border: 1px solid var(--line); background: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; padding: 0; user-select: none;">+</button>
+            <span style="font-size: 11px; font-weight: 700; color: var(--muted); margin-left: 2px;">Pcs</span>
+          </div>
+
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
+            </button>
+            <span style="color: var(--line, #ccc);">|</span>
+            <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: bold; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
+          </div>
         </div>
       </div>
     </div>
   `}).join("");
 }
+
+window.adjustCartItemQty = function(index, delta) {
+  loadCart();
+  const item = cart[index];
+  if (!item) return;
+  const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
+  const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+
+  let currentQty = parseInt(item.quantity || item.qty || moqVal) || moqVal;
+  let newQty = currentQty + delta;
+  if (newQty < moqVal) {
+    if (typeof showToast === "function") {
+      showToast(`Minimum order quantity for ${item.name} is ${moqVal} pcs.`, "warning", 3000);
+    }
+    return;
+  }
+  item.quantity = newQty;
+  item.qty = newQty;
+
+  if (item.sizesBreakdown && typeof item.sizesBreakdown === "object") {
+    const keys = Object.keys(item.sizesBreakdown);
+    if (keys.length === 1) {
+      item.sizesBreakdown[keys[0]] = newQty;
+      item.size = `${keys[0]} (${newQty})`;
+    } else if (keys.length > 1) {
+      item.sizesBreakdown[keys[0]] = (item.sizesBreakdown[keys[0]] || 0) + delta;
+      item.size = Object.entries(item.sizesBreakdown).map(([s, q]) => `${s} (${q})`).join(", ");
+    }
+  }
+
+  saveCart();
+  renderCart();
+  if (typeof showToast === "function") {
+    showToast(`✓ Quantity updated to ${newQty} pcs`, "success", 2000);
+  }
+};
+
+window.updateCartItemQty = function(index, val) {
+  loadCart();
+  const item = cart[index];
+  if (!item) return;
+  const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
+  const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+
+  let newQty = parseInt(val);
+  if (isNaN(newQty) || newQty < moqVal) {
+    if (typeof showToast === "function") {
+      showToast(`Minimum order quantity for ${item.name} is ${moqVal} pcs.`, "warning", 3000);
+    }
+    newQty = moqVal;
+  }
+  item.quantity = newQty;
+  item.qty = newQty;
+
+  if (item.sizesBreakdown && typeof item.sizesBreakdown === "object") {
+    const keys = Object.keys(item.sizesBreakdown);
+    if (keys.length === 1) {
+      item.sizesBreakdown[keys[0]] = newQty;
+      item.size = `${keys[0]} (${newQty})`;
+    }
+  }
+
+  saveCart();
+  renderCart();
+  if (typeof showToast === "function") {
+    showToast(`✓ Quantity set to ${newQty} pcs`, "success", 2000);
+  }
+};
+
+window.stepEditModalQty = function(delta) {
+  const qtyInput = document.getElementById("editItemQty");
+  if (!qtyInput) return;
+  const min = parseInt(qtyInput.min || "1");
+  let val = (parseInt(qtyInput.value) || min) + delta;
+  if (val < min) val = min;
+  qtyInput.value = val;
+
+  const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
+  if (breakdownInputs && breakdownInputs.length === 1) {
+    breakdownInputs[0].value = val;
+  }
+};
+
+window.syncBreakdownToTotal = function() {
+  const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
+  let total = 0;
+  breakdownInputs.forEach(inp => {
+    total += parseInt(inp.value) || 0;
+  });
+  const qtyInput = document.getElementById("editItemQty");
+  if (qtyInput && total > 0) {
+    qtyInput.value = total;
+  }
+};
 
 window.openEditCartModal = function(idx) {
   editingCartIndex = idx;
@@ -835,15 +978,17 @@ window.openEditCartModal = function(idx) {
     document.body.appendChild(modal);
   }
 
-  const pDef = products.find(p => p.sku === item.sku) || item;
+  const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
   const availableColors = pDef.colors || [item.color || "White"];
   const availableSizes = pDef.sizes || ["S", "M", "L", "XL", "2XL"];
-  const moqVal = pDef.moq ? (pDef.moq.replace(/[^0-9]/g, '') || "50") : "1";
+  const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+  const currentQty = parseInt(item.quantity || item.qty || moqVal) || moqVal;
+  const hasBreakdown = item.sizesBreakdown && typeof item.sizesBreakdown === "object" && Object.keys(item.sizesBreakdown).length > 0;
 
   modal.style.display = "flex";
   modal.innerHTML = `
-    <div class="product-modal-content" style="max-width: 540px; padding: 28px; border-radius: 16px; background: #ffffff; border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(0,0,0,0.18);">
-      <button type="button" class="modal-close" onclick="closeEditCartModal()" style="font-size: 24px; cursor: pointer; background: transparent; border: none;">&times;</button>
+    <div class="product-modal-content" style="max-width: 540px; padding: 28px; border-radius: 16px; background: #ffffff; border: 1px solid var(--line); box-shadow: 0 20px 40px rgba(0,0,0,0.18); box-sizing: border-box; overflow-x: hidden;">
+      <button type="button" class="modal-close" onclick="closeEditCartModal()" style="font-size: 24px; cursor: pointer; background: transparent; border: none; position: absolute; top: 16px; right: 16px;">&times;</button>
       <div style="display: flex; gap: 16px; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 20px;">
         ${item.image ? `<div style="width: 64px; height: 64px; background: #faf9f5; border: 1px solid var(--line); border-radius: 8px; display: grid; place-items: center; padding: 4px; flex-shrink: 0;"><img src="${item.image}" style="max-width: 100%; max-height: 100%; object-fit: contain;" /></div>` : ''}
         <div>
@@ -853,18 +998,52 @@ window.openEditCartModal = function(idx) {
         </div>
       </div>
 
-      <form id="editCartItemForm" onsubmit="saveEditCartItem(event, ${idx}); return false;">
+      <form id="editCartItemForm" onsubmit="window.saveEditCartItem(event, ${idx}); return false;" style="margin: 0; box-sizing: border-box;">
+        <!-- Quantity input with Steppers & Quick Adds -->
         <div style="margin-bottom: 18px;">
-          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Quantity (Min: ${moqVal})</label>
-          <input type="number" id="editItemQty" value="${item.quantity || item.qty || 50}" min="${moqVal}" required style="width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 15px; font-weight: 700; font-family: inherit;" />
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);">Quantity (Min: ${moqVal} Pcs)</label>
+            <span style="font-size: 11px; color: var(--muted); font-weight: 700;">Hit Enter to Save</span>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button type="button" onclick="window.stepEditModalQty(-1)" style="width: 44px; height: 44px; border: 1px solid var(--line); background: #f8f8f6; border-radius: 8px; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
+            <input type="number" id="editItemQty" value="${currentQty}" min="${moqVal}" required style="flex: 1; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 800; font-family: inherit; text-align: center;" />
+            <button type="button" onclick="window.stepEditModalQty(1)" style="width: 44px; height: 44px; border: 1px solid var(--line); background: #f8f8f6; border-radius: 8px; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 8px;">
+            <button type="button" onclick="window.stepEditModalQty(10)" style="padding: 4px 10px; font-size: 11px; font-weight: 800; border: 1px solid var(--line); background: #faf9f6; border-radius: 9999px; cursor: pointer;">+10 Pcs</button>
+            <button type="button" onclick="window.stepEditModalQty(25)" style="padding: 4px 10px; font-size: 11px; font-weight: 800; border: 1px solid var(--line); background: #faf9f6; border-radius: 9999px; cursor: pointer;">+25 Pcs</button>
+            <button type="button" onclick="window.stepEditModalQty(50)" style="padding: 4px 10px; font-size: 11px; font-weight: 800; border: 1px solid var(--line); background: #faf9f6; border-radius: 9999px; cursor: pointer;">+50 Pcs</button>
+          </div>
         </div>
 
+        <!-- Size / Breakdown Selector -->
+        ${hasBreakdown ? `
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Sizes Breakdown (Adjust per size)</label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; background: #faf9f6; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+            ${availableSizes.map(s => {
+              const q = (item.sizesBreakdown && item.sizesBreakdown[s]) || 0;
+              return `
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                  <span style="font-size: 12px; font-weight: 800; color: var(--ink);">${s}</span>
+                  <input type="number" min="0" class="edit-size-breakdown-input" data-size="${s}" value="${q}" oninput="window.syncBreakdownToTotal()" style="width: 100%; height: 36px; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-weight: 800; font-size: 14px; font-family: inherit; background: #fff;" />
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+        ` : `
         <div style="margin-bottom: 18px;">
           <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Size</label>
           <select id="editItemSize" style="width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; font-weight: 700; background: #fff; font-family: inherit;">
-            ${availableSizes.map(s => `<option value="${s}" ${s === item.size ? 'selected' : ''}>${s}</option>`).join("")}
+            ${availableSizes.map(s => {
+              const isSel = (s === item.size || (item.size && item.size.startsWith(s + " ")) || (item.size && item.size.startsWith(s + "(")));
+              return `<option value="${s}" ${isSel ? 'selected' : ''}>${s}</option>`;
+            }).join("")}
           </select>
         </div>
+        `}
 
         <div style="margin-bottom: 18px;">
           <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Color: <span id="editColorLabel" style="color: var(--green, #2f873d); font-weight: 800;">${item.color || "White"}</span></label>
@@ -884,11 +1063,22 @@ window.openEditCartModal = function(idx) {
 
         <div style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 18px;">
           <button type="button" onclick="closeEditCartModal()" style="padding: 12px 22px; background: transparent; border: 1px solid var(--line); border-radius: 9999px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase;">Cancel</button>
-          <button type="button" onclick="saveEditCartItem(event, ${idx})" style="padding: 12px 30px; background: var(--green, #2f873d); color: #fff; border: none; border-radius: 9999px; font-size: 13px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em;">Save Changes</button>
+          <button type="submit" id="saveEditCartBtn" style="padding: 12px 30px; background: var(--green, #2f873d); color: #fff; border: none; border-radius: 9999px; font-size: 13px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 4px 12px rgba(47,135,61,0.25);">Save Changes</button>
         </div>
       </form>
     </div>
   `;
+
+  // Attach Enter key handler to save immediately
+  const qtyInput = document.getElementById("editItemQty");
+  if (qtyInput) {
+    qtyInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        window.saveEditCartItem(e, idx);
+      }
+    });
+  }
 };
 
 window.closeEditCartModal = function() {
@@ -912,29 +1102,73 @@ window.selectEditColor = function(color) {
 window.saveEditCartItem = function(e, idx) {
   if (e && e.preventDefault) e.preventDefault();
   loadCart();
-  const targetIdx = parseInt(idx);
-  const item = cart[targetIdx];
+  const targetIdx = parseInt(idx !== undefined && idx !== null ? idx : editingCartIndex);
+  let item = (targetIdx >= 0 && targetIdx < cart.length) ? cart[targetIdx] : null;
+  if (!item && typeof editingCartIndex === "number" && editingCartIndex >= 0 && editingCartIndex < cart.length) {
+    item = cart[editingCartIndex];
+  }
   if (!item) {
     closeEditCartModal();
     return;
   }
 
+  const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
+  const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+
   const qtyEl = document.getElementById("editItemQty");
   const sizeEl = document.getElementById("editItemSize");
   const colorEl = document.getElementById("editItemColor");
 
-  const newQty = qtyEl ? (parseInt(qtyEl.value) || item.quantity || 50) : (item.quantity || 50);
-  const newSize = sizeEl ? sizeEl.value : (item.size || "M");
-  const newColor = colorEl ? colorEl.value : (item.color || "White");
+  let newQty = qtyEl ? (parseInt(qtyEl.value) || item.quantity || moqVal) : (item.quantity || moqVal);
+  if (isNaN(newQty) || newQty < 1) newQty = moqVal;
+
+  if (newQty < moqVal) {
+    if (typeof showToast === "function") {
+      showToast(`Minimum order quantity for ${item.name} is ${moqVal} pcs. Adjusted to ${moqVal}.`, "warning", 4000);
+    }
+    newQty = moqVal;
+    if (qtyEl) qtyEl.value = moqVal;
+  }
 
   item.quantity = newQty;
   item.qty = newQty;
-  item.size = newSize;
 
+  // Multi-size breakdown sync
+  const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
+  if (breakdownInputs && breakdownInputs.length > 0) {
+    const updatedBreakdown = {};
+    let bTotal = 0;
+    breakdownInputs.forEach(inp => {
+      const q = parseInt(inp.value) || 0;
+      if (q > 0) {
+        updatedBreakdown[inp.dataset.size] = q;
+        bTotal += q;
+      }
+    });
+
+    if (bTotal > 0) {
+      item.sizesBreakdown = updatedBreakdown;
+      item.quantity = bTotal;
+      item.qty = bTotal;
+      item.size = Object.entries(updatedBreakdown).map(([s, q]) => `${s} (${q})`).join(", ");
+    } else {
+      const fallbackSize = sizeEl ? sizeEl.value : (item.size && !item.size.includes('(') ? item.size : "M");
+      item.size = fallbackSize;
+      item.sizesBreakdown = { [fallbackSize]: newQty };
+    }
+  } else {
+    // Single size
+    const newSize = sizeEl ? sizeEl.value : (item.size || "M");
+    item.size = newSize;
+    if (item.sizesBreakdown && typeof item.sizesBreakdown === "object") {
+      item.sizesBreakdown = { [newSize]: newQty };
+    }
+  }
+
+  const newColor = colorEl ? colorEl.value : item.color;
   if (newColor && item.color !== newColor) {
     item.color = newColor;
     if (Array.isArray(products) && products.length > 0) {
-      const pDef = products.find(p => p.sku === item.sku);
       if (pDef && pDef.images && pDef.images.length > 0) {
         const matchCol = pDef.images.find(img => img.toLowerCase().includes(newColor.toLowerCase()));
         if (matchCol) {
@@ -953,7 +1187,7 @@ window.saveEditCartItem = function(e, idx) {
   closeEditCartModal();
 
   if (typeof showToast === "function") {
-    showToast("✓ Cart item updated successfully!", "success");
+    showToast(`✓ Cart item updated to ${item.quantity} pcs!`, "success", 3000);
   }
 };
 
@@ -1303,6 +1537,9 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("page-ready");
+  loadCart();
+  if (typeof renderCart === "function") renderCart();
+  if (typeof initClientDetailsPersistence === "function") initClientDetailsPersistence();
   if (typeof initHeaderSearch === "function") initHeaderSearch();
 });
 
@@ -1426,6 +1663,17 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('button');
   const originalBtnText = submitBtn ? submitBtn.textContent : "Submit Request";
 
+  // Check that cart has items
+  loadCart();
+  if (!cart || cart.length === 0) {
+    if (typeof showToast === "function") {
+      showToast("⚠️ Your cart is empty. Please add items to your cart before requesting a quote.", "warning", 6000);
+    } else {
+      alert("Your cart is empty. Please add items to your cart before requesting a quote.");
+    }
+    return;
+  }
+
   // Validate delivery date (must be today or future date)
   const dateInput = form.querySelector('input[type="date"]');
   if (dateInput && dateInput.value) {
@@ -1444,6 +1692,11 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       dateInput.focus();
       return;
     }
+  }
+
+  // Save current client details immediately so data is never lost
+  if (typeof window.saveClientDetails === "function") {
+    window.saveClientDetails();
   }
   
   if (submitBtn) {
@@ -1506,7 +1759,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
         );
       }
 
-      const logoContent = item.artworkSrc || (typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : item.logoData);
+      const logoContent = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : (typeof item.logoData === 'string' ? item.logoData : null));
       if (typeof logoContent === 'string' && logoContent.startsWith('data:image/')) {
         itemPromises.push(
           compressBase64Image(logoContent, 350, 0.7).then(compressedLogo => {
@@ -1539,7 +1792,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
           cleanItem.customizedImage = `data:image/jpeg;base64,${compressedBase64}`;
         }
       }
-      if (typeof cleanItem.logoData === 'object' && cleanItem.logoData) {
+      if (cleanItem.logoData && typeof cleanItem.logoData === 'object') {
         const cleanLogo = { ...cleanItem.logoData };
         delete cleanLogo.imageSrc;
         delete cleanLogo.data;
@@ -1555,7 +1808,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     };
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second request timeout safeguard
+    const timeoutId = setTimeout(() => controller.abort(), 35000); // 35-second request timeout safeguard for Excel generation & email dispatch
 
     try {
       const res = await fetch('/api/sendQuote', {
@@ -1565,42 +1818,38 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
+
+      const resJson = await res.json().catch(() => null);
       
-      if (res.ok) {
+      if (res.ok && resJson && resJson.success && !resJson.emailError) {
         showToast("Order submitted successfully! Our team will contact you shortly.", "success", 8000);
         cart.splice(0, cart.length);
         saveCart();
         renderCart();
-        form.reset();
-        if (typeof initClientDetailsPersistence === 'function') initClientDetailsPersistence();
+        // Clear message and uploaded file only, keep customer contact info filled
+        const msgField = form.elements['Message'];
+        if (msgField) msgField.value = '';
+        const fileField = form.elements['File Upload'];
+        if (fileField) fileField.value = '';
       } else {
-        showToast("Order captured! Displaying order details summary.", "info", 6000);
+        const errorReason = resJson?.error?.message || resJson?.error || resJson?.emailError || `Server responded with status ${res.status}`;
+        console.warn("sendQuote delivery issue:", errorReason);
+        showToast(`Notice: Automatic email dispatch encountered an issue (${errorReason}). Opening order draft fallback.`, "warning", 8000);
         triggerMailtoFallback(customerInfo, cart);
-        cart.splice(0, cart.length);
-        saveCart();
-        renderCart();
-        form.reset();
       }
     } catch (fetchErr) {
       clearTimeout(timeoutId);
-      console.error("Network or timeout error:", fetchErr);
-      showToast("Order captured! Displaying order details summary.", "info", 6000);
+      const isTimeout = fetchErr.name === 'AbortError';
+      console.warn("sendQuote fetch unavailable or timed out:", fetchErr);
+      showToast(isTimeout ? "Notice: Request timed out. Displaying order draft fallback." : "Order captured! Displaying order details summary.", "info", 7000);
       triggerMailtoFallback(customerInfo, cart);
-      cart.splice(0, cart.length);
-      saveCart();
-      renderCart();
-      form.reset();
     }
   } catch (err) {
     console.error("Quote submission error:", err);
-    showToast("Order captured! Displaying order details summary.", "info", 6000);
+    showToast("An unexpected error occurred. Displaying email draft fallback.", "warning", 6000);
     try {
       triggerMailtoFallback(customerInfo || {}, cart || []);
     } catch (e) {}
-    if (cart && Array.isArray(cart)) cart.splice(0, cart.length);
-    if (typeof saveCart === 'function') saveCart();
-    if (typeof renderCart === 'function') renderCart();
-    form.reset();
   } finally {
     if (submitBtn) {
       submitBtn.textContent = originalBtnText;
@@ -1627,6 +1876,21 @@ function initClientDetailsPersistence() {
           }
         }
       }
+
+      const billingChk = document.getElementById("billingSameChk");
+      const billingFields = document.getElementById("billingAddressFields");
+      if (billingChk && billingFields) {
+        billingFields.style.display = billingChk.checked ? 'none' : 'flex';
+      }
+
+      const shipCountry = document.getElementById("shipCountry");
+      if (shipCountry && shipCountry.value) {
+        shipCountry.dispatchEvent(new Event('change'));
+      }
+      const billCountry = document.getElementById("billCountry");
+      if (billCountry && billCountry.value) {
+        billCountry.dispatchEvent(new Event('change'));
+      }
     }
   } catch (e) {
     console.warn("Failed to restore client details", e);
@@ -1637,7 +1901,7 @@ function initClientDetailsPersistence() {
       const data = {};
       const formData = new FormData(form);
       for (const [key, value] of formData.entries()) {
-        if (!(value instanceof File) && key !== "Message") {
+        if (!(value instanceof File)) {
           data[key] = value;
         }
       }
@@ -1647,7 +1911,25 @@ function initClientDetailsPersistence() {
     }
   };
 
-  form.querySelectorAll("input:not([type='file']), select").forEach(el => {
+  window.saveClientDetails = saveDetails;
+
+  const phoneInput = form.querySelector('input[name="Phone"]') || document.getElementById('clientPhone');
+  if (phoneInput) {
+    phoneInput.addEventListener('keydown', (e) => {
+      if (['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter'].includes(e.key) ||
+          e.ctrlKey || e.metaKey) {
+        return;
+      }
+      if (!/^[0-9+]$/.test(e.key) || (e.key === '+' && (phoneInput.selectionStart !== 0 || phoneInput.value.includes('+')))) {
+        e.preventDefault();
+      }
+    });
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/[^0-9+]/g, '').replace(/(?!^)\+/g, '');
+    });
+  }
+
+  form.querySelectorAll("input:not([type='file']), select, textarea").forEach(el => {
     el.addEventListener("input", saveDetails);
     el.addEventListener("change", saveDetails);
   });
@@ -1695,6 +1977,9 @@ function initHeaderSearch() {
 
 function initSite() {
   initHeaderSearch();
+  loadCart();
+  if (typeof renderCart === 'function') renderCart();
+  
   const path = window.location.pathname.toLowerCase();
   
   if (path.includes('product.html')) {
@@ -1703,14 +1988,13 @@ function initSite() {
     if (sku) {
       initProductPage(sku);
     }
+    initClientDetailsPersistence();
   } else if (path.includes('checkout.html') || path.includes('quote.html')) {
-    if (typeof renderCart === 'function') renderCart();
     initClientDetailsPersistence();
   } else {
     initClientDetailsPersistence();
     // For shop.html and others
     if (typeof renderProducts === 'function') renderProducts();
-    if (typeof renderCart === 'function') renderCart();
     if (typeof setupStudio === 'function') setupStudio();
     if (typeof renderShowcase === 'function') renderShowcase();
   }
@@ -2544,35 +2828,44 @@ function initProductPage(sku) {
       if (match) matchedImage = match;
     }
 
-    // Add or merge items for each size
-    for (const [size, qty] of Object.entries(sizes)) {
-      const existing = cart.find(
-        (item) => item.sku === p.sku && item.color === activeCatalogColor && item.size === size && (item.branding === brandingDesc || !item.branding || item.branding === "Blank")
-      );
+    const sizeDetailsList = [];
+    for (const [sName, sQty] of Object.entries(sizes)) {
+      sizeDetailsList.push(`${sName} (${sQty})`);
+    }
+    const formattedSizes = sizeDetailsList.join(", ");
 
-      if (existing) {
-        existing.quantity = (existing.quantity || existing.qty || 0) + qty;
-        existing.qty = existing.quantity;
-        existing.image = matchedImage;
-        existing.baseGarmentImage = matchedImage;
-      } else {
-        cart.push({
-          ...p,
-          image: matchedImage,
-          baseGarmentImage: matchedImage,
-          quantity: qty,
-          qty: qty,
-          color: activeCatalogColor,
-          size: size,
-          branding: brandingDesc,
-          originStudio: "Product Catalog",
-          customizationType: null,
-          logoData: null
-        });
-      }
+    // Combine all chosen sizes into ONE single cart item for this product and color
+    const existing = cart.find(
+      (item) => item.sku === p.sku && item.color === activeCatalogColor && (item.branding === brandingDesc || !item.branding || item.branding === "Blank")
+    );
+
+    if (existing) {
+      existing.quantity = (existing.quantity || existing.qty || 0) + totalQty;
+      existing.qty = existing.quantity;
+      existing.size = formattedSizes;
+      existing.sizesBreakdown = sizes;
+      existing.image = matchedImage;
+      existing.baseGarmentImage = matchedImage;
+    } else {
+      cart.push({
+        ...p,
+        id: "F8-ITEM-" + Date.now(),
+        image: matchedImage,
+        baseGarmentImage: matchedImage,
+        quantity: totalQty,
+        qty: totalQty,
+        color: activeCatalogColor,
+        size: formattedSizes,
+        sizesBreakdown: sizes,
+        branding: brandingDesc,
+        originStudio: "Product Catalog",
+        customizationType: null,
+        logoData: null
+      });
     }
     
     saveCart();
+    renderCart();
     showToast("Added to cart successfully!", "success", 4000);
     window.location.href = "checkout.html";
   });
@@ -3607,7 +3900,12 @@ function setupContactForm(formId, sourceName) {
         body: JSON.stringify(data)
       });
       
-      if (!response.ok) throw new Error('Failed to send');
+      const resJson = await response.json().catch(() => null);
+
+      if (!response.ok || (resJson && resJson.success === false)) {
+        const errorMsg = resJson?.error?.message || resJson?.error || `Server returned status ${response.status}`;
+        throw new Error(errorMsg);
+      }
       
       form.reset();
       if(statusDiv) {
@@ -3616,10 +3914,25 @@ function setupContactForm(formId, sourceName) {
         statusDiv.style.display = 'block';
       }
     } catch (err) {
-      console.error(err);
+      console.warn("Contact form submission note:", err);
       if(statusDiv) {
-        statusDiv.innerText = 'Failed to send message. Please try again later.';
-        statusDiv.style.color = '#b7342b';
+        const senderName = (data.firstName ? data.firstName + ' ' + (data.lastName || '') : (data.email || 'Website Visitor')).trim();
+        const mailSubject = encodeURIComponent(data.subject ? `[Inquiry] ${data.subject}` : `Fabric-8 Inquiry from ${senderName}`);
+        let mailBody = `Inquiry Details:\n`;
+        for (const [k, v] of Object.entries(data)) {
+          if (k !== 'source' && v) {
+            mailBody += `- ${k}: ${v}\n`;
+          }
+        }
+        const mailtoUrl = `mailto:hello@thefabric8.com?subject=${mailSubject}&body=${encodeURIComponent(mailBody)}`;
+        
+        statusDiv.innerHTML = `
+          <div style="color: #b7342b; margin-bottom: 8px; font-weight: 600;">Unable to send message automatically (${err.message || 'Server offline or unconfigured'}).</div>
+          <div style="font-weight: normal; font-size: 13px; color: #555; margin-bottom: 10px;">Please click below to send your message directly via email:</div>
+          <a href="${mailtoUrl}" target="_blank" style="display: inline-block; background: #2f873d; color: #fff; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; font-size: 13px;">
+            Send Direct Email ✉️
+          </a>
+        `;
         statusDiv.style.display = 'block';
       }
     } finally {

@@ -1,13 +1,26 @@
 import { Resend } from 'resend';
 import ExcelJS from 'exceljs';
-import fs from 'fs';
-import path from 'path';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey || apiKey.trim() === '' || apiKey.startsWith('re_mock')) {
+    console.warn("RESEND_API_KEY is not configured or is a mock key in sendQuote:", apiKey);
+    return res.status(500).json({
+      success: false,
+      error: 'RESEND_API_KEY is not configured. Please add a valid Resend API key to environment variables.'
+    });
+  }
+
+  let resend;
+  try {
+    resend = new Resend(apiKey);
+  } catch (initErr) {
+    console.error("Resend client initialization error:", initErr);
+    return res.status(500).json({ success: false, error: 'Failed to initialize Resend client: ' + initErr.message });
   }
 
   try {
@@ -216,39 +229,41 @@ export default async function handler(req, res) {
     const replyTo = (customerEmail && customerEmail.includes('@')) ? customerEmail : undefined;
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // 1. Prepare attachments array with Excel & CID Mockup attachments
+    // 1. Prepare attachments array with Excel & Mockup attachments
     const attachments = [
       {
         filename: `Fabric8_Order_Quote_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`,
-        content: Buffer.from(excelBuffer).toString('base64')
+        content: Buffer.from(excelBuffer).toString('base64'),
+        content_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       }
     ];
 
-    // Process cart items to assign Content-IDs (CID) for native inline email rendering
-    const itemCids = {};
+    const attachedFileNames = new Set();
+    attachedFileNames.add(attachments[0].filename);
+
     cart.forEach((item, idx) => {
       const customizedImg = item.customizedImage || item.mockupImage || item.previewImage;
       if (customizedImg && typeof customizedImg === 'string' && customizedImg.includes('base64,')) {
         const cleanBase64 = customizedImg.split('base64,')[1];
         if (cleanBase64 && cleanBase64.trim() !== '') {
-          const cidName = `mockup_${idx}_${Date.now()}`;
           const itemSku = (item.sku || `Item_${idx + 1}`).replace(/[^a-zA-Z0-9_-]/g, '_');
           const fileName = `Item_${idx + 1}_${itemSku}_Customized_Design.jpg`;
           
-          attachments.push({
-            filename: fileName,
-            content: cleanBase64,
-            content_id: cidName,
-            disposition: 'inline'
-          });
-          itemCids[idx] = cidName;
+          if (!attachedFileNames.has(fileName)) {
+            attachments.push({
+              filename: fileName,
+              content: cleanBase64,
+              content_type: 'image/jpeg'
+            });
+            attachedFileNames.add(fileName);
+          }
         }
       }
     });
 
-    // Preserve and sanitize customer uploaded logo assets if present
+    // Preserve and sanitize customer uploaded logo assets if present (deduplicated)
     if (data.attachments && Array.isArray(data.attachments)) {
-      data.attachments.forEach(att => {
+      data.attachments.forEach((att, aIdx) => {
         if (!att.filename?.includes(".xlsx") && att.content) {
           let rawContent = att.content;
           if (typeof rawContent === 'object' && !Buffer.isBuffer(rawContent) && !Array.isArray(rawContent) && !(rawContent instanceof ArrayBuffer)) {
@@ -263,10 +278,15 @@ export default async function handler(req, res) {
               cleanContent = cleanContent.split(',')[1];
             }
             if (cleanContent && cleanContent.trim() !== '') {
-              attachments.push({
-                filename: att.filename || `Attachment_${Date.now()}.png`,
-                content: cleanContent
-              });
+              const fname = att.filename || `Attachment_${aIdx + 1}.png`;
+              if (!attachedFileNames.has(fname)) {
+                attachments.push({
+                  filename: fname,
+                  content: cleanContent,
+                  content_type: fname.endsWith('.pdf') ? 'application/pdf' : 'image/png'
+                });
+                attachedFileNames.add(fname);
+              }
             }
           }
         }
@@ -303,16 +323,13 @@ export default async function handler(req, res) {
       }
 
       let photoHtml = "";
-      if (itemCids[i]) {
-        // Native inline CID image rendering for Gmail, Outlook & Apple Mail
-        const imgTag = `<img src="cid:${itemCids[i]}" width="130" style="object-fit: contain; border-radius: 8px; border: 2px solid #2f873d; background: #ffffff; padding: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);" alt="Customized Garment">`;
-        if (fullBaseUrl) {
-          photoHtml = `<a href="${fullBaseUrl}" target="_blank" style="text-decoration: none;">${imgTag}</a><div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px; text-align: center;">✦ Customized Preview</div>`;
-        } else {
-          photoHtml = `<div style="text-align: center;">${imgTag}<div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px;">✦ Customized Preview</div></div>`;
-        }
-      } else if (fullBaseUrl) {
+      if (fullBaseUrl) {
         photoHtml = `<a href="${fullBaseUrl}" target="_blank" style="text-decoration: none;"><img src="${fullBaseUrl}" width="110" style="object-fit: contain; border-radius: 8px; border: 1px solid #e0e0e0; background: #ffffff; padding: 4px;" alt="${item.name || 'Product'}"></a>`;
+        if (item.customizedImage || item.mockupImage) {
+          photoHtml += `<div style="font-size: 10px; color: #2f873d; font-weight: bold; margin-top: 4px; text-align: center;">✦ Customized Mockup Attached</div>`;
+        }
+      } else if (item.customizedImage || item.mockupImage) {
+        photoHtml = `<div style="text-align: center; color: #2f873d; font-weight: bold; font-size: 11px;">✦ Customized Design (See Attachments)</div>`;
       } else {
         photoHtml = `<span style="color:#aaa; font-size: 11px;">No Photo</span>`;
       }
@@ -369,57 +386,65 @@ export default async function handler(req, res) {
     emailHtml += `<p style="font-size: 13px; color: #666; line-height: 1.6;">Please open the attached Excel spreadsheet (<strong>Fabric8_Order_Quote.xlsx</strong>) to review line item details, pricing formulas, and complete the quotation fill-in.</p>`;
     emailHtml += `<div style="margin-top: 36px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #999; text-align: center;">Fabric 8 Custom Atelier System &copy; 2026. All rights reserved.</div></div>`;
 
-    // Set destination email address
-    const targetEmails = ['lilyanawsan@gmail.com', 'hello@thefabric8.com'];
+    // Destination email addresses
+    const defaultTargetEmails = ['lilyanawsan@gmail.com', 'hello@thefabric8.com'];
+    const targetEmails = process.env.RESEND_TO_EMAIL
+      ? process.env.RESEND_TO_EMAIL.split(',').map(e => e.trim()).filter(Boolean)
+      : defaultTargetEmails;
 
-    // Preserve and sanitize customer uploaded logo assets if present
-    if (data.attachments && Array.isArray(data.attachments)) {
-      data.attachments.forEach(att => {
-        if (!att.filename?.includes(".xlsx") && att.content) {
-          let rawContent = att.content;
-          if (typeof rawContent === 'object' && !Buffer.isBuffer(rawContent) && !Array.isArray(rawContent) && !(rawContent instanceof ArrayBuffer)) {
-            rawContent = rawContent.imageSrc || rawContent.data || null;
-          }
-          if (rawContent) {
-            let cleanContent = typeof rawContent === 'string' ? rawContent : Buffer.from(rawContent).toString('base64');
-            // Strip any data:image/...;base64, header prefix to satisfy Resend strict base64 requirement
-            if (cleanContent.includes('base64,')) {
-              cleanContent = cleanContent.split('base64,')[1];
-            } else if (cleanContent.startsWith('data:')) {
-              cleanContent = cleanContent.split(',')[1];
-            }
-            if (cleanContent && cleanContent.trim() !== '') {
-              attachments.push({
-                filename: att.filename || `Attachment_${Date.now()}.png`,
-                content: cleanContent
-              });
-            }
-          }
-        }
-      });
-    }
+    const fromAddress = process.env.RESEND_FROM_EMAIL || 'Fabric8 Orders <hello@thefabric8.com>';
 
-    const options = {
-      from: 'Fabric8 Orders <hello@thefabric8.com>',
+    let options = {
+      from: fromAddress,
       to: targetEmails,
       subject: `[New Order & Quote] Fabric 8 Request from ${customerName}`,
       html: emailHtml,
-      attachments: attachments
+      attachments: attachments,
+      ...(replyTo ? { reply_to: replyTo } : {})
     };
 
-    try {
-      const { data: responseData, error } = await resend.emails.send(options);
-      if (error) {
-        console.error("Resend API Error:", error);
-        return res.status(200).json({ success: true, warning: "Order captured", emailError: error.message || error });
+    let sendResult = await resend.emails.send(options);
+    let { data: responseData, error } = sendResult;
+
+    // If custom domain is not yet verified or test mode restriction triggers, automatically fallback to onboarding@resend.dev
+    if (error && (
+      (error.message && (
+        error.message.toLowerCase().includes('domain') ||
+        error.message.toLowerCase().includes('verify') ||
+        error.message.toLowerCase().includes('testing emails') ||
+        error.message.toLowerCase().includes('validation_error')
+      )) ||
+      error.statusCode === 403
+    )) {
+      console.warn("Resend primary quote delivery restriction:", error.message, "- Retrying with onboarding@resend.dev...");
+      const fallbackOptions = {
+        ...options,
+        from: 'Fabric8 Orders <onboarding@resend.dev>',
+        to: process.env.RESEND_TO_EMAIL ? [process.env.RESEND_TO_EMAIL.trim()] : ['lilyanawsan@gmail.com']
+      };
+
+      const retryResult = await resend.emails.send(fallbackOptions);
+      if (!retryResult.error) {
+        console.log("Resend fallback quote delivery succeeded:", retryResult.data);
+        responseData = retryResult.data;
+        error = null;
+      } else {
+        console.error("Resend fallback quote delivery also failed:", retryResult.error);
+        error = retryResult.error;
       }
-      return res.status(200).json({ success: true, data: responseData });
-    } catch (emailErr) {
-      console.error("Resend send exception:", emailErr);
-      return res.status(200).json({ success: true, warning: "Order captured", emailError: emailErr.message });
     }
+
+    if (error) {
+      console.error("Resend API Error:", error);
+      return res.status(error.statusCode || 502).json({
+        success: false,
+        error: error.message || error
+      });
+    }
+
+    return res.status(200).json({ success: true, data: responseData });
   } catch (error) {
     console.error("Serverless Quote Handler Error:", error);
-    return res.status(200).json({ success: true, warning: "Order captured", error: error.message });
+    return res.status(500).json({ success: false, error: error.message });
   }
 }

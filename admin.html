@@ -48,6 +48,7 @@
         <h1 style="margin: 0;">Admin Dashboard</h1>
         <div class="admin-tabs" style="display: flex; gap: 10px; margin-left: 20px;">
           <button id="tabProducts" class="tab-btn active" style="padding: 8px 16px; border: none; background: var(--green); color: white; border-radius: 4px; cursor: pointer; font-weight: bold;">Products</button>
+          <button id="tabTaxonomy" class="tab-btn" style="padding: 8px 16px; border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 4px; cursor: pointer; font-weight: bold;">Sectors & Categories</button>
           <button id="tabSettings" class="tab-btn" style="padding: 8px 16px; border: 1px solid var(--line); background: white; color: var(--ink); border-radius: 4px; cursor: pointer; font-weight: bold;">Site Settings</button>
         </div>
       </div>
@@ -89,6 +90,108 @@
         </table>
       </div>
       </div> <!-- End Products Tab -->
+
+      <!-- SECTORS & CATEGORIES TAB -->
+      <div id="taxonomySection" style="display: none; margin-top: 20px; width: 100%;">
+        <div style="background: white; border: 1px solid var(--line); border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 24px;">
+            <div>
+              <h2 style="margin: 0; font-size: 20px; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 10px;">
+                <span>🏷️ Sectors & Categories (Sidebar Filters)</span>
+              </h2>
+              <p style="margin: 6px 0 0 0; font-size: 13px; color: var(--muted);">
+                Add new items, drag or click arrows to re-order, rename, or toggle visibility. These control the exact order shown on the Shop page filters.
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span id="taxonomyStatusBadge" style="display: none; font-size: 12px; font-weight: 700; color: #27ae60; background: #eafaf1; padding: 6px 12px; border-radius: 20px; border: 1px solid #a9dfbf;">● Changes Published</span>
+              <button id="saveTaxonomyBtn" class="button primary" style="font-size: 13px; padding: 10px 22px; display: flex; align-items: center; gap: 8px; font-weight: 800; border-radius: 6px; cursor: pointer;">
+                <span>💾 Publish Filter Changes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Two-Column Grid: Sectors on Left, Categories on Right -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px;">
+            
+            <!-- SECTORS COLUMN -->
+            <div class="taxonomy-card" style="background: #faf9f6; border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div>
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--ink);">🏢 Sectors (1st-Layer Filter)</h3>
+                  <span style="font-size: 12px; color: var(--muted);">Industries shown on the Shop sidebar</span>
+                </div>
+                <span id="sectorsCountBadge" class="reorder-badge active">0 Sectors</span>
+              </div>
+
+              <!-- Add Sector Input Form -->
+              <form id="addSectorForm" onsubmit="event.preventDefault(); window.addNewSectorFromInput();" style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input type="text" id="newSectorInput" placeholder="New sector name (e.g., Aviation)..." style="flex: 1; padding: 10px 12px; font-size: 13px; border: 1px solid var(--line); border-radius: 6px; background: #fff;">
+                <button type="submit" class="button outline" style="padding: 10px 16px; font-size: 13px; font-weight: 700; background: #2f873d; color: #fff; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">+ Add Sector</button>
+              </form>
+
+              <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                <span>Drag (⋮⋮) or arrows (▲/▼) to reorder</span>
+                <span>Visibility / Actions</span>
+              </div>
+
+              <!-- Draggable / Reorderable Sectors List -->
+              <div id="sectorsReorderList" style="display: flex; flex-direction: column; gap: 8px; min-height: 180px;">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+            <!-- CATEGORIES COLUMN -->
+            <div class="taxonomy-card" style="background: #faf9f6; border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: flex; flex-direction: column;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div>
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: var(--ink);">🏷️ Categories (2nd-Layer Filter)</h3>
+                  <span style="font-size: 12px; color: var(--muted);">Garment types shown on the Shop sidebar</span>
+                </div>
+                <span id="categoriesCountBadge" class="reorder-badge active">0 Categories</span>
+              </div>
+
+              <!-- Add Category Input Form -->
+              <form id="addCategoryForm" onsubmit="event.preventDefault(); window.addNewCategoryFromInput();" style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input type="text" id="newCategoryInput" placeholder="New category name (e.g., MEDICAL WEAR)..." style="flex: 1; padding: 10px 12px; font-size: 13px; border: 1px solid var(--line); border-radius: 6px; background: #fff;">
+                <button type="submit" class="button outline" style="padding: 10px 16px; font-size: 13px; font-weight: 700; background: #2f873d; color: #fff; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">+ Add Category</button>
+              </form>
+
+              <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                <span>Drag (⋮⋮) or arrows (▲/▼) to reorder</span>
+                <span>Visibility / Actions</span>
+              </div>
+
+              <!-- Draggable / Reorderable Categories List -->
+              <div id="categoriesReorderList" style="display: flex; flex-direction: column; gap: 8px; min-height: 180px;">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live Sidebar Filter Preview -->
+          <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h4 style="margin: 0; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);">
+                👀 Live Shop Sidebar Filter Preview (How it appears to customers)
+              </h4>
+              <span style="font-size: 11px; color: var(--muted);">Updates in real time as you re-order or toggle items</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; background: #ffffff; border: 1px dashed var(--line); border-radius: 8px; padding: 20px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 8px;">Sector Filter Preview</label>
+                <div id="previewSectorPills" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+              <div>
+                <label style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 8px;">Category Filter Preview</label>
+                <div id="previewCategoryPills" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div> <!-- End Sectors & Categories Tab -->
 
       <!-- SETTINGS & SITE CMS TAB -->
       <div id="settingsSection" style="display: none; margin-top: 20px; width: 100%;">
@@ -132,6 +235,7 @@
             
             <!-- Quick Hero Photo Button -->
             <div style="margin-top: 6px; padding-top: 10px; border-top: 1px dashed var(--line); display: flex; flex-direction: column; gap: 6px;">
+              <input type="file" id="editorHeroFileInput" accept="image/*" style="display: none;">
               <button id="editorChangeHeroBtn" type="button" class="button" style="width: 100%; font-size: 12px; font-weight: 800; padding: 10px; background: #0f172a; color: #ffffff; border: 2px solid #22c55e; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); text-transform: uppercase;">
                 📷 Change Hero Photo
               </button>
@@ -395,7 +499,7 @@
   </div>
 
   <!-- Firebase SDK via CDN -->
-  <script type="module" src="admin.js?v=27"></script>
+  <script type="module" src="admin.js?v=28"></script>
 </body>
 </html>
 

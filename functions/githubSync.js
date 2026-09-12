@@ -13,6 +13,66 @@ export default async function handler(req, res) {
   const jsonPath = "data/products.json";
 
   try {
+    // Handler for save_settings action (Sectors, Categories, and general site settings)
+    if (action === "save_settings") {
+      const { siteSettingsPayload } = req.body;
+      if (siteSettingsPayload && typeof siteSettingsPayload === 'object') {
+        const settingsPath = "data/admin_settings.json";
+        let currentSettingsSha = null;
+        let existingSettings = {};
+
+        try {
+          const settingsFileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+            headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
+          });
+          if (settingsFileRes.ok) {
+            const fileData = await settingsFileRes.json();
+            currentSettingsSha = fileData.sha;
+            try {
+              const str = Buffer.from(fileData.content, 'base64').toString('utf-8');
+              existingSettings = JSON.parse(str);
+            } catch(e) {}
+          }
+        } catch(e) {}
+
+        const mergedSettings = {
+          ...existingSettings,
+          ...siteSettingsPayload
+        };
+
+        const newSettingsStr = JSON.stringify(mergedSettings, null, 2);
+        const newSettingsBase64 = Buffer.from(newSettingsStr).toString('base64');
+
+        const settingsPayload = {
+          message: 'Update admin settings (Sectors & Categories)',
+          content: newSettingsBase64
+        };
+        if (currentSettingsSha) settingsPayload.sha = currentSettingsSha;
+
+        try {
+          await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+            method: 'PUT',
+            headers: { 
+              'Authorization': `Bearer ${githubToken}`, 
+              'Content-Type': 'application/json',
+              'User-Agent': 'Fabric8-Admin'
+            },
+            body: JSON.stringify(settingsPayload)
+          });
+        } catch(e) {}
+
+        // Sync to Firebase Realtime DB
+        await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(mergedSettings)
+        }).catch(e => console.error("Firebase sync error:", e));
+
+        return res.status(200).json({ success: true, message: 'Settings saved successfully', settings: mergedSettings });
+      }
+      return res.status(400).json({ success: false, message: 'Missing siteSettingsPayload' });
+    }
+
     // Immediate handler for save_html action to avoid unnecessary products.json fetches
     if (action === "save_html") {
       const { filename, htmlContent, siteImages, siteSettingsPayload } = req.body;

@@ -67,7 +67,7 @@
           <input name="Job Title" required placeholder="Job Title*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           <input name="Company name" required placeholder="Company name*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
           <input name="Email" type="email" required placeholder="Email*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
-          <input name="Phone" required placeholder="Phone*" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" />
+          <input name="Phone" id="clientPhone" type="tel" inputmode="tel" required placeholder="Phone*" pattern="[0-9+]{6,20}" title="Please enter numbers only" style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;" onkeydown="if(!['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Home','End','Enter'].includes(event.key)&&!event.ctrlKey&&!event.metaKey&&(!/^[0-9+]$/.test(event.key)||(event.key==='+'&&(this.selectionStart!==0||this.value.includes('+'))))){event.preventDefault();}" oninput="this.value=this.value.replace(/[^0-9+]/g,'').replace(/(?!^)\+/g,'')" />
           
           <select name="Industry" required style="padding: 12px; border: 1px solid var(--line); border-radius: 6px;">
             <option value="">Industry*</option>
@@ -185,7 +185,7 @@
     </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="site.js?v=26"></script>
+  <script src="site.js?v=28"></script>
   <script>
     // Handle country-specific address fields
     function updateAddressFields(prefix) {

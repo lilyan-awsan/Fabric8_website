@@ -1135,38 +1135,45 @@
     "sketch": "",
     "sketchDescription": "",
     "supportedPlacements": [
+      "Center Chest (Bib)",
       "Bottom Left Corner",
       "Bottom Right Corner"
     ],
     "placements": [
       {
-        "name": "Bottom Left Corner",
+        "name": "Center Chest (Bib)",
         "x": 50,
-        "y": 48,
-        "w": 25,
-        "h": 25,
+        "y": 35.5,
+        "w": 15,
+        "h": 15,
+        "r": 0
+      },
+      {
+        "name": "Bottom Left Corner",
+        "x": 43.5,
+        "y": 73.5,
+        "w": 12,
+        "h": 12,
         "r": 0
       },
       {
         "name": "Bottom Right Corner",
-        "x": 50,
-        "y": 48,
-        "w": 25,
-        "h": 25,
+        "x": 56.5,
+        "y": 73.5,
+        "w": 12,
+        "h": 12,
         "r": 0
       }
     ],
     "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -1216,56 +1223,45 @@
     "sketch": "",
     "sketchDescription": "",
     "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "placements": [
       {
-        "name": "Left Chest",
-        "x": 63,
-        "y": 44,
-        "w": 18,
-        "h": 18,
-        "r": 0
-      },
-      {
-        "name": "Right Chest",
-        "x": 37,
-        "y": 44,
-        "w": 18,
-        "h": 18,
-        "r": 0
-      },
-      {
-        "name": "Center Back",
+        "name": "Center Chest (Bib)",
         "x": 50,
-        "y": 52,
-        "w": 42,
-        "h": 42,
+        "y": 35.5,
+        "w": 15,
+        "h": 15,
         "r": 0
       },
       {
-        "name": "Upper Sleeve",
-        "x": 76,
-        "y": 48,
-        "w": 14,
-        "h": 14,
-        "r": 8
+        "name": "Bottom Left Corner",
+        "x": 43.5,
+        "y": 73.5,
+        "w": 12,
+        "h": 12,
+        "r": 0
+      },
+      {
+        "name": "Bottom Right Corner",
+        "x": 56.5,
+        "y": 73.5,
+        "w": 12,
+        "h": 12,
+        "r": 0
       }
     ],
     "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -1312,38 +1308,34 @@
     "sketch": "",
     "sketchDescription": "",
     "supportedPlacements": [
-      "Left Corner",
-      "Right Corner"
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "placements": [
       {
-        "name": "Left Corner",
-        "x": 50,
-        "y": 48,
-        "w": 25,
-        "h": 25,
+        "name": "Bottom Left Corner",
+        "x": 41,
+        "y": 64,
+        "w": 13,
+        "h": 13,
         "r": 0
       },
       {
-        "name": "Right Corner",
-        "x": 50,
-        "y": 48,
-        "w": 25,
-        "h": 25,
+        "name": "Bottom Right Corner",
+        "x": 59,
+        "y": 64,
+        "w": 13,
+        "h": 13,
         "r": 0
       }
     ],
     "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "supportedFinishes": [
       "Embroidery",
@@ -1391,56 +1383,34 @@
     "sketch": "",
     "sketchDescription": "",
     "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "placements": [
       {
-        "name": "Left Chest",
-        "x": 63,
-        "y": 44,
-        "w": 18,
-        "h": 18,
+        "name": "Bottom Left Corner",
+        "x": 41,
+        "y": 64,
+        "w": 13,
+        "h": 13,
         "r": 0
       },
       {
-        "name": "Right Chest",
-        "x": 37,
-        "y": 44,
-        "w": 18,
-        "h": 18,
+        "name": "Bottom Right Corner",
+        "x": 59,
+        "y": 64,
+        "w": 13,
+        "h": 13,
         "r": 0
-      },
-      {
-        "name": "Center Back",
-        "x": 50,
-        "y": 52,
-        "w": 42,
-        "h": 42,
-        "r": 0
-      },
-      {
-        "name": "Upper Sleeve",
-        "x": 76,
-        "y": 48,
-        "w": 14,
-        "h": 14,
-        "r": 8
       }
     ],
     "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
     "supportedFinishes": [
       "Embroidery",

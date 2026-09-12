@@ -527,8 +527,13 @@ document.getElementById("addColorTagBtn")?.addEventListener("click", () => {
 function renderSectorButtons() {
   const container = document.getElementById("productSectorsButtons");
   if (!container) return;
-  const sectors = ["Food & beverage", "Hospitality", "Corporate", "Healthcare", "Industrial", "Education", "Aviation"];
-  container.innerHTML = sectors.map(sec => {
+  const sectorsList = (typeof currentSectors !== 'undefined' && currentSectors && currentSectors.length > 0)
+    ? currentSectors.filter(s => s.enabled !== false).map(s => s.name)
+    : (typeof currentSiteSettings !== 'undefined' && currentSiteSettings.categories1stLayer && currentSiteSettings.categories1stLayer.length > 0)
+      ? currentSiteSettings.categories1stLayer.filter(s => s.enabled !== false).map(s => s.name)
+      : ["Food & beverage", "Hospitality", "Corporate", "Healthcare", "Industrial", "Education", "Aviation"];
+
+  container.innerHTML = sectorsList.map(sec => {
     const isSelected = activeSectors.some(s => s.toLowerCase() === sec.toLowerCase());
     return `
       <button type="button" class="sector-btn ${isSelected ? 'active' : ''}" data-sector="${sec}" onclick="window.toggleSectorSelection('${sec}')" style="padding: 8px 16px; border-radius: 20px; border: 1px solid ${isSelected ? 'var(--ink)' : 'var(--line)'}; background: ${isSelected ? 'var(--ink)' : '#fff'}; color: ${isSelected ? '#fff' : 'var(--ink)'}; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">
@@ -538,6 +543,36 @@ function renderSectorButtons() {
   }).join("");
   const input = document.getElementById("sectors");
   if (input) input.value = activeSectors.join(", ");
+}
+
+function updateCategoryDropdowns() {
+  const categoriesList = (typeof currentCategories !== 'undefined' && currentCategories && currentCategories.length > 0)
+    ? currentCategories.filter(c => c.enabled !== false).map(c => c.name)
+    : (typeof currentSiteSettings !== 'undefined' && currentSiteSettings.categories2ndLayer && currentSiteSettings.categories2ndLayer.length > 0)
+      ? currentSiteSettings.categories2ndLayer.filter(c => c.enabled !== false).map(c => c.name)
+      : ["HEAD WEAR", "TOP WEAR", "BOTTOM WEAR", "OUTER WEAR", "ACCESSORIES"];
+
+  // Update modal #category select
+  const catSelect = document.getElementById("category");
+  if (catSelect) {
+    const curVal = catSelect.value;
+    catSelect.innerHTML = categoriesList.map(c => `<option value="${c}">${c}</option>`).join("") +
+      `<option value="ADD_NEW" style="font-weight: bold; color: var(--accent, #2f873d);">+ Add New Category...</option>`;
+    if (curVal && Array.from(catSelect.options).some(o => o.value.toLowerCase() === curVal.toLowerCase())) {
+      catSelect.value = curVal;
+    }
+  }
+
+  // Update table filter #categoryFilter select
+  const filterSelect = document.getElementById("categoryFilter");
+  if (filterSelect) {
+    const curFilterVal = filterSelect.value;
+    filterSelect.innerHTML = `<option value="All">All Categories</option>` +
+      categoriesList.map(c => `<option value="${c}">${c}</option>`).join("");
+    if (curFilterVal && Array.from(filterSelect.options).some(o => o.value === curFilterVal)) {
+      filterSelect.value = curFilterVal;
+    }
+  }
 }
 
 window.toggleSectorSelection = function(sectorName) {
@@ -972,14 +1007,27 @@ document.getElementById("bulkDeleteBtn")?.addEventListener("click", async () => 
 
 // --- Visual Editor Controller ---
 const tabProducts = document.getElementById('tabProducts');
+const tabTaxonomy = document.getElementById('tabTaxonomy');
 const tabSettings = document.getElementById('tabSettings');
 const productsSection = document.getElementById('productsSection');
 const tableContainer = document.querySelector('.table-container');
+const taxonomySection = document.getElementById('taxonomySection');
 const settingsSection = document.getElementById('settingsSection');
 const tabBrands = document.getElementById('tabBrands');
 const brandsSection = document.getElementById('brandsSection');
 const brandLogosGrid = document.getElementById('brandLogosGrid');
 const saveBrandsBtn = document.getElementById('saveBrandsBtn');
+
+const saveTaxonomyBtn = document.getElementById('saveTaxonomyBtn');
+const taxonomyStatusBadge = document.getElementById('taxonomyStatusBadge');
+const sectorsReorderList = document.getElementById('sectorsReorderList');
+const categoriesReorderList = document.getElementById('categoriesReorderList');
+const newSectorInput = document.getElementById('newSectorInput');
+const newCategoryInput = document.getElementById('newCategoryInput');
+const sectorsCountBadge = document.getElementById('sectorsCountBadge');
+const categoriesCountBadge = document.getElementById('categoriesCountBadge');
+const previewSectorPills = document.getElementById('previewSectorPills');
+const previewCategoryPills = document.getElementById('previewCategoryPills');
 
 const addBrandModal = document.getElementById('addBrandModal');
 const closeBrandModalBtn = document.getElementById('closeBrandModalBtn');
@@ -1241,38 +1289,440 @@ if (brandForm) {
   });
 }
 
-// Tab Switching
-if (tabProducts && tabSettings) {
-  tabProducts.addEventListener('click', () => {
-    tabProducts.classList.add('active');
-    tabProducts.style.background = 'var(--green)';
-    tabProducts.style.color = 'white';
-    tabProducts.style.border = 'none';
-    tabSettings.classList.remove('active');
-    tabSettings.style.background = 'white';
-    tabSettings.style.color = 'var(--ink)';
-    tabSettings.style.border = '1px solid var(--line)';
-    
-    productsSection.style.display = 'block';
-    if(tableContainer) tableContainer.style.display = 'block';
-    settingsSection.style.display = 'none';
+// Tab Switching (Products, Sectors & Categories, Site Settings)
+function switchAdminTab(targetTab) {
+  const tabs = [
+    { btn: tabProducts, sec: productsSection, isProducts: true },
+    { btn: tabTaxonomy, sec: taxonomySection },
+    { btn: tabSettings, sec: settingsSection }
+  ];
+
+  tabs.forEach(t => {
+    if (!t.btn) return;
+    if (t.btn === targetTab) {
+      t.btn.classList.add('active');
+      t.btn.style.background = 'var(--green)';
+      t.btn.style.color = 'white';
+      t.btn.style.border = 'none';
+      if (t.sec) t.sec.style.display = 'block';
+      if (t.isProducts && tableContainer) tableContainer.style.display = 'block';
+    } else {
+      t.btn.classList.remove('active');
+      t.btn.style.background = 'white';
+      t.btn.style.color = 'var(--ink)';
+      t.btn.style.border = '1px solid var(--line)';
+      if (t.sec) t.sec.style.display = 'none';
+      if (t.isProducts && tableContainer) tableContainer.style.display = 'none';
+    }
   });
-  
-  tabSettings.addEventListener('click', () => {
-    tabSettings.classList.add('active');
-    tabSettings.style.background = 'var(--green)';
-    tabSettings.style.color = 'white';
-    tabSettings.style.border = 'none';
-    tabProducts.classList.remove('active');
-    tabProducts.style.background = 'white';
-    tabProducts.style.color = 'var(--ink)';
-    tabProducts.style.border = '1px solid var(--line)';
-    
-    productsSection.style.display = 'none';
-    if(tableContainer) tableContainer.style.display = 'none';
-    settingsSection.style.display = 'block';
+
+  if (targetTab === tabSettings) {
     loadBrandLogos();
     loadSiteSettings();
+  } else if (targetTab === tabTaxonomy) {
+    initTaxonomyManager();
+  }
+}
+
+if (tabProducts) tabProducts.addEventListener('click', () => switchAdminTab(tabProducts));
+if (tabTaxonomy) tabTaxonomy.addEventListener('click', () => switchAdminTab(tabTaxonomy));
+if (tabSettings) tabSettings.addEventListener('click', () => switchAdminTab(tabSettings));
+
+// ===================================================
+// --- SECTORS & CATEGORIES (TAXONOMY) MANAGER ---
+// ===================================================
+let currentSectors = [];
+let currentCategories = [];
+let draggingTaxonomy = null; // { type: 'sector'|'category', index: number }
+
+async function initTaxonomyManager() {
+  if (!currentSiteSettings || !currentSiteSettings.categories1stLayer) {
+    await loadSiteSettings();
+  }
+
+  if (currentSiteSettings.categories1stLayer && Array.isArray(currentSiteSettings.categories1stLayer)) {
+    currentSectors = JSON.parse(JSON.stringify(currentSiteSettings.categories1stLayer));
+  } else {
+    currentSectors = [
+      { name: "Food & beverage", enabled: true },
+      { name: "Hospitality", enabled: true },
+      { name: "Corporate", enabled: true },
+      { name: "Healthcare", enabled: true },
+      { name: "Industrial", enabled: true },
+      { name: "Education", enabled: false },
+      { name: "Aviation", enabled: false }
+    ];
+  }
+
+  if (currentSiteSettings.categories2ndLayer && Array.isArray(currentSiteSettings.categories2ndLayer)) {
+    currentCategories = JSON.parse(JSON.stringify(currentSiteSettings.categories2ndLayer));
+  } else {
+    currentCategories = [
+      { name: "HEAD WEAR", enabled: true },
+      { name: "TOP WEAR", enabled: true },
+      { name: "BOTTOM WEAR", enabled: true },
+      { name: "OUTER WEAR", enabled: true },
+      { name: "ACCESSORIES", enabled: true }
+    ];
+  }
+
+  renderTaxonomyLists();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+}
+
+function renderTaxonomyLists() {
+  renderTaxonomyItemsList('sector');
+  renderTaxonomyItemsList('category');
+  renderLiveTaxonomyPreview();
+}
+
+function renderTaxonomyItemsList(type) {
+  const isSector = type === 'sector';
+  const container = isSector ? sectorsReorderList : categoriesReorderList;
+  const badge = isSector ? sectorsCountBadge : categoriesCountBadge;
+  const items = isSector ? currentSectors : currentCategories;
+
+  if (!container) return;
+
+  const activeCount = items.filter(i => i.enabled !== false).length;
+  if (badge) {
+    badge.textContent = `${activeCount} of ${items.length} Active`;
+    badge.className = `reorder-badge ${activeCount > 0 ? 'active' : 'hidden'}`;
+  }
+
+  if (!items || items.length === 0) {
+    container.innerHTML = `<div style="padding: 24px; text-align: center; color: var(--muted); font-size: 13px; background: #fff; border: 1px dashed var(--line); border-radius: 8px;">No ${isSector ? 'sectors' : 'categories'} found. Use the input above to add one!</div>`;
+    return;
+  }
+
+  container.innerHTML = items.map((item, idx) => {
+    const isFirst = idx === 0;
+    const isLast = idx === items.length - 1;
+    const isEnabled = item.enabled !== false;
+    const escapedName = (item.name || "").replace(/"/g, "&quot;");
+
+    return `
+      <div class="reorder-item ${isEnabled ? '' : 'item-disabled'}" 
+           draggable="true" 
+           data-taxonomy-type="${type}" 
+           data-taxonomy-index="${idx}">
+        <span class="reorder-handle" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+        <span class="reorder-num">#${idx + 1}</span>
+        
+        <input type="text" 
+               class="reorder-name-input" 
+               value="${escapedName}" 
+               placeholder="Name..." 
+               onchange="window.updateTaxonomyName('${type}', ${idx}, this.value)"
+               title="Click to rename" />
+
+        <div class="reorder-controls">
+          <div class="reorder-arrows">
+            <button type="button" 
+                    class="reorder-arrow-btn" 
+                    ${isFirst ? 'disabled' : ''} 
+                    onclick="window.moveTaxonomyItem('${type}', ${idx}, -1)" 
+                    title="Move Up (Earlier in filter order)">▲</button>
+            <button type="button" 
+                    class="reorder-arrow-btn" 
+                    ${isLast ? 'disabled' : ''} 
+                    onclick="window.moveTaxonomyItem('${type}', ${idx}, 1)" 
+                    title="Move Down (Later in filter order)">▼</button>
+          </div>
+
+          <button type="button" 
+                  class="reorder-toggle-btn ${isEnabled ? 'visible' : 'hidden'}" 
+                  onclick="window.toggleTaxonomyEnabled('${type}', ${idx})" 
+                  title="${isEnabled ? 'Click to hide from Shop filter' : 'Click to show in Shop filter'}">
+            ${isEnabled ? '👁️ Visible' : '🚫 Hidden'}
+          </button>
+
+          <button type="button" 
+                  class="reorder-delete-btn" 
+                  onclick="window.deleteTaxonomyItem('${type}', ${idx})" 
+                  title="Delete this ${type}">✕</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  attachTaxonomyDragHandlers(container, type);
+}
+
+function attachTaxonomyDragHandlers(container, type) {
+  const itemEls = container.querySelectorAll('.reorder-item');
+
+  itemEls.forEach(el => {
+    el.addEventListener('dragstart', (e) => {
+      const idx = parseInt(el.getAttribute('data-taxonomy-index'));
+      draggingTaxonomy = { type, index: idx };
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', idx.toString());
+    });
+
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      container.querySelectorAll('.reorder-item').forEach(i => {
+        i.classList.remove('drag-over-top', 'drag-over-bottom');
+      });
+      draggingTaxonomy = null;
+    });
+
+    el.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!draggingTaxonomy || draggingTaxonomy.type !== type) return;
+      e.dataTransfer.dropEffect = 'move';
+
+      const rect = el.getBoundingClientRect();
+      const midY = rect.top + rect.height / 2;
+      if (e.clientY < midY) {
+        el.classList.add('drag-over-top');
+        el.classList.remove('drag-over-bottom');
+      } else {
+        el.classList.add('drag-over-bottom');
+        el.classList.remove('drag-over-top');
+      }
+    });
+
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('drag-over-top', 'drag-over-bottom');
+    });
+
+    el.addEventListener('drop', (e) => {
+      e.preventDefault();
+      el.classList.remove('drag-over-top', 'drag-over-bottom');
+      if (!draggingTaxonomy || draggingTaxonomy.type !== type) return;
+
+      const fromIdx = draggingTaxonomy.index;
+      let toIdx = parseInt(el.getAttribute('data-taxonomy-index'));
+      if (fromIdx === toIdx) return;
+
+      const rect = el.getBoundingClientRect();
+      const midY = rect.top + rect.height / 2;
+      const dropAfter = e.clientY >= midY;
+
+      const targetList = (type === 'sector') ? currentSectors : currentCategories;
+      const movedItem = targetList.splice(fromIdx, 1)[0];
+
+      // Recompute target index after splice
+      let newIdx = toIdx;
+      if (fromIdx < toIdx) {
+        newIdx = dropAfter ? toIdx : toIdx - 1;
+      } else {
+        newIdx = dropAfter ? toIdx + 1 : toIdx;
+      }
+      if (newIdx < 0) newIdx = 0;
+      if (newIdx > targetList.length) newIdx = targetList.length;
+
+      targetList.splice(newIdx, 0, movedItem);
+
+      renderTaxonomyLists();
+      updateCategoryDropdowns();
+      renderSectorButtons();
+      if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+      if (window.showToast) window.showToast(`Reordered ${type}: "${movedItem.name}". Click 'Publish Filter Changes' to deploy!`, 'success', 3000);
+    });
+  });
+}
+
+window.moveTaxonomyItem = function(type, idx, direction) {
+  const list = (type === 'sector') ? currentSectors : currentCategories;
+  const newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= list.length) return;
+
+  const temp = list[idx];
+  list[idx] = list[newIdx];
+  list[newIdx] = temp;
+
+  renderTaxonomyLists();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+  if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+};
+
+window.updateTaxonomyName = function(type, idx, newName) {
+  const list = (type === 'sector') ? currentSectors : currentCategories;
+  const clean = (newName || "").trim();
+  if (!clean) {
+    alert("Name cannot be empty.");
+    renderTaxonomyLists();
+    return;
+  }
+  list[idx].name = clean;
+  renderLiveTaxonomyPreview();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+  if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+};
+
+window.toggleTaxonomyEnabled = function(type, idx) {
+  const list = (type === 'sector') ? currentSectors : currentCategories;
+  list[idx].enabled = list[idx].enabled === false ? true : false;
+  renderTaxonomyLists();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+  if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+};
+
+window.deleteTaxonomyItem = function(type, idx) {
+  const list = (type === 'sector') ? currentSectors : currentCategories;
+  const item = list[idx];
+  if (!confirm(`Are you sure you want to delete the ${type} "${item.name}"?`)) return;
+
+  list.splice(idx, 1);
+  renderTaxonomyLists();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+  if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+  if (window.showToast) window.showToast(`Deleted "${item.name}". Click 'Publish Filter Changes' to save!`, 'warning', 3000);
+};
+
+window.addNewSectorFromInput = function() {
+  if (!newSectorInput) return;
+  const name = newSectorInput.value.trim();
+  if (!name) {
+    alert("Please enter a sector name.");
+    return;
+  }
+  if (currentSectors.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+    alert(`A sector named "${name}" already exists.`);
+    return;
+  }
+
+  currentSectors.push({ name, enabled: true });
+  newSectorInput.value = "";
+  renderTaxonomyLists();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+  if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+  if (window.showToast) window.showToast(`Added Sector "${name}"! Click 'Publish Filter Changes' to deploy.`, 'success');
+};
+
+window.addNewCategoryFromInput = function() {
+  if (!newCategoryInput) return;
+  const name = newCategoryInput.value.trim();
+  if (!name) {
+    alert("Please enter a category name.");
+    return;
+  }
+  if (currentCategories.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+    alert(`A category named "${name}" already exists.`);
+    return;
+  }
+
+  currentCategories.push({ name, enabled: true });
+  newCategoryInput.value = "";
+  renderTaxonomyLists();
+  updateCategoryDropdowns();
+  renderSectorButtons();
+  if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
+  if (window.showToast) window.showToast(`Added Category "${name}"! Click 'Publish Filter Changes' to deploy.`, 'success');
+};
+
+function renderLiveTaxonomyPreview() {
+  if (previewSectorPills) {
+    const visibleSectors = currentSectors.filter(s => s.enabled !== false);
+    let html = `<div style="padding: 6px 12px; background: var(--green); color: #fff; border-radius: 4px; font-size: 12px; font-weight: 700;">All Sectors</div>`;
+    if (visibleSectors.length === 0) {
+      html += `<div style="font-size: 11px; color: var(--muted); font-style: italic;">No active sectors</div>`;
+    } else {
+      visibleSectors.forEach(s => {
+        html += `<div style="padding: 6px 12px; background: #f4f3ef; border: 1px solid var(--line); border-radius: 4px; font-size: 12px; color: var(--ink); font-weight: 500;">${s.name}</div>`;
+      });
+    }
+    previewSectorPills.innerHTML = html;
+  }
+
+  if (previewCategoryPills) {
+    const visibleCats = currentCategories.filter(c => c.enabled !== false);
+    let html = `<div style="padding: 6px 12px; background: var(--green); color: #fff; border-radius: 4px; font-size: 12px; font-weight: 700;">All Categories</div>`;
+    if (visibleCats.length === 0) {
+      html += `<div style="font-size: 11px; color: var(--muted); font-style: italic;">No active categories</div>`;
+    } else {
+      visibleCats.forEach(c => {
+        html += `<div style="padding: 6px 12px; background: #fff; border: 1px dashed var(--line); border-radius: 4px; font-size: 12px; color: var(--ink); font-weight: 600; text-transform: uppercase;">${c.name}</div>`;
+      });
+    }
+    previewCategoryPills.innerHTML = html;
+  }
+}
+
+// Publish Taxonomy Changes to GitHub & Firebase
+if (saveTaxonomyBtn) {
+  saveTaxonomyBtn.addEventListener('click', async () => {
+    const originalText = saveTaxonomyBtn.innerHTML;
+    saveTaxonomyBtn.innerHTML = `<span>⏳ Publishing...</span>`;
+    saveTaxonomyBtn.disabled = true;
+
+    try {
+      // 1. Update in-memory siteSettings
+      currentSiteSettings.categories1stLayer = currentSectors;
+      currentSiteSettings.categories2ndLayer = currentCategories;
+
+      // 2. Save to localStorage immediately
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch(e) {}
+
+      // 3. Save to Firebase Realtime Database
+      try {
+        const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+        await fetch(`${FIREBASE_DB}/admin_settings.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentSiteSettings)
+        });
+      } catch(fbErr) {
+        console.warn("Firebase sync notice:", fbErr);
+      }
+
+      // 4. Save to GitHub via /api/githubSync
+      let ghSynced = false;
+      try {
+        const res = await fetch('/api/githubSync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'save_settings',
+            siteSettingsPayload: currentSiteSettings,
+            commitMessage: 'Update Sectors and Categories filter order and visibility'
+          })
+        });
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.success) ghSynced = true;
+        }
+      } catch(ghErr) {
+        console.warn("GitHub API notice:", ghErr);
+      }
+
+      // 5. Update UI
+      if (taxonomyStatusBadge) {
+        taxonomyStatusBadge.textContent = "● Changes Published to Live Site!";
+        taxonomyStatusBadge.style.display = "inline-block";
+        setTimeout(() => {
+          if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = "none";
+        }, 6000);
+      }
+
+      updateCategoryDropdowns();
+      renderSectorButtons();
+
+      if (window.showToast) {
+        window.showToast("✅ Sectors and Categories filter order updated successfully!", "success", 5000);
+      } else {
+        alert("Sectors and Categories filter order updated successfully!");
+      }
+    } catch(err) {
+      console.error("Failed to save taxonomy:", err);
+      alert("Error publishing filter changes: " + (err.message || err));
+    } finally {
+      saveTaxonomyBtn.innerHTML = originalText;
+      saveTaxonomyBtn.disabled = false;
+    }
   });
 }
 
@@ -1396,6 +1846,8 @@ async function loadSiteSettings() {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
           localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
         } catch (e) {}
+        if (typeof updateCategoryDropdowns === 'function') updateCategoryDropdowns();
+        if (typeof renderSectorButtons === 'function') renderSectorButtons();
         return;
       }
     }
@@ -1411,6 +1863,9 @@ async function loadSiteSettings() {
       } catch (e) {}
     }
   } catch (e) {}
+
+  if (typeof updateCategoryDropdowns === 'function') updateCategoryDropdowns();
+  if (typeof renderSectorButtons === 'function') renderSectorButtons();
 }
 
 const iframe = document.getElementById('visualEditorIframe');
@@ -1491,6 +1946,7 @@ if (iframe && navBtns.length > 0) {
       if (!doc.body.getAttribute('data-click-intercepted')) {
         doc.body.setAttribute('data-click-intercepted', 'true');
         doc.addEventListener('click', (e) => {
+          if (e.target.closest('.editor-change-bg-btn')) return;
           const link = e.target.closest('a, button');
           if (link) {
             e.preventDefault();
@@ -1503,6 +1959,7 @@ if (iframe && navBtns.length > 0) {
       textTags.forEach(tag => {
         const els = doc.querySelectorAll(tag);
         els.forEach(el => {
+          if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn')) return;
           if (el.children.length === 0 || tag === 'span' || tag === 'a' || tag === 'button' || tag === 'p' || tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
             el.setAttribute('contenteditable', 'true');
           }
@@ -1511,6 +1968,7 @@ if (iframe && navBtns.length > 0) {
 
       // Prevent link navigation inside editor iframe so clicks edit text
       doc.querySelectorAll('a, button').forEach(el => {
+        if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn')) return;
         if (!el.getAttribute('data-editor-click-handled')) {
           el.setAttribute('data-editor-click-handled', 'true');
           el.addEventListener('click', (e) => {
@@ -1591,25 +2049,22 @@ if (iframe && navBtns.length > 0) {
 
           const handleBgSelect = (e) => {
             if (e) { e.preventDefault(); e.stopPropagation(); }
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*';
-            fileInput.onchange = (event) => {
-              const file = event.target.files[0];
-              if (file) {
-                const reader = new FileReader();
-                reader.onload = (e2) => {
-                  hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
-                  hero.style.backgroundSize = 'cover';
-                  hero.style.backgroundPosition = 'center';
-                  hero.setAttribute('data-new-bg-upload', file.name);
-                  hero.setAttribute('data-new-bg-base64', e2.target.result);
-                  if (window.showToast) window.showToast(`Selected "${file.name}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
-                };
-                reader.readAsDataURL(file);
-              }
-            };
-            fileInput.click();
+            const parentFileInput = document.getElementById('editorHeroFileInput');
+            if (parentFileInput) {
+              parentFileInput.click();
+            } else {
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.accept = 'image/*';
+              fileInput.style.display = 'none';
+              document.body.appendChild(fileInput);
+              fileInput.onchange = (event) => {
+                const file = event.target.files && event.target.files[0];
+                if (file) applyHeroImageFile(file);
+                fileInput.remove();
+              };
+              fileInput.click();
+            }
           };
 
           // Inject floating "Change Photo" button directly into the hero
@@ -1617,6 +2072,7 @@ if (iframe && navBtns.length > 0) {
             const btn = doc.createElement('button');
             btn.className = 'editor-change-bg-btn';
             btn.type = 'button';
+            btn.setAttribute('contenteditable', 'false');
             btn.innerHTML = '📷 Change Hero Photo';
             btn.style.cssText = 'position: absolute; top: 15px; right: 20px; z-index: 999999; background: #111; color: #fff; border: 2px solid #2ecc71; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.6); display: flex; align-items: center; gap: 8px; font-family: inherit; letter-spacing: 0.5px;';
             btn.onmouseover = () => { btn.style.background = '#2ecc71'; btn.style.color = '#fff'; btn.style.transform = 'scale(1.05)'; };
@@ -1769,6 +2225,7 @@ if (saveVisualEditorBtn) {
           });
         }
         
+        bg.style.background = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${newPath}") center center / cover`;
         bg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${newPath}")`;
         bg.style.backgroundSize = 'cover';
         bg.style.backgroundPosition = 'center';
@@ -1776,8 +2233,9 @@ if (saveVisualEditorBtn) {
         bg.removeAttribute('data-new-bg-upload');
         bg.removeAttribute('data-new-bg-base64');
         bg.removeAttribute('data-editable-bg');
+        bg.removeAttribute('title');
 
-        if (currentVisualPage === 'index.html' && bg.classList.contains('page-hero')) {
+        if (currentVisualPage === 'index.html' && (bg.classList.contains('page-hero') || bg.id === 'cmsHomeHeroBg')) {
           currentSettings.siteContent.heroImage = newPath;
           settingsUpdated = true;
         } else if (currentVisualPage === 'about.html') {
@@ -2012,44 +2470,74 @@ if (saveVisualEditorBtn) {
   });
 }
 
+// Function to apply selected hero image file to currently previewed page
+function applyHeroImageFile(file) {
+  if (!file) return;
+  try {
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    if (!doc) {
+      alert("Please wait for the page to finish loading in the editor before changing photo.");
+      return;
+    }
+    const hero = doc.querySelector('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide') ||
+                 doc.getElementById('cmsHomeHeroBg') ||
+                 doc.getElementById('cmsAboutHeroBg') ||
+                 doc.getElementById('cmsSectorsHeroBg');
+    if (!hero) {
+      alert("No hero banner was found on the currently previewed page.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e2) => {
+      const base64 = e2.target.result;
+      hero.style.background = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}") center center / cover`;
+      hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}")`;
+      hero.style.backgroundSize = 'cover';
+      hero.style.backgroundPosition = 'center';
+      hero.setAttribute('data-new-bg-upload', file.name);
+      hero.setAttribute('data-new-bg-base64', base64);
+      if (window.showToast) {
+        window.showToast(`Selected "${file.name}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
+      }
+    };
+    reader.readAsDataURL(file);
+  } catch(err) {
+    console.warn("Could not apply hero image:", err);
+    alert("Please wait for the page to finish loading in the editor before changing photo.");
+  }
+}
+
+// Dedicated hidden file input listener in admin dashboard
+const editorHeroFileInput = document.getElementById('editorHeroFileInput');
+if (editorHeroFileInput) {
+  editorHeroFileInput.addEventListener('change', (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (file) {
+      applyHeroImageFile(file);
+    }
+    editorHeroFileInput.value = '';
+  });
+}
+
 // Sidebar button to change hero photo of currently previewed page
 const editorChangeHeroBtn = document.getElementById('editorChangeHeroBtn');
 if (editorChangeHeroBtn) {
-  editorChangeHeroBtn.addEventListener('click', () => {
-    try {
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
-      const hero = doc.querySelector('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide');
-      if (hero) {
-        const btn = hero.querySelector('.editor-change-bg-btn');
-        if (btn) {
-          btn.click();
-        } else {
-          const fileInput = document.createElement('input');
-          fileInput.type = 'file';
-          fileInput.accept = 'image/*';
-          fileInput.onchange = (event) => {
-            const file = event.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = (e2) => {
-                hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${e2.target.result}")`;
-                hero.style.backgroundSize = 'cover';
-                hero.style.backgroundPosition = 'center';
-                hero.setAttribute('data-new-bg-upload', file.name);
-                hero.setAttribute('data-new-bg-base64', e2.target.result);
-                if (window.showToast) window.showToast(`Selected "${file.name}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-          fileInput.click();
-        }
-      } else {
-        alert("No hero banner was found on the currently previewed page.");
-      }
-    } catch(err) {
-      console.warn("Could not trigger hero image select from sidebar:", err);
-      alert("Please wait for the page to finish loading in the editor before changing photo.");
+  editorChangeHeroBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (editorHeroFileInput) {
+      editorHeroFileInput.click();
+    } else {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      document.body.appendChild(fileInput);
+      fileInput.onchange = (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (file) applyHeroImageFile(file);
+        fileInput.remove();
+      };
+      fileInput.click();
     }
   });
 }
