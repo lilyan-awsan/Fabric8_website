@@ -802,8 +802,11 @@
       "Front Center Panel",
       "Side Panel"
     ],
-    "supportedFinishes": [],
-    "customizationCapability": "none",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
     "images": [
       "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
