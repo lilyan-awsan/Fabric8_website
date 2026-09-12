@@ -2371,10 +2371,10 @@ if (saveVisualEditorBtn) {
           });
         }
         
-        bg.style.background = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${newPath}") center center / cover`;
         bg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${newPath}")`;
+        bg.style.backgroundPosition = 'center center';
         bg.style.backgroundSize = 'cover';
-        bg.style.backgroundPosition = 'center';
+        bg.style.backgroundRepeat = 'no-repeat';
 
         bg.removeAttribute('data-new-bg-upload');
         bg.removeAttribute('data-new-bg-base64');
@@ -2636,10 +2636,10 @@ function applyHeroImageFile(file) {
     const reader = new FileReader();
     reader.onload = (e2) => {
       const base64 = e2.target.result;
-      hero.style.background = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}") center center / cover`;
       hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}")`;
+      hero.style.backgroundPosition = 'center center';
       hero.style.backgroundSize = 'cover';
-      hero.style.backgroundPosition = 'center';
+      hero.style.backgroundRepeat = 'no-repeat';
       hero.setAttribute('data-new-bg-upload', file.name);
       hero.setAttribute('data-new-bg-base64', base64);
       if (window.showToast) {

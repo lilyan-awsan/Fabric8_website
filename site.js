@@ -85,8 +85,23 @@ function applySiteSettings() {
   if (sc.heroImage && document.getElementById('cmsHomeHeroTitle')) {
     const heroBg = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
     if (heroBg) {
-      heroBg.style.background = `linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url('${sc.heroImage}') center / cover`;
-      heroBg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.84), rgba(0,0,0,.22)), url('${sc.heroImage}')`;
+      const applyHeroUrl = (imgUrl) => {
+        heroBg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url('${imgUrl}')`;
+        heroBg.style.backgroundPosition = 'center center';
+        heroBg.style.backgroundSize = 'cover';
+        heroBg.style.backgroundRepeat = 'no-repeat';
+      };
+      applyHeroUrl(sc.heroImage);
+
+      // If relative path fails to load (e.g. uploaded via Visual Editor to GitHub but not yet synced locally), fallback to GitHub raw
+      if (!sc.heroImage.startsWith('http') && !sc.heroImage.startsWith('data:')) {
+        const testImg = new Image();
+        testImg.onerror = () => {
+          const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${sc.heroImage.replace(/^\/+/, '')}`;
+          applyHeroUrl(ghUrl);
+        };
+        testImg.src = sc.heroImage;
+      }
     }
   }
   if (sc.promoImage) {
@@ -554,7 +569,12 @@ const colorMap = {
   "Light Grey": "#d3d3d3",
   Green: "#2f873d",
   "Dark Green": "#1e4d2b",
+  "Light Green": "#7bc676",
+  "light green": "#7bc676",
+  Lime: "#a3e635",
+  Mint: "#86efac",
   "Olive Green": "#556b2f",
+  "Forest Green": "#1e4d2b",
   "Army Green": "#4b5320",
   Red: "#b7342b",
   Burgundy: "#6e1f32",
@@ -835,19 +855,56 @@ document.addEventListener("click", (e) => {
 });
 
 
-function colorStyle(color) {
-  if (window.currentLoadedProduct && window.currentLoadedProduct.colorHexMap && window.currentLoadedProduct.colorHexMap[color]) {
-    return window.currentLoadedProduct.colorHexMap[color];
+function colorStyle(color, product) {
+  if (!color || typeof color !== "string") return "#d8d2c5";
+  const norm = color.trim().toLowerCase();
+  
+  // 1. Check product-specific custom hex mapping (case-insensitive)
+  const hexMap = product?.colorHexMap || window.currentLoadedProduct?.colorHexMap;
+  if (hexMap && typeof hexMap === "object") {
+    if (hexMap[color]) return hexMap[color];
+    for (const [k, v] of Object.entries(hexMap)) {
+      if (k.trim().toLowerCase() === norm) return v;
+    }
   }
-  return colorMap[color] || "#d8d2c5";
+
+  // 2. Direct lookup in global colorMap (case-insensitive)
+  if (colorMap[color]) return colorMap[color];
+  for (const [k, v] of Object.entries(colorMap)) {
+    if (k.trim().toLowerCase() === norm) return v;
+  }
+
+  // 3. Normalized compound heuristic for compound/unregistered color names
+  if (norm.includes("light green") || norm.includes("lime") || norm.includes("mint") || norm.includes("sage")) return "#7bc676";
+  if (norm.includes("dark green") || norm.includes("forest green") || norm.includes("hunter green")) return "#1e4d2b";
+  if (norm.includes("olive green") || norm.includes("army green") || norm.includes("olive")) return "#556b2f";
+  if (norm.includes("green")) return "#2f873d";
+  if (norm.includes("light blue") || norm.includes("baby blue") || norm.includes("sky blue")) return "#89cff0";
+  if (norm.includes("dark blue") || norm.includes("navy")) return "#17233f";
+  if (norm.includes("royal blue") || norm.includes("blue")) return "#2f6fb3";
+  if (norm.includes("light grey") || norm.includes("light gray")) return "#d3d3d3";
+  if (norm.includes("dark grey") || norm.includes("charcoal") || norm.includes("dark gray")) return "#3a3d3d";
+  if (norm.includes("grey") || norm.includes("gray")) return "#9a9a96";
+  if (norm.includes("white")) return "#ffffff";
+  if (norm.includes("black")) return "#111111";
+  if (norm.includes("red") || norm.includes("crimson")) return "#b7342b";
+  if (norm.includes("burgundy") || norm.includes("maroon") || norm.includes("wine")) return "#6e1f32";
+  if (norm.includes("yellow")) return "#ffd700";
+  if (norm.includes("orange")) return "#ffa500";
+  if (norm.includes("pink")) return "#ffc0cb";
+  if (norm.includes("purple")) return "#800080";
+  if (norm.includes("beige") || norm.includes("tan") || norm.includes("khaki") || norm.includes("sand")) return "#cbb99d";
+  if (norm.includes("brown")) return "#5c4033";
+
+  return "#d8d2c5";
 }
 
-function colorSwatch(color) {
-  return `<span class="mini-swatch" title="${color}" style="background:${colorStyle(color)}"></span>`;
+function colorSwatch(color, product) {
+  return `<span class="mini-swatch" title="${color}" style="background:${colorStyle(color, product)}"></span>`;
 }
 
-function colorButton(color) {
-  return `<button class="color-dot" type="button" data-color="${color}" title="${color}" style="--swatch:${colorStyle(color)}"><span>${color}</span></button>`;
+function colorButton(color, product) {
+  return `<button class="color-dot" type="button" data-color="${color}" title="${color}" style="--swatch:${colorStyle(color, product)}"><span>${color}</span></button>`;
 }
 
 function renderCart() {
@@ -1891,53 +1948,14 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
 
     const attachments = [];
     if (base64File && fileName) {
-      attachments.push({ filename: fileName, content: base64File });
+      attachments.push({ filename: fileName, content: base64File, isFormUpload: true });
     }
 
-    // Fast parallel compression for customized product mockup pictures and uploaded logo files
-    const attachmentPromises = (cart || []).flatMap((item, index) => {
-      const itemPromises = [];
-      const mockupImg = item.customizedImage || item.image;
-      if (typeof mockupImg === 'string' && mockupImg.startsWith('data:image/')) {
-        itemPromises.push(
-          compressBase64Image(mockupImg, 350, 0.7).then(compressedMockup => {
-            if (compressedMockup) {
-              return {
-                filename: `${item.sku || 'Item'}_Customized_Product_Mockup_${index + 1}.jpg`,
-                content: compressedMockup
-              };
-            }
-            return null;
-          }).catch(() => null)
-        );
-      }
-
-      const logoContent = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' ? (item.logoData.imageSrc || item.logoData.data) : (typeof item.logoData === 'string' ? item.logoData : null));
-      if (typeof logoContent === 'string' && logoContent.startsWith('data:image/')) {
-        itemPromises.push(
-          compressBase64Image(logoContent, 350, 0.7).then(compressedLogo => {
-            if (compressedLogo) {
-              return {
-                filename: `${item.sku || 'Item'}_Logo_File_${index + 1}.jpg`,
-                content: compressedLogo
-              };
-            }
-            return null;
-          }).catch(() => null)
-        );
-      }
-      return itemPromises;
-    });
-
-    const resolvedAttachments = (await Promise.race([
-      Promise.all(attachmentPromises),
-      new Promise(resolve => setTimeout(() => resolve([]), 3000))
-    ])).filter(Boolean);
-    attachments.push(...resolvedAttachments);
-
-    // Clean & compress cart items to prevent Vercel payload overflow while preserving customized mockup images
+    // Clean & compress cart items to prevent payload overflow while preserving customized mockup images and uploaded logos
     const sanitizedCart = await Promise.all((cart || []).map(async (item) => {
       const cleanItem = { ...item };
+      
+      // 1. Optimize customized garment mockup
       const rawCustomImg = item.customizedImage || item.mockupImage || item.previewImage;
       if (typeof rawCustomImg === 'string' && rawCustomImg.startsWith('data:image/')) {
         const compressedBase64 = await compressBase64Image(rawCustomImg, 450, 0.75);
@@ -1945,10 +1963,23 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
           cleanItem.customizedImage = `data:image/jpeg;base64,${compressedBase64}`;
         }
       }
+
+      // 2. Optimize customer uploaded artwork/logo file if present
+      const rawArtwork = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' && (item.logoData.imageSrc || item.logoData.data));
+      if (typeof rawArtwork === 'string' && rawArtwork.startsWith('data:image/')) {
+        const compressedArt = await compressBase64Image(rawArtwork, 600, 0.85);
+        if (compressedArt) {
+          cleanItem.artworkSrc = `data:image/png;base64,${compressedArt}`;
+        }
+      }
+
+      // 3. Clean up legacy data properties to keep payload clean
       if (cleanItem.logoData && typeof cleanItem.logoData === 'object') {
         const cleanLogo = { ...cleanItem.logoData };
-        delete cleanLogo.imageSrc;
         delete cleanLogo.data;
+        if (cleanItem.artworkSrc) {
+          cleanLogo.imageSrc = cleanItem.artworkSrc;
+        }
         cleanItem.logoData = cleanLogo;
       }
       return cleanItem;
@@ -2225,8 +2256,11 @@ function getImagesForColor(product, targetColor) {
       }
     }
     if (explicitImg) {
-      const otherImgs = (product.images || []).filter(img => img !== explicitImg);
-      const res = [explicitImg, ...otherImgs];
+      const targetNorm = normalizeForMatch(targetColor);
+      const matchingColorAngles = (product.images || []).filter(img => 
+        img !== explicitImg && targetNorm && normalizeForMatch(img).includes(targetNorm)
+      );
+      const res = [explicitImg, ...matchingColorAngles];
       colorMatchCache.set(cacheKey, res);
       return res;
     }
@@ -2340,6 +2374,7 @@ function initProductPage(sku) {
     activeCatalogColor = bestInitColor;
   }
   
+  window.currentLoadedProduct = p;
   document.getElementById('productName').textContent = p.name;
   const catEl = document.getElementById('productCategory');
   if (catEl) catEl.textContent = p.category;
@@ -2417,7 +2452,7 @@ function initProductPage(sku) {
 
   const colorFilter = document.getElementById("productColorFilter");
   if (colorFilter && p.colors) {
-    colorFilter.innerHTML = p.colors.map(c => colorButton(c)).join("");
+    colorFilter.innerHTML = p.colors.map(c => colorButton(c, p)).join("");
     let activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
     if (!activeBtn && colorFilter.querySelector('.color-dot')) {
       activeBtn = colorFilter.querySelector('.color-dot');

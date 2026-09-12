@@ -1015,7 +1015,7 @@
         placement: placementName,
         size: "4",
         finish: state.currentFinish,
-        imageSrc: previewUrl || ""
+        imageSrc: state.artwork.src || ""
       } : null
     };
 

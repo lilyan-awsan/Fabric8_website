@@ -227,7 +227,7 @@ export default async function handler(req, res) {
     const replyTo = (customerEmail && customerEmail.includes('@')) ? customerEmail : undefined;
     const customerName = customerInfo['Full name'] || customerInfo['fullName'] || customerInfo['Name'] || 'Client';
 
-    // 1. Prepare attachments array with Excel & Mockup attachments
+    // 1. Prepare attachments array with Excel spreadsheet
     const attachments = [
       {
         filename: `Fabric8_Order_Quote_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`,
@@ -237,29 +237,60 @@ export default async function handler(req, res) {
     ];
 
     const attachedFileNames = new Set();
+    const attachedContentHashes = new Set();
     attachedFileNames.add(attachments[0].filename);
 
+    // Helper to generate a fingerprint for attachment content deduplication
+    const getContentFingerprint = (contentStr) => {
+      if (!contentStr || typeof contentStr !== 'string') return '';
+      const len = contentStr.length;
+      return `${len}_${contentStr.slice(0, 40)}_${contentStr.slice(-40)}`;
+    };
+
+    // 2. Attach EXACTLY ONE customized garment mockup and ONE raw customer artwork per customized cart item
     cart.forEach((item, idx) => {
+      const itemSku = (item.sku || `Item_${idx + 1}`).replace(/[^a-zA-Z0-9_-]/g, '_');
+
+      // A. Customized Garment Mockup (Rendered Garment with Logo/Text)
       const customizedImg = item.customizedImage || item.mockupImage || item.previewImage;
       if (customizedImg && typeof customizedImg === 'string' && customizedImg.includes('base64,')) {
-        const cleanBase64 = customizedImg.split('base64,')[1];
-        if (cleanBase64 && cleanBase64.trim() !== '') {
-          const itemSku = (item.sku || `Item_${idx + 1}`).replace(/[^a-zA-Z0-9_-]/g, '_');
+        const cleanBase64 = customizedImg.split('base64,')[1]?.trim();
+        if (cleanBase64) {
+          const fp = getContentFingerprint(cleanBase64);
           const fileName = `Item_${idx + 1}_${itemSku}_Customized_Design.jpg`;
-          
-          if (!attachedFileNames.has(fileName)) {
+          if (!attachedFileNames.has(fileName) && !attachedContentHashes.has(fp)) {
             attachments.push({
               filename: fileName,
               content: cleanBase64,
               content_type: 'image/jpeg'
             });
             attachedFileNames.add(fileName);
+            attachedContentHashes.add(fp);
+          }
+        }
+      }
+
+      // B. Raw Customer Uploaded Logo / Artwork File (if uploaded by customer and distinct from the mockup)
+      const rawArt = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' && item.logoData.imageSrc);
+      if (rawArt && typeof rawArt === 'string' && rawArt.includes('base64,')) {
+        const cleanArtBase64 = rawArt.split('base64,')[1]?.trim();
+        if (cleanArtBase64) {
+          const artFp = getContentFingerprint(cleanArtBase64);
+          const artFileName = `Item_${idx + 1}_${itemSku}_Uploaded_Artwork.png`;
+          if (!attachedFileNames.has(artFileName) && !attachedContentHashes.has(artFp)) {
+            attachments.push({
+              filename: artFileName,
+              content: cleanArtBase64,
+              content_type: 'image/png'
+            });
+            attachedFileNames.add(artFileName);
+            attachedContentHashes.add(artFp);
           }
         }
       }
     });
 
-    // Preserve and sanitize customer uploaded logo assets if present (deduplicated)
+    // 3. Attach customer files uploaded via the Quote Request Form (e.g. PDF briefs, specs)
     if (data.attachments && Array.isArray(data.attachments)) {
       data.attachments.forEach((att, aIdx) => {
         if (!att.filename?.includes(".xlsx") && att.content) {
@@ -269,21 +300,27 @@ export default async function handler(req, res) {
           }
           if (rawContent) {
             let cleanContent = typeof rawContent === 'string' ? rawContent : Buffer.from(rawContent).toString('base64');
-            // Strip any data:image/...;base64, header prefix to satisfy Resend strict base64 requirement
             if (cleanContent.includes('base64,')) {
               cleanContent = cleanContent.split('base64,')[1];
             } else if (cleanContent.startsWith('data:')) {
               cleanContent = cleanContent.split(',')[1];
             }
-            if (cleanContent && cleanContent.trim() !== '') {
-              const fname = att.filename || `Attachment_${aIdx + 1}.png`;
-              if (!attachedFileNames.has(fname)) {
-                attachments.push({
-                  filename: fname,
-                  content: cleanContent,
-                  content_type: fname.endsWith('.pdf') ? 'application/pdf' : 'image/png'
-                });
-                attachedFileNames.add(fname);
+            cleanContent = cleanContent?.trim();
+            if (cleanContent) {
+              const fp = getContentFingerprint(cleanContent);
+              // Avoid re-attaching mockups that might have been pushed into data.attachments
+              const isRedundantMockup = att.filename && (att.filename.includes('Customized_Product_Mockup') || att.filename.includes('Customized_Design') || att.filename.includes('Logo_File'));
+              if (!isRedundantMockup && !attachedContentHashes.has(fp)) {
+                const fname = att.filename || `Attachment_${aIdx + 1}.png`;
+                if (!attachedFileNames.has(fname)) {
+                  attachments.push({
+                    filename: fname,
+                    content: cleanContent,
+                    content_type: fname.endsWith('.pdf') ? 'application/pdf' : 'image/png'
+                  });
+                  attachedFileNames.add(fname);
+                  attachedContentHashes.add(fp);
+                }
               }
             }
           }
