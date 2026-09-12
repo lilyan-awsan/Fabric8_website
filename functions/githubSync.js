@@ -373,8 +373,20 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, message: 'Settings saved successfully' });
     } else if (action === "save") {
       delete product.existingImages;
+      const colorImageMap = (product.colorImageMap && typeof product.colorImageMap === 'object') ? { ...product.colorImageMap } : {};
+      finalImages.forEach(imgUrl => {
+        for (const col of (product.colors || [])) {
+          if (imgUrl.toLowerCase().includes(col.toLowerCase())) {
+            if (!colorImageMap[col]) {
+              colorImageMap[col] = imgUrl;
+            }
+          }
+        }
+      });
+
       const newProduct = { 
         ...product, 
+        colorImageMap: colorImageMap,
         images: finalImages, 
         image: finalImages.length > 0 ? finalImages[0] : "assets/white.png", 
         id: product.sku 

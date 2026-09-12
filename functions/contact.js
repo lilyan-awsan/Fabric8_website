@@ -83,8 +83,7 @@ export default async function handler(req, res) {
       const fallbackOptions = {
         ...options,
         from: 'Fabric8 <onboarding@resend.dev>',
-        // In Resend free/test tier, you can only send to the verified account owner email
-        to: process.env.RESEND_TO_EMAIL ? [process.env.RESEND_TO_EMAIL.trim()] : ['lilyanawsan@gmail.com']
+        to: ['lilyanawsan@gmail.com']
       };
 
       const retryResult = await resend.emails.send(fallbackOptions);

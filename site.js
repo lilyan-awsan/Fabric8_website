@@ -836,6 +836,9 @@ document.addEventListener("click", (e) => {
 
 
 function colorStyle(color) {
+  if (window.currentLoadedProduct && window.currentLoadedProduct.colorHexMap && window.currentLoadedProduct.colorHexMap[color]) {
+    return window.currentLoadedProduct.colorHexMap[color];
+  }
   return colorMap[color] || "#d8d2c5";
 }
 
@@ -913,6 +916,13 @@ window.adjustCartItemQty = function(index, delta) {
     }
     return;
   }
+  const maxLimit = parseInt(pDef.maxQty || pDef.max || 0);
+  if (maxLimit > 0 && newQty > maxLimit) {
+    if (typeof showToast === "function") {
+      showToast(`Maximum order limit for ${item.name} is ${maxLimit} pcs.`, "warning", 3000);
+    }
+    return;
+  }
   item.quantity = newQty;
   item.qty = newQty;
 
@@ -972,29 +982,47 @@ window.distributeTotalToBreakdown = function(totalQty) {
   
   if (breakdownInputs.length === 1) {
     breakdownInputs[0].value = totalQty;
-    return;
+  } else {
+    let currentSum = 0;
+    const activeInputs = [];
+    breakdownInputs.forEach(inp => {
+      const v = parseInt(inp.value) || 0;
+      currentSum += v;
+      if (v > 0) activeInputs.push(inp);
+    });
+    
+    const targets = activeInputs.length > 0 ? activeInputs : breakdownInputs;
+    const baseSum = currentSum > 0 ? currentSum : targets.length;
+    
+    let allocated = 0;
+    targets.forEach((inp, i) => {
+      if (i === targets.length - 1) {
+        inp.value = Math.max(0, totalQty - allocated);
+      } else {
+        const origVal = currentSum > 0 ? (parseInt(inp.value) || 0) : 1;
+        const share = Math.round((origVal / baseSum) * totalQty);
+        inp.value = share;
+        allocated += share;
+      }
+    });
   }
-  
-  let currentSum = 0;
-  const activeInputs = [];
+
+  const badge = document.getElementById("breakdownTotalBadge");
+  if (badge) badge.textContent = totalQty;
+
   breakdownInputs.forEach(inp => {
     const v = parseInt(inp.value) || 0;
-    currentSum += v;
-    if (v > 0) activeInputs.push(inp);
-  });
-  
-  const targets = activeInputs.length > 0 ? activeInputs : breakdownInputs;
-  const baseSum = currentSum > 0 ? currentSum : targets.length;
-  
-  let allocated = 0;
-  targets.forEach((inp, i) => {
-    if (i === targets.length - 1) {
-      inp.value = Math.max(0, totalQty - allocated);
-    } else {
-      const origVal = currentSum > 0 ? (parseInt(inp.value) || 0) : 1;
-      const share = Math.round((origVal / baseSum) * totalQty);
-      inp.value = share;
-      allocated += share;
+    const card = inp.closest(".size-square-card");
+    if (card) {
+      if (v > 0) {
+        card.style.borderColor = "var(--ink)";
+        card.style.background = "#ffffff";
+        card.style.boxShadow = "0 2px 6px rgba(0,0,0,0.08)";
+      } else {
+        card.style.borderColor = "var(--line)";
+        card.style.background = "#fafafa";
+        card.style.boxShadow = "none";
+      }
     }
   });
 };
@@ -1003,8 +1031,15 @@ window.stepEditModalQty = function(delta) {
   const qtyInput = document.getElementById("editItemQty");
   if (!qtyInput) return;
   const min = parseInt(qtyInput.min || "1");
+  const max = parseInt(qtyInput.max || "0");
   let val = (parseInt(qtyInput.value) || min) + delta;
   if (val < min) val = min;
+  if (max > 0 && val > max) {
+    val = max;
+    if (typeof showToast === "function") {
+      showToast(`Maximum quantity allowed is ${max} pcs.`, "warning", 3000);
+    }
+  }
   qtyInput.value = val;
 
   window.distributeTotalToBreakdown(val);
@@ -1014,11 +1049,28 @@ window.syncBreakdownToTotal = function() {
   const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
   let total = 0;
   breakdownInputs.forEach(inp => {
-    total += parseInt(inp.value) || 0;
+    const v = parseInt(inp.value) || 0;
+    total += v;
+    const card = inp.closest(".size-square-card");
+    if (card) {
+      if (v > 0) {
+        card.style.borderColor = "var(--ink)";
+        card.style.background = "#ffffff";
+        card.style.boxShadow = "0 2px 6px rgba(0,0,0,0.08)";
+      } else {
+        card.style.borderColor = "var(--line)";
+        card.style.background = "#fafafa";
+        card.style.boxShadow = "none";
+      }
+    }
   });
   const qtyInput = document.getElementById("editItemQty");
-  if (qtyInput && total > 0) {
+  if (qtyInput) {
     qtyInput.value = total;
+  }
+  const badge = document.getElementById("breakdownTotalBadge");
+  if (badge) {
+    badge.textContent = total;
   }
 };
 
@@ -1038,10 +1090,24 @@ window.openEditCartModal = function(idx) {
 
   const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
   const availableColors = pDef.colors || [item.color || "White"];
-  const availableSizes = pDef.sizes || ["S", "M", "L", "XL", "2XL"];
+  let availableSizes = [];
+  if (Array.isArray(pDef.sizes) && pDef.sizes.length > 0) {
+    availableSizes = [...pDef.sizes];
+  } else if (typeof pDef.sizes === "string") {
+    availableSizes = pDef.sizes.split(",").map(s => s.trim()).filter(Boolean);
+  } else {
+    availableSizes = ["XS", "S", "M", "L", "XL", "2XL"];
+  }
+  if (item.sizesBreakdown && typeof item.sizesBreakdown === "object") {
+    Object.keys(item.sizesBreakdown).forEach(s => {
+      if (!availableSizes.includes(s)) availableSizes.push(s);
+    });
+  } else if (item.size && !availableSizes.includes(item.size) && !item.size.includes("(")) {
+    availableSizes.unshift(item.size);
+  }
   const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+  const maxLimit = parseInt(pDef.maxQty || pDef.max || 0);
   const currentQty = parseInt(item.quantity || item.qty || moqVal) || moqVal;
-  const hasBreakdown = item.sizesBreakdown && typeof item.sizesBreakdown === "object" && Object.keys(item.sizesBreakdown).length > 0;
 
   modal.style.display = "flex";
   modal.innerHTML = `
@@ -1060,12 +1126,12 @@ window.openEditCartModal = function(idx) {
         <!-- Quantity input with Steppers & Quick Adds -->
         <div style="margin-bottom: 18px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);">Quantity (Min: ${moqVal} Pcs)</label>
+            <label style="font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink);">Quantity (Min: ${moqVal} Pcs${maxLimit ? ` | Max: ${maxLimit} Pcs` : ''})</label>
             <span style="font-size: 11px; color: var(--muted); font-weight: 700;">Hit Enter to Save</span>
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
             <button type="button" onclick="window.stepEditModalQty(-1)" style="width: 44px; height: 44px; border: 1px solid var(--line); background: #f8f8f6; border-radius: 8px; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center;">-</button>
-            <input type="number" id="editItemQty" value="${currentQty}" min="${moqVal}" required style="flex: 1; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 800; font-family: inherit; text-align: center;" />
+            <input type="number" id="editItemQty" value="${currentQty}" min="${moqVal}" ${maxLimit ? `max="${maxLimit}"` : ''} required style="flex: 1; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 800; font-family: inherit; text-align: center;" />
             <button type="button" onclick="window.stepEditModalQty(1)" style="width: 44px; height: 44px; border: 1px solid var(--line); background: #f8f8f6; border-radius: 8px; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center;">+</button>
           </div>
           <div style="display: flex; gap: 6px; margin-top: 8px;">
@@ -1075,33 +1141,30 @@ window.openEditCartModal = function(idx) {
           </div>
         </div>
 
-        <!-- Size / Breakdown Selector -->
-        ${hasBreakdown ? `
-        <div style="margin-bottom: 18px;">
-          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Sizes Breakdown (Adjust per size)</label>
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; background: #faf9f6; padding: 12px; border-radius: 8px; border: 1px solid var(--line);">
+        <!-- Size Breakdown Squares Matrix -->
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink); margin: 0;">Quantity per Size (Select Sizes & Amounts)</label>
+            <span style="font-size: 11px; color: var(--muted); font-weight: 700;">Total: <strong id="breakdownTotalBadge" style="color: var(--green, #2f873d); font-size: 13px;">${currentQty}</strong> Pcs</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 6px; background: #faf9f6; padding: 10px; border-radius: 10px; border: 1px solid var(--line);">
             ${availableSizes.map(s => {
-              const q = (item.sizesBreakdown && item.sizesBreakdown[s]) || 0;
+              let q = 0;
+              if (item.sizesBreakdown && typeof item.sizesBreakdown === "object" && item.sizesBreakdown[s] !== undefined) {
+                q = item.sizesBreakdown[s];
+              } else if (item.size === s || (item.size && item.size.startsWith(s + " ")) || (item.size && item.size.startsWith(s + "("))) {
+                q = currentQty;
+              }
+              const isSelected = q > 0;
               return `
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                  <span style="font-size: 12px; font-weight: 800; color: var(--ink);">${s}</span>
-                  <input type="number" min="0" class="edit-size-breakdown-input" data-size="${s}" value="${q}" oninput="window.syncBreakdownToTotal()" style="width: 100%; height: 36px; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-weight: 800; font-size: 14px; font-family: inherit; background: #fff;" />
+                <div class="size-square-card" style="box-sizing: border-box !important; display: flex; flex-direction: column; align-items: center; gap: 4px; background: ${isSelected ? '#ffffff' : '#fafafa'}; padding: 8px 4px; border-radius: 8px; border: ${isSelected ? '1.5px solid var(--ink)' : '1px solid var(--line)'}; box-shadow: ${isSelected ? '0 2px 6px rgba(0,0,0,0.08)' : 'none'}; transition: all 0.2s ease;">
+                  <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">${s}</span>
+                  <input type="number" min="0" ${maxLimit ? `max="${maxLimit}"` : ''} class="edit-size-breakdown-input" data-size="${s}" value="${q}" oninput="window.syncBreakdownToTotal()" style="box-sizing: border-box !important; min-height: 0 !important; height: 36px !important; padding: 4px 6px !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-weight: 800; font-size: 14px; font-family: inherit; background: #fff;" />
                 </div>
               `;
             }).join("")}
           </div>
         </div>
-        ` : `
-        <div style="margin-bottom: 18px;">
-          <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Size</label>
-          <select id="editItemSize" style="width: 100%; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; font-weight: 700; background: #fff; font-family: inherit;">
-            ${availableSizes.map(s => {
-              const isSel = (s === item.size || (item.size && item.size.startsWith(s + " ")) || (item.size && item.size.startsWith(s + "(")));
-              return `<option value="${s}" ${isSel ? 'selected' : ''}>${s}</option>`;
-            }).join("")}
-          </select>
-        </div>
-        `}
 
         <div style="margin-bottom: 18px;">
           <label style="display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--ink);">Color: <span id="editColorLabel" style="color: var(--green, #2f873d); font-weight: 800;">${item.color || "White"}</span></label>
@@ -1157,9 +1220,10 @@ window.selectEditColor = function(color) {
   if (input) input.value = color;
   if (label) label.textContent = color;
   if (container) {
-    container.querySelectorAll(".color-dot").forEach(b => b.classList.remove("active"));
-    const targetBtn = container.querySelector(`[data-color="${CSS.escape(color)}"]`);
-    if (targetBtn) targetBtn.classList.add("active");
+    container.querySelectorAll(".color-dot").forEach(b => {
+      if (b.dataset.color === color) b.classList.add("active");
+      else b.classList.remove("active");
+    });
   }
 };
 
@@ -1176,26 +1240,13 @@ window.saveEditCartItem = function(e, idx) {
     return;
   }
 
-  const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
-  const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
-
   const qtyEl = document.getElementById("editItemQty");
   const sizeEl = document.getElementById("editItemSize");
   const colorEl = document.getElementById("editItemColor");
 
-  let newQty = qtyEl ? (parseInt(qtyEl.value) || item.quantity || moqVal) : (item.quantity || moqVal);
-  if (isNaN(newQty) || newQty < 1) newQty = moqVal;
-
-  if (newQty < moqVal) {
-    if (typeof showToast === "function") {
-      showToast(`Minimum order quantity for ${item.name} is ${moqVal} pcs. Adjusted to ${moqVal}.`, "warning", 4000);
-    }
-    newQty = moqVal;
-    if (qtyEl) qtyEl.value = moqVal;
-  }
-
-  item.quantity = newQty;
-  item.qty = newQty;
+  const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
+  const moqVal = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+  const maxLimit = parseInt(pDef.maxQty || pDef.max || 0);
 
   // Multi-size breakdown sync
   const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
@@ -1210,32 +1261,38 @@ window.saveEditCartItem = function(e, idx) {
       }
     });
 
-    if (bTotal !== newQty && newQty > 0) {
-      window.distributeTotalToBreakdown(newQty);
-      const recheckedInputs = document.querySelectorAll(".edit-size-breakdown-input");
-      const recheckedBreakdown = {};
-      recheckedInputs.forEach(inp => {
-        const q = parseInt(inp.value) || 0;
-        if (q > 0) recheckedBreakdown[inp.dataset.size] = q;
-      });
-      item.sizesBreakdown = recheckedBreakdown;
-      item.quantity = newQty;
-      item.qty = newQty;
-      item.size = Object.entries(recheckedBreakdown).map(([s, q]) => `${s} (${q})`).join(", ");
-    } else if (bTotal > 0) {
-      item.sizesBreakdown = updatedBreakdown;
-      item.quantity = bTotal;
-      item.qty = bTotal;
-      item.size = Object.entries(updatedBreakdown).map(([s, q]) => `${s} (${q})`).join(", ");
-    } else {
-      const fallbackSize = sizeEl ? sizeEl.value : (item.size && !item.size.includes('(') ? item.size : "M");
-      item.size = fallbackSize;
-      item.sizesBreakdown = { [fallbackSize]: newQty };
-      item.quantity = newQty;
-      item.qty = newQty;
+    if (bTotal < moqVal) {
+      if (typeof showToast === "function") {
+        showToast(`Minimum Order Quantity is ${moqVal} pcs. Total across sizes must be at least ${moqVal}.`, "warning", 4000);
+      }
+      return;
     }
+    if (maxLimit > 0 && bTotal > maxLimit) {
+      if (typeof showToast === "function") {
+        showToast(`Maximum Order Quantity is ${maxLimit} pcs. Total across sizes cannot exceed ${maxLimit}.`, "warning", 4000);
+      }
+      return;
+    }
+
+    item.sizesBreakdown = updatedBreakdown;
+    item.quantity = bTotal;
+    item.qty = bTotal;
+    item.size = Object.entries(updatedBreakdown).map(([s, q]) => `${s} (${q})`).join(", ");
   } else {
-    // Single size
+    // Single size fallback
+    const newQty = parseInt(qtyEl ? qtyEl.value : item.quantity) || moqVal;
+    if (newQty < moqVal) {
+      if (typeof showToast === "function") {
+        showToast(`Minimum Order Quantity is ${moqVal} pcs.`, "warning", 4000);
+      }
+      return;
+    }
+    if (maxLimit > 0 && newQty > maxLimit) {
+      if (typeof showToast === "function") {
+        showToast(`Maximum Order Quantity is ${maxLimit} pcs.`, "warning", 4000);
+      }
+      return;
+    }
     const newSize = sizeEl ? sizeEl.value : (item.size || "M");
     item.size = newSize;
     item.quantity = newQty;
@@ -1250,7 +1307,12 @@ window.saveEditCartItem = function(e, idx) {
     item.color = newColor;
     if (Array.isArray(products) && products.length > 0) {
       if (pDef && pDef.images && pDef.images.length > 0) {
-        const matchCol = pDef.images.find(img => img.toLowerCase().includes(newColor.toLowerCase()));
+        let matchCol = null;
+        if (pDef.colorImageMap && pDef.colorImageMap[newColor]) {
+          matchCol = pDef.colorImageMap[newColor];
+        } else {
+          matchCol = pDef.images.find(img => img.toLowerCase().includes(newColor.toLowerCase()));
+        }
         if (matchCol) {
           item.baseGarmentImage = matchCol;
           if (!item.customizedImage || item.customizedImage === item.image) {
@@ -1322,6 +1384,17 @@ function addToCart(sku) {
   }
   if (quantity < 1 || isNaN(quantity)) {
     showToast("Please enter a valid quantity.", "warning");
+    return;
+  }
+
+  const moqLimit = parseInt(String(selectedProduct.moq || 50).replace(/[^0-9]/g, '')) || 50;
+  if (quantity < moqLimit) {
+    showToast(`Minimum order quantity for ${selectedProduct.name} is ${moqLimit} pcs.`, "warning");
+    return;
+  }
+  const maxLimit = parseInt(selectedProduct.maxQty || selectedProduct.max || 0);
+  if (maxLimit > 0 && quantity > maxLimit) {
+    showToast(`Maximum order quantity for ${selectedProduct.name} is ${maxLimit} pcs.`, "warning");
     return;
   }
 
@@ -2140,6 +2213,25 @@ function getImagesForColor(product, targetColor) {
     return colorMatchCache.get(cacheKey);
   }
 
+  // 1. Direct explicit colorImageMap check
+  if (product.colorImageMap && typeof product.colorImageMap === "object") {
+    let explicitImg = product.colorImageMap[targetColor];
+    if (!explicitImg) {
+      for (const [col, colUrl] of Object.entries(product.colorImageMap)) {
+        if (col.toLowerCase() === (targetColor || "").toLowerCase()) {
+          explicitImg = colUrl;
+          break;
+        }
+      }
+    }
+    if (explicitImg) {
+      const otherImgs = (product.images || []).filter(img => img !== explicitImg);
+      const res = [explicitImg, ...otherImgs];
+      colorMatchCache.set(cacheKey, res);
+      return res;
+    }
+  }
+
   const colorMap = new Map();
   product.images.forEach(img => {
     const imgNorm = normalizeForMatch(img);
@@ -2413,6 +2505,7 @@ function initProductPage(sku) {
     let totalQty = 0;
     let selectedSizesList = [];
     let sizeDetailsList = [];
+    let sizesBreakdownMap = {};
     
     if (sizeInputs && sizeInputs.length > 0) {
       sizeInputs.forEach(inp => {
@@ -2421,6 +2514,7 @@ function initProductPage(sku) {
           totalQty += v;
           selectedSizesList.push(inp.dataset.size);
           sizeDetailsList.push(`${inp.dataset.size} (${v})`);
+          sizesBreakdownMap[inp.dataset.size] = v;
         }
       });
     }
@@ -2429,6 +2523,11 @@ function initProductPage(sku) {
     const moqLimit = parseInt(prod.moq ? prod.moq.toString().replace(/[^0-9]/g, '') : "50") || 50;
     if (totalQty < moqLimit) {
       showToast(`Minimum Order Quantity is ${moqLimit} pcs. Please enter a total quantity of at least ${moqLimit} pieces across your chosen sizes before customizing.`, "warning", 5000);
+      return;
+    }
+    const maxLimit = parseInt(prod.maxQty || prod.max || 0);
+    if (maxLimit > 0 && totalQty > maxLimit) {
+      showToast(`Maximum Order Quantity for this product is ${maxLimit} pcs. You have selected ${totalQty} pieces. Please adjust your quantity to continue.`, "warning", 5000);
       return;
     }
 
@@ -2458,13 +2557,18 @@ function initProductPage(sku) {
       mode: modeParam,
       cust: prod.customizationCapability || prod.customizationPermissions || "both"
     });
+    if (maxLimit > 0) queryParams.set("maxQty", maxLimit);
+    if (moqLimit > 0) queryParams.set("moq", moqLimit);
 
     const customizerState = {
       sku: prod.sku || "F8-STUDIO-CUSTOM",
       name: prod.name || "Custom Uniform Garment",
       color: selectedColor,
       size: targetSize,
+      sizesBreakdown: sizesBreakdownMap,
       qty: totalQty,
+      moq: moqLimit,
+      maxQty: maxLimit,
       image: targetImg,
       category: prod.category || "General Apparel",
       capability: prod.customizationCapability || prod.customizationPermissions || "both",
@@ -2908,6 +3012,14 @@ function initProductPage(sku) {
         addToCartBtn.textContent = "ADD TO CART";
         delete addToCartBtn.dataset.busy;
         showToast(`Minimum Order Quantity is ${moqLimit} pcs. Please enter a total quantity of at least ${moqLimit} pieces across your chosen sizes.`, "warning", 5000);
+        return;
+      }
+      const maxLimit = parseInt(p.maxQty || p.max || 0);
+      if (maxLimit > 0 && totalQty > maxLimit) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.textContent = "ADD TO CART";
+        delete addToCartBtn.dataset.busy;
+        showToast(`Maximum Order Quantity for this product is ${maxLimit} pcs. You have selected ${totalQty} pieces. Please adjust your quantity to continue.`, "warning", 5000);
         return;
       }
       

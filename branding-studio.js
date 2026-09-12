@@ -119,7 +119,16 @@
     }
 
     const sizeSel = document.getElementById("sizeSelector");
-    if (sizeSel && state.product.size) sizeSel.value = state.product.size;
+    if (sizeSel && state.product.size) {
+      const optExists = Array.from(sizeSel.options).some(o => o.value === state.product.size);
+      if (!optExists) {
+        const opt = document.createElement("option");
+        opt.value = state.product.size;
+        opt.textContent = state.product.size;
+        sizeSel.insertBefore(opt, sizeSel.firstChild);
+      }
+      sizeSel.value = state.product.size;
+    }
 
     const qtyInp = document.getElementById("qtyInput");
     if (qtyInp && state.product.qty) qtyInp.value = state.product.qty;
@@ -137,6 +146,8 @@
   function initializeBrandingStudioParams() {
     const params = new URLSearchParams(window.location.search);
     const sku = params.get("sku");
+    const name = params.get("name");
+    const proto = params.get("proto");
     const color = params.get("color");
     const size = params.get("size");
     const qty = params.get("qty");
@@ -153,6 +164,7 @@
             if (cartItem.name) state.product.name = cartItem.name;
             if (cartItem.color) state.product.color = cartItem.color;
             if (cartItem.size) state.product.size = cartItem.size;
+            if (cartItem.sizesBreakdown) state.product.sizesBreakdown = cartItem.sizesBreakdown;
             if (cartItem.quantity || cartItem.qty) state.product.qty = cartItem.quantity || cartItem.qty;
             
             if (cartItem.baseGarmentImage && !cartItem.baseGarmentImage.startsWith("data:")) {
@@ -201,15 +213,15 @@
                   state.text.fontStyle = cartItem.customization.textDetails.font || state.text.fontStyle;
                   state.text.swatchName = cartItem.customization.textDetails.threadColor || state.text.swatchName;
                 }
-              } else {
+              } else if (cartItem.customization.type === "Logo Upload" || cartItem.customizationType === "upload_logo") {
                 state.currentMode = "logo";
+                state.currentFinish = cartItem.customization.finish || "Embroidery";
               }
-              state.currentFinish = cartItem.customization.finish || "Embroidery";
             }
           }
         }
-      } catch(e) {
-        console.warn("Error reading editCartIndex in branding studio", e);
+      } catch (e) {
+        console.warn("Error parsing editCartIndex from localStorage", e);
       }
 
       const submitBtn = document.getElementById("mainAddToCartBtn");
@@ -224,6 +236,8 @@
           const item = catalog.find(p => p.sku === sku);
           if (item) {
             state.product.name = item.name;
+            if (!state.product.moq && item.moq) state.product.moq = item.moq;
+            if (!state.product.maxQty && (item.maxQty || item.max)) state.product.maxQty = parseInt(item.maxQty || item.max);
             if (!color && item.colors && item.colors.length > 0) state.product.color = item.colors[0];
             if (item.image) state.product.image = item.image;
             if (item.placements && item.placements.length > 0) {
@@ -257,6 +271,20 @@
       if (color) state.product.color = color;
       if (size) state.product.size = size;
       if (qty) state.product.qty = parseInt(qty) || 50;
+      if (params.get("moq")) state.product.moq = params.get("moq");
+      if (params.get("maxQty")) state.product.maxQty = parseInt(params.get("maxQty"));
+
+      try {
+        const storedState = localStorage.getItem('fabric8_customizer_state');
+        if (storedState) {
+          const parsedState = JSON.parse(storedState);
+          if (parsedState.sku === state.product.sku) {
+            if (parsedState.sizesBreakdown) state.product.sizesBreakdown = parsedState.sizesBreakdown;
+            if (parsedState.maxQty) state.product.maxQty = parsedState.maxQty;
+            if (parsedState.moq) state.product.moq = parsedState.moq;
+          }
+        }
+      } catch (e) {}
     }
 
     const garmentBtns = Array.from(document.querySelectorAll(".garment-btn"));
@@ -946,6 +974,23 @@
   }
 
   function handleAddToCart() {
+    const moqVal = parseInt(String(state.product.moq || 50).replace(/[^0-9]/g, '')) || 50;
+    const maxLimit = parseInt(state.product.maxQty || state.product.max || 0);
+    const orderQty = parseInt(state.product.qty || 50) || 50;
+
+    if (orderQty < moqVal) {
+      if (typeof window.showToast === "function") {
+        window.showToast(`Minimum Order Quantity is ${moqVal} pcs.`, "warning", 4000);
+      }
+      return;
+    }
+    if (maxLimit > 0 && orderQty > maxLimit) {
+      if (typeof window.showToast === "function") {
+        window.showToast(`Maximum Order Quantity for this product is ${maxLimit} pcs. You have selected ${orderQty} pcs.`, "warning", 4000);
+      }
+      return;
+    }
+
     drawCanvas();
     const previewUrl = getCartPreviewThumbnail();
     const placementName = state.selectedPlacement ? state.selectedPlacement.name : "Custom";
@@ -955,7 +1000,12 @@
 
     let cleanGarment = state.product.baseGarmentImage;
     if (state.product.color && Array.isArray(state.product.images) && state.product.images.length > 0) {
-      const match = state.product.images.find(img => img.toLowerCase().includes(state.product.color.toLowerCase()));
+      let match = null;
+      if (state.product.colorImageMap && state.product.colorImageMap[state.product.color]) {
+        match = state.product.colorImageMap[state.product.color];
+      } else {
+        match = state.product.images.find(img => img.toLowerCase().includes(state.product.color.toLowerCase()));
+      }
       if (match) cleanGarment = match;
     }
     if (!cleanGarment || cleanGarment.startsWith("data:")) {
@@ -970,9 +1020,10 @@
       sku: state.product.sku,
       name: state.product.name.includes("[Customized]") ? state.product.name : `${state.product.name} [Customized]`,
       size: state.product.size,
+      sizesBreakdown: state.product.sizesBreakdown || (state.product.size && !state.product.size.includes('(') ? { [state.product.size]: orderQty } : null),
       color: state.product.color,
-      quantity: state.product.qty || 50,
-      qty: state.product.qty || 50,
+      quantity: orderQty,
+      qty: orderQty,
       price: "Custom Quotation",
       originStudio: "Branding Studio",
       isBrandingStudio: true,

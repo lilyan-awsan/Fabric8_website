@@ -414,7 +414,7 @@ export default async function handler(req, res) {
       const fallbackOptions = {
         ...options,
         from: 'Fabric8 Orders <onboarding@resend.dev>',
-        to: process.env.RESEND_TO_EMAIL ? [process.env.RESEND_TO_EMAIL.trim()] : ['lilyanawsan@gmail.com']
+        to: ['lilyanawsan@gmail.com']
       };
 
       const retryResult = await resend.emails.send(fallbackOptions);

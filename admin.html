@@ -333,9 +333,25 @@
             <div id="colorsTagsContainer" style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px; background: #fff; border: 1px solid var(--line); border-radius: 6px; min-height: 44px; margin-bottom: 8px;">
               <!-- Chips injected by JS -->
             </div>
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="newColorInput" placeholder="Type color name (e.g. Forest Green or Navy)..." style="flex: 1; padding: 8px; font-size: 13px;">
-              <button type="button" id="addColorTagBtn" class="button outline" style="padding: 6px 16px; font-size: 13px; font-weight: 600;">+ Add Color</button>
+            <!-- Quick Preset Swatches -->
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px; flex-wrap: wrap;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Quick Presets:</span>
+              <button type="button" class="admin-color-preset" data-name="Black" data-hex="#111111" style="width: 22px; height: 22px; border-radius: 50%; background: #111111; border: 1px solid #999; cursor: pointer;" title="Black"></button>
+              <button type="button" class="admin-color-preset" data-name="White" data-hex="#ffffff" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; cursor: pointer;" title="White"></button>
+              <button type="button" class="admin-color-preset" data-name="Navy" data-hex="#1b263b" style="width: 22px; height: 22px; border-radius: 50%; background: #1b263b; border: 1px solid #999; cursor: pointer;" title="Navy"></button>
+              <button type="button" class="admin-color-preset" data-name="Grey" data-hex="#7f8c8d" style="width: 22px; height: 22px; border-radius: 50%; background: #7f8c8d; border: 1px solid #999; cursor: pointer;" title="Grey"></button>
+              <button type="button" class="admin-color-preset" data-name="Charcoal" data-hex="#333333" style="width: 22px; height: 22px; border-radius: 50%; background: #333333; border: 1px solid #999; cursor: pointer;" title="Charcoal"></button>
+              <button type="button" class="admin-color-preset" data-name="Forest Green" data-hex="#28532f" style="width: 22px; height: 22px; border-radius: 50%; background: #28532f; border: 1px solid #999; cursor: pointer;" title="Forest Green"></button>
+              <button type="button" class="admin-color-preset" data-name="Olive" data-hex="#556b2f" style="width: 22px; height: 22px; border-radius: 50%; background: #556b2f; border: 1px solid #999; cursor: pointer;" title="Olive"></button>
+              <button type="button" class="admin-color-preset" data-name="Royal Blue" data-hex="#2980b9" style="width: 22px; height: 22px; border-radius: 50%; background: #2980b9; border: 1px solid #999; cursor: pointer;" title="Royal Blue"></button>
+              <button type="button" class="admin-color-preset" data-name="Red" data-hex="#c0392b" style="width: 22px; height: 22px; border-radius: 50%; background: #c0392b; border: 1px solid #999; cursor: pointer;" title="Red"></button>
+              <button type="button" class="admin-color-preset" data-name="Burgundy" data-hex="#6b1d2f" style="width: 22px; height: 22px; border-radius: 50%; background: #6b1d2f; border: 1px solid #999; cursor: pointer;" title="Burgundy"></button>
+              <button type="button" class="admin-color-preset" data-name="Khaki" data-hex="#c3b091" style="width: 22px; height: 22px; border-radius: 50%; background: #c3b091; border: 1px solid #999; cursor: pointer;" title="Khaki"></button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="color" id="newColorPicker" value="#111111" style="width: 44px; height: 38px; padding: 2px; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; background: #fff;" title="Pick visual color">
+              <input type="text" id="newColorInput" placeholder="Type color name (e.g. Forest Green or Navy)..." style="flex: 1; padding: 8px 12px; font-size: 13px; height: 38px; border: 1px solid var(--line); border-radius: 6px; box-sizing: border-box;">
+              <button type="button" id="addColorTagBtn" class="button outline" style="padding: 6px 16px; font-size: 13px; font-weight: 600; height: 38px; white-space: nowrap;">+ Add Color</button>
             </div>
           </div>
           <div class="input-group">
@@ -499,7 +515,7 @@
   </div>
 
   <!-- Firebase SDK via CDN -->
-  <script type="module" src="admin.js?v=28"></script>
+  <script type="module" src="admin.js?v=39"></script>
 </body>
 </html>
 

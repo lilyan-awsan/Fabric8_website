@@ -355,6 +355,31 @@ async function syncWithGithub(action, product) {
 // Dynamic Tag Managers & Sector Engine
 let activeSizes = ["S", "M", "L", "XL"];
 let activeColors = ["Black", "Navy", "White"];
+const defaultColorHexMap = {
+  "Black": "#111111",
+  "White": "#ffffff",
+  "Navy": "#1b263b",
+  "Grey": "#7f8c8d",
+  "Charcoal": "#333333",
+  "Forest Green": "#28532f",
+  "Olive": "#556b2f",
+  "Royal Blue": "#2980b9",
+  "Red": "#c0392b",
+  "Burgundy": "#6b1d2f",
+  "Khaki": "#c3b091"
+};
+let activeColorHexMap = {};
+let existingImageColorMap = {};
+let pendingImageColorMap = {};
+
+function getColorHex(colName) {
+  if (activeColorHexMap && activeColorHexMap[colName]) return activeColorHexMap[colName];
+  const lower = (colName || "").toLowerCase().trim();
+  for (const [k, v] of Object.entries(defaultColorHexMap)) {
+    if (k.toLowerCase() === lower) return v;
+  }
+  return "#7f8c8d";
+}
 let activeSectors = [];
 let activeProductPlacements = [];
 let activeDtfPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
@@ -431,12 +456,16 @@ function renderSizesTags() {
 function renderColorsTags() {
   const container = document.getElementById("colorsTagsContainer");
   if (!container) return;
-  container.innerHTML = activeColors.map((col, idx) => `
-    <span style="background: #f0eee9; color: var(--ink); padding: 4px 10px; border-radius: 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);">
-      ${col}
-      <button type="button" onclick="window.removeColorTag(${idx})" style="background: none; border: none; font-size: 15px; cursor: pointer; color: #888; line-height: 1; padding: 0;">&times;</button>
-    </span>
-  `).join("");
+  container.innerHTML = activeColors.map((col, idx) => {
+    const hex = getColorHex(col);
+    return `
+      <span style="background: #f0eee9; color: var(--ink); padding: 4px 10px; border-radius: 16px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line);">
+        <span style="width: 12px; height: 12px; border-radius: 50%; background: ${hex}; border: 1px solid ${hex.toLowerCase() === '#ffffff' ? '#ccc' : 'transparent'}; display: inline-block; flex-shrink: 0;"></span>
+        ${col}
+        <button type="button" onclick="window.removeColorTag(${idx})" style="background: none; border: none; font-size: 15px; cursor: pointer; color: #888; line-height: 1; padding: 0;">&times;</button>
+      </span>
+    `;
+  }).join("");
   renderImagePreviews();
 }
 
@@ -446,6 +475,8 @@ window.removeSizeTag = function(index) {
 };
 
 window.removeColorTag = function(index) {
+  const removed = activeColors[index];
+  if (removed && activeColorHexMap) delete activeColorHexMap[removed];
   activeColors.splice(index, 1);
   renderColorsTags();
 };
@@ -516,13 +547,45 @@ document.getElementById("addSizeTagBtn")?.addEventListener("click", () => {
 
 document.getElementById("addColorTagBtn")?.addEventListener("click", () => {
   const input = document.getElementById("newColorInput");
+  const picker = document.getElementById("newColorPicker");
   const val = input?.value.trim();
+  const hex = picker ? picker.value : getColorHex(val);
   if (val && !activeColors.includes(val)) {
     activeColors.push(val);
+    activeColorHexMap[val] = hex;
     input.value = "";
     renderColorsTags();
   }
 });
+
+document.getElementById("newColorInput")?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("addColorTagBtn")?.click();
+  }
+});
+
+document.querySelectorAll(".admin-color-preset").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const name = btn.dataset.name;
+    const hex = btn.dataset.hex;
+    const input = document.getElementById("newColorInput");
+    const picker = document.getElementById("newColorPicker");
+    if (input) input.value = name;
+    if (picker) picker.value = hex;
+  });
+});
+
+const adminColorPicker = document.getElementById("newColorPicker");
+if (adminColorPicker) {
+  adminColorPicker.addEventListener("input", (e) => {
+    const hex = e.target.value;
+    const input = document.getElementById("newColorInput");
+    if (input && (!input.value || input.value.startsWith("#"))) {
+      input.value = hex;
+    }
+  });
+}
 
 function renderSectorButtons() {
   const container = document.getElementById("productSectorsButtons");
@@ -681,10 +744,27 @@ function openModal(docId = null) {
         });
       }
 
+      existingImageColorMap = {};
+      pendingImageColorMap = {};
+      pendingImages = [];
+      activeColorHexMap = p.colorHexMap ? { ...p.colorHexMap } : {};
+
       if (p.images && p.images.length > 0) {
         existingImages = [...p.images];
       } else if (p.image) {
         existingImages = [p.image];
+      } else {
+        existingImages = [];
+      }
+
+      if (p.colorImageMap && typeof p.colorImageMap === "object") {
+        existingImages.forEach((imgUrl, idx) => {
+          for (const [col, colUrl] of Object.entries(p.colorImageMap)) {
+            if (colUrl === imgUrl) {
+              existingImageColorMap[idx] = col;
+            }
+          }
+        });
       }
       renderImagePreviews();
     }
@@ -694,9 +774,15 @@ function openModal(docId = null) {
     activeSectors = ["Corporate", "Hospitality"];
     activeSizes = ["S", "M", "L", "XL", "2XL"];
     activeColors = ["Black", "White", "Navy", "Grey"];
+    activeColorHexMap = {};
+    existingImageColorMap = {};
+    pendingImageColorMap = {};
+    existingImages = [];
+    pendingImages = [];
     renderSectorButtons();
     renderSizesTags();
     renderColorsTags();
+    renderImagePreviews();
     activeDtfPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
     activeEmbPlacements = ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
     renderProdBrandingPlacements();
@@ -757,6 +843,15 @@ productForm.addEventListener("submit", async (e) => {
     long: document.getElementById("long").value,
     sizes: activeSizes,
     colors: activeColors,
+    colorHexMap: activeColorHexMap,
+    colorImageMap: (function() {
+      const map = {};
+      existingImages.forEach((imgUrl, idx) => {
+        const assigned = existingImageColorMap[idx];
+        if (assigned) map[assigned] = imgUrl;
+      });
+      return map;
+    })(),
     fabric: document.getElementById("fabric").value,
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
@@ -801,72 +896,123 @@ function renderImagePreviews() {
   const colorOptions = activeColors && activeColors.length > 0 ? activeColors : ["Default"];
   
   existingImages.forEach((imgUrl, index) => {
+    if (!existingImageColorMap[index]) {
+      const match = activeColors.find(c => imgUrl.toLowerCase().includes(c.toLowerCase()));
+      if (match) existingImageColorMap[index] = match;
+    }
+    const assignedColor = existingImageColorMap[index] || "";
+    const hex = assignedColor ? getColorHex(assignedColor) : "#888";
+
     const div = document.createElement("div");
     div.className = "preview-item";
     div.style.display = "flex";
     div.style.flexDirection = "column";
     div.style.alignItems = "center";
     div.style.gap = "6px";
-    div.style.padding = "6px";
-    div.style.border = "1px solid var(--line)";
+    div.style.padding = "8px";
+    div.style.border = `1px solid ${assignedColor ? 'var(--ink)' : 'var(--line)'}`;
     div.style.borderRadius = "8px";
     div.style.background = "#fff";
+    div.style.width = "114px";
+    div.style.position = "relative";
+    div.style.boxShadow = "0 1px 4px rgba(0,0,0,0.05)";
+
     div.innerHTML = `
-      <div style="position: relative;">
-        <img src="${imgUrl}" alt="Existing" style="width: 80px; height: 80px; object-fit: contain; border-radius: 4px; background: #f9f8f5;">
-        <button type="button" class="remove-btn" onclick="removeExistingImage(${index})" style="position: absolute; top: -6px; right: -6px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold;">&times;</button>
+      <div style="position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
+        <img src="${imgUrl}" alt="Existing" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        <button type="button" class="remove-btn" onclick="window.removeExistingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">&times;</button>
       </div>
-      <select onchange="window.updateImageColorMatch('existing', ${index}, this.value)" style="font-size: 11px; padding: 2px 4px; border-radius: 4px; width: 100%; border: 1px solid var(--line);">
-        <option value="">Match Color</option>
-        ${colorOptions.map(col => `<option value="${col}" ${imgUrl.toLowerCase().includes(col.toLowerCase()) ? 'selected' : ''}>${col}</option>`).join("")}
-      </select>
+      <div style="width: 100%;">
+        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 3px;">
+          ${assignedColor ? `<span style="width: 8px; height: 8px; border-radius: 50%; background: ${hex}; border: 1px solid ${hex.toLowerCase() === '#ffffff' ? '#ccc' : 'transparent'}; display: inline-block;"></span>` : ''}
+          <span style="font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase;">Color Variant:</span>
+        </div>
+        <select onchange="window.updateImageColorMatch('existing', ${index}, this.value)" style="font-size: 11px; font-weight: 700; padding: 3px 4px; border-radius: 4px; width: 100%; border: 1px solid var(--line); background: ${assignedColor ? '#f2f8f3' : '#fff'}; color: ${assignedColor ? '#2f873d' : 'inherit'};">
+          <option value="">(All Colors)</option>
+          ${colorOptions.map(col => `<option value="${col}" ${assignedColor === col ? 'selected' : ''}>${col}</option>`).join("")}
+        </select>
+      </div>
     `;
     imagePreviewContainer.appendChild(div);
   });
   
   pendingImages.forEach((img, index) => {
+    if (!pendingImageColorMap[index]) {
+      const match = activeColors.find(c => img.name && img.name.toLowerCase().includes(c.toLowerCase()));
+      if (match) pendingImageColorMap[index] = match;
+    }
+    const assignedColor = pendingImageColorMap[index] || "";
+    const hex = assignedColor ? getColorHex(assignedColor) : "#888";
+
     const div = document.createElement("div");
     div.className = "preview-item";
     div.style.display = "flex";
     div.style.flexDirection = "column";
     div.style.alignItems = "center";
     div.style.gap = "6px";
-    div.style.padding = "6px";
-    div.style.border = "1px solid var(--line)";
+    div.style.padding = "8px";
+    div.style.border = `1px solid ${assignedColor ? 'var(--ink)' : 'var(--line)'}`;
     div.style.borderRadius = "8px";
     div.style.background = "#fff";
+    div.style.width = "114px";
+    div.style.position = "relative";
+    div.style.boxShadow = "0 1px 4px rgba(0,0,0,0.05)";
+
     div.innerHTML = `
-      <div style="position: relative;">
-        <img src="${img.base64}" alt="Pending" style="width: 80px; height: 80px; object-fit: contain; border-radius: 4px; background: #f9f8f5;">
-        <button type="button" class="remove-btn" onclick="removePendingImage(${index})" style="position: absolute; top: -6px; right: -6px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold;">&times;</button>
+      <div style="position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
+        <img src="${img.base64}" alt="Pending" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        <button type="button" class="remove-btn" onclick="window.removePendingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">&times;</button>
       </div>
-      <select onchange="window.updateImageColorMatch('pending', ${index}, this.value)" style="font-size: 11px; padding: 2px 4px; border-radius: 4px; width: 100%; border: 1px solid var(--line);">
-        <option value="">Match Color</option>
-        ${colorOptions.map(col => `<option value="${col}" ${img.name && img.name.toLowerCase().includes(col.toLowerCase()) ? 'selected' : ''}>${col}</option>`).join("")}
-      </select>
+      <div style="width: 100%;">
+        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 3px;">
+          ${assignedColor ? `<span style="width: 8px; height: 8px; border-radius: 50%; background: ${hex}; border: 1px solid ${hex.toLowerCase() === '#ffffff' ? '#ccc' : 'transparent'}; display: inline-block;"></span>` : ''}
+          <span style="font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase;">Color Variant:</span>
+        </div>
+        <select onchange="window.updateImageColorMatch('pending', ${index}, this.value)" style="font-size: 11px; font-weight: 700; padding: 3px 4px; border-radius: 4px; width: 100%; border: 1px solid var(--line); background: ${assignedColor ? '#f2f8f3' : '#fff'}; color: ${assignedColor ? '#2f873d' : 'inherit'};">
+          <option value="">(All Colors)</option>
+          ${colorOptions.map(col => `<option value="${col}" ${assignedColor === col ? 'selected' : ''}>${col}</option>`).join("")}
+        </select>
+      </div>
     `;
     imagePreviewContainer.appendChild(div);
   });
 }
 
 window.updateImageColorMatch = function(type, index, colorName) {
-  if (type === 'pending' && pendingImages[index]) {
+  if (type === 'existing') {
+    existingImageColorMap[index] = colorName;
+    renderImagePreviews();
+  } else if (type === 'pending' && pendingImages[index]) {
+    pendingImageColorMap[index] = colorName;
     const origName = pendingImages[index].name || "image.png";
     let cleanName = origName;
     if (origName.includes("_")) {
-      cleanName = origName.split("_").slice(1).join("_"); // Remove existing color prefix
+      cleanName = origName.split("_").slice(1).join("_");
     }
     pendingImages[index].name = colorName ? `${colorName}_${cleanName}` : cleanName;
+    renderImagePreviews();
   }
 };
 
 window.removeExistingImage = function(index) {
   existingImages.splice(index, 1);
+  const newMap = {};
+  existingImages.forEach((_, i) => {
+    const oldIdx = i >= index ? i + 1 : i;
+    if (existingImageColorMap[oldIdx]) newMap[i] = existingImageColorMap[oldIdx];
+  });
+  existingImageColorMap = newMap;
   renderImagePreviews();
 };
 
 window.removePendingImage = function(index) {
   pendingImages.splice(index, 1);
+  const newMap = {};
+  pendingImages.forEach((_, i) => {
+    const oldIdx = i >= index ? i + 1 : i;
+    if (pendingImageColorMap[oldIdx]) newMap[i] = pendingImageColorMap[oldIdx];
+  });
+  pendingImageColorMap = newMap;
   renderImagePreviews();
 };
 
