@@ -226,10 +226,20 @@
             state.product.name = item.name;
             if (!color && item.colors && item.colors.length > 0) state.product.color = item.colors[0];
             if (item.image) state.product.image = item.image;
+            if (item.placements && item.placements.length > 0) {
+              state.product.placements = item.placements;
+              state.selectedPlacement = item.placements[0];
+            }
             const nameEl = document.getElementById("headerProdName");
             const imgEl = document.getElementById("headerProdImg");
+            const skuEl = document.getElementById("headerProdSku");
+            const colorEl = document.getElementById("headerProdColor");
             if (nameEl) nameEl.textContent = state.product.name;
             if (imgEl && state.product.image) imgEl.src = state.product.image;
+            if (skuEl) skuEl.textContent = `SKU: ${state.product.sku}`;
+            if (colorEl) colorEl.textContent = `Color: ${state.product.color}`;
+            renderPlacementOptions();
+            loadBaseImage();
           }
         };
 
@@ -249,15 +259,28 @@
       if (qty) state.product.qty = parseInt(qty) || 50;
     }
 
-    const garmentBtns = document.querySelectorAll(".garment-btn");
-    garmentBtns.forEach(btn => {
-      if (btn.dataset.sku === state.product.sku || btn.dataset.color === state.product.color) {
-        garmentBtns.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        if (btn.dataset.name) state.product.name = btn.dataset.name;
-        if (btn.dataset.img) state.product.image = btn.dataset.img;
+    const garmentBtns = Array.from(document.querySelectorAll(".garment-btn"));
+    let matchedBtn = null;
+    if (proto) {
+      matchedBtn = garmentBtns.find(b => (b.dataset.proto || "").toLowerCase() === proto.toLowerCase());
+    } else if (sku) {
+      matchedBtn = garmentBtns.find(b => (b.dataset.sku || "").toLowerCase() === sku.toLowerCase());
+      if (!matchedBtn && name) {
+        matchedBtn = garmentBtns.find(b => (b.dataset.name || "").toLowerCase().includes(name.toLowerCase()));
       }
-    });
+    } else if (name) {
+      matchedBtn = garmentBtns.find(b => (b.dataset.name || "").toLowerCase().includes(name.toLowerCase()));
+    }
+
+    if (matchedBtn) {
+      applyGarment(matchedBtn);
+    } else if (!sku && !editIdx) {
+      const defaultBtn = garmentBtns.find(b => b.dataset.proto === "polo") || garmentBtns[0];
+      if (defaultBtn) applyGarment(defaultBtn);
+    } else {
+      renderPlacementOptions();
+      loadBaseImage();
+    }
 
     const nameEl = document.getElementById("headerProdName");
     const imgEl = document.getElementById("headerProdImg");
@@ -274,63 +297,78 @@
     if (qtyEl && state.product.qty) qtyEl.textContent = `Qty: ${state.product.qty} Pcs`;
   }
 
+  function applyGarment(btn) {
+    if (!btn) return;
+    const garmentBtns = document.querySelectorAll(".garment-btn");
+    garmentBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const protoType = btn.dataset.proto;
+    state.product.sku = btn.dataset.sku || state.product.sku;
+    state.product.name = btn.dataset.name || state.product.name;
+    state.product.color = btn.dataset.color || state.product.color;
+    state.product.image = btn.dataset.img || state.product.image;
+
+    // Update top header badges
+    const nameEl = document.getElementById("headerProdName");
+    const imgEl = document.getElementById("headerProdImg");
+    const skuEl = document.getElementById("headerProdSku");
+    const colorEl = document.getElementById("headerProdColor");
+    const sizeEl = document.getElementById("headerProdSize");
+    const qtyEl = document.getElementById("headerProdQty");
+
+    if (nameEl) nameEl.textContent = state.product.name;
+    if (imgEl && state.product.image) imgEl.src = state.product.image;
+    if (skuEl) skuEl.textContent = `SKU: ${state.product.sku}`;
+    if (colorEl) colorEl.textContent = `Color: ${state.product.color}`;
+    if (sizeEl && state.product.size) sizeEl.textContent = `Size: ${state.product.size}`;
+    if (qtyEl && state.product.qty) qtyEl.textContent = `Qty: ${state.product.qty} Pcs`;
+
+    if (state.artwork.sampleImg) {
+      if (protoType === "cap" || protoType === "scrub") {
+        state.artwork.sampleImg.src = "assets/fabric8_logo_white.png";
+      } else {
+        state.artwork.sampleImg.src = "assets/fabric8_logo_noneedle_cropped.png";
+      }
+    }
+
+    // Recalibrate placement zones based on garment category
+    if (protoType === "cap") {
+      state.product.placements = [
+        { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
+        { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
+      ];
+    } else if (protoType === "chef") {
+      state.product.placements = [
+        { name: "Left Chest Pocket", x: 64, y: 46, w: 16, h: 16, r: 0 },
+        { name: "Right Collar / Collar Tip", x: 44, y: 36, w: 12, h: 12, r: 0 },
+        { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 }
+      ];
+    } else {
+      state.product.placements = [
+        { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
+        { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+      ];
+    }
+
+    state.selectedPlacement = state.product.placements[0];
+    state.artwork.x = state.selectedPlacement.x;
+    state.artwork.y = state.selectedPlacement.y;
+    state.artwork.rotation = state.selectedPlacement.r || 0;
+    state.text.x = state.selectedPlacement.x;
+    state.text.y = state.selectedPlacement.y;
+
+    renderPlacementOptions();
+    loadBaseImage();
+  }
+
   function setupGarmentSwitcher() {
     const garmentBtns = document.querySelectorAll(".garment-btn");
     garmentBtns.forEach(btn => {
       btn.addEventListener("click", () => {
-        garmentBtns.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        const protoType = btn.dataset.proto;
-        state.product.sku = btn.dataset.sku;
-        state.product.name = btn.dataset.name;
-        state.product.color = btn.dataset.color;
-        state.product.image = btn.dataset.img;
-
-        // Update top header badges
-        document.getElementById("headerProdName").textContent = state.product.name;
-        document.getElementById("headerProdImg").src = state.product.image;
-        document.getElementById("headerProdSku").textContent = `SKU: ${state.product.sku}`;
-        document.getElementById("headerProdColor").textContent = `Color: ${state.product.color}`;
-
-        if (state.artwork.sampleImg) {
-          if (protoType === "cap" || protoType === "scrub") {
-            state.artwork.sampleImg.src = "assets/fabric8_logo_white.png";
-          } else {
-            state.artwork.sampleImg.src = "assets/fabric8_logo_noneedle_cropped.png";
-          }
-        }
-
-        // Recalibrate placement zones based on garment category
-        if (protoType === "cap") {
-          state.product.placements = [
-            { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
-            { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
-          ];
-        } else if (protoType === "chef") {
-          state.product.placements = [
-            { name: "Left Chest Pocket", x: 64, y: 46, w: 16, h: 16, r: 0 },
-            { name: "Right Collar / Collar Tip", x: 44, y: 36, w: 12, h: 12, r: 0 },
-            { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 }
-          ];
-        } else {
-          state.product.placements = [
-            { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
-            { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
-            { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
-            { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
-          ];
-        }
-
-        state.selectedPlacement = state.product.placements[0];
-        state.artwork.x = state.selectedPlacement.x;
-        state.artwork.y = state.selectedPlacement.y;
-        state.artwork.rotation = state.selectedPlacement.r || 0;
-        state.text.x = state.selectedPlacement.x;
-        state.text.y = state.selectedPlacement.y;
-
-        renderPlacementOptions();
-        loadBaseImage();
+        applyGarment(btn);
       });
     });
   }

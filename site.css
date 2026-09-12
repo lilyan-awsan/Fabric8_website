@@ -1226,10 +1226,41 @@ input.error, select.error, textarea.error {
   background: transparent;
   overflow: hidden;
   border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 .product-card-img img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   object-fit: contain !important;
-  padding: 10px !important;
+  box-sizing: border-box !important;
+  padding: 12px !important;
+}
+
+.main-image-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  aspect-ratio: 1 / 1 !important;
+  max-width: 450px !important;
+  max-height: 450px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+.main-image-container #productMainImage {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  box-sizing: border-box !important;
+  padding: 16px !important;
 }
 
 .product-card-info {

@@ -6,7 +6,7 @@
   <title>Fabric8 | Product</title>
 
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
-    <link rel="stylesheet" href="site.css?v=14" />
+    <link rel="stylesheet" href="site.css?v=35" />
 </head>
 <body>
   <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
@@ -42,10 +42,10 @@
     <div class="product-page-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
       <!-- Product Images & Carousel -->
       <div class="product-gallery" style="position: relative;">
-        <div class="main-image-container" style="background: #faf9f5; aspect-ratio: 1/1; max-height: 400px; max-width: 450px; margin: 0 auto; display: grid; place-items: center; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--line);">
+        <div class="main-image-container" style="background: #faf9f5; aspect-ratio: 1/1; max-height: 450px; max-width: 450px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid var(--line);">
           <button type="button" id="carouselPrevBtn" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); z-index: 20; background: rgba(255,255,255,0.85); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; display: none; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">←</button>
           
-          <img id="productMainImage" src="" alt="Product" style="width: 100%; height: 100%; object-fit: contain; padding: 24px; transition: opacity 0.25s ease;" / loading="lazy">
+          <img id="productMainImage" src="" alt="Product" style="width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; box-sizing: border-box; padding: 16px; transition: opacity 0.25s ease;" loading="lazy">
           
           <button type="button" id="carouselNextBtn" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); z-index: 20; background: rgba(255,255,255,0.85); border: 1px solid var(--line); width: 40px; height: 40px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; display: none; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">→</button>
           
@@ -126,8 +126,8 @@
           
           <div style="margin-bottom: 12px;">
             <label style="font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              Sizes & Quantities*
-              <span style="font-size: 10px; color: var(--muted);">Min. Qty: 50</span>
+              <span>Sizes &amp; Quantities*</span>
+              <span style="font-size: 11px; color: var(--muted); font-weight: 700;">Min. Qty: <span id="minQtyLabel">50</span></span>
             </label>
             <div id="sizeQtyMatrix" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <!-- JS injected sizes -->
@@ -182,6 +182,6 @@
     </footer>
 
     <!-- Firebase SDK -->
-    <script src="site.js?v=26"></script>
+    <script src="site.js?v=35"></script>
 </body>
 </html>

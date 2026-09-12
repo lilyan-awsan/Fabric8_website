@@ -356,7 +356,41 @@ function loadCart() {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
         cart.length = 0;
-        cart.push(...parsed);
+        const deduplicated = [];
+        parsed.forEach(item => {
+          if (!item) return;
+          if (item.sizesBreakdown && typeof item.sizesBreakdown === 'object') {
+            const bSum = Object.values(item.sizesBreakdown).reduce((sum, q) => sum + (parseInt(q) || 0), 0);
+            if (bSum > 0) {
+              item.quantity = bSum;
+              item.qty = bSum;
+            }
+          } else if (item.size && typeof item.size === 'string' && item.size.includes('(')) {
+            const matches = item.size.match(/\((\d+)\)/g);
+            if (matches && matches.length > 0) {
+              const parsedSum = matches.reduce((sum, m) => sum + (parseInt(m.replace(/\D/g, '')) || 0), 0);
+              if (parsedSum > 0) {
+                item.quantity = parsedSum;
+                item.qty = parsedSum;
+              }
+            }
+          }
+          
+          const existingItem = deduplicated.find(d => 
+            d.sku === item.sku && 
+            (d.color || "").trim().toLowerCase() === (item.color || "").trim().toLowerCase() && 
+            (d.branding || "Blank") === (item.branding || "Blank")
+          );
+          if (existingItem) {
+            if (item.sizesBreakdown && !existingItem.sizesBreakdown) {
+              const idx = deduplicated.indexOf(existingItem);
+              deduplicated[idx] = item;
+            }
+          } else {
+            deduplicated.push(item);
+          }
+        });
+        cart.push(...deduplicated);
       }
     }
   } catch (e) {
@@ -2847,74 +2881,97 @@ function initProductPage(sku) {
   // --- End Live Text Embroidery Preview ---
 
   // Add to Cart
-  document.getElementById("pageAddToCart")?.addEventListener("click", () => {
-    loadCart();
+  const addToCartBtn = document.getElementById("pageAddToCart");
+  if (addToCartBtn) {
+    addToCartBtn.onclick = (e) => {
+      if (e) e.preventDefault();
+      if (addToCartBtn.dataset.busy === "1") return;
+      addToCartBtn.dataset.busy = "1";
+      addToCartBtn.disabled = true;
+      addToCartBtn.textContent = "ADDING TO CART...";
 
-    let totalQty = 0;
-    const sizes = {};
-    document.querySelectorAll(".matrix-qty-input").forEach(input => {
-      const q = parseInt(input.value);
-      if (q && q > 0) {
-        sizes[input.dataset.size] = q;
-        totalQty += q;
-      }
-    });
-    
-    const moqLimit = parseInt(p.moq ? p.moq.toString().replace(/[^0-9]/g, '') : "50") || 50;
-    if (totalQty < moqLimit) {
-      showToast(`Minimum Order Quantity is ${moqLimit} pcs. Please enter a total quantity of at least ${moqLimit} pieces across your chosen sizes.`, "warning", 5000);
-      return;
-    }
-    
-    let brandingDesc = "Blank";
-    
-    let matchedImage = p.image;
-    if (activeCatalogColor && Array.isArray(p.images) && p.images.length > 0) {
-      const match = p.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
-      if (match) matchedImage = match;
-    }
+      loadCart();
 
-    const sizeDetailsList = [];
-    for (const [sName, sQty] of Object.entries(sizes)) {
-      sizeDetailsList.push(`${sName} (${sQty})`);
-    }
-    const formattedSizes = sizeDetailsList.join(", ");
-
-    // Combine all chosen sizes into ONE single cart item for this product and color
-    const existing = cart.find(
-      (item) => item.sku === p.sku && item.color === activeCatalogColor && (item.branding === brandingDesc || !item.branding || item.branding === "Blank")
-    );
-
-    if (existing) {
-      existing.quantity = (existing.quantity || existing.qty || 0) + totalQty;
-      existing.qty = existing.quantity;
-      existing.size = formattedSizes;
-      existing.sizesBreakdown = sizes;
-      existing.image = matchedImage;
-      existing.baseGarmentImage = matchedImage;
-    } else {
-      cart.push({
-        ...p,
-        id: "F8-ITEM-" + Date.now(),
-        image: matchedImage,
-        baseGarmentImage: matchedImage,
-        quantity: totalQty,
-        qty: totalQty,
-        color: activeCatalogColor,
-        size: formattedSizes,
-        sizesBreakdown: sizes,
-        branding: brandingDesc,
-        originStudio: "Product Catalog",
-        customizationType: null,
-        logoData: null
+      let totalQty = 0;
+      const sizes = {};
+      document.querySelectorAll(".matrix-qty-input").forEach(input => {
+        const q = parseInt(input.value);
+        if (q && q > 0) {
+          sizes[input.dataset.size] = q;
+          totalQty += q;
+        }
       });
-    }
-    
-    saveCart();
-    renderCart();
-    showToast("Added to cart successfully!", "success", 4000);
-    window.location.href = "checkout.html";
-  });
+      
+      const moqLimit = parseInt(p.moq ? p.moq.toString().replace(/[^0-9]/g, '') : "50") || 50;
+      if (totalQty < moqLimit) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.textContent = "ADD TO CART";
+        delete addToCartBtn.dataset.busy;
+        showToast(`Minimum Order Quantity is ${moqLimit} pcs. Please enter a total quantity of at least ${moqLimit} pieces across your chosen sizes.`, "warning", 5000);
+        return;
+      }
+      
+      let brandingDesc = "Blank";
+      
+      let matchedImage = p.image;
+      if (activeCatalogColor && Array.isArray(p.images) && p.images.length > 0) {
+        const match = p.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
+        if (match) matchedImage = match;
+      }
+
+      const sizeDetailsList = [];
+      for (const [sName, sQty] of Object.entries(sizes)) {
+        sizeDetailsList.push(`${sName} (${sQty})`);
+      }
+      const formattedSizes = sizeDetailsList.join(", ");
+
+      // Check for existing cart item for this product and color
+      const existing = cart.find(
+        (item) => item.sku === p.sku && 
+          (item.color || "").trim().toLowerCase() === (activeCatalogColor || "").trim().toLowerCase() && 
+          (item.branding === brandingDesc || !item.branding || item.branding === "Blank")
+      );
+
+      if (existing) {
+        existing.quantity = totalQty;
+        existing.qty = totalQty;
+        existing.size = formattedSizes;
+        existing.sizesBreakdown = sizes;
+        existing.color = activeCatalogColor;
+        existing.image = matchedImage;
+        existing.baseGarmentImage = matchedImage;
+        // Purge any accidental duplicate copies
+        for (let i = cart.length - 1; i >= 0; i--) {
+          if (cart[i] !== existing && cart[i].sku === p.sku && 
+              (cart[i].color || "").trim().toLowerCase() === (activeCatalogColor || "").trim().toLowerCase() && 
+              (!cart[i].branding || cart[i].branding === "Blank" || cart[i].branding === brandingDesc)) {
+            cart.splice(i, 1);
+          }
+        }
+      } else {
+        cart.push({
+          ...p,
+          id: "F8-ITEM-" + Date.now(),
+          image: matchedImage,
+          baseGarmentImage: matchedImage,
+          quantity: totalQty,
+          qty: totalQty,
+          color: activeCatalogColor,
+          size: formattedSizes,
+          sizesBreakdown: sizes,
+          branding: brandingDesc,
+          originStudio: "Product Catalog",
+          customizationType: null,
+          logoData: null
+        });
+      }
+      
+      saveCart();
+      renderCart();
+      showToast("Added to cart successfully!", "success", 4000);
+      window.location.href = "checkout.html";
+    };
+  }
 }
 
 // Form Validation UI
