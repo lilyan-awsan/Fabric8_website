@@ -27,11 +27,11 @@
     },
     {
       "enabled": true,
-      "name": "Healthcare"
+      "name": "Industrial"
     },
     {
       "enabled": true,
-      "name": "Industrial"
+      "name": "Healthcare"
     },
     {
       "enabled": false,
@@ -40,6 +40,10 @@
     {
       "enabled": false,
       "name": "Aviation"
+    },
+    {
+      "enabled": true,
+      "name": "Automotive"
     }
   ],
   "categories2ndLayer": [
@@ -62,6 +66,10 @@
     {
       "enabled": true,
       "name": "ACCESSORIES"
+    },
+    {
+      "enabled": true,
+      "name": "FOOT WEAR"
     }
   ],
   "footerLegal": "© 2026 Fabric8. All rights reserved. Custom Workwear &amp; Uniform Solutions.",
@@ -140,6 +148,12 @@
       "id": "brand_visiotech",
       "name": "VISIOTECH",
       "src": "assets/site_images/visiotech.png"
+    },
+    {
+      "id": "brand_1789255405258",
+      "name": "test",
+      "src": "assets/site_images/1789255411908_7_test.png",
+      "fileName": "Screenshot 2026-09-13 015804.png"
     }
   ]
 }
