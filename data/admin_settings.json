@@ -86,14 +86,17 @@
     "aboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.",
     "contactEmail": "hello@thefabric8.com",
     "contactEmailTitle": "Direct Email",
-    "contactGlobalText": "USA: +1 770-710-2286\nJordan: +962 796 788 240",
+    "contactGlobalText": "USA: +1 770-710-2286\nJordan: +962 796 788 240\nYemen: +967 1 234 567",
     "contactGlobalTitle": "Global Contact",
     "contactHQ": "6290 Jimmy Carter Blvd Suite 202\nNorcross, GA 30071\nUnited States",
     "contactHQTitle": "Corporate Headquarters",
+    "contactHeroSub": "We're ready to discuss your next uniform program.",
+    "contactHeroTag": "Get in Touch",
+    "contactHeroTitle": "Contact Us",
     "contactInquiryTitle": "Send an Inquiry",
     "contactJordan": "+962 796 788 240",
     "contactUSA": "+1 770-710-2286",
-    "footerContactHtml": "6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br>United States<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href=\"contact.html\" style=\"color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;\">Contact Us</a>",
+    "footerContactHtml": "6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br>United States<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br>Yemen: +967 1 234 567<br><a href=\"contact.html\" style=\"color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;\">Contact Us</a>",
     "footerLegalLinksHtml": "<a href=\"privacy.html\" style=\"color: #aaa; text-decoration: none;\">Privacy Policy</a><br><a href=\"terms.html\" style=\"color: #aaa; text-decoration: none;\">Terms &amp; Conditions</a>",
     "footerOverviewHtml": "<a href=\"services.html\" style=\"color: #aaa; text-decoration: none;\">Services</a>\n<a href=\"method.html\" style=\"color: #aaa; text-decoration: none;\">The Fabric 8 Method</a>\n<a href=\"sectors.html\" style=\"color: #aaa; text-decoration: none;\">Sectors</a>\n<a href=\"shop.html\" style=\"color: #aaa; text-decoration: none;\">Shop</a>\n<a href=\"about.html\" style=\"color: #aaa; text-decoration: none;\">About Us</a>",
     "heroImage": "assets/site_images/1789255831857_bg_0_1787516075822_img.webp",
@@ -122,7 +125,7 @@
         "id": "linkedin",
         "name": "LinkedIn",
         "shape": "square",
-        "url": "https://www.linkedin.com/company/thefabric8"
+        "url": "https://www.linkedin.com/company/the-fabric8/"
       },
       {
         "active": true,
@@ -130,7 +133,7 @@
         "id": "instagram",
         "name": "Instagram",
         "shape": "square",
-        "url": "https://www.instagram.com/thefabric8"
+        "url": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag=="
       },
       {
         "active": false,
@@ -141,7 +144,7 @@
         "url": ""
       },
       {
-        "active": true,
+        "active": false,
         "iconKey": "telegram",
         "id": "social_1789419780270",
         "name": "Telegram",
@@ -149,8 +152,8 @@
         "url": "https://thefabric8.com"
       }
     ],
-    "socialInstagram": "https://www.instagram.com/thefabric8",
-    "socialLinkedIn": "https://www.linkedin.com/company/thefabric8"
+    "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
+    "socialLinkedIn": "https://www.linkedin.com/company/the-fabric8/"
   },
   "brandLogos": [
     {
@@ -187,18 +190,6 @@
       "id": "brand_visiotech",
       "name": "VISIOTECH",
       "src": "assets/site_images/visiotech.png"
-    },
-    {
-      "fileName": "VISIOTECH PNG NAVY.png",
-      "id": "brand_1789337273247",
-      "name": "VISIOTECH",
-      "src": "assets/site_images/1789337276782_7_visiotech.png"
-    },
-    {
-      "fileName": "New Log Small.png",
-      "id": "brand_1789354331432",
-      "name": "MeenoTek",
-      "src": "assets/site_images/1789354338656_8_meenotek.png"
     }
   ]
 }
