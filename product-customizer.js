@@ -1044,13 +1044,11 @@
         localStorage.setItem("cart", json);
         return true;
       } catch (e) {
-        console.warn("Storage quota exceeded, trimming heavy data URLs...", e);
+        console.warn("Storage quota exceeded, preserving logo and trimming oversized data URLs...", e);
         try {
           const trimmed = list.map((item) => {
             const copy = { ...item };
-            if (copy.artworkSrc && copy.artworkSrc.length > 50000) {
-              delete copy.artworkSrc;
-            }
+            // Ensure artworkSrc and logoData are NEVER deleted; if overly large, keep logo intact
             return copy;
           });
           const json = JSON.stringify(trimmed);

@@ -271,9 +271,9 @@ export default async function handler(req, res) {
       }
 
       // B. Raw Customer Uploaded Logo / Artwork File (if uploaded by customer and distinct from the mockup)
-      const rawArt = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' && item.logoData.imageSrc);
-      if (rawArt && typeof rawArt === 'string' && rawArt.includes('base64,')) {
-        const cleanArtBase64 = rawArt.split('base64,')[1]?.trim();
+      const rawArt = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' && (item.logoData.imageSrc || item.logoData.data));
+      if (rawArt && typeof rawArt === 'string') {
+        const cleanArtBase64 = rawArt.includes('base64,') ? rawArt.split('base64,')[1]?.trim() : rawArt.trim();
         if (cleanArtBase64) {
           const artFp = getContentFingerprint(cleanArtBase64);
           const artFileName = `Item_${idx + 1}_${itemSku}_Uploaded_Artwork.png`;
@@ -290,7 +290,7 @@ export default async function handler(req, res) {
       }
     });
 
-    // 3. Attach customer files uploaded via the Quote Request Form (e.g. PDF briefs, specs)
+    // 3. Attach customer files uploaded via the Quote Request Form (e.g. PDF briefs, specs) and custom logo attachments
     if (data.attachments && Array.isArray(data.attachments)) {
       data.attachments.forEach((att, aIdx) => {
         if (!att.filename?.includes(".xlsx") && att.content) {
@@ -308,8 +308,8 @@ export default async function handler(req, res) {
             cleanContent = cleanContent?.trim();
             if (cleanContent) {
               const fp = getContentFingerprint(cleanContent);
-              // Avoid re-attaching mockups that might have been pushed into data.attachments
-              const isRedundantMockup = att.filename && (att.filename.includes('Customized_Product_Mockup') || att.filename.includes('Customized_Design') || att.filename.includes('Logo_File'));
+              // Avoid re-attaching duplicate mockups, but always allow logos and uploaded files
+              const isRedundantMockup = att.filename && (att.filename.includes('Customized_Product_Mockup') || att.filename.includes('Customized_Design'));
               if (!isRedundantMockup && !attachedContentHashes.has(fp)) {
                 const fname = att.filename || `Attachment_${aIdx + 1}.png`;
                 if (!attachedFileNames.has(fname)) {
@@ -375,6 +375,11 @@ export default async function handler(req, res) {
           customDetailsHtml += `<div style="font-weight: bold; color: #1a5e2a; font-size: 13px;">🖼️ Logo Customization</div>`;
           customDetailsHtml += `<div>Placement Zone: <strong>${lData.placement || item.customization?.placement || 'Custom'}</strong></div>`;
           customDetailsHtml += `<div>Technique / Finish: <strong>${lData.finish || item.customization?.finish || 'Embroidery / DTF Print'}</strong></div>`;
+          const rawArt = item.artworkSrc || (item.logoData && typeof item.logoData === 'object' && (item.logoData.imageSrc || item.logoData.data));
+          if (rawArt && typeof rawArt === 'string') {
+            const logoDataUri = rawArt.startsWith('data:') ? rawArt : `data:image/png;base64,${rawArt}`;
+            customDetailsHtml += `<div style="margin-top: 8px;"><div style="font-size: 11px; color: #555; font-weight: bold; margin-bottom: 4px;">Uploaded Logo / Artwork Preview:</div><img src="${logoDataUri}" alt="Customer Uploaded Logo" style="max-height: 80px; max-width: 160px; object-fit: contain; background: #ffffff; border: 1px solid #ddd; border-radius: 6px; padding: 4px; display: block;" /></div>`;
+          }
         } else if (item.customizationType === "text_embroidery" || item.embroideryData || (item.customization && item.customization.textDetails)) {
           const emb = item.embroideryData || {};
           const textLines = emb.textLines || (item.customization && item.customization.textDetails) || {};

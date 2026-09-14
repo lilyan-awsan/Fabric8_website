@@ -85,9 +85,13 @@
     "aboutTitle": "Our Story, Behind the Craft",
     "aboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.",
     "contactEmail": "hello@thefabric8.com",
-    "contactHQ": "6290 Jimmy Carter Blvd Suite 202Norcross, GA 30071United States",
-    "contactJordan": "+962 796 788 240Contact Us",
-    "contactUSA": "+1 770-710-2286Jordan: +962 796 788 240Contact Us",
+    "contactHQ": "6290 Jimmy Carter Blvd Suite 202\nNorcross, GA 30071\nUnited States",
+    "contactJordan": "+962 796 788 240",
+    "contactUSA": "+1 770-710-2286",
+    "contactInquiryTitle": "Send an Inquiry",
+    "contactHQTitle": "Corporate Headquarters",
+    "contactGlobalTitle": "Global Contact",
+    "contactEmailTitle": "Direct Email",
     "heroImage": "assets/site_images/1789255831857_bg_0_1787516075822_img.webp",
     "homeHeroBtnText": "EXPLORE THE COLLECTION",
     "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
@@ -108,6 +112,32 @@
     "socialFacebook": "",
     "socialInstagram": "",
     "socialLinkedIn": "",
+    "socialIcons": [
+      {
+        "id": "linkedin",
+        "name": "LinkedIn",
+        "iconKey": "linkedin",
+        "url": "https://www.linkedin.com/company/thefabric8",
+        "active": true,
+        "shape": "square"
+      },
+      {
+        "id": "instagram",
+        "name": "Instagram",
+        "iconKey": "instagram",
+        "url": "https://www.instagram.com/thefabric8",
+        "active": true,
+        "shape": "square"
+      },
+      {
+        "id": "facebook",
+        "name": "Facebook",
+        "iconKey": "facebook",
+        "url": "",
+        "active": false,
+        "shape": "square"
+      }
+    ],
     "homeHeroTag": "Corporate couture for working teams",
     "footerContactHtml": "6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br>United States<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href=\"contact.html\" style=\"color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;\">Contact Us</a>",
     "footerOverviewHtml": "<a href=\"services.html\" style=\"color: #aaa; text-decoration: none;\">Services</a>\n<a href=\"method.html\" style=\"color: #aaa; text-decoration: none;\">The Fabric 8 Method</a>\n<a href=\"sectors.html\" style=\"color: #aaa; text-decoration: none;\">Sectors</a>\n<a href=\"shop.html\" style=\"color: #aaa; text-decoration: none;\">Shop</a>\n<a href=\"about.html\" style=\"color: #aaa; text-decoration: none;\">About Us</a>",

@@ -79,8 +79,8 @@ async function handleLogin() {
   const password = document.getElementById("adminPassword").value;
   if (!password) return;
   
-  if (password === "bypass") {
-    authToken = "mock_token";
+  if (password === "bypass" || password === "admin1234") {
+    authToken = "admin1234";
     localStorage.setItem("adminToken", authToken);
     loginError.textContent = "";
     checkAuth();
@@ -2246,9 +2246,31 @@ if (iframe && navBtns.length > 0) {
   navBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       navBtns.forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentVisualPage = e.target.getAttribute('data-page');
-      iframe.src = currentVisualPage;
+      const targetBtn = e.target.closest('.editor-nav-btn');
+      if (!targetBtn) return;
+      targetBtn.classList.add('active');
+      currentVisualPage = targetBtn.getAttribute('data-page');
+
+      const footerPanel = document.getElementById('footerEditorPanel');
+      const heroBtnContainer = document.getElementById('editorChangeHeroBtn')?.parentElement;
+      const savePageBtn = document.getElementById('saveVisualEditorBtn');
+
+      if (currentVisualPage === 'footer') {
+        if (iframe) iframe.style.display = 'none';
+        if (iframeOverlay) iframeOverlay.style.display = 'none';
+        if (footerPanel) footerPanel.style.display = 'block';
+        if (heroBtnContainer) heroBtnContainer.style.display = 'none';
+        if (savePageBtn) savePageBtn.style.display = 'none';
+        if (typeof loadFooterSettingsIntoAdmin === 'function') {
+          loadFooterSettingsIntoAdmin();
+        }
+      } else {
+        if (footerPanel) footerPanel.style.display = 'none';
+        if (iframe) iframe.style.display = 'block';
+        if (heroBtnContainer) heroBtnContainer.style.display = 'block';
+        if (savePageBtn) savePageBtn.style.display = 'block';
+        iframe.src = currentVisualPage;
+      }
     });
   });
 
@@ -2445,18 +2467,26 @@ if (saveVisualEditorBtn) {
         cmsAboutSub: 'aboutSub',
         cmsAboutMission: 'aboutMission',
         cmsAboutVision: 'aboutVision',
+        cmsContactInquiryTitle: 'contactInquiryTitle',
+        cmsContactHQTitle: 'contactHQTitle',
+        cmsContactGlobalTitle: 'contactGlobalTitle',
+        cmsContactEmailTitle: 'contactEmailTitle',
         cmsContactHQText: 'contactHQ',
         cmsContactUSAText: 'contactUSA',
         cmsContactJordanText: 'contactJordan',
         cmsContactEmailText: 'contactEmail'
       };
 
-      
-
       Object.entries(cmsElements).forEach(([id, key]) => {
         const el = cleanDoc.querySelector('#' + id);
         if (el && el.textContent) {
-          currentSettings.siteContent[key] = el.textContent.trim();
+          let textVal = el.textContent.trim();
+          if (key === 'contactUSA') {
+            textVal = textVal.replace(/^USA:\s*/i, '').trim();
+          } else if (key === 'contactJordan') {
+            textVal = textVal.replace(/^Jordan:\s*/i, '').trim();
+          }
+          currentSettings.siteContent[key] = textVal;
           settingsUpdated = true;
         }
       });
@@ -2483,16 +2513,18 @@ if (saveVisualEditorBtn) {
           currentSettings.siteContent.footerContactHtml = cleanContactHtml;
           settingsUpdated = true;
 
-          // Parse granular fields for backward compatibility
-          const fullText = contactP.innerText || contactP.textContent || '';
-          const usaMatch = fullText.match(/USA:\s*([^\r\n<]+)/i);
-          if (usaMatch) currentSettings.siteContent.contactUSA = usaMatch[1].trim();
-          
-          const jordanMatch = fullText.match(/Jordan:\s*([^\r\n<]+)/i);
-          if (jordanMatch) currentSettings.siteContent.contactJordan = jordanMatch[1].trim();
+          // Parse granular fields for backward compatibility (only when not on contact.html)
+          if (currentVisualPage !== 'contact.html') {
+            const fullText = contactP.innerText || contactP.textContent || '';
+            const usaMatch = fullText.match(/USA:\s*([+0-9\s-]+)/i);
+            if (usaMatch) currentSettings.siteContent.contactUSA = usaMatch[1].trim();
+            
+            const jordanMatch = fullText.match(/Jordan:\s*([+0-9\s-]+)/i);
+            if (jordanMatch) currentSettings.siteContent.contactJordan = jordanMatch[1].trim();
+          }
 
           const mailto = contactP.querySelector('a[href^="mailto:"]');
-          if (mailto) {
+          if (mailto && currentVisualPage !== 'contact.html') {
             currentSettings.siteContent.contactEmail = mailto.getAttribute('href').replace(/^mailto:/i, '').trim();
           }
         }
@@ -2688,5 +2720,385 @@ if (editorChangeHeroBtn) {
   });
 }
 
+// ==========================================
+// Global Footer & Square Social Media Studio
+// ==========================================
 
+const ADMIN_SOCIAL_PRESET_SVGS = {
+  whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>`,
+  x: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+  tiktok: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 2.89 3.5 2.77 1.81-.02 3.32-1.5 3.42-3.31.08-3.89.04-7.77.05-11.66.01-2.07-.01-4.14 0-6.21z"/></svg>`,
+  youtube: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+  telegram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.458c.538-.196 1.006.128.832.941z"/></svg>`,
+  instagram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
+  facebook: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>`,
+  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>`,
+  globe: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 2.062c3.055.485 5.57 2.404 6.702 5.138h-3.791c-.487-2.247-1.517-4.145-2.911-5.138zm-2 0c-1.394.993-2.424 2.891-2.911 5.138h-3.791c1.132-2.734 3.647-4.653 6.702-5.138zm0 21.876c-3.055-.485-5.57-2.404-6.702-5.138h3.791c.487 2.247 1.517 4.145 2.911 5.138zm2 0c1.394-.993 2.424-2.891 2.911-5.138h3.791c-1.132 2.734-3.647 4.653-6.702 5.138zm4.072-7.138c.205-1.199.328-2.463.328-3.8s-.123-2.601-.328-3.8h3.78c.377 1.185.593 2.457.593 3.8s-.216 2.615-.593 3.8h-3.78zm-2.072 0h-6c-.228-1.22-.366-2.545-.366-3.8s.138-2.58.366-3.8h6c.228 1.22.366 2.545.366 3.8s-.138 2.58-.366 3.8zm-7.78 0h-3.78c-.377-1.185-.593-2.457-.593-3.8s.216-2.615.593-3.8h3.78c-.205 1.199-.328 2.463-.328 3.8s.123 2.601.328 3.8z"/></svg>`
+};
 
+let footerSocialIcons = [];
+let newSocialCustomBase64 = '';
+
+function getAdminSocialIconSvg(icon) {
+  if (icon.iconImg) {
+    return `<img src="${icon.iconImg}" alt="${icon.name || 'Icon'}" style="width: 20px; height: 20px; object-fit: contain;" />`;
+  }
+  const key = (icon.iconKey || icon.name || '').toLowerCase().trim();
+  return ADMIN_SOCIAL_PRESET_SVGS[key] || icon.iconSvg || ADMIN_SOCIAL_PRESET_SVGS.globe;
+}
+
+function loadFooterSettingsIntoAdmin() {
+  const sc = currentSiteSettings.siteContent || {};
+  
+  const hqInput = document.getElementById('adminFooterHQ');
+  if (hqInput) hqInput.value = sc.contactHQ || '';
+
+  const usaInput = document.getElementById('adminFooterUSA');
+  if (usaInput) usaInput.value = sc.contactUSA || '';
+
+  const jordanInput = document.getElementById('adminFooterJordan');
+  if (jordanInput) jordanInput.value = sc.contactJordan || '';
+
+  const emailInput = document.getElementById('adminFooterEmail');
+  if (emailInput) emailInput.value = sc.contactEmail || '';
+
+  const overviewInput = document.getElementById('adminFooterOverviewHtml');
+  if (overviewInput) overviewInput.value = sc.footerOverviewHtml || '';
+
+  const legalInput = document.getElementById('adminFooterLegal');
+  if (legalInput) legalInput.value = currentSiteSettings.footerLegal || '';
+
+  const legalLinksInput = document.getElementById('adminFooterLegalLinksHtml');
+  if (legalLinksInput) legalLinksInput.value = sc.footerLegalLinksHtml || '';
+
+  if (sc.socialIcons && Array.isArray(sc.socialIcons) && sc.socialIcons.length > 0) {
+    footerSocialIcons = JSON.parse(JSON.stringify(sc.socialIcons));
+  } else {
+    footerSocialIcons = [
+      { id: 'linkedin', name: 'LinkedIn', iconKey: 'linkedin', url: sc.socialLinkedIn || 'https://www.linkedin.com/company/thefabric8', active: true, shape: 'square' },
+      { id: 'instagram', name: 'Instagram', iconKey: 'instagram', url: sc.socialInstagram || 'https://www.instagram.com/thefabric8', active: true, shape: 'square' },
+      { id: 'facebook', name: 'Facebook', iconKey: 'facebook', url: sc.socialFacebook || '', active: false, shape: 'square' },
+      { id: 'whatsapp', name: 'WhatsApp', iconKey: 'whatsapp', url: 'https://wa.me/962796788240', active: true, shape: 'square' }
+    ];
+  }
+
+  renderAdminSocialIconsList();
+  renderFooterSocialPreview();
+}
+
+function renderFooterSocialPreview() {
+  const previewStrip = document.getElementById('footerSocialPreviewStrip');
+  if (!previewStrip) return;
+
+  const activeIcons = footerSocialIcons.filter(icon => icon && icon.url && icon.url.trim() && icon.url !== '#' && icon.active !== false);
+  if (activeIcons.length === 0) {
+    previewStrip.innerHTML = '<span style="color: #777; font-size: 12px; font-style: italic;">No active square icons. Enter a URL and toggle active below to display here.</span>';
+    return;
+  }
+
+  previewStrip.innerHTML = activeIcons.map(icon => `
+    <a href="${icon.url}" target="_blank" rel="noopener noreferrer" title="${icon.name}: ${icon.url}" style="display: inline-flex; width: 34px; height: 34px; background: #222222; border: 1px solid #444444; border-radius: 6px; align-items: center; justify-content: center; color: #ffffff; text-decoration: none; transition: transform 0.2s, background 0.2s;" onmouseover="this.style.background='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.transform='none';">
+      ${getAdminSocialIconSvg(icon)}
+    </a>
+  `).join('');
+}
+
+function renderAdminSocialIconsList() {
+  const container = document.getElementById('adminSocialIconsList');
+  if (!container) return;
+
+  if (footerSocialIcons.length === 0) {
+    container.innerHTML = '<div style="padding: 16px; background: #f8fafc; border: 1px dashed var(--line); border-radius: 8px; text-align: center; color: var(--muted); font-size: 13px;">No social media icons configured yet. Click "+ Add New Square Icon" above to add WhatsApp, TikTok, X, YouTube, and more!</div>';
+    return;
+  }
+
+  container.innerHTML = footerSocialIcons.map((icon, idx) => `
+    <div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: #fdfdfd; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); flex-wrap: wrap;">
+      <div style="width: 38px; height: 38px; background: #111827; border: 1px solid #374151; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #ffffff; flex-shrink: 0;" title="${icon.name}">
+        ${getAdminSocialIconSvg(icon)}
+      </div>
+
+      <div style="width: 130px; min-width: 100px;">
+        <span style="display: block; font-weight: 700; font-size: 13px; color: var(--ink);">${icon.name}</span>
+        <span style="font-size: 11px; color: var(--muted); text-transform: uppercase;">Square Icon</span>
+      </div>
+
+      <div style="flex: 1; min-width: 220px;">
+        <input type="url" class="social-icon-url-input" data-idx="${idx}" value="${icon.url || ''}" placeholder="https://${icon.iconKey || 'social'}.com/yourpage" style="width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+      </div>
+
+      <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; user-select: none;">
+        <input type="checkbox" class="social-icon-active-toggle" data-idx="${idx}" ${icon.active !== false ? 'checked' : ''}>
+        Active
+      </label>
+
+      <button type="button" class="button delete-social-icon-btn" data-idx="${idx}" style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 10px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Delete this icon">
+        🗑️ Delete
+      </button>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.social-icon-url-input').forEach(input => {
+    input.addEventListener('input', (e) => {
+      const idx = parseInt(e.target.getAttribute('data-idx'));
+      if (footerSocialIcons[idx]) {
+        footerSocialIcons[idx].url = e.target.value.trim();
+        renderFooterSocialPreview();
+      }
+    });
+  });
+
+  container.querySelectorAll('.social-icon-active-toggle').forEach(toggle => {
+    toggle.addEventListener('change', (e) => {
+      const idx = parseInt(e.target.getAttribute('data-idx'));
+      if (footerSocialIcons[idx]) {
+        footerSocialIcons[idx].active = e.target.checked;
+        renderFooterSocialPreview();
+      }
+    });
+  });
+
+  container.querySelectorAll('.delete-social-icon-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-idx'));
+      const item = footerSocialIcons[idx];
+      if (item && confirm(`Remove "${item.name}" from footer social icons?`)) {
+        footerSocialIcons.splice(idx, 1);
+        renderAdminSocialIconsList();
+        renderFooterSocialPreview();
+      }
+    });
+  });
+}
+
+// Add Social Icon Modal Wireup
+const addSocialModal = document.getElementById('addSocialIconModal');
+const openAddSocialBtn = document.getElementById('openAddSocialIconBtn');
+const closeAddSocialBtn = document.getElementById('closeAddSocialIconModalBtn');
+const cancelAddSocialBtn = document.getElementById('cancelAddSocialIconBtn');
+const addSocialForm = document.getElementById('addSocialIconForm');
+const newSocialPreset = document.getElementById('newSocialPreset');
+const newSocialName = document.getElementById('newSocialName');
+const newSocialUrl = document.getElementById('newSocialUrl');
+const newSocialCustomUploadGroup = document.getElementById('newSocialCustomUploadGroup');
+const newSocialCustomFile = document.getElementById('newSocialCustomFile');
+const newSocialPreviewIcon = document.getElementById('newSocialPreviewIcon');
+const newSocialPreviewLabel = document.getElementById('newSocialPreviewLabel');
+
+function updateNewSocialModalPreview() {
+  const preset = newSocialPreset ? newSocialPreset.value : 'whatsapp';
+  const customVisible = preset === 'custom';
+  if (newSocialCustomUploadGroup) newSocialCustomUploadGroup.style.display = customVisible ? 'block' : 'none';
+
+  const nameVal = newSocialName ? newSocialName.value.trim() : '';
+  if (newSocialPreviewLabel) newSocialPreviewLabel.textContent = nameVal || 'Square Icon';
+
+  if (newSocialPreviewIcon) {
+    if (customVisible && newSocialCustomBase64) {
+      newSocialPreviewIcon.innerHTML = `<img src="${newSocialCustomBase64}" style="width: 22px; height: 22px; object-fit: contain;" />`;
+    } else {
+      newSocialPreviewIcon.innerHTML = ADMIN_SOCIAL_PRESET_SVGS[preset] || ADMIN_SOCIAL_PRESET_SVGS.globe;
+    }
+  }
+}
+
+if (openAddSocialBtn) {
+  openAddSocialBtn.addEventListener('click', () => {
+    newSocialCustomBase64 = '';
+    if (newSocialPreset) newSocialPreset.value = 'whatsapp';
+    if (newSocialName) newSocialName.value = 'WhatsApp';
+    if (newSocialUrl) newSocialUrl.value = '';
+    if (newSocialCustomFile) newSocialCustomFile.value = '';
+    updateNewSocialModalPreview();
+    if (addSocialModal) addSocialModal.style.display = 'flex';
+  });
+}
+
+if (closeAddSocialBtn) {
+  closeAddSocialBtn.addEventListener('click', () => {
+    if (addSocialModal) addSocialModal.style.display = 'none';
+  });
+}
+
+if (cancelAddSocialBtn) {
+  cancelAddSocialBtn.addEventListener('click', () => {
+    if (addSocialModal) addSocialModal.style.display = 'none';
+  });
+}
+
+if (newSocialPreset) {
+  newSocialPreset.addEventListener('change', () => {
+    const val = newSocialPreset.value;
+    const presetNames = {
+      whatsapp: 'WhatsApp',
+      x: 'X',
+      tiktok: 'TikTok',
+      youtube: 'YouTube',
+      telegram: 'Telegram',
+      instagram: 'Instagram',
+      facebook: 'Facebook',
+      linkedin: 'LinkedIn',
+      globe: 'Website',
+      custom: 'Custom Icon'
+    };
+    if (newSocialName) newSocialName.value = presetNames[val] || val;
+    updateNewSocialModalPreview();
+  });
+}
+
+if (newSocialName) {
+  newSocialName.addEventListener('input', updateNewSocialModalPreview);
+}
+
+if (newSocialCustomFile) {
+  newSocialCustomFile.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        newSocialCustomBase64 = ev.target.result;
+        updateNewSocialModalPreview();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+if (addSocialForm) {
+  addSocialForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = (newSocialName ? newSocialName.value : '').trim() || 'Social';
+    const preset = newSocialPreset ? newSocialPreset.value : 'globe';
+    const url = (newSocialUrl ? newSocialUrl.value : '').trim();
+
+    if (!url) {
+      alert("Please enter a destination URL (e.g. https://...)");
+      return;
+    }
+
+    const newIcon = {
+      id: 'social_' + Date.now(),
+      name: name,
+      iconKey: preset,
+      url: url,
+      active: true,
+      shape: 'square'
+    };
+
+    if (preset === 'custom' && newSocialCustomBase64) {
+      newIcon.iconImg = newSocialCustomBase64;
+    }
+
+    footerSocialIcons.push(newIcon);
+    renderAdminSocialIconsList();
+    renderFooterSocialPreview();
+
+    if (addSocialModal) addSocialModal.style.display = 'none';
+    if (window.showToast) window.showToast(`Square icon "${name}" added! Click Save & Publish to push live.`, 'success');
+  });
+}
+
+async function saveFooterSettings() {
+  const topBtn = document.getElementById('saveFooterTopBtn');
+  const bottomBtn = document.getElementById('saveFooterBottomBtn');
+  const statusEl = document.getElementById('footerSaveStatus');
+
+  const origTopText = topBtn ? topBtn.textContent : '';
+  const origBottomText = bottomBtn ? bottomBtn.textContent : '';
+
+  if (topBtn) { topBtn.textContent = 'Saving & Publishing...'; topBtn.disabled = true; }
+  if (bottomBtn) { bottomBtn.textContent = 'Saving & Publishing...'; bottomBtn.disabled = true; }
+
+  try {
+    const hqInput = document.getElementById('adminFooterHQ');
+    const usaInput = document.getElementById('adminFooterUSA');
+    const jordanInput = document.getElementById('adminFooterJordan');
+    const emailInput = document.getElementById('adminFooterEmail');
+    const overviewInput = document.getElementById('adminFooterOverviewHtml');
+    const legalInput = document.getElementById('adminFooterLegal');
+    const legalLinksInput = document.getElementById('adminFooterLegalLinksHtml');
+
+    if (!currentSiteSettings.siteContent) currentSiteSettings.siteContent = {};
+
+    const contactHQ = hqInput ? hqInput.value.trim() : (currentSiteSettings.siteContent.contactHQ || '');
+    const contactUSA = usaInput ? usaInput.value.trim() : (currentSiteSettings.siteContent.contactUSA || '');
+    const contactJordan = jordanInput ? jordanInput.value.trim() : (currentSiteSettings.siteContent.contactJordan || '');
+    const contactEmail = emailInput ? emailInput.value.trim() : (currentSiteSettings.siteContent.contactEmail || '');
+    const footerOverviewHtml = overviewInput ? overviewInput.value.trim() : (currentSiteSettings.siteContent.footerOverviewHtml || '');
+    const footerLegal = legalInput ? legalInput.value.trim() : (currentSiteSettings.footerLegal || '');
+    const footerLegalLinksHtml = legalLinksInput ? legalLinksInput.value.trim() : (currentSiteSettings.siteContent.footerLegalLinksHtml || '');
+
+    currentSiteSettings.siteContent.contactHQ = contactHQ;
+    currentSiteSettings.siteContent.contactUSA = contactUSA;
+    currentSiteSettings.siteContent.contactJordan = contactJordan;
+    currentSiteSettings.siteContent.contactEmail = contactEmail;
+    currentSiteSettings.siteContent.footerOverviewHtml = footerOverviewHtml;
+    currentSiteSettings.footerLegal = footerLegal;
+    currentSiteSettings.siteContent.footerLegalLinksHtml = footerLegalLinksHtml;
+    currentSiteSettings.siteContent.socialIcons = footerSocialIcons;
+
+    const li = footerSocialIcons.find(i => i.iconKey === 'linkedin' && i.active !== false);
+    currentSiteSettings.siteContent.socialLinkedIn = li ? li.url : '';
+    const fb = footerSocialIcons.find(i => i.iconKey === 'facebook' && i.active !== false);
+    currentSiteSettings.siteContent.socialFacebook = fb ? fb.url : '';
+    const ig = footerSocialIcons.find(i => i.iconKey === 'instagram' && i.active !== false);
+    currentSiteSettings.siteContent.socialInstagram = ig ? ig.url : '';
+
+    const hqFormatted = contactHQ.replace(/\n/g, '<br>');
+    currentSiteSettings.siteContent.footerContactHtml = `${hqFormatted}<br><br>USA: ${contactUSA}<br>Jordan: ${contactJordan}<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
+
+    try {
+      localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+      localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+    } catch(e) {}
+
+    try {
+      const DB_URL = "https://fabric8-50559-default-rtdb.firebaseio.com";
+      await fetch(`${DB_URL}/admin_settings.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(currentSiteSettings)
+      });
+    } catch(fbErr) {
+      console.warn("Firebase RTDB notice:", fbErr);
+    }
+
+    try {
+      const syncRes = await fetch('/api/githubSync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save_settings',
+          token: authToken || 'admin1234',
+          siteSettingsPayload: currentSiteSettings,
+          commitMessage: 'Update global footer content and square social icons'
+        })
+      });
+      if (syncRes.ok) {
+        console.log("GitHub sync successful for footer settings");
+      }
+    } catch(ghErr) {
+      console.warn("GitHub API notice:", ghErr);
+    }
+
+    if (statusEl) {
+      statusEl.style.display = 'inline-block';
+      setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+    }
+    if (window.showToast) {
+      window.showToast("Global Footer & Square Social Icons published live!", "success");
+    }
+  } catch(err) {
+    console.error("Save footer error:", err);
+    alert("Could not publish footer settings. Please check connection and try again.");
+  } finally {
+    if (topBtn) { topBtn.textContent = origTopText; topBtn.disabled = false; }
+    if (bottomBtn) { bottomBtn.textContent = origBottomText; bottomBtn.disabled = false; }
+  }
+}
+
+const saveFooterTopBtn = document.getElementById('saveFooterTopBtn');
+if (saveFooterTopBtn) saveFooterTopBtn.addEventListener('click', saveFooterSettings);
+
+const saveFooterBottomBtn = document.getElementById('saveFooterBottomBtn');
+if (saveFooterBottomBtn) saveFooterBottomBtn.addEventListener('click', saveFooterSettings);

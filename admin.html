@@ -231,10 +231,11 @@
               <button class="editor-nav-btn" data-page="sectors.html">Sectors</button>
               <button class="editor-nav-btn" data-page="shop.html">Shop & Filters</button>
               <button class="editor-nav-btn" data-page="contact.html">Contact</button>
+              <button class="editor-nav-btn" data-page="footer" id="editorNavFooterBtn" style="border-top: 1px solid var(--line); margin-top: 4px; padding-top: 8px;">⚙️ Footer</button>
             </div>
             
             <!-- Quick Hero Photo Button -->
-            <div style="margin-top: 6px; padding-top: 10px; border-top: 1px dashed var(--line); display: flex; flex-direction: column; gap: 6px;">
+            <div id="editorQuickHeroContainer" style="margin-top: 6px; padding-top: 10px; border-top: 1px dashed var(--line); display: flex; flex-direction: column; gap: 6px;">
               <input type="file" id="editorHeroFileInput" accept="image/*" style="display: none;">
               <button id="editorChangeHeroBtn" type="button" class="button" style="width: 100%; font-size: 12px; font-weight: 800; padding: 10px; background: #0f172a; color: #ffffff; border: 2px solid #22c55e; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); text-transform: uppercase;">
                 📷 Change Hero Photo
@@ -247,10 +248,103 @@
             </div>
           </div>
           
-          <!-- Iframe Container -->
+          <!-- Iframe & Footer Panels Container -->
           <div style="flex: 1; min-width: 0; background: white; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; position: relative; height: 100%;">
             <div id="iframeOverlay" style="position: absolute; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; z-index: 10; font-weight: bold; pointer-events: none;">Loading Editor...</div>
             <iframe id="visualEditorIframe" src="index.html" style="width: 100%; height: 100%; border: none; min-width: 100%;"></iframe>
+
+            <!-- Dedicated Global Footer Management Panel -->
+            <div id="footerEditorPanel" style="display: none; width: 100%; height: 100%; overflow-y: auto; padding: 32px 36px; box-sizing: border-box; background: #fdfdfd;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--line); padding-bottom: 16px; margin-bottom: 24px;">
+                <div>
+                  <h2 style="margin: 0 0 6px; font-size: 22px; color: var(--ink);">Global Footer &amp; Social Media Studio</h2>
+                  <p style="margin: 0; font-size: 13px; color: var(--muted);">Manage the footer content, corporate contacts, legal text, and square social media icons displayed across all pages of the website.</p>
+                </div>
+                <button type="button" id="saveFooterTopBtn" class="button primary" style="padding: 10px 20px; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                  💾 Save &amp; Publish Footer
+                </button>
+              </div>
+
+              <!-- Card 1: Square Social Media Icons Management -->
+              <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                  <div>
+                    <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--ink); display: flex; align-items: center; gap: 8px;">
+                      <span style="display: inline-block; width: 12px; height: 12px; background: #2f873d; border-radius: 2px;"></span>
+                      Square Social Media Icons &amp; URLs
+                    </h3>
+                    <p style="margin: 0; font-size: 12px; color: var(--muted);">Click the square icon or enter a URL. Add new square icons (WhatsApp, X, TikTok, YouTube, etc.) with custom destination links.</p>
+                  </div>
+                  <button type="button" id="openAddSocialIconBtn" class="button" style="background: #111; color: #fff; padding: 8px 14px; font-size: 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    + Add New Square Icon
+                  </button>
+                </div>
+
+                <!-- Live Square Icons Preview Strip -->
+                <div style="background: #111111; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                  <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; font-weight: bold;">Live Footer Preview:</span>
+                  <div id="footerSocialPreviewStrip" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <!-- Dynamically populated square preview icons -->
+                  </div>
+                </div>
+
+                <!-- Social Icons Edit List -->
+                <div id="adminSocialIconsList" style="display: flex; flex-direction: column; gap: 12px;">
+                  <!-- Dynamically populated icon rows -->
+                </div>
+              </div>
+
+              <!-- Card 2: Corporate Contact Information in Footer -->
+              <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--ink);">Corporate Contact Information (Footer &amp; Contact Page)</h3>
+                <p style="margin: 0 0 16px; font-size: 12px; color: var(--muted);">These contact details automatically sync across all footers and the Contact Us page.</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div style="grid-column: 1 / -1;">
+                    <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; color: var(--ink);">Corporate Headquarters Address (Multi-line)</label>
+                    <textarea id="adminFooterHQ" rows="3" style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; box-sizing: border-box;" placeholder="6290 Jimmy Carter Blvd Suite 202&#10;Norcross, GA 30071&#10;United States"></textarea>
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; color: var(--ink);">USA Contact Phone</label>
+                    <input type="text" id="adminFooterUSA" style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; box-sizing: border-box;" placeholder="+1 770-710-2286" />
+                  </div>
+                  <div>
+                    <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; color: var(--ink);">Jordan Contact Phone</label>
+                    <input type="text" id="adminFooterJordan" style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; box-sizing: border-box;" placeholder="+962 796 788 240" />
+                  </div>
+                  <div style="grid-column: 1 / -1;">
+                    <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; color: var(--ink);">Direct Email Address</label>
+                    <input type="email" id="adminFooterEmail" style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; box-sizing: border-box;" placeholder="hello@thefabric8.com" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Overview Navigation Links & Legal -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                  <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--ink);">Footer Overview Links</h3>
+                  <p style="margin: 0 0 12px; font-size: 12px; color: var(--muted);">Navigation links rendered in the Overview column.</p>
+                  <textarea id="adminFooterOverviewHtml" rows="5" style="width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; font-family: monospace; resize: vertical; box-sizing: border-box;" placeholder="<a href=&quot;services.html&quot;>Services</a>&#10;<a href=&quot;about.html&quot;>About Us</a>"></textarea>
+                </div>
+
+                <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                  <h3 style="margin: 0 0 4px; font-size: 16px; color: var(--ink);">Legal Links &amp; Copyright Notice</h3>
+                  <p style="margin: 0 0 12px; font-size: 12px; color: var(--muted);">Bottom copyright statement &amp; legal column links.</p>
+                  <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 4px; color: var(--ink);">Copyright Statement Text</label>
+                  <input type="text" id="adminFooterLegal" style="width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; margin-bottom: 12px; box-sizing: border-box;" placeholder="© 2026 Fabric8. All rights reserved." />
+                  <label style="display: block; font-size: 11px; font-weight: bold; margin-bottom: 4px; color: var(--ink);">Legal Links HTML</label>
+                  <textarea id="adminFooterLegalLinksHtml" rows="3" style="width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; font-family: monospace; resize: vertical; box-sizing: border-box;" placeholder="<a href=&quot;privacy.html&quot;>Privacy Policy</a>&#10;<a href=&quot;terms.html&quot;>Terms &amp; Conditions</a>"></textarea>
+                </div>
+              </div>
+
+              <!-- Bottom Save Button & Status -->
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 14px; padding-top: 10px; border-top: 1px solid var(--line);">
+                <span id="footerSaveStatus" style="font-size: 13px; color: var(--green); font-weight: bold; display: none;">✅ Footer Changes Saved &amp; Published!</span>
+                <button type="button" id="saveFooterBottomBtn" class="button primary" style="padding: 12px 28px; font-size: 14px; font-weight: bold;">
+                  💾 Save &amp; Publish All Footer Changes
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div> <!-- End Settings Tab -->
@@ -514,8 +608,69 @@
     </div>
   </div>
 
+  <!-- Add Square Social Media Icon Modal -->
+  <div id="addSocialIconModal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 480px; padding: 24px; border-radius: 12px;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0; font-size: 18px; color: var(--ink); display: flex; align-items: center; gap: 8px;">
+          <span style="display: inline-block; width: 14px; height: 14px; background: #2f873d; border-radius: 3px;"></span>
+          Add Square Social Media Icon
+        </h2>
+        <button type="button" id="closeAddSocialIconModalBtn" class="close-btn" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #555;">&times;</button>
+      </div>
+      <form id="addSocialIconForm">
+        <div class="input-group" style="margin-bottom: 16px;">
+          <label style="font-weight: 700; display: block; margin-bottom: 6px; font-size: 13px;">Platform Name*</label>
+          <input type="text" id="newSocialName" placeholder="e.g. WhatsApp, TikTok, X, YouTube..." required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+        
+        <div class="input-group" style="margin-bottom: 16px;">
+          <label style="font-weight: 700; display: block; margin-bottom: 6px; font-size: 13px;">Choose Preset Icon</label>
+          <select id="newSocialPreset" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; background: #fff; box-sizing: border-box;">
+            <option value="whatsapp">WhatsApp</option>
+            <option value="x">X (formerly Twitter)</option>
+            <option value="tiktok">TikTok</option>
+            <option value="youtube">YouTube</option>
+            <option value="telegram">Telegram</option>
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="globe">Globe / Official Website</option>
+            <option value="custom">Custom Image Upload</option>
+          </select>
+        </div>
+
+        <div id="newSocialCustomUploadGroup" class="input-group" style="margin-bottom: 16px; display: none;">
+          <label style="font-weight: 700; display: block; margin-bottom: 6px; font-size: 13px;">Upload Square Icon / Logo (PNG, SVG)</label>
+          <input type="file" id="newSocialCustomFile" accept="image/png, image/svg+xml, image/jpeg, image/webp" style="width: 100%; padding: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+          <label style="font-weight: 700; display: block; margin-bottom: 6px; font-size: 13px;">Destination URL*</label>
+          <input type="url" id="newSocialUrl" placeholder="https://..." required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; box-sizing: border-box;">
+        </div>
+
+        <!-- Live Square Icon Preview -->
+        <div style="margin-bottom: 22px; padding: 14px; background: #111; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="color: #aaa; font-size: 12px; font-weight: bold;">Icon Appearance:</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div id="newSocialPreviewIcon" style="width: 38px; height: 38px; background: #222; border: 1px solid #444; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff;">
+              <!-- Dynamic preview svg -->
+            </div>
+            <span id="newSocialPreviewLabel" style="color: #fff; font-size: 13px; font-weight: bold;">WhatsApp</span>
+          </div>
+        </div>
+
+        <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 16px;">
+          <button type="button" id="cancelAddSocialIconBtn" class="button outline">Cancel</button>
+          <button type="submit" class="button primary" style="background: var(--green); color: white; padding: 10px 22px; font-weight: bold;">Add Square Icon</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Firebase SDK via CDN -->
-  <script type="module" src="admin.js?v=39"></script>
+  <script type="module" src="admin.js?v=40"></script>
 </body>
 </html>
 
