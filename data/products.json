@@ -761,12 +761,9 @@
       "Light Grey",
       "Navy",
       "Red",
-      "Yellow",
-      "yee"
+      "Yellow"
     ],
-    "colorHexMap": {
-      "yee": "#b3e93f"
-    },
+    "colorHexMap": {},
     "colorImageMap": {
       "White": "assets/products/Cap White Back.webp",
       "American Blue": "assets/products/Cap American Blue.webp",
@@ -779,8 +776,7 @@
       "Light Grey": "assets/products/Cap Light Grey.webp",
       "Navy": "assets/products/Cap Navy.webp",
       "Red": "assets/products/Cap Red.webp",
-      "Yellow": "assets/products/Cap Yellow 2.webp",
-      "yee": "assets/products/1789421976195_yee_promoImage_Fabric_8_P_logo_Colored.png"
+      "Yellow": "assets/products/Cap Yellow 2.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -840,8 +836,7 @@
       "assets/products/Cap Light Grey.webp",
       "assets/products/Cap Navy.webp",
       "assets/products/Cap Red.webp",
-      "assets/products/Cap Yellow 2.webp",
-      "assets/products/1789421976195_yee_promoImage_Fabric_8_P_logo_Colored.png"
+      "assets/products/Cap Yellow 2.webp"
     ],
     "image": "assets/products/Cap White.webp"
   },
