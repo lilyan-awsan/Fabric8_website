@@ -735,7 +735,7 @@
     "id": "F8-010",
     "sku": "F8-010",
     "name": "Caps",
-    "category": "Accessories",
+    "category": "TOP WEAR",
     "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Adjustable branded cap for outdoor or retail teams.",
@@ -822,9 +822,14 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
+    "image": "assets/products/Cap American Blue.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 1
+    },
     "images": [
-      "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
+      "assets/products/Cap White.webp",
       "assets/products/Cap White Side.webp",
       "assets/products/Cap White Back.webp",
       "assets/products/Cap Black.webp",
@@ -837,8 +842,7 @@
       "assets/products/Cap Navy.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap Yellow 2.webp"
-    ],
-    "image": "assets/products/Cap White.webp"
+    ]
   },
   {
     "sku": "F8-011",
