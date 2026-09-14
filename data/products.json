@@ -735,7 +735,7 @@
     "id": "F8-010",
     "sku": "F8-010",
     "name": "Caps",
-    "category": "Head Wear",
+    "category": "Accessories",
     "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Adjustable branded cap for outdoor or retail teams.",
@@ -761,8 +761,27 @@
       "Light Grey",
       "Navy",
       "Red",
-      "Yellow"
+      "Yellow",
+      "yee"
     ],
+    "colorHexMap": {
+      "yee": "#b3e93f"
+    },
+    "colorImageMap": {
+      "White": "assets/products/Cap White Back.webp",
+      "American Blue": "assets/products/Cap American Blue.webp",
+      "Black": "assets/products/Cap Black.webp",
+      "Brown": "assets/products/Cap Brown.webp",
+      "Burgundy": "assets/products/Cap Burgundy.webp",
+      "Charcoal": "assets/products/Cap Charcoal.webp",
+      "Green": "assets/products/Cap Green.webp",
+      "Kiwi": "assets/products/Cap Kiwi 2.webp",
+      "Light Grey": "assets/products/Cap Light Grey.webp",
+      "Navy": "assets/products/Cap Navy.webp",
+      "Red": "assets/products/Cap Red.webp",
+      "Yellow": "assets/products/Cap Yellow 2.webp",
+      "yee": "assets/products/1789421976195_yee_promoImage_Fabric_8_P_logo_Colored.png"
+    },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "",
@@ -778,20 +797,20 @@
     ],
     "placements": [
       {
-        "name": "Front Center Panel",
-        "x": 55,
-        "y": 58,
-        "w": 22,
         "h": 22,
-        "r": 3
+        "name": "Front Center Panel",
+        "r": 3,
+        "w": 22,
+        "x": 55,
+        "y": 58
       },
       {
-        "name": "Side Panel",
-        "x": 33,
-        "y": 56,
-        "w": 16,
         "h": 16,
-        "r": -12
+        "name": "Side Panel",
+        "r": -12,
+        "w": 16,
+        "x": 33,
+        "y": 56
       }
     ],
     "dtfPlacements": [
@@ -821,7 +840,8 @@
       "assets/products/Cap Light Grey.webp",
       "assets/products/Cap Navy.webp",
       "assets/products/Cap Red.webp",
-      "assets/products/Cap Yellow 2.webp"
+      "assets/products/Cap Yellow 2.webp",
+      "assets/products/1789421976195_yee_promoImage_Fabric_8_P_logo_Colored.png"
     ],
     "image": "assets/products/Cap White.webp"
   },
