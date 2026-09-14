@@ -143,22 +143,7 @@ export default async function handler(req, res) {
       };
       if (currentHtmlSha) bodyPayload.sha = currentHtmlSha;
 
-      const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-        method: 'PUT',
-        headers: { 
-          'Authorization': `Bearer ${githubToken}`, 
-          'Content-Type': 'application/json',
-          'User-Agent': 'Fabric8-Admin'
-        },
-        body: JSON.stringify(bodyPayload)
-      });
-
-      if (!updateRes.ok) {
-        const err = await updateRes.json();
-        throw new Error("Failed to save HTML to server: " + err.message);
-      }
-
-      // If siteSettingsPayload is provided, update data/admin_settings.json & Firebase atomically
+      // If siteSettingsPayload is provided, update data/admin_settings.json & Firebase atomically BEFORE saving HTML
       if (siteSettingsPayload && typeof siteSettingsPayload === 'object') {
         try {
           const settingsPath = "data/admin_settings.json";
@@ -195,26 +180,50 @@ export default async function handler(req, res) {
           };
           if (currentSettingsSha) settingsPayload.sha = currentSettingsSha;
 
-          await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
-            method: 'PUT',
-            headers: { 
-              'Authorization': `Bearer ${githubToken}`, 
-              'Content-Type': 'application/json',
-              'User-Agent': 'Fabric8-Admin'
-            },
-            body: JSON.stringify(settingsPayload)
-          });
+          // Sync to Firebase Realtime DB first
+          try {
+            await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(mergedSettings)
+            });
+          } catch (fbErr) {
+            console.error("Firebase sync error:", fbErr);
+          }
 
-          // Sync to Firebase Realtime DB
-          await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(mergedSettings)
-          }).catch(e => console.error("Firebase sync error:", e));
+          // Commit updated settings to GitHub
+          try {
+            await fetch(`https://api.github.com/repos/${repo}/contents/${settingsPath}`, {
+              method: 'PUT',
+              headers: { 
+                'Authorization': `Bearer ${githubToken}`, 
+                'Content-Type': 'application/json',
+                'User-Agent': 'Fabric8-Admin'
+              },
+              body: JSON.stringify(settingsPayload)
+            });
+          } catch (ghErr) {
+            console.warn("GitHub settings commit notice:", ghErr);
+          }
 
         } catch (sErr) {
           console.warn("Could not save updated settings alongside HTML:", sErr);
         }
+      }
+
+      const updateRes = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
+        method: 'PUT',
+        headers: { 
+          'Authorization': `Bearer ${githubToken}`, 
+          'Content-Type': 'application/json',
+          'User-Agent': 'Fabric8-Admin'
+        },
+        body: JSON.stringify(bodyPayload)
+      });
+
+      if (!updateRes.ok) {
+        const err = await updateRes.json();
+        throw new Error("Failed to save HTML to server: " + err.message);
       }
 
       return res.status(200).json({ success: true, message: 'HTML layout saved successfully' });

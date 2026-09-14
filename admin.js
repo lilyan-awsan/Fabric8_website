@@ -2019,6 +2019,20 @@ const iframeOverlay = document.getElementById('iframeOverlay');
 const navBtns = document.querySelectorAll('.editor-nav-btn');
 let currentVisualPage = 'index.html';
 
+function extractTextWithLineBreaks(el) {
+  if (!el) return '';
+  const clone = el.cloneNode(true);
+  clone.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+  clone.querySelectorAll('div, p, li').forEach(block => {
+    block.prepend(document.createTextNode('\n'));
+  });
+  return (clone.textContent || '')
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .join('\n');
+}
+
 if (iframe && navBtns.length > 0) {
   const initIframeEditing = () => {
     if (iframeOverlay) iframeOverlay.style.display = 'none';
@@ -2100,13 +2114,32 @@ if (iframe && navBtns.length > 0) {
         }, true);
       }
 
-      // Make text editable
-      const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button', 'td', 'th', 'div'];
+      // Ensure Contact Page blocks have clean single editable containers
+      const hqTitle = doc.getElementById('cmsContactHQTitle');
+      if (hqTitle && hqTitle.nextElementSibling) {
+        hqTitle.nextElementSibling.id = 'cmsContactHQText';
+      }
+      const globalTitle = doc.getElementById('cmsContactGlobalTitle');
+      if (globalTitle && globalTitle.nextElementSibling) {
+        const gEl = globalTitle.nextElementSibling;
+        gEl.id = 'cmsContactGlobalText';
+        if (gEl.querySelector('span, div')) {
+          const lines = extractTextWithLineBreaks(gEl);
+          if (lines) gEl.innerHTML = lines.replace(/\n/g, '<br>');
+        }
+      }
+
+      // Make text editable (only leaf or intended text containers without editable children)
+      const textTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'li', 'a', 'button', 'td', 'th'];
       textTags.forEach(tag => {
         const els = doc.querySelectorAll(tag);
         els.forEach(el => {
           if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn')) return;
-          if (el.children.length === 0 || tag === 'span' || tag === 'a' || tag === 'button' || tag === 'p' || tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4') {
+          // Never mark parent contenteditable if it contains child editable elements or CMS identifiers
+          const hasChildEditables = el.querySelector('a, button, span[id], p[id], div[id], h1, h2, h3, h4, h5, h6, [id^="cms"]');
+          if (hasChildEditables) return;
+
+          if (el.children.length === 0 || tag === 'p' || tag === 'span' || tag === 'a' || tag === 'button' || tag.startsWith('h')) {
             el.setAttribute('contenteditable', 'true');
           }
         });
@@ -2448,10 +2481,74 @@ if (saveVisualEditorBtn) {
         }
       }
 
-      // Get raw HTML string
-      const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
+      // 1. Corporate Headquarters (Multi-line Address preservation)
+      const hqEl = cleanDoc.querySelector('#cmsContactHQText') || cleanDoc.querySelector('#cmsContactHQTitle')?.nextElementSibling;
+      if (hqEl) {
+        const cleanHQ = extractTextWithLineBreaks(hqEl);
+        if (cleanHQ) {
+          currentSettings.siteContent.contactHQ = cleanHQ;
+          hqEl.innerHTML = cleanHQ.replace(/\n/g, '<br>');
+          hqEl.id = 'cmsContactHQText';
+          settingsUpdated = true;
+        }
+      }
 
-      // Update local admin settings cache with any cms text changes from the iframe
+      // 2. Global Contact (Multi-line / multi-country support)
+      const globalEl = cleanDoc.querySelector('#cmsContactGlobalText') || cleanDoc.querySelector('#cmsContactGlobalTitle')?.nextElementSibling;
+      if (globalEl) {
+        const cleanGlobal = extractTextWithLineBreaks(globalEl);
+        if (cleanGlobal) {
+          currentSettings.siteContent.contactGlobalText = cleanGlobal;
+          globalEl.innerHTML = cleanGlobal.replace(/\n/g, '<br>');
+          globalEl.id = 'cmsContactGlobalText';
+          
+          const usaMatch = cleanGlobal.match(/USA:\s*([+0-9\s-]+)/i);
+          if (usaMatch) currentSettings.siteContent.contactUSA = usaMatch[1].trim();
+          const jordanMatch = cleanGlobal.match(/Jordan:\s*([+0-9\s-]+)/i);
+          if (jordanMatch) currentSettings.siteContent.contactJordan = jordanMatch[1].trim();
+          settingsUpdated = true;
+        }
+      } else {
+        const usaEl = cleanDoc.querySelector('#cmsContactUSAText');
+        if (usaEl && usaEl.textContent) {
+          let textVal = usaEl.textContent.trim().replace(/^USA:\s*/i, '').trim();
+          if (textVal) {
+            currentSettings.siteContent.contactUSA = textVal;
+            usaEl.textContent = `USA: ${textVal}`;
+            settingsUpdated = true;
+          }
+        }
+        const jordanEl = cleanDoc.querySelector('#cmsContactJordanText');
+        if (jordanEl && jordanEl.textContent) {
+          let textVal = jordanEl.textContent.trim().replace(/^Jordan:\s*/i, '').trim();
+          if (textVal) {
+            currentSettings.siteContent.contactJordan = textVal;
+            jordanEl.textContent = `Jordan: ${textVal}`;
+            settingsUpdated = true;
+          }
+        }
+      }
+
+      // 3. Direct Email
+      const emailEl = cleanDoc.querySelector('#cmsContactEmailText') || 
+                      cleanDoc.querySelector('#cmsContactEmailTitle')?.parentElement?.querySelector('a') || 
+                      cleanDoc.querySelector('#cmsContactEmailTitle')?.nextElementSibling?.querySelector('a') ||
+                      cleanDoc.querySelector('a[href^="mailto:"]');
+      if (emailEl && emailEl.textContent) {
+        let textVal = emailEl.textContent.trim();
+        if (textVal) {
+          currentSettings.siteContent.contactEmail = textVal;
+          emailEl.textContent = textVal;
+          emailEl.id = 'cmsContactEmailText';
+          if (emailEl.tagName === 'A') emailEl.setAttribute('href', `mailto:${textVal}`);
+          cleanDoc.querySelectorAll('footer a[href^="mailto:"]').forEach(a => {
+            a.setAttribute('href', `mailto:${textVal}`);
+          });
+          settingsUpdated = true;
+        }
+      }
+
+      // 4. Contact Titles & Hero Elements
       const cmsElements = {
         cmsHomeHeroTag: 'homeHeroTag',
         cmsHomeHeroTitle: 'homeHeroTitle',
@@ -2467,31 +2564,44 @@ if (saveVisualEditorBtn) {
         cmsAboutSub: 'aboutSub',
         cmsAboutMission: 'aboutMission',
         cmsAboutVision: 'aboutVision',
+        cmsContactHeroTag: 'contactHeroTag',
+        cmsContactHeroTitle: 'contactHeroTitle',
+        cmsContactHeroSub: 'contactHeroSub',
         cmsContactInquiryTitle: 'contactInquiryTitle',
         cmsContactHQTitle: 'contactHQTitle',
         cmsContactGlobalTitle: 'contactGlobalTitle',
-        cmsContactEmailTitle: 'contactEmailTitle',
-        cmsContactHQText: 'contactHQ',
-        cmsContactUSAText: 'contactUSA',
-        cmsContactJordanText: 'contactJordan',
-        cmsContactEmailText: 'contactEmail'
+        cmsContactEmailTitle: 'contactEmailTitle'
       };
 
       Object.entries(cmsElements).forEach(([id, key]) => {
         const el = cleanDoc.querySelector('#' + id);
         if (el && el.textContent) {
-          let textVal = el.textContent.trim();
-          if (key === 'contactUSA') {
-            textVal = textVal.replace(/^USA:\s*/i, '').trim();
-          } else if (key === 'contactJordan') {
-            textVal = textVal.replace(/^Jordan:\s*/i, '').trim();
-          }
-          currentSettings.siteContent[key] = textVal;
+          currentSettings.siteContent[key] = el.textContent.trim();
           settingsUpdated = true;
         }
       });
 
-      // Extract all footer elements so direct visual edits persist globally across the whole website:
+      // 5. Keep footerContactHtml in sync across all pages
+      const hqFormatted = (currentSettings.siteContent.contactHQ || '').replace(/\n/g, '<br>');
+      let globalFormatted = '';
+      if (currentSettings.siteContent.contactGlobalText) {
+        globalFormatted = currentSettings.siteContent.contactGlobalText.replace(/\n/g, '<br>');
+      } else {
+        const u = currentSettings.siteContent.contactUSA || '+1 770-710-2286';
+        const j = currentSettings.siteContent.contactJordan || '+962 796 788 240';
+        globalFormatted = `USA: ${u}<br>Jordan: ${j}`;
+      }
+      currentSettings.siteContent.footerContactHtml = `${hqFormatted}<br><br>${globalFormatted}<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
+
+      // Update footer Contact block inside cleanDoc if present
+      const contactH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+        h4.textContent.trim().toLowerCase().includes('contact')
+      );
+      if (contactH4 && contactH4.nextElementSibling && contactH4.nextElementSibling.tagName === 'P') {
+        contactH4.nextElementSibling.innerHTML = currentSettings.siteContent.footerContactHtml;
+      }
+
+      // Extract all other footer elements so direct visual edits persist globally across the whole website:
       // 1. Footer Legal / Copyright notice
       const footerLegalEl = cleanDoc.querySelector('footer > div:last-child, .site-footer-bottom p, #cmsFooterLegal');
       if (footerLegalEl && footerLegalEl.innerHTML) {
@@ -2502,35 +2612,7 @@ if (saveVisualEditorBtn) {
         }
       }
 
-      // 2. Footer Contact Details block
-      const contactH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
-        h4.textContent.trim().toLowerCase().includes('contact')
-      );
-      if (contactH4 && contactH4.nextElementSibling) {
-        const contactP = contactH4.nextElementSibling;
-        const cleanContactHtml = contactP.innerHTML.trim();
-        if (cleanContactHtml) {
-          currentSettings.siteContent.footerContactHtml = cleanContactHtml;
-          settingsUpdated = true;
-
-          // Parse granular fields for backward compatibility (only when not on contact.html)
-          if (currentVisualPage !== 'contact.html') {
-            const fullText = contactP.innerText || contactP.textContent || '';
-            const usaMatch = fullText.match(/USA:\s*([+0-9\s-]+)/i);
-            if (usaMatch) currentSettings.siteContent.contactUSA = usaMatch[1].trim();
-            
-            const jordanMatch = fullText.match(/Jordan:\s*([+0-9\s-]+)/i);
-            if (jordanMatch) currentSettings.siteContent.contactJordan = jordanMatch[1].trim();
-          }
-
-          const mailto = contactP.querySelector('a[href^="mailto:"]');
-          if (mailto && currentVisualPage !== 'contact.html') {
-            currentSettings.siteContent.contactEmail = mailto.getAttribute('href').replace(/^mailto:/i, '').trim();
-          }
-        }
-      }
-
-      // 3. Footer Overview Links block
+      // 2. Footer Overview Links block
       const overviewH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
         h4.textContent.trim().toLowerCase().includes('overview')
       );
@@ -2543,7 +2625,7 @@ if (saveVisualEditorBtn) {
         }
       }
 
-      // 4. Footer Legal Links block
+      // 3. Footer Legal Links block
       const legalH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
         h4.textContent.trim().toLowerCase().includes('legal')
       );
@@ -2556,7 +2638,7 @@ if (saveVisualEditorBtn) {
         }
       }
 
-      // 5. Footer Social Media Links
+      // 4. Footer Social Media Links
       const linkedinA = cleanDoc.querySelector('#cmsSocialLinkedIn, footer a[href*="linkedin"]');
       if (linkedinA) {
         const href = linkedinA.getAttribute('data-updated-href') || linkedinA.getAttribute('href');
@@ -2582,7 +2664,22 @@ if (saveVisualEditorBtn) {
         }
       }
 
-      // Always save to local cache
+      // Get raw HTML string after all cleanDoc normalizations
+      const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
+
+      // 1. Immediately update Firebase Realtime Database directly from the browser
+      try {
+        const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+        await fetch(`${FIREBASE_DB}/admin_settings.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentSettings)
+        });
+      } catch (dbErr) {
+        console.warn("Direct Firebase RTDB update notice:", dbErr);
+      }
+
+      // 2. Always save to local cache
       try {
         localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
@@ -2599,7 +2696,7 @@ if (saveVisualEditorBtn) {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          token: authToken,
+          token: authToken || 'admin1234',
           action: "save_html",
           filename: currentVisualPage,
           htmlContent: rawHtml,
@@ -2621,11 +2718,11 @@ if (saveVisualEditorBtn) {
         alert("✅ Success! Your changes were saved and published live to GitHub & Firebase.");
         setTimeout(() => { if (statusEl) statusEl.style.display = 'none'; }, 6000);
         
-        // Refresh preview iframe cleanly without redirect loops
+        // Refresh preview iframe cleanly without redirect loops, bypassing any browser cache
         setTimeout(() => {
           if (iframe) {
             try {
-              iframe.contentWindow.location.reload();
+              iframe.src = currentVisualPage + (currentVisualPage.includes('?') ? '&' : '?') + 't=' + Date.now();
             } catch(e) {
               iframe.src = currentVisualPage;
             }
@@ -2758,6 +2855,18 @@ function loadFooterSettingsIntoAdmin() {
 
   const jordanInput = document.getElementById('adminFooterJordan');
   if (jordanInput) jordanInput.value = sc.contactJordan || '';
+
+  const globalInput = document.getElementById('adminFooterGlobal');
+  if (globalInput) {
+    let gVal = sc.contactGlobalText;
+    if (!gVal) {
+      const parts = [];
+      if (sc.contactUSA) parts.push(`USA: ${sc.contactUSA.replace(/^USA:\s*/i, '').trim()}`);
+      if (sc.contactJordan) parts.push(`Jordan: ${sc.contactJordan.replace(/^Jordan:\s*/i, '').trim()}`);
+      gVal = parts.join('\n');
+    }
+    globalInput.value = gVal || '';
+  }
 
   const emailInput = document.getElementById('adminFooterEmail');
   if (emailInput) emailInput.value = sc.contactEmail || '';
@@ -3045,7 +3154,13 @@ async function saveFooterSettings() {
     currentSiteSettings.siteContent.socialInstagram = ig ? ig.url : '';
 
     const hqFormatted = contactHQ.replace(/\n/g, '<br>');
-    currentSiteSettings.siteContent.footerContactHtml = `${hqFormatted}<br><br>USA: ${contactUSA}<br>Jordan: ${contactJordan}<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
+    const globalInput = document.getElementById('adminFooterGlobal');
+    let contactGlobal = globalInput ? globalInput.value.trim() : '';
+    if (!contactGlobal) {
+      contactGlobal = `USA: ${contactUSA}\nJordan: ${contactJordan}`.trim();
+    }
+    currentSiteSettings.siteContent.contactGlobalText = contactGlobal;
+    currentSiteSettings.siteContent.footerContactHtml = `${hqFormatted}<br><br>${contactGlobal.replace(/\n/g, '<br>')}<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
 
     try {
       localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));

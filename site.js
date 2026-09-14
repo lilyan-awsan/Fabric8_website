@@ -192,6 +192,18 @@ function applySiteSettings() {
   }
 
   // 6. Contact Information & Global Footers Engine
+  if (sc.contactHeroTag) {
+    const el = document.getElementById('cmsContactHeroTag');
+    if (el) el.textContent = sc.contactHeroTag;
+  }
+  if (sc.contactHeroTitle) {
+    const el = document.getElementById('cmsContactHeroTitle');
+    if (el) el.textContent = sc.contactHeroTitle;
+  }
+  if (sc.contactHeroSub) {
+    const el = document.getElementById('cmsContactHeroSub');
+    if (el) el.textContent = sc.contactHeroSub;
+  }
   if (sc.contactInquiryTitle) {
     const el = document.getElementById('cmsContactInquiryTitle');
     if (el) el.textContent = sc.contactInquiryTitle;
@@ -209,21 +221,40 @@ function applySiteSettings() {
     if (el) el.textContent = sc.contactEmailTitle;
   }
   if (sc.contactHQ) {
-    const el = document.getElementById('cmsContactHQText');
+    const el = document.getElementById('cmsContactHQText') || document.getElementById('cmsContactHQTitle')?.nextElementSibling;
     if (el) el.innerHTML = sc.contactHQ.replace(/\n/g, '<br>');
   }
-  if (sc.contactUSA) {
-    const el = document.getElementById('cmsContactUSAText');
-    const cleanUsa = sc.contactUSA.replace(/^USA:\s*/i, '').trim();
-    if (el) el.textContent = `USA: ${cleanUsa}`;
+
+  // Dynamic Global Contact Text (supports multiple countries / custom lines)
+  const globalContactEl = document.getElementById('cmsContactGlobalText') || document.getElementById('cmsContactGlobalTitle')?.nextElementSibling;
+  if (globalContactEl) {
+    if (sc.contactGlobalText) {
+      globalContactEl.innerHTML = sc.contactGlobalText.replace(/\n/g, '<br>');
+    } else {
+      const parts = [];
+      if (sc.contactUSA) parts.push(`USA: ${sc.contactUSA.replace(/^USA:\s*/i, '').trim()}`);
+      if (sc.contactJordan) parts.push(`Jordan: ${sc.contactJordan.replace(/^Jordan:\s*/i, '').trim()}`);
+      if (parts.length > 0) globalContactEl.innerHTML = parts.join('<br>');
+    }
   }
-  if (sc.contactJordan) {
-    const el = document.getElementById('cmsContactJordanText');
-    const cleanJordan = sc.contactJordan.replace(/^Jordan:\s*/i, '').trim();
-    if (el) el.textContent = `Jordan: ${cleanJordan}`;
+
+  // Backward compatibility for standalone USA / Jordan spans (only if no unified global container was updated)
+  if (!globalContactEl) {
+    if (sc.contactUSA) {
+      const el = document.getElementById('cmsContactUSAText');
+      const cleanUsa = sc.contactUSA.replace(/^USA:\s*/i, '').trim();
+      if (el) el.textContent = `USA: ${cleanUsa}`;
+    }
+    if (sc.contactJordan) {
+      const el = document.getElementById('cmsContactJordanText');
+      const cleanJordan = sc.contactJordan.replace(/^Jordan:\s*/i, '').trim();
+      if (el) el.textContent = `Jordan: ${cleanJordan}`;
+    }
   }
   if (sc.contactEmail) {
-    const el = document.getElementById('cmsContactEmailText');
+    const el = document.getElementById('cmsContactEmailText') || 
+               document.getElementById('cmsContactEmailTitle')?.parentElement?.querySelector('a') || 
+               document.getElementById('cmsContactEmailTitle')?.nextElementSibling?.querySelector('a');
     if (el) {
       el.textContent = sc.contactEmail;
       el.href = `mailto:${sc.contactEmail}`;
@@ -523,10 +554,12 @@ async function loadProducts() {
   }
 
   // 3. Background Async Sync with Firebase Realtime Database (Instant Realtime Sync throttled to 60s)
+  const isInsideIframe = window.self !== window.top;
+  const forceRefresh = window.location.search.includes('t=') || isInsideIframe;
   const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
   const isCacheRecent = (Date.now() - lastSettingsSync) < 60000;
   
-  if (!isCacheRecent || !siteInitialized) {
+  if (!isCacheRecent || !siteInitialized || forceRefresh) {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
     const freshTime = Date.now();
     Promise.all([
