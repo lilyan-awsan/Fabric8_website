@@ -736,14 +736,14 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Trousers Navy Front.webp",
+    "image": "assets/products/Trousers Beige.webp",
     "mainImageSelection": {
       "type": "existing",
-      "index": 0
+      "index": 1
     },
     "images": [
-      "assets/products/Trousers Navy Front.webp",
       "assets/products/Trousers Beige.webp",
+      "assets/products/Trousers Navy Front.webp",
       "assets/products/Trousers Black back.webp",
       "assets/products/Trousers Black.webp",
       "assets/products/Trousers Charcoal.webp"
