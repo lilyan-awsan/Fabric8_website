@@ -1979,11 +1979,15 @@
     "colors": [
       "White",
       "Grey",
-      "Navy"
+      "Navy",
+      "Black"
     ],
-    "colorHexMap": {},
+    "colorHexMap": {
+      "Black": "#111111"
+    },
     "colorImageMap": {
       "White": "assets/products/Hoodie White.webp",
+      "Black": "assets/products/Hoodie Black.webp",
       "Grey": "assets/products/Hoodie grey.webp",
       "Navy": "assets/products/Hoodie Navy.webp"
     },
