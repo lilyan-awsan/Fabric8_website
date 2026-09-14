@@ -34,7 +34,50 @@ window.showToast = function(message, type = 'success', duration = 6000) {
 let products = [];
 let siteSettings = {};
 
+function populateCountrySelectors(countries) {
+  const selectors = document.querySelectorAll('.country-selector');
+  if (!selectors.length) return;
+
+  const list = (countries && Array.isArray(countries) && countries.length > 0)
+    ? countries
+    : [
+        { code: 'US', name: 'USA' },
+        { code: 'JO', name: 'Jordan' },
+        { code: 'INT', name: 'International' }
+      ];
+
+  const saved = localStorage.getItem('fabric8_selected_country') || list[0].code;
+
+  selectors.forEach(sel => {
+    sel.innerHTML = list.map(c => `<option value="${c.code || c.name}">${c.name}</option>`).join('');
+    if (list.some(c => (c.code || c.name) === saved)) {
+      sel.value = saved;
+    } else {
+      sel.value = list[0].code || list[0].name;
+    }
+
+    if (!sel.dataset.countryWired) {
+      sel.dataset.countryWired = 'true';
+      sel.addEventListener('change', function() {
+        localStorage.setItem('fabric8_selected_country', this.value);
+        selectors.forEach(s => { if (s !== this) s.value = this.value; });
+        const shipCountry = document.getElementById('shipCountry');
+        if (shipCountry) {
+          if (this.value === 'US') shipCountry.value = 'United States';
+          else if (this.value === 'JO') shipCountry.value = 'Jordan';
+          else {
+            const found = list.find(c => (c.code || c.name) === this.value);
+            if (found) shipCountry.value = found.name;
+          }
+          if (typeof updateAddressFields === 'function') updateAddressFields('ship');
+        }
+      });
+    }
+  });
+}
+
 function applySiteSettings() {
+  populateCountrySelectors(siteSettings.countries);
   if (siteSettings.banners) {
     const path = window.location.pathname.toLowerCase();
     let pageKey = 'home';
@@ -540,7 +583,7 @@ async function loadProducts() {
         fetch('data/admin_settings.json').then(r => r.ok ? r.json() : null).catch(() => null),
         needsProducts ? fetch('data/products.json').then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null)
       ]);
-      if (localSettings) {
+      if (localSettings && (!siteSettings || Object.keys(siteSettings).length === 0)) {
         siteSettings = localSettings;
         applySiteSettings();
       }
@@ -553,11 +596,11 @@ async function loadProducts() {
     } catch (e) {}
   }
 
-  // 3. Background Async Sync with Firebase Realtime Database (Instant Realtime Sync throttled to 60s)
+  // 3. Background Async Sync with Firebase Realtime Database (Throttled to 300s to keep site instant)
   const isInsideIframe = window.self !== window.top;
   const forceRefresh = window.location.search.includes('t=') || isInsideIframe;
   const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-  const isCacheRecent = (Date.now() - lastSettingsSync) < 60000;
+  const isCacheRecent = (Date.now() - lastSettingsSync) < 300000;
   
   if (!isCacheRecent || !siteInitialized || forceRefresh) {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -567,22 +610,33 @@ async function loadProducts() {
       fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
     ]).then(([settingsData, productsData]) => {
       if (settingsData) {
-        siteSettings = settingsData;
-        try {
-          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings));
-          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch (e) {}
-        applySiteSettings();
+        const oldSettingsStr = JSON.stringify(siteSettings);
+        const newSettingsStr = JSON.stringify(settingsData);
+        if (oldSettingsStr !== newSettingsStr) {
+          siteSettings = settingsData;
+          try {
+            localStorage.setItem("fabric8_admin_settings_cache", newSettingsStr);
+          } catch (e) {}
+          applySiteSettings();
+        }
       }
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch (e) {}
+
       if (productsData && Array.isArray(productsData) && productsData.length > 0) {
-        products = productsData;
-        products.sort((a, b) => a.name.localeCompare(b.name));
-        try {
-          localStorage.setItem("fabric8_products_cache", JSON.stringify(products));
-          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
-        } catch (e) {}
-        initSite();
-        siteInitialized = true;
+        const oldProductsStr = JSON.stringify(products);
+        productsData.sort((a, b) => a.name.localeCompare(b.name));
+        const newProductsStr = JSON.stringify(productsData);
+        if (oldProductsStr !== newProductsStr || !siteInitialized) {
+          products = productsData;
+          try {
+            localStorage.setItem("fabric8_products_cache", newProductsStr);
+            localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+          } catch (e) {}
+          initSite();
+          siteInitialized = true;
+        }
       } else if (!siteInitialized) {
         initSite();
         siteInitialized = true;
@@ -802,10 +856,12 @@ function renderProducts() {
     let imagesHtml = '';
     if (p.images && p.images.length > 1) {
       imagesHtml = p.images.map((img, idx) => 
-        `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: ${idx === 0 ? 1 : 0}; transition: opacity 0.6s ease-in-out;">`
+        idx === 0
+          ? `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;">`
+          : `<img id="img-${p.sku}-${idx}" data-src="${img}" alt="${p.name}" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">`
       ).join('');
     } else {
-      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px;">`;
+      imagesHtml = `<img src="${imgSrc}" alt="${p.name}" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px;">`;
     }
 
     return `
@@ -831,12 +887,19 @@ window.slideshowTimers = {};
 window.slideshowIndices = {};
 
 window.startSlideshow = function(sku, maxIdx) {
+  // Preload secondary images for this card on hover
+  for (let i = 1; i < maxIdx; i++) {
+    const el = document.getElementById(`img-${sku}-${i}`);
+    if (el && el.dataset.src && !el.src) {
+      el.src = el.dataset.src;
+    }
+  }
   if (window.slideshowTimers[sku]) clearInterval(window.slideshowTimers[sku]);
   window.slideshowIndices[sku] = window.slideshowIndices[sku] || 0;
   window.nextImage(sku, maxIdx);
   window.slideshowTimers[sku] = setInterval(() => {
     window.nextImage(sku, maxIdx);
-  }, 1200); // 1.2s allows time to see the view
+  }, 1200);
 };
 
 window.stopSlideshow = function(sku, maxIdx) {
@@ -856,6 +919,11 @@ window.nextImage = function(sku, maxIdx) {
   let next = curr + 1;
   if (next >= maxIdx) next = 0;
   window.slideshowIndices[sku] = next;
+
+  const targetImg = document.getElementById(`img-${sku}-${next}`);
+  if (targetImg && targetImg.dataset.src && !targetImg.src) {
+    targetImg.src = targetImg.dataset.src;
+  }
 
   for (let i = 0; i < maxIdx; i++) {
     const img = document.getElementById(`img-${sku}-${i}`);
@@ -1835,6 +1903,7 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("page-ready");
+  if (typeof populateCountrySelectors === "function") populateCountrySelectors(siteSettings.countries);
   loadCart();
   if (typeof renderCart === "function") renderCart();
   if (typeof initClientDetailsPersistence === "function") initClientDetailsPersistence();
@@ -4160,7 +4229,7 @@ function renderShowcase() {
     return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column;">
       <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; position: relative;">
         <div style="background: transparent; height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: none !important; padding: 10px;">
-          <img src="${imgSrc}" alt="${p.name}" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
+          <img src="${imgSrc}" alt="${p.name}" loading="lazy" decoding="async" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
         </div>
         <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: center; text-align: center;">
           <p style="margin: 0 0 6px; font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>

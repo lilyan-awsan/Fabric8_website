@@ -51,7 +51,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "no-cache, no-store, must-revalidate, max-age=0"
+            "value": "public, max-age=120, stale-while-revalidate=600"
           }
         ]
       },
@@ -69,7 +69,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public, max-age=604800, s-maxage=2592000"
+            "value": "public, max-age=2592000, immutable"
           }
         ]
       },
@@ -86,14 +86,6 @@
     "rewrites": [
       {
         "source": "/api/**",
-        "function": "api"
-      },
-      {
-        "source": "/assets/site_images/**",
-        "function": "api"
-      },
-      {
-        "source": "/assets/products/**",
         "function": "api"
       },
       {

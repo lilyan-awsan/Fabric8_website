@@ -2109,6 +2109,7 @@ async function loadSiteSettings() {
         } catch (e) {}
         if (typeof updateCategoryDropdowns === 'function') updateCategoryDropdowns();
         if (typeof renderSectorButtons === 'function') renderSectorButtons();
+        if (typeof initAdminCountries === 'function') initAdminCountries();
         return;
       }
     }
@@ -2127,6 +2128,137 @@ async function loadSiteSettings() {
 
   if (typeof updateCategoryDropdowns === 'function') updateCategoryDropdowns();
   if (typeof renderSectorButtons === 'function') renderSectorButtons();
+  if (typeof initAdminCountries === 'function') initAdminCountries();
+}
+
+// --- Header Country/Region Dropdown Management ---
+let currentCountriesList = [
+  { code: "US", name: "USA" },
+  { code: "JO", name: "Jordan" },
+  { code: "INT", name: "International" }
+];
+
+function initAdminCountries() {
+  if (currentSiteSettings && Array.isArray(currentSiteSettings.countries) && currentSiteSettings.countries.length > 0) {
+    currentCountriesList = JSON.parse(JSON.stringify(currentSiteSettings.countries));
+  } else {
+    currentCountriesList = [
+      { code: "US", name: "USA" },
+      { code: "JO", name: "Jordan" },
+      { code: "INT", name: "International" }
+    ];
+  }
+  renderAdminCountriesList();
+}
+
+function renderAdminCountriesList() {
+  const container = document.getElementById("adminCountriesList");
+  if (!container) return;
+
+  if (!currentCountriesList || currentCountriesList.length === 0) {
+    container.innerHTML = `<div style="font-size: 12px; color: var(--muted); font-style: italic; padding: 6px;">No countries in list. Add one using the form above.</div>`;
+    return;
+  }
+
+  container.innerHTML = currentCountriesList.map((c, idx) => `
+    <div style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+      <span style="font-size: 14px;">🌐</span>
+      <span style="font-size: 13px; font-weight: 700; color: var(--ink);">${c.name}</span>
+      <span style="font-size: 11px; font-weight: 800; background: #f1f5f9; color: #475569; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">${c.code || c.name}</span>
+      <button type="button" onclick="window.deleteCountry(${idx})" title="Delete ${c.name}" style="background: none; border: none; color: #ef4444; font-size: 16px; line-height: 1; cursor: pointer; padding: 0 0 0 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.25)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
+    </div>
+  `).join('');
+}
+
+window.addNewCountryFromInput = function() {
+  const nameInput = document.getElementById("newCountryNameInput");
+  const codeInput = document.getElementById("newCountryCodeInput");
+  if (!nameInput) return;
+
+  const name = nameInput.value.trim();
+  let code = codeInput ? codeInput.value.trim().toUpperCase() : '';
+  if (!name) return;
+  if (!code) code = name.slice(0, 3).toUpperCase();
+
+  if (currentCountriesList.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+    alert(`"${name}" is already in the list.`);
+    return;
+  }
+
+  currentCountriesList.push({ code, name });
+  nameInput.value = '';
+  if (codeInput) codeInput.value = '';
+
+  renderAdminCountriesList();
+  if (window.showToast) window.showToast(`Added "${name}"! Click "Publish Country Changes" to deploy live.`, 'success');
+};
+
+window.deleteCountry = function(idx) {
+  if (idx < 0 || idx >= currentCountriesList.length) return;
+  const target = currentCountriesList[idx];
+  if (confirm(`Are you sure you want to remove "${target.name}" from the header country selector?`)) {
+    currentCountriesList.splice(idx, 1);
+    renderAdminCountriesList();
+    if (window.showToast) window.showToast(`Removed "${target.name}". Click "Publish Country Changes" to save.`, 'warning');
+  }
+};
+
+const saveCountriesBtn = document.getElementById('saveCountriesBtn');
+if (saveCountriesBtn) {
+  saveCountriesBtn.addEventListener('click', async () => {
+    const originalText = saveCountriesBtn.textContent;
+    saveCountriesBtn.textContent = 'Publishing Countries...';
+    saveCountriesBtn.disabled = true;
+
+    try {
+      currentSiteSettings.countries = currentCountriesList;
+
+      // 1. Save to localStorage
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch(e) {}
+
+      // 2. Save directly to Firebase Realtime Database
+      try {
+        const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+        await fetch(`${FIREBASE_DB}/admin_settings.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentSiteSettings)
+        });
+      } catch(fbErr) {
+        console.warn("Firebase sync error:", fbErr);
+      }
+
+      // 3. Save to GitHub repository
+      try {
+        await fetch('/api/githubSync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'save_settings',
+            siteSettingsPayload: currentSiteSettings,
+            commitMessage: 'Update Header Countries & Regions dropdown list'
+          })
+        });
+      } catch(ghErr) {
+        console.warn("GitHub API error:", ghErr);
+      }
+
+      if (window.showToast) {
+        window.showToast('Country list published live successfully!', 'success');
+      } else {
+        alert('Country list published successfully!');
+      }
+    } catch(err) {
+      console.error(err);
+      alert('Error saving countries: ' + err.message);
+    } finally {
+      saveCountriesBtn.textContent = originalText;
+      saveCountriesBtn.disabled = false;
+    }
+  });
 }
 
 const iframe = document.getElementById('visualEditorIframe');

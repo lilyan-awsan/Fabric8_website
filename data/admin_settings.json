@@ -12,6 +12,20 @@
     "dtfHelperNote": "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.",
     "embroideryHelperNote": "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics."
   },
+  "countries": [
+    {
+      "code": "US",
+      "name": "USA"
+    },
+    {
+      "code": "JO",
+      "name": "Jordan"
+    },
+    {
+      "code": "INT",
+      "name": "International"
+    }
+  ],
   "categories1stLayer": [
     {
       "enabled": true,
