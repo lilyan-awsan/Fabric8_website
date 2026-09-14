@@ -472,37 +472,42 @@ async function loadProducts() {
     } catch (e) {}
   }
 
-  // 3. Background Async Sync with Firebase Realtime Database (Instant Realtime Sync)
-  const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
-  const freshTime = Date.now();
-  Promise.all([
-    fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
-  ]).then(([settingsData, productsData]) => {
-    if (settingsData) {
-      siteSettings = settingsData;
-      try {
-        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings));
-        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch (e) {}
-      applySiteSettings();
-    }
-    if (productsData && Array.isArray(productsData) && productsData.length > 0) {
-      products = productsData;
-      products.sort((a, b) => a.name.localeCompare(b.name));
-      try {
-        localStorage.setItem("fabric8_products_cache", JSON.stringify(products));
-        localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
-      } catch (e) {}
-      initSite();
-      siteInitialized = true;
-    } else if (!siteInitialized) {
-      initSite();
-      siteInitialized = true;
-    }
-  }).catch(() => {
-    if (!siteInitialized) initSite();
-  });
+  // 3. Background Async Sync with Firebase Realtime Database (Instant Realtime Sync throttled to 60s)
+  const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
+  const isCacheRecent = (Date.now() - lastSettingsSync) < 60000;
+  
+  if (!isCacheRecent || !siteInitialized) {
+    const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+    const freshTime = Date.now();
+    Promise.all([
+      fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
+    ]).then(([settingsData, productsData]) => {
+      if (settingsData) {
+        siteSettings = settingsData;
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(siteSettings));
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch (e) {}
+        applySiteSettings();
+      }
+      if (productsData && Array.isArray(productsData) && productsData.length > 0) {
+        products = productsData;
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        try {
+          localStorage.setItem("fabric8_products_cache", JSON.stringify(products));
+          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+        } catch (e) {}
+        initSite();
+        siteInitialized = true;
+      } else if (!siteInitialized) {
+        initSite();
+        siteInitialized = true;
+      }
+    }).catch(() => {
+      if (!siteInitialized) initSite();
+    });
+  }
 }
 
 // Start loading
