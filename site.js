@@ -1940,37 +1940,17 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     return;
   }
 
-  // Validate delivery date (must be today or future date)
+  // Validate delivery date (must be strictly in the future: not today, not past date)
   const dateInput = form.querySelector('#deliveryDate') || form.querySelector('input[name="Required delivery date"]') || form.querySelector('input[type="date"]');
   const dateErrEl = document.getElementById('deliveryDateError');
   if (dateInput) {
     const rawDateVal = (dateInput.value || '').trim();
-    if (!rawDateVal) {
-      const msg = "⚠️ Please provide a required delivery date.";
-      if (dateErrEl) { dateErrEl.textContent = msg; dateErrEl.style.display = 'block'; }
-      if (typeof showToast === "function") showToast(msg, "warning");
-      else alert(msg);
-      if (submitBtn) { submitBtn.textContent = originalBtnText; submitBtn.disabled = false; }
-      dateInput.focus();
-      return;
-    }
-    const parsedDate = parseUserDeliveryDate(rawDateVal);
-    const todayObj = new Date();
-    todayObj.setHours(0, 0, 0, 0);
+    const valResult = typeof validateDeliveryDate === 'function'
+      ? validateDeliveryDate(rawDateVal, true)
+      : { valid: !!rawDateVal, error: "" };
 
-    if (!parsedDate) {
-      const msg = "⚠️ Please enter a valid delivery date (e.g. MM/DD/YYYY or YYYY-MM-DD).";
-      if (dateErrEl) { dateErrEl.textContent = msg; dateErrEl.style.display = 'block'; }
-      if (typeof showToast === "function") showToast(msg, "warning");
-      else alert(msg);
-      if (submitBtn) { submitBtn.textContent = originalBtnText; submitBtn.disabled = false; }
-      dateInput.focus();
-      return;
-    }
-
-    if (parsedDate < todayObj) {
-      const todayFormatted = todayObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      const msg = `⚠️ Required delivery date cannot be before today's order date (${todayFormatted}). Please enter today or a future date.`;
+    if (!valResult.valid) {
+      const msg = valResult.error || "⚠️ Please provide a valid delivery date (DD / MM / YYYY). Delivery date must be at least tomorrow.";
       if (dateErrEl) { dateErrEl.textContent = msg; dateErrEl.style.display = 'block'; }
       dateInput.style.borderColor = '#dc2626';
       if (typeof showToast === "function") showToast(msg, "warning");
@@ -4295,51 +4275,134 @@ document.addEventListener('DOMContentLoaded', () => {
   initDeliveryDatePicker();
 });
 
+/**
+ * Strict Delivery Date Validation & Parser
+ * Format expected: DD / MM / YYYY (Day / Month / Year)
+ * Enforces:
+ * 1. Disallows arbitrary/free typing (numbers only, automatic format mask)
+ * 2. Valid calendar day (1 to 28/29/30/31 depending on month & leap years)
+ * 3. Valid month (1 to 12)
+ * 4. Valid 4-digit year (>= current year)
+ * 5. Strictly NOT today and NOT before today (must be tomorrow onwards)
+ */
+function validateDeliveryDate(str, isBlur = false) {
+  if (!str || typeof str !== 'string') {
+    return {
+      valid: false,
+      error: isBlur ? "⚠️ Required delivery date is required." : "",
+      dateObj: null
+    };
+  }
+
+  const clean = str.trim();
+  if (!clean) {
+    return {
+      valid: false,
+      error: isBlur ? "⚠️ Required delivery date is required." : "",
+      dateObj: null
+    };
+  }
+
+  let day = null, month = null, year = null;
+
+  // 1. Check DD / MM / YYYY (or DD/MM/YYYY or DD-MM-YYYY)
+  const dmyMatch = clean.match(/^(\d{1,2})\s*[/.-]\s*(\d{1,2})\s*[/.-]\s*(\d{4})$/);
+  if (dmyMatch) {
+    day = parseInt(dmyMatch[1], 10);
+    month = parseInt(dmyMatch[2], 10);
+    year = parseInt(dmyMatch[3], 10);
+  } else {
+    // 2. Check ISO format YYYY-MM-DD (e.g. from calendar picker)
+    const isoMatch = clean.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
+    if (isoMatch) {
+      year = parseInt(isoMatch[1], 10);
+      month = parseInt(isoMatch[2], 10);
+      day = parseInt(isoMatch[3], 10);
+    }
+  }
+
+  if (day === null || month === null || year === null) {
+    const digitsOnly = clean.replace(/\D/g, '');
+    if (isBlur || digitsOnly.length >= 8) {
+      return {
+        valid: false,
+        error: "⚠️ Please enter a complete date in DD / MM / YYYY format.",
+        dateObj: null
+      };
+    }
+    return { valid: false, error: "", dateObj: null };
+  }
+
+  // Validate Month (1 - 12)
+  if (month < 1 || month > 12) {
+    return {
+      valid: false,
+      error: "⚠️ Invalid month (" + month + "). Month must be between 01 and 12.",
+      dateObj: null
+    };
+  }
+
+  // Validate Year
+  const currentYear = new Date().getFullYear();
+  if (year < currentYear || year > currentYear + 10) {
+    return {
+      valid: false,
+      error: "⚠️ Invalid year (" + year + "). Please enter a valid 4-digit year (" + currentYear + " or later).",
+      dateObj: null
+    };
+  }
+
+  // Days in month calculation (with leap year logic for Feb)
+  const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+  const daysInMonthMap = [31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const maxDays = daysInMonthMap[month - 1];
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  if (day < 1 || day > maxDays) {
+    return {
+      valid: false,
+      error: "⚠️ Invalid day (" + day + "). " + monthNames[month - 1] + " " + year + " has " + maxDays + " days.",
+      dateObj: null
+    };
+  }
+
+  const dateObj = new Date(year, month - 1, day);
+  dateObj.setHours(0, 0, 0, 0);
+
+  // Audio requirement: "and it's not the same day or before the day submit the request"
+  const todayObj = new Date();
+  todayObj.setHours(0, 0, 0, 0);
+
+  if (dateObj.getTime() === todayObj.getTime()) {
+    return {
+      valid: false,
+      error: "⚠️ Delivery date cannot be today. Same-day delivery is not supported. Please select tomorrow or a later date.",
+      dateObj: null
+    };
+  }
+
+  if (dateObj.getTime() < todayObj.getTime()) {
+    const todayFormatted = todayObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    return {
+      valid: false,
+      error: "⚠️ Delivery date cannot be in the past (order date is " + todayFormatted + "). Please select tomorrow or a later date.",
+      dateObj: null
+    };
+  }
+
+  return {
+    valid: true,
+    error: "",
+    dateObj: dateObj,
+    day: day,
+    month: month,
+    year: year
+  };
+}
+
 function parseUserDeliveryDate(str) {
-  if (!str || typeof str !== 'string') return null;
-  const s = str.trim();
-  if (!s) return null;
-
-  // 1. Check ISO format YYYY-MM-DD or YYYY/MM/DD or YYYY.MM.DD
-  let match = s.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
-  if (match) {
-    const y = parseInt(match[1], 10);
-    const m = parseInt(match[2], 10) - 1;
-    const d = parseInt(match[3], 10);
-    const date = new Date(y, m, d);
-    if (date.getFullYear() === y && date.getMonth() === m && date.getDate() === d) {
-      return date;
-    }
-  }
-
-  // 2. Check MM/DD/YYYY or DD/MM/YYYY
-  match = s.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/);
-  if (match) {
-    const n1 = parseInt(match[1], 10);
-    const n2 = parseInt(match[2], 10);
-    const y = parseInt(match[3], 10);
-
-    if (n1 > 12 && n2 <= 12) {
-      // Must be DD/MM/YYYY
-      const date = new Date(y, n2 - 1, n1);
-      if (date.getFullYear() === y && date.getMonth() === n2 - 1 && date.getDate() === n1) return date;
-    } else {
-      // Default to MM/DD/YYYY
-      let date = new Date(y, n1 - 1, n2);
-      if (date.getFullYear() === y && date.getMonth() === n1 - 1 && date.getDate() === n2) return date;
-      date = new Date(y, n2 - 1, n1);
-      if (date.getFullYear() === y && date.getMonth() === n2 - 1 && date.getDate() === n1) return date;
-    }
-  }
-
-  // 3. Date.parse fallback
-  const parsed = Date.parse(s);
-  if (!isNaN(parsed)) {
-    const d = new Date(parsed);
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  }
-
-  return null;
+  const res = validateDeliveryDate(str, false);
+  return res.valid ? res.dateObj : null;
 }
 
 function initDeliveryDatePicker() {
@@ -4350,16 +4413,24 @@ function initDeliveryDatePicker() {
 
   const todayObj = new Date();
   todayObj.setHours(0, 0, 0, 0);
-  const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
-  const todayFormatted = todayObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  // Tomorrow is the absolute earliest permissible delivery date
+  const tomorrowObj = new Date(todayObj);
+  tomorrowObj.setDate(tomorrowObj.getDate() + 1);
+  const tomorrowStr = `${tomorrowObj.getFullYear()}-${String(tomorrowObj.getMonth() + 1).padStart(2, '0')}-${String(tomorrowObj.getDate()).padStart(2, '0')}`;
 
   if (dPicker) {
-    dPicker.setAttribute('min', todayStr);
+    dPicker.setAttribute('min', tomorrowStr);
     dPicker.addEventListener('change', () => {
       if (dPicker.value) {
-        if (dInput) {
-          dInput.value = dPicker.value;
-          dInput.style.borderColor = 'var(--line)';
+        const parts = dPicker.value.split('-');
+        if (parts.length === 3) {
+          const y = parts[0];
+          const m = parts[1];
+          const d = parts[2];
+          if (dInput) {
+            dInput.value = `${d} / ${m} / ${y}`;
+            dInput.style.borderColor = 'var(--line)';
+          }
         }
         if (dError) dError.style.display = 'none';
         if (typeof window.saveClientDetails === 'function') window.saveClientDetails();
@@ -4387,10 +4458,12 @@ function initDeliveryDatePicker() {
   if (dInput) {
     const validateDateVal = (isBlur = false) => {
       const val = dInput.value.trim();
-      if (!val) {
-        if (isBlur) {
+      const res = validateDeliveryDate(val, isBlur);
+
+      if (!res.valid) {
+        if (res.error) {
           if (dError) {
-            dError.textContent = "⚠️ Required delivery date is required.";
+            dError.textContent = res.error;
             dError.style.display = 'block';
           }
           dInput.style.borderColor = '#dc2626';
@@ -4398,50 +4471,105 @@ function initDeliveryDatePicker() {
           if (dError) dError.style.display = 'none';
           dInput.style.borderColor = 'var(--line)';
         }
-        return;
+        return false;
       }
 
-      const parsed = parseUserDeliveryDate(val);
-      if (!parsed) {
-        if (isBlur || val.length >= 8) {
-          if (dError) {
-            dError.textContent = "⚠️ Please enter a valid date (e.g. MM/DD/YYYY or YYYY-MM-DD).";
-            dError.style.display = 'block';
-          }
-          dInput.style.borderColor = '#dc2626';
-        }
-        return;
-      }
-
-      if (parsed < todayObj) {
-        if (dError) {
-          dError.textContent = `⚠️ Delivery date cannot be before today's order date (${todayFormatted}). Please select today or a future date.`;
-          dError.style.display = 'block';
-        }
-        dInput.style.borderColor = '#dc2626';
-        return;
-      }
-
-      // Valid future/today date!
+      // Valid date!
       if (dError) dError.style.display = 'none';
       dInput.style.borderColor = 'var(--line)';
-      if (dPicker) {
-        const iso = `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
+      if (dPicker && res.dateObj) {
+        const iso = `${res.year}-${String(res.month).padStart(2, '0')}-${String(res.day).padStart(2, '0')}`;
         dPicker.value = iso;
       }
+      return true;
     };
 
-    dInput.addEventListener('input', () => validateDateVal(false));
+    // Block non-digits on keydown (prevents arbitrary free-writing)
+    dInput.addEventListener('keydown', (e) => {
+      const allowedSpecial = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter'];
+      if (allowedSpecial.includes(e.key) || e.ctrlKey || e.metaKey) {
+        if (e.key === 'Backspace') {
+          const pos = dInput.selectionStart;
+          const end = dInput.selectionEnd;
+          if (pos === end && pos > 0) {
+            const val = dInput.value;
+            if (val.slice(pos - 3, pos) === ' / ') {
+              e.preventDefault();
+              dInput.value = val.slice(0, pos - 3) + val.slice(pos);
+              dInput.setSelectionRange(pos - 3, pos - 3);
+              validateDateVal(false);
+              return;
+            }
+          }
+        }
+        return;
+      }
+
+      // Allow '/' to smoothly advance day -> month -> year
+      if (e.key === '/' || e.key === '-') {
+        e.preventDefault();
+        const digits = dInput.value.replace(/\D/g, '');
+        if (digits.length === 1) {
+          dInput.value = '0' + digits + ' / ';
+        } else if (digits.length === 2) {
+          dInput.value = digits + ' / ';
+        } else if (digits.length === 3) {
+          dInput.value = digits.slice(0, 2) + ' / 0' + digits.slice(2) + ' / ';
+        } else if (digits.length === 4) {
+          dInput.value = digits.slice(0, 2) + ' / ' + digits.slice(2, 4) + ' / ';
+        }
+        return;
+      }
+
+      // Disallow letters, spaces, and punctuation
+      if (!/^[0-9]$/.test(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    // Auto-mask digits into DD / MM / YYYY
+    dInput.addEventListener('input', () => {
+      const digits = dInput.value.replace(/\D/g, '').slice(0, 8);
+      let formatted = '';
+      if (digits.length > 0) {
+        formatted = digits.slice(0, 2);
+        if (digits.length >= 3) {
+          formatted += ' / ' + digits.slice(2, 4);
+          if (digits.length >= 5) {
+            formatted += ' / ' + digits.slice(4, 8);
+          }
+        }
+      }
+      dInput.value = formatted;
+
+      if (digits.length >= 8) {
+        validateDateVal(false);
+      } else {
+        if (dError) dError.style.display = 'none';
+        dInput.style.borderColor = 'var(--line)';
+      }
+    });
+
     dInput.addEventListener('change', () => {
       validateDateVal(true);
       if (typeof window.saveClientDetails === 'function') window.saveClientDetails();
     });
+
     dInput.addEventListener('blur', () => validateDateVal(true));
+
+    // If an initial value exists (e.g. from saved client details)
+    if (dInput.value) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dInput.value.trim())) {
+        const parts = dInput.value.trim().split('-');
+        dInput.value = `${parts[2]} / ${parts[1]} / ${parts[0]}`;
+      }
+      validateDateVal(false);
+    }
   }
 
   // Also support any other native date inputs if present
   document.querySelectorAll('input[type="date"]:not(#deliveryDatePicker)').forEach(inp => {
-    inp.setAttribute('min', todayStr);
+    inp.setAttribute('min', tomorrowStr);
   });
 }
 

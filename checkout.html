@@ -6,7 +6,7 @@
   <title>Fabric8 | Checkout</title>
 
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
-    <link rel="stylesheet" href="site.css?v=35" />
+    <link rel="stylesheet" href="site.css?v=36" />
 </head>
 <body>
   <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">CHECK OUT OUR NEW COLLECTIONS - CLICK HERE</a></div>
@@ -139,7 +139,7 @@
           <div class="delivery-date-group" style="margin-top: 6px;">
             <label for="deliveryDate" style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px;">
               Required delivery date* 
-              <span style="font-size: 11px; font-weight: normal; color: #777; margin-left: 6px;">(Type date or click calendar 📅)</span>
+              <span style="font-size: 11px; font-weight: normal; color: #777; margin-left: 6px;">(Format: DD / MM / YYYY or click calendar 📅)</span>
             </label>
             <div style="position: relative; display: flex; align-items: center; width: 100%;">
               <input 
@@ -147,9 +147,11 @@
                 name="Required delivery date" 
                 type="text" 
                 required 
-                placeholder="MM/DD/YYYY or YYYY-MM-DD" 
+                placeholder="DD / MM / YYYY" 
                 autocomplete="off" 
-                style="width: 100%; padding: 12px 46px 12px 12px; border: 1px solid var(--line); border-radius: 6px; font-size: 14px; background: #fff; transition: border-color 0.2s, box-shadow 0.2s;" 
+                inputmode="numeric"
+                maxlength="14"
+                style="width: 100%; padding: 12px 46px 12px 14px; border: 1px solid var(--line); border-radius: 6px; font-size: 14px; font-family: inherit; letter-spacing: 0.04em; background: #fff; transition: border-color 0.2s, box-shadow 0.2s;" 
               />
               <button 
                 type="button" 
@@ -174,6 +176,7 @@
               />
             </div>
             <div id="deliveryDateError" style="display: none; color: #dc2626; font-size: 12px; font-weight: 600; margin-top: 5px; line-height: 1.4;"></div>
+            <div id="deliveryDateHint" style="color: #64748b; font-size: 11.5px; margin-top: 4px;">Orders require lead time; delivery date cannot be today or in the past.</div>
           </div>
 
           <label style="font-size: 13px; font-weight: bold;">Reference file (Logo, Tech Pack, etc.)
@@ -220,7 +223,7 @@
     </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="site.js?v=40"></script>
+  <script src="site.js?v=41"></script>
   <script>
     // Handle country-specific address fields
     function updateAddressFields(prefix) {
