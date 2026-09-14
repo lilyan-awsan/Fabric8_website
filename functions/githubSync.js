@@ -230,10 +230,15 @@ export default async function handler(req, res) {
     }
 
     // 1. If there are new images or sketch attachments, upload them to GitHub first
-    let finalImages = product?.existingImages || [];
+    let finalImages = product?.existingImages ? [...product.existingImages] : [];
+    let mainImageUrl = product?.image || null;
+    if (product?.mainImageSelection?.type === 'existing' && product.mainImageSelection.url) {
+      mainImageUrl = product.mainImageSelection.url;
+    }
     
     if (newImages && Array.isArray(newImages) && newImages.length > 0) {
-      for (const img of newImages) {
+      for (let i = 0; i < newImages.length; i++) {
+        const img = newImages[i];
         if (img.base64 && img.name) {
           const imgPath = `assets/products/${Date.now()}_${img.name.replace(/\s+/g, '_')}`;
           const imgRes = await fetch(`https://api.github.com/repos/${repo}/contents/${imgPath}`, {
@@ -253,6 +258,9 @@ export default async function handler(req, res) {
             throw new Error("Failed to upload image: " + err.message);
           }
           finalImages.push(imgPath);
+          if (product?.mainImageSelection?.type === 'pending' && product.mainImageSelection.index === i) {
+            mainImageUrl = imgPath;
+          }
         }
       }
     }
@@ -382,6 +390,14 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, message: 'Settings saved successfully' });
     } else if (action === "save") {
       delete product.existingImages;
+      delete product.mainImageSelection;
+      delete product.mainImagePendingIndex;
+
+      // Ensure designated main image is placed at index 0 of finalImages
+      if (mainImageUrl && finalImages.includes(mainImageUrl)) {
+        finalImages = [mainImageUrl, ...finalImages.filter(img => img !== mainImageUrl)];
+      }
+
       const colorImageMap = (product.colorImageMap && typeof product.colorImageMap === 'object') ? { ...product.colorImageMap } : {};
       finalImages.forEach(imgUrl => {
         for (const col of (product.colors || [])) {
@@ -393,11 +409,13 @@ export default async function handler(req, res) {
         }
       });
 
+      const chosenMainImage = finalImages.length > 0 ? finalImages[0] : (product.image || "assets/white.png");
+
       const newProduct = { 
         ...product, 
         colorImageMap: colorImageMap,
         images: finalImages, 
-        image: finalImages.length > 0 ? finalImages[0] : "assets/white.png", 
+        image: chosenMainImage, 
         id: product.sku 
       };
       const existingIndex = productsList.findIndex(p => p.sku === product.sku || p.id === product.id);

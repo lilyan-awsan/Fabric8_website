@@ -2368,7 +2368,11 @@ function getImagesForColor(product, targetColor) {
       const matchingColorAngles = (product.images || []).filter(img => 
         img !== explicitImg && targetNorm && normalizeForMatch(img).includes(targetNorm)
       );
-      const res = [explicitImg, ...matchingColorAngles];
+      let res = [explicitImg, ...matchingColorAngles];
+      if (product.image && res.some(img => img === product.image || img.split('?')[0] === product.image.split('?')[0])) {
+        const matchMain = res.find(img => img === product.image || img.split('?')[0] === product.image.split('?')[0]);
+        if (matchMain) res = [matchMain, ...res.filter(img => img !== matchMain)];
+      }
       colorMatchCache.set(cacheKey, res);
       return res;
     }
@@ -2410,6 +2414,10 @@ function getImagesForColor(product, targetColor) {
   }
 
   matchedImgs.sort((a, b) => {
+    if (product.image) {
+      if (a === product.image || a.split('?')[0] === product.image.split('?')[0]) return -1;
+      if (b === product.image || b.split('?')[0] === product.image.split('?')[0]) return 1;
+    }
     const aNorm = a.toLowerCase();
     const bNorm = b.toLowerCase();
     const aIsFront = aNorm.includes("front") || (aNorm.includes("white.png") && !aNorm.includes("side") && !aNorm.includes("back"));
@@ -2467,19 +2475,39 @@ function initProductPage(sku) {
   if (!p) return;
   
   selectedProductSku = sku;
-  if (!p.colors.includes(activeCatalogColor)) {
-    let bestInitColor = p.colors[0];
-    let maxLen = 0;
-    const imgNorm = normalizeForMatch(p.image || "");
-    p.colors.forEach(col => {
-      const colNorm = normalizeForMatch(col);
-      const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
-      if (tokens.every(t => imgNorm.includes(t)) && col.length > maxLen) {
-        maxLen = col.length;
-        bestInitColor = col;
+  
+  // Resolve activeCatalogColor: prioritize color associated with the Main Photo (p.image) unless user passed ?color=...
+  const urlParams = new URLSearchParams(window.location.search);
+  const queryColor = urlParams.get('color');
+  if (queryColor && p.colors && p.colors.includes(queryColor)) {
+    activeCatalogColor = queryColor;
+  } else {
+    let bestInitColor = null;
+    if (p.colorImageMap && typeof p.colorImageMap === "object") {
+      const cleanMain = (p.image || "").split('?')[0].toLowerCase();
+      for (const [col, colUrl] of Object.entries(p.colorImageMap)) {
+        if (colUrl === p.image || (colUrl && colUrl.split('?')[0].toLowerCase() === cleanMain)) {
+          bestInitColor = col;
+          break;
+        }
       }
-    });
-    activeCatalogColor = bestInitColor;
+    }
+    if (!bestInitColor && p.colors && p.colors.length > 0) {
+      let maxLen = 0;
+      const imgNorm = normalizeForMatch(p.image || "");
+      p.colors.forEach(col => {
+        const colNorm = normalizeForMatch(col);
+        const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
+        if (tokens.length > 0 && tokens.every(t => imgNorm.includes(t)) && col.length > maxLen) {
+          maxLen = col.length;
+          bestInitColor = col;
+        }
+      });
+    }
+    if (!bestInitColor && p.colors && p.colors.length > 0) {
+      bestInitColor = p.colors[0];
+    }
+    activeCatalogColor = bestInitColor || (p.colors && p.colors[0]) || "";
   }
   
   window.currentLoadedProduct = p;

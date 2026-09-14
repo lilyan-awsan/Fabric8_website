@@ -371,6 +371,7 @@ const defaultColorHexMap = {
 let activeColorHexMap = {};
 let existingImageColorMap = {};
 let pendingImageColorMap = {};
+let selectedMainPhoto = { type: 'existing', index: 0 };
 
 function getColorHex(colName) {
   if (activeColorHexMap && activeColorHexMap[colName]) return activeColorHexMap[colName];
@@ -757,6 +758,16 @@ function openModal(docId = null) {
         existingImages = [];
       }
 
+      let mainIdx = -1;
+      if (p.image && existingImages.length > 0) {
+        const cleanTarget = p.image.split('?')[0].toLowerCase();
+        mainIdx = existingImages.findIndex(img => img === p.image || img.split('?')[0].toLowerCase() === cleanTarget);
+      }
+      if (mainIdx === -1 && existingImages.length > 0) {
+        mainIdx = 0;
+      }
+      selectedMainPhoto = { type: 'existing', index: mainIdx >= 0 ? mainIdx : 0 };
+
       if (p.colorImageMap && typeof p.colorImageMap === "object") {
         existingImages.forEach((imgUrl, idx) => {
           for (const [col, colUrl] of Object.entries(p.colorImageMap)) {
@@ -779,6 +790,7 @@ function openModal(docId = null) {
     pendingImageColorMap = {};
     existingImages = [];
     pendingImages = [];
+    selectedMainPhoto = { type: 'pending', index: 0 };
     renderSectorButtons();
     renderSizesTags();
     renderColorsTags();
@@ -867,7 +879,23 @@ productForm.addEventListener("submit", async (e) => {
     embroideryPlacements: activeEmbPlacements,
     supportedFinishes: supportedFinishes,
     customizationCapability: custCap,
-    existingImages: existingImages
+    existingImages: (function() {
+      let ordered = [...existingImages];
+      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+        if (selectedMainPhoto.index > 0 && selectedMainPhoto.index < ordered.length) {
+          const [picked] = ordered.splice(selectedMainPhoto.index, 1);
+          ordered.unshift(picked);
+        }
+      }
+      return ordered;
+    })(),
+    image: (function() {
+      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+        return existingImages[selectedMainPhoto.index];
+      }
+      return existingImages[0] || "";
+    })(),
+    mainImageSelection: selectedMainPhoto
   };
 
   if (pendingSketchFile) {
@@ -882,7 +910,7 @@ productForm.addEventListener("submit", async (e) => {
   submitBtn.disabled = false;
 });
 
-// --- Image Preview (Base64) with Color Swatch Association ---
+// --- Image Preview (Base64) with Color Swatch Association & Main Photo Selection ---
 function renderImagePreviews() {
   imagePreviewContainer.innerHTML = "";
   
@@ -892,6 +920,21 @@ function renderImagePreviews() {
   }
   
   imagePreviewContainer.style.display = "flex";
+
+  // Sanitize selectedMainPhoto bounds
+  if (selectedMainPhoto.type === 'existing') {
+    if (existingImages.length === 0) {
+      if (pendingImages.length > 0) selectedMainPhoto = { type: 'pending', index: 0 };
+    } else if (selectedMainPhoto.index >= existingImages.length) {
+      selectedMainPhoto.index = 0;
+    }
+  } else if (selectedMainPhoto.type === 'pending') {
+    if (pendingImages.length === 0) {
+      if (existingImages.length > 0) selectedMainPhoto = { type: 'existing', index: 0 };
+    } else if (selectedMainPhoto.index >= pendingImages.length) {
+      selectedMainPhoto.index = 0;
+    }
+  }
   
   const colorOptions = activeColors && activeColors.length > 0 ? activeColors : ["Default"];
   
@@ -902,6 +945,7 @@ function renderImagePreviews() {
     }
     const assignedColor = existingImageColorMap[index] || "";
     const hex = assignedColor ? getColorHex(assignedColor) : "#888";
+    const isMain = selectedMainPhoto.type === 'existing' && selectedMainPhoto.index === index;
 
     const div = document.createElement("div");
     div.className = "preview-item";
@@ -910,19 +954,36 @@ function renderImagePreviews() {
     div.style.alignItems = "center";
     div.style.gap = "6px";
     div.style.padding = "8px";
-    div.style.border = `1px solid ${assignedColor ? 'var(--ink)' : 'var(--line)'}`;
+    div.style.border = isMain ? "2px solid #f39c12" : `1px solid ${assignedColor ? 'var(--ink)' : 'var(--line)'}`;
     div.style.borderRadius = "8px";
-    div.style.background = "#fff";
-    div.style.width = "114px";
+    div.style.background = isMain ? "#fffdf5" : "#fff";
+    div.style.width = "118px";
+    div.style.height = "auto";
+    div.style.overflow = "visible";
     div.style.position = "relative";
-    div.style.boxShadow = "0 1px 4px rgba(0,0,0,0.05)";
+    div.style.boxShadow = isMain ? "0 2px 10px rgba(243, 156, 18, 0.25)" : "0 1px 4px rgba(0,0,0,0.05)";
+    div.style.transition = "all 0.2s ease";
+
+    const mainBtnHtml = isMain ? `
+      <button type="button" style="width: 100%; padding: 4px 2px; font-size: 10px; font-weight: 800; background: #f39c12; color: #fff; border: 1px solid #d68910; border-radius: 4px; cursor: default; display: flex; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 1px 2px rgba(243,156,18,0.25); text-transform: uppercase; letter-spacing: 0.02em;">
+        ★ Main Photo
+      </button>
+    ` : `
+      <button type="button" onclick="window.setMainProductPhoto('existing', ${index})" style="width: 100%; padding: 4px 2px; font-size: 10px; font-weight: 700; background: #fcfbf8; color: #555; border: 1px dashed #ccc; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px; transition: all 0.15s ease;" onmouseenter="this.style.background='#fff8e7'; this.style.borderColor='#f39c12'; this.style.color='#b9770e';" onmouseleave="this.style.background='#fcfbf8'; this.style.borderColor='#ccc'; this.style.color='#555';" title="Make this the primary photo displayed in shop catalog and product page">
+        ☆ Set as Main
+      </button>
+    `;
 
     div.innerHTML = `
-      <div style="position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
-        <img src="${imgUrl}" alt="Existing" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-        <button type="button" class="remove-btn" onclick="window.removeExistingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">&times;</button>
+      <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
+        ${isMain ? `<span style="position: absolute; top: 3px; left: 3px; background: #f39c12; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.25); z-index: 2; pointer-events: none; letter-spacing: 0.03em;">★ Main</span>` : ''}
+        <img src="${imgUrl}" alt="Existing" style="max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer;" onclick="window.setMainProductPhoto('existing', ${index})" title="Click to make this the Main Photo">
+        <button type="button" class="remove-btn" onclick="window.removeExistingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3); z-index: 3;">&times;</button>
       </div>
-      <div style="width: 100%;">
+      <div style="width: 100%; margin-top: 2px;">
+        ${mainBtnHtml}
+      </div>
+      <div style="width: 100%; margin-top: 2px;">
         <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 3px;">
           ${assignedColor ? `<span style="width: 8px; height: 8px; border-radius: 50%; background: ${hex}; border: 1px solid ${hex.toLowerCase() === '#ffffff' ? '#ccc' : 'transparent'}; display: inline-block;"></span>` : ''}
           <span style="font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase;">Color Variant:</span>
@@ -943,6 +1004,7 @@ function renderImagePreviews() {
     }
     const assignedColor = pendingImageColorMap[index] || "";
     const hex = assignedColor ? getColorHex(assignedColor) : "#888";
+    const isMain = selectedMainPhoto.type === 'pending' && selectedMainPhoto.index === index;
 
     const div = document.createElement("div");
     div.className = "preview-item";
@@ -951,19 +1013,36 @@ function renderImagePreviews() {
     div.style.alignItems = "center";
     div.style.gap = "6px";
     div.style.padding = "8px";
-    div.style.border = `1px solid ${assignedColor ? 'var(--ink)' : 'var(--line)'}`;
+    div.style.border = isMain ? "2px solid #f39c12" : `1px solid ${assignedColor ? 'var(--ink)' : 'var(--line)'}`;
     div.style.borderRadius = "8px";
-    div.style.background = "#fff";
-    div.style.width = "114px";
+    div.style.background = isMain ? "#fffdf5" : "#fff";
+    div.style.width = "118px";
+    div.style.height = "auto";
+    div.style.overflow = "visible";
     div.style.position = "relative";
-    div.style.boxShadow = "0 1px 4px rgba(0,0,0,0.05)";
+    div.style.boxShadow = isMain ? "0 2px 10px rgba(243, 156, 18, 0.25)" : "0 1px 4px rgba(0,0,0,0.05)";
+    div.style.transition = "all 0.2s ease";
+
+    const mainBtnHtml = isMain ? `
+      <button type="button" style="width: 100%; padding: 4px 2px; font-size: 10px; font-weight: 800; background: #f39c12; color: #fff; border: 1px solid #d68910; border-radius: 4px; cursor: default; display: flex; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 1px 2px rgba(243,156,18,0.25); text-transform: uppercase; letter-spacing: 0.02em;">
+        ★ Main Photo
+      </button>
+    ` : `
+      <button type="button" onclick="window.setMainProductPhoto('pending', ${index})" style="width: 100%; padding: 4px 2px; font-size: 10px; font-weight: 700; background: #fcfbf8; color: #555; border: 1px dashed #ccc; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px; transition: all 0.15s ease;" onmouseenter="this.style.background='#fff8e7'; this.style.borderColor='#f39c12'; this.style.color='#b9770e';" onmouseleave="this.style.background='#fcfbf8'; this.style.borderColor='#ccc'; this.style.color='#555';" title="Make this the primary photo displayed in shop catalog and product page">
+        ☆ Set as Main
+      </button>
+    `;
 
     div.innerHTML = `
-      <div style="position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
-        <img src="${img.base64}" alt="Pending" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-        <button type="button" class="remove-btn" onclick="window.removePendingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">&times;</button>
+      <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
+        ${isMain ? `<span style="position: absolute; top: 3px; left: 3px; background: #f39c12; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.25); z-index: 2; pointer-events: none; letter-spacing: 0.03em;">★ Main</span>` : ''}
+        <img src="${img.base64}" alt="Pending" style="max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer;" onclick="window.setMainProductPhoto('pending', ${index})" title="Click to make this the Main Photo">
+        <button type="button" class="remove-btn" onclick="window.removePendingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3); z-index: 3;">&times;</button>
       </div>
-      <div style="width: 100%;">
+      <div style="width: 100%; margin-top: 2px;">
+        ${mainBtnHtml}
+      </div>
+      <div style="width: 100%; margin-top: 2px;">
         <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 3px;">
           ${assignedColor ? `<span style="width: 8px; height: 8px; border-radius: 50%; background: ${hex}; border: 1px solid ${hex.toLowerCase() === '#ffffff' ? '#ccc' : 'transparent'}; display: inline-block;"></span>` : ''}
           <span style="font-size: 10px; font-weight: 800; color: var(--muted); text-transform: uppercase;">Color Variant:</span>
@@ -977,6 +1056,11 @@ function renderImagePreviews() {
     imagePreviewContainer.appendChild(div);
   });
 }
+
+window.setMainProductPhoto = function(type, index) {
+  selectedMainPhoto = { type, index };
+  renderImagePreviews();
+};
 
 window.updateImageColorMatch = function(type, index, colorName) {
   if (type === 'existing') {
@@ -1002,6 +1086,20 @@ window.removeExistingImage = function(index) {
     if (existingImageColorMap[oldIdx]) newMap[i] = existingImageColorMap[oldIdx];
   });
   existingImageColorMap = newMap;
+
+  if (selectedMainPhoto.type === 'existing') {
+    if (selectedMainPhoto.index === index) {
+      if (existingImages.length > 0) {
+        selectedMainPhoto = { type: 'existing', index: 0 };
+      } else if (pendingImages.length > 0) {
+        selectedMainPhoto = { type: 'pending', index: 0 };
+      } else {
+        selectedMainPhoto = { type: 'existing', index: 0 };
+      }
+    } else if (selectedMainPhoto.index > index) {
+      selectedMainPhoto.index--;
+    }
+  }
   renderImagePreviews();
 };
 
@@ -1013,6 +1111,20 @@ window.removePendingImage = function(index) {
     if (pendingImageColorMap[oldIdx]) newMap[i] = pendingImageColorMap[oldIdx];
   });
   pendingImageColorMap = newMap;
+
+  if (selectedMainPhoto.type === 'pending') {
+    if (selectedMainPhoto.index === index) {
+      if (existingImages.length > 0) {
+        selectedMainPhoto = { type: 'existing', index: 0 };
+      } else if (pendingImages.length > 0) {
+        selectedMainPhoto = { type: 'pending', index: 0 };
+      } else {
+        selectedMainPhoto = { type: 'pending', index: 0 };
+      }
+    } else if (selectedMainPhoto.index > index) {
+      selectedMainPhoto.index--;
+    }
+  }
   renderImagePreviews();
 };
 
@@ -1035,6 +1147,9 @@ imageUpload.addEventListener("change", async (e) => {
   
   const results = await Promise.all(readPromises);
   pendingImages = [...pendingImages, ...results];
+  if (existingImages.length === 0 && selectedMainPhoto.type === 'existing') {
+    selectedMainPhoto = { type: 'pending', index: 0 };
+  }
   
   renderImagePreviews();
   uploadStatus.textContent = "Images ready to be uploaded upon saving!";
