@@ -88,24 +88,30 @@ footer,
 }
 @font-face {
   font-family: 'Acumin Variable Concept';
-  src: url('assets/fonts/heading.otf') format('opentype');
+  src: url('assets/fonts/heading.woff2') format('woff2'),
+       url('assets/fonts/heading.otf') format('opentype');
   font-display: swap;
 }
 @font-face {
   font-family: 'Acumin Condensed';
-  src: url('assets/fonts/heading-condensed.otf') format('opentype');
+  src: url('assets/fonts/heading-condensed.woff2') format('woff2'),
+       url('assets/fonts/heading-condensed.otf') format('opentype');
   font-display: swap;
 }
 @font-face {
   font-family: 'Century Gothic';
-  src: url('assets/fonts/body.ttf') format('truetype');
+  src: url('assets/fonts/body.woff2') format('woff2'),
+       url('assets/fonts/body.ttf') format('truetype');
   font-weight: normal;
+  font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Century Gothic';
-  src: url('assets/fonts/body-bold.ttf') format('truetype');
+  src: url('assets/fonts/body-bold.woff2') format('woff2'),
+       url('assets/fonts/body-bold.ttf') format('truetype');
   font-weight: bold;
+  font-style: normal;
   font-display: swap;
 }
 

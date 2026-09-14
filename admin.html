@@ -217,33 +217,6 @@
           </div>
         </div>
 
-        <!-- HEADER COUNTRY & REGION SELECTOR MANAGER -->
-        <div id="countriesSection" style="background: white; border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); width: 100%;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--line); padding-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-            <div>
-              <h2 style="margin: 0; font-size: 18px; color: var(--ink); display: flex; align-items: center; gap: 8px;">
-                <span>🌐 Header Countries / Regions Dropdown</span>
-              </h2>
-              <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--muted);">Manage the countries/regions available in the top navigation bar dropdown (<code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 700;">.country-selector</code>) across all pages.</p>
-            </div>
-            <button id="saveCountriesBtn" class="button primary" style="font-size: 13px; padding: 8px 18px;">Publish Country Changes</button>
-          </div>
-
-          <!-- Add Country Form -->
-          <form id="addCountryForm" onsubmit="event.preventDefault(); window.addNewCountryFromInput();" style="display: flex; gap: 10px; margin-bottom: 16px; max-width: 540px; flex-wrap: wrap;">
-            <input type="text" id="newCountryNameInput" placeholder="Country Name (e.g., Yemen, UAE, Saudi Arabia)..." style="flex: 1; min-width: 220px; padding: 10px 12px; font-size: 13px; border: 1px solid var(--line); border-radius: 6px; background: #fff;" required>
-            <input type="text" id="newCountryCodeInput" placeholder="Code (e.g., YE, AE)" style="width: 110px; padding: 10px 12px; font-size: 13px; border: 1px solid var(--line); border-radius: 6px; background: #fff; text-transform: uppercase;">
-            <button type="submit" class="button outline" style="padding: 10px 16px; font-size: 13px; font-weight: 700; background: #2f873d; color: #fff; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">+ Add Country</button>
-          </form>
-
-          <!-- Country Chips / Badges Container -->
-          <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-            Active Countries &amp; Regions
-          </div>
-          <div id="adminCountriesList" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; min-height: 52px; padding: 12px; background: #f8fafc; border: 1px dashed var(--line); border-radius: 8px;">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
 
         <div style="display: flex; gap: 20px; width: 100%; min-height: 750px; height: calc(100vh - 280px);">
           <!-- Sidebar -->

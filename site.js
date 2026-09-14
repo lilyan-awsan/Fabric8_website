@@ -585,11 +585,19 @@ async function loadProducts() {
       ]);
       if (localSettings && (!siteSettings || Object.keys(siteSettings).length === 0)) {
         siteSettings = localSettings;
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(localSettings));
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch (e) {}
         applySiteSettings();
       }
       if (localProducts && Array.isArray(localProducts) && localProducts.length > 0) {
         products = localProducts;
         products.sort((a, b) => a.name.localeCompare(b.name));
+        try {
+          localStorage.setItem("fabric8_products_cache", JSON.stringify(localProducts));
+          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+        } catch (e) {}
         initSite();
         siteInitialized = true;
       }

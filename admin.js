@@ -2131,7 +2131,7 @@ async function loadSiteSettings() {
   if (typeof initAdminCountries === 'function') initAdminCountries();
 }
 
-// --- Header Country/Region Dropdown Management ---
+// --- Header Country/Region Dropdown Management (In-Preview Manager) ---
 let currentCountriesList = [
   { code: "US", name: "USA" },
   { code: "JO", name: "Jordan" },
@@ -2148,118 +2148,257 @@ function initAdminCountries() {
       { code: "INT", name: "International" }
     ];
   }
-  renderAdminCountriesList();
 }
 
-function renderAdminCountriesList() {
-  const container = document.getElementById("adminCountriesList");
-  if (!container) return;
+async function autoPersistCountries() {
+  currentSiteSettings.countries = currentCountriesList;
 
-  if (!currentCountriesList || currentCountriesList.length === 0) {
-    container.innerHTML = `<div style="font-size: 12px; color: var(--muted); font-style: italic; padding: 6px;">No countries in list. Add one using the form above.</div>`;
-    return;
+  // 1. Save to localStorage
+  try {
+    localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
+    localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+  } catch(e) {}
+
+  // 2. Save directly to Firebase Realtime Database
+  try {
+    const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+    await fetch(`${FIREBASE_DB}/admin_settings.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(currentSiteSettings)
+    });
+  } catch(fbErr) {
+    console.warn("Firebase sync error:", fbErr);
   }
 
-  container.innerHTML = currentCountriesList.map((c, idx) => `
-    <div style="display: inline-flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
-      <span style="font-size: 14px;">🌐</span>
-      <span style="font-size: 13px; font-weight: 700; color: var(--ink);">${c.name}</span>
-      <span style="font-size: 11px; font-weight: 800; background: #f1f5f9; color: #475569; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">${c.code || c.name}</span>
-      <button type="button" onclick="window.deleteCountry(${idx})" title="Delete ${c.name}" style="background: none; border: none; color: #ef4444; font-size: 16px; line-height: 1; cursor: pointer; padding: 0 0 0 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.25)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
-    </div>
-  `).join('');
-}
-
-window.addNewCountryFromInput = function() {
-  const nameInput = document.getElementById("newCountryNameInput");
-  const codeInput = document.getElementById("newCountryCodeInput");
-  if (!nameInput) return;
-
-  const name = nameInput.value.trim();
-  let code = codeInput ? codeInput.value.trim().toUpperCase() : '';
-  if (!name) return;
-  if (!code) code = name.slice(0, 3).toUpperCase();
-
-  if (currentCountriesList.some(c => c.name.toLowerCase() === name.toLowerCase())) {
-    alert(`"${name}" is already in the list.`);
-    return;
+  // 3. Save to GitHub repository
+  try {
+    await fetch('/api/githubSync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'save_settings',
+        siteSettingsPayload: currentSiteSettings,
+        commitMessage: 'Update Header Countries & Regions dropdown list'
+      })
+    });
+  } catch(ghErr) {
+    console.warn("GitHub API error:", ghErr);
   }
 
-  currentCountriesList.push({ code, name });
-  nameInput.value = '';
-  if (codeInput) codeInput.value = '';
-
-  renderAdminCountriesList();
-  if (window.showToast) window.showToast(`Added "${name}"! Click "Publish Country Changes" to deploy live.`, 'success');
-};
-
-window.deleteCountry = function(idx) {
-  if (idx < 0 || idx >= currentCountriesList.length) return;
-  const target = currentCountriesList[idx];
-  if (confirm(`Are you sure you want to remove "${target.name}" from the header country selector?`)) {
-    currentCountriesList.splice(idx, 1);
-    renderAdminCountriesList();
-    if (window.showToast) window.showToast(`Removed "${target.name}". Click "Publish Country Changes" to save.`, 'warning');
-  }
-};
-
-const saveCountriesBtn = document.getElementById('saveCountriesBtn');
-if (saveCountriesBtn) {
-  saveCountriesBtn.addEventListener('click', async () => {
-    const originalText = saveCountriesBtn.textContent;
-    saveCountriesBtn.textContent = 'Publishing Countries...';
-    saveCountriesBtn.disabled = true;
-
-    try {
-      currentSiteSettings.countries = currentCountriesList;
-
-      // 1. Save to localStorage
-      try {
-        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
-        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch(e) {}
-
-      // 2. Save directly to Firebase Realtime Database
-      try {
-        const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
-        await fetch(`${FIREBASE_DB}/admin_settings.json`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(currentSiteSettings)
-        });
-      } catch(fbErr) {
-        console.warn("Firebase sync error:", fbErr);
+  // 4. Update any native select inside iframe and sync site.js
+  try {
+    const iframeEl = document.getElementById('visualEditorIframe');
+    const doc = iframeEl ? (iframeEl.contentDocument || iframeEl.contentWindow.document) : null;
+    if (doc) {
+      const selectors = doc.querySelectorAll('.country-selector');
+      selectors.forEach(sel => {
+        sel.innerHTML = currentCountriesList.map(c => `<option value="${c.code || c.name}">${c.name}</option>`).join('');
+      });
+      const currentLabel = doc.querySelector('.editor-country-label');
+      if (currentLabel && currentCountriesList.length > 0) {
+        currentLabel.textContent = currentCountriesList[0].name;
       }
-
-      // 3. Save to GitHub repository
-      try {
-        await fetch('/api/githubSync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'save_settings',
-            siteSettingsPayload: currentSiteSettings,
-            commitMessage: 'Update Header Countries & Regions dropdown list'
-          })
-        });
-      } catch(ghErr) {
-        console.warn("GitHub API error:", ghErr);
-      }
-
-      if (window.showToast) {
-        window.showToast('Country list published live successfully!', 'success');
-      } else {
-        alert('Country list published successfully!');
-      }
-    } catch(err) {
-      console.error(err);
-      alert('Error saving countries: ' + err.message);
-    } finally {
-      saveCountriesBtn.textContent = originalText;
-      saveCountriesBtn.disabled = false;
     }
+  } catch(e) {}
+}
+
+function injectEditorCountryManager(doc) {
+  if (!doc) return;
+  const selectors = doc.querySelectorAll('.country-selector');
+  selectors.forEach(sel => {
+    // Avoid double wrapping
+    if (sel.parentElement && sel.parentElement.classList.contains('editor-country-wrapper')) return;
+
+    // Hide native select visually
+    sel.style.display = 'none';
+
+    // Create custom wrapper
+    const wrapper = doc.createElement('div');
+    wrapper.className = 'editor-country-wrapper';
+    wrapper.style.cssText = 'position: relative; display: inline-flex; align-items: center; z-index: 10000;';
+
+    // Create trigger button
+    const trigger = doc.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'editor-country-trigger';
+    trigger.title = 'Manage Countries / Regions (Click to edit)';
+    trigger.style.cssText = 'min-height: 36px; padding: 4px 12px; font-size: 11px; border-radius: 9999px; border: 1.5px solid var(--ink, #111); background: #ffffff; cursor: pointer; text-transform: uppercase; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); font-family: inherit; color: var(--ink, #111); transition: all 0.2s ease;';
+    trigger.onmouseover = () => { trigger.style.borderColor = 'var(--green, #2f873d)'; trigger.style.boxShadow = '0 3px 10px rgba(47,135,61,0.2)'; };
+    trigger.onmouseout = () => { trigger.style.borderColor = 'var(--ink, #111)'; trigger.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)'; };
+
+    const labelSpan = doc.createElement('span');
+    labelSpan.className = 'editor-country-label';
+    const activeCountry = (currentCountriesList && currentCountriesList.length > 0) ? currentCountriesList[0].name : 'USA';
+    labelSpan.textContent = activeCountry;
+
+    const arrowSpan = doc.createElement('span');
+    arrowSpan.style.cssText = 'font-size: 8px; opacity: 0.7; margin-left: 2px;';
+    arrowSpan.innerHTML = '&#9660;';
+
+    trigger.appendChild(labelSpan);
+    trigger.appendChild(arrowSpan);
+
+    // Dropdown panel
+    const dropdown = doc.createElement('div');
+    dropdown.className = 'editor-country-menu';
+    dropdown.style.cssText = 'display: none; position: absolute; top: calc(100% + 6px); right: 0; min-width: 250px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 14px 35px rgba(0,0,0,0.18); z-index: 999999; overflow: hidden; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; text-transform: none; text-align: left;';
+
+    // Render Dropdown content
+    const renderDropdown = () => {
+      dropdown.innerHTML = '';
+
+      // Header row
+      const headerRow = doc.createElement('div');
+      headerRow.style.cssText = 'padding: 10px 14px 8px; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #fafafa;';
+      headerRow.innerHTML = `
+        <span>Countries &amp; Regions</span>
+        <span style="font-size: 10px; background: #e2e8f0; color: #334155; padding: 2px 7px; border-radius: 9999px; font-weight: bold;">${currentCountriesList.length}</span>
+      `;
+      dropdown.appendChild(headerRow);
+
+      // Countries List
+      const listContainer = doc.createElement('div');
+      listContainer.style.cssText = 'max-height: 220px; overflow-y: auto; padding: 4px 0;';
+
+      if (!currentCountriesList || currentCountriesList.length === 0) {
+        listContainer.innerHTML = '<div style="padding: 14px; font-size: 12px; color: #94a3b8; text-align: center; font-style: italic;">No countries yet. Add one below.</div>';
+      } else {
+        currentCountriesList.forEach((c, idx) => {
+          const itemRow = doc.createElement('div');
+          itemRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid #f8fafc; gap: 8px; transition: background 0.15s ease;';
+          itemRow.onmouseover = () => { itemRow.style.background = '#f8fafc'; };
+          itemRow.onmouseout = () => { itemRow.style.background = 'transparent'; };
+
+          const infoDiv = doc.createElement('div');
+          infoDiv.style.cssText = 'display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1;';
+          infoDiv.innerHTML = `
+            <span style="font-size: 13px; font-weight: 700; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.name}</span>
+            <span style="font-size: 10px; font-weight: 800; color: #64748b; background: #f1f5f9; padding: 2px 5px; border-radius: 4px; text-transform: uppercase;">${c.code || c.name}</span>
+          `;
+
+          // Red [x] delete button
+          const delBtn = doc.createElement('button');
+          delBtn.type = 'button';
+          delBtn.title = `Remove ${c.name}`;
+          delBtn.style.cssText = 'width: 22px; height: 22px; min-width: 22px; border-radius: 50%; background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; cursor: pointer; line-height: 1; padding: 0; transition: all 0.15s ease;';
+          delBtn.innerHTML = '&times;';
+          delBtn.onmouseover = () => {
+            delBtn.style.background = '#ef4444';
+            delBtn.style.color = '#ffffff';
+            delBtn.style.transform = 'scale(1.15)';
+          };
+          delBtn.onmouseout = () => {
+            delBtn.style.background = '#fee2e2';
+            delBtn.style.color = '#ef4444';
+            delBtn.style.transform = 'scale(1)';
+          };
+
+          delBtn.onclick = async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const removed = currentCountriesList[idx];
+            if (confirm(`Remove "${removed.name}" from country list?`)) {
+              currentCountriesList.splice(idx, 1);
+              renderDropdown();
+              await autoPersistCountries();
+              if (window.showToast) window.showToast(`Removed "${removed.name}"!`, 'warning');
+            }
+          };
+
+          itemRow.appendChild(infoDiv);
+          itemRow.appendChild(delBtn);
+          listContainer.appendChild(itemRow);
+        });
+      }
+      dropdown.appendChild(listContainer);
+
+      // Bottom [+] Add Country Row
+      const addRow = doc.createElement('div');
+      addRow.style.cssText = 'padding: 10px 14px; background: #f8fafc; border-top: 1px solid #e2e8f0;';
+
+      const addForm = doc.createElement('form');
+      addForm.style.cssText = 'display: flex; gap: 6px; align-items: center; margin: 0;';
+      addForm.onsubmit = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const nameVal = nameInput.value.trim();
+        let codeVal = codeInput.value.trim().toUpperCase();
+        if (!nameVal) return;
+        if (!codeVal) codeVal = nameVal.slice(0, 3).toUpperCase();
+
+        if (currentCountriesList.some(c => c.name.toLowerCase() === nameVal.toLowerCase())) {
+          alert(`"${nameVal}" is already in the list.`);
+          return;
+        }
+
+        currentCountriesList.push({ code: codeVal, name: nameVal });
+        nameInput.value = '';
+        codeInput.value = '';
+        renderDropdown();
+        await autoPersistCountries();
+        if (window.showToast) window.showToast(`Added "${nameVal}"!`, 'success');
+      };
+
+      const nameInput = doc.createElement('input');
+      nameInput.type = 'text';
+      nameInput.placeholder = 'Add Country (e.g. Yemen)';
+      nameInput.required = true;
+      nameInput.style.cssText = 'flex: 1; min-width: 0; padding: 6px 8px; font-size: 11px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; background: #ffffff;';
+
+      const codeInput = doc.createElement('input');
+      codeInput.type = 'text';
+      codeInput.placeholder = 'Code';
+      codeInput.style.cssText = 'width: 44px; padding: 6px 4px; font-size: 11px; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; background: #ffffff; text-align: center;';
+
+      const plusBtn = doc.createElement('button');
+      plusBtn.type = 'submit';
+      plusBtn.title = 'Add Country';
+      plusBtn.style.cssText = 'width: 28px; height: 28px; min-width: 28px; border-radius: 6px; background: #2f873d; color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; cursor: pointer; transition: transform 0.15s ease;';
+      plusBtn.innerHTML = '&plus;';
+      plusBtn.onmouseover = () => { plusBtn.style.transform = 'scale(1.1)'; };
+      plusBtn.onmouseout = () => { plusBtn.style.transform = 'scale(1)'; };
+
+      addForm.appendChild(nameInput);
+      addForm.appendChild(codeInput);
+      addForm.appendChild(plusBtn);
+      addRow.appendChild(addForm);
+      dropdown.appendChild(addRow);
+    };
+
+    // Toggle menu
+    trigger.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const isOpen = dropdown.style.display === 'block';
+      if (!isOpen) {
+        renderDropdown();
+        dropdown.style.display = 'block';
+      } else {
+        dropdown.style.display = 'none';
+      }
+    };
+
+    // Close on click outside inside doc
+    doc.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Close on click outside in parent admin window
+    window.addEventListener('click', (e) => {
+      dropdown.style.display = 'none';
+    });
+
+    // Mount
+    sel.parentNode.insertBefore(wrapper, sel);
+    wrapper.appendChild(sel);
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(dropdown);
   });
 }
+
 
 const iframe = document.getElementById('visualEditorIframe');
 const iframeOverlay = document.getElementById('iframeOverlay');
@@ -2353,13 +2492,16 @@ if (iframe && navBtns.length > 0) {
       if (!doc.body.getAttribute('data-click-intercepted')) {
         doc.body.setAttribute('data-click-intercepted', 'true');
         doc.addEventListener('click', (e) => {
-          if (e.target.closest('.editor-change-bg-btn')) return;
+          if (e.target.closest('.editor-change-bg-btn, .editor-country-wrapper, .editor-country-trigger, .editor-country-menu')) return;
           const link = e.target.closest('a, button');
           if (link) {
             e.preventDefault();
           }
         }, true);
       }
+
+      // Inject Header Country & Region Selector Manager directly into header preview
+      injectEditorCountryManager(doc);
 
       // Ensure Contact Page blocks have clean single editable containers
       const hqTitle = doc.getElementById('cmsContactHQTitle');
@@ -2630,6 +2772,17 @@ if (saveVisualEditorBtn) {
         el.removeAttribute('data-updated-href');
       });
       cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"]').forEach(el => el.remove());
+
+      // Restore clean native country-selector before saving HTML
+      cleanDoc.querySelectorAll('.editor-country-wrapper').forEach(wrapper => {
+        const nativeSel = wrapper.querySelector('.country-selector');
+        if (nativeSel) {
+          nativeSel.style.display = '';
+          nativeSel.innerHTML = currentCountriesList.map(c => `<option value="${c.code || c.name}">${c.name}</option>`).join('\n');
+          wrapper.parentNode.insertBefore(nativeSel, wrapper);
+        }
+        wrapper.remove();
+      });
 
       const injectedStyleTag = cleanDoc.querySelector('#visual-editor-style');
       if (injectedStyleTag) injectedStyleTag.remove();
