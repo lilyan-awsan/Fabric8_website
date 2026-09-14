@@ -641,9 +641,11 @@
     ]
   },
   {
+    "id": "F8-009",
     "sku": "F8-009",
     "name": "Workwear / Waiter Pants",
     "category": "Bottom Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Polished, comfortable pants for service staff.",
     "long": "A versatile pant designed for all-day wear in hospitality and service settings, with wrinkle-resistant fabric and comfortable movement.",
@@ -661,23 +663,22 @@
       "Navy",
       "Charcoal"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Trousers Beige.webp",
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Navy": "assets/products/Trousers Navy Front.webp",
+      "Beige": "assets/products/Trousers Beige.webp",
+      "Black": "assets/products/Trousers Black.webp",
+      "Charcoal": "assets/products/Trousers Charcoal.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "50 pieces",
+    "maxQty": "",
     "availability": "In Stock",
-    "images": [
-      "assets/products/Trousers Navy Front.webp",
-      "assets/products/Trousers Beige.webp",
-      "assets/products/Trousers Black back.webp",
-      "assets/products/Trousers Black.webp",
-      "assets/products/Trousers Charcoal.webp"
-    ],
-    "supportedFinishes": [],
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Left Hip Pocket",
       "Right Hip Pocket",
@@ -729,6 +730,23 @@
       "Right Hip Pocket",
       "Left Cargo Pocket / Leg",
       "Right Cargo Pocket / Leg"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "image": "assets/products/Trousers Navy Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0
+    },
+    "images": [
+      "assets/products/Trousers Navy Front.webp",
+      "assets/products/Trousers Beige.webp",
+      "assets/products/Trousers Black back.webp",
+      "assets/products/Trousers Black.webp",
+      "assets/products/Trousers Charcoal.webp"
     ]
   },
   {
