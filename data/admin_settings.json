@@ -87,7 +87,7 @@
     "contactEmail": "hello@thefabric8.com",
     "contactEmailTitle": "Direct Email",
     "contactGlobalTitle": "Global Contact",
-    "contactHQ": "6290 Jimmy Carter Blvd Suite 202\nNorcross, GA 30071\nUnited States.",
+    "contactHQ": "6290 Jimmy Carter Blvd Suite 202Norcross, GA 30071United States.",
     "contactHQTitle": "Corporate Headquarters",
     "contactInquiryTitle": "Send an Inquiry",
     "contactJordan": "+962 796 788 240",
@@ -140,12 +140,12 @@
         "url": ""
       },
       {
+        "active": true,
+        "iconKey": "telegram",
         "id": "social_1789419780270",
         "name": "Telegram",
-        "iconKey": "telegram",
-        "url": "https://thefabric8.com",
-        "active": true,
-        "shape": "square"
+        "shape": "square",
+        "url": "https://thefabric8.com"
       }
     ],
     "socialInstagram": "https://www.instagram.com/thefabric8",
