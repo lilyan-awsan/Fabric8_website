@@ -1963,7 +1963,7 @@
     "id": "F8-023",
     "sku": "F8-023",
     "name": "Hoodie",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education",
     "short": "Comfortable layer for casual or outdoor work settings.",
@@ -1978,7 +1978,7 @@
     ],
     "colors": [
       "White",
-      "Black",
+      "Grey",
       "Navy"
     ],
     "colorHexMap": {},
