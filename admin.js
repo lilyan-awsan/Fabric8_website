@@ -2280,8 +2280,10 @@ function injectEditorCountryManager(doc) {
           // Red [x] delete button
           const delBtn = doc.createElement('button');
           delBtn.type = 'button';
+          delBtn.className = 'country-del-btn';
+          delBtn.setAttribute('contenteditable', 'false');
           delBtn.title = `Remove ${c.name}`;
-          delBtn.style.cssText = 'width: 22px; height: 22px; min-width: 22px; border-radius: 50%; background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; cursor: pointer; line-height: 1; padding: 0; transition: all 0.15s ease;';
+          delBtn.style.cssText = 'width: 24px; height: 24px; min-width: 24px; border-radius: 50%; background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; cursor: pointer; line-height: 1; padding: 0; transition: all 0.15s ease; user-select: none;';
           delBtn.innerHTML = '&times;';
           delBtn.onmouseover = () => {
             delBtn.style.background = '#ef4444';
@@ -2294,17 +2296,28 @@ function injectEditorCountryManager(doc) {
             delBtn.style.transform = 'scale(1)';
           };
 
-          delBtn.onclick = async (e) => {
+          // Reliable capture-phase click handler: removes immediately without blocking native modal
+          delBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const removed = currentCountriesList[idx];
-            if (confirm(`Remove "${removed.name}" from country list?`)) {
-              currentCountriesList.splice(idx, 1);
+            const targetName = c.name;
+            const targetCode = c.code || c.name;
+            const foundIdx = currentCountriesList.findIndex(item => 
+              (item.code && item.code === targetCode) || 
+              (item.name && item.name.toLowerCase() === targetName.toLowerCase())
+            );
+            if (foundIdx !== -1) {
+              const removed = currentCountriesList.splice(foundIdx, 1)[0];
               renderDropdown();
               await autoPersistCountries();
-              if (window.showToast) window.showToast(`Removed "${removed.name}"!`, 'warning');
+              if (window.showToast) window.showToast(`Removed "${removed ? removed.name : targetName}"!`, 'warning');
             }
-          };
+          }, true);
+
+          delBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }, true);
 
           itemRow.appendChild(infoDiv);
           itemRow.appendChild(delBtn);
@@ -2500,9 +2513,6 @@ if (iframe && navBtns.length > 0) {
         }, true);
       }
 
-      // Inject Header Country & Region Selector Manager directly into header preview
-      injectEditorCountryManager(doc);
-
       // Ensure Contact Page blocks have clean single editable containers
       const hqTitle = doc.getElementById('cmsContactHQTitle');
       if (hqTitle && hqTitle.nextElementSibling) {
@@ -2523,7 +2533,7 @@ if (iframe && navBtns.length > 0) {
       textTags.forEach(tag => {
         const els = doc.querySelectorAll(tag);
         els.forEach(el => {
-          if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn')) return;
+          if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn, .editor-country-wrapper, .editor-country-trigger, .editor-country-menu, .country-del-btn')) return;
           // Never mark parent contenteditable if it contains child editable elements or CMS identifiers
           const hasChildEditables = el.querySelector('a, button, span[id], p[id], div[id], h1, h2, h3, h4, h5, h6, [id^="cms"]');
           if (hasChildEditables) return;
@@ -2536,7 +2546,7 @@ if (iframe && navBtns.length > 0) {
 
       // Prevent link navigation inside editor iframe so clicks edit text
       doc.querySelectorAll('a, button').forEach(el => {
-        if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn')) return;
+        if (el.classList.contains('editor-change-bg-btn') || el.closest('.editor-change-bg-btn, .editor-country-wrapper, .editor-country-trigger, .editor-country-menu, .country-del-btn')) return;
         if (!el.getAttribute('data-editor-click-handled')) {
           el.setAttribute('data-editor-click-handled', 'true');
           el.addEventListener('click', (e) => {
@@ -2659,6 +2669,9 @@ if (iframe && navBtns.length > 0) {
       
       // Update iframe marquee with brand logos
       updateIframeMarquee();
+
+      // Inject Header Country & Region Selector Manager directly into header preview
+      injectEditorCountryManager(doc);
 
     } catch(err) {
       console.warn("Could not inject editor script into iframe:", err);
