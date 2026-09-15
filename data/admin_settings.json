@@ -94,7 +94,7 @@
       "name": "FOOT WEAR"
     }
   ],
-  "footerLegal": "© 2026 Fabric8. All rights reserved. Custom Workwear &amp; Uniform Solutions. Designed for Perfection.",
+  "footerLegal": "© 2026 Fabric8. All rights reserved. Custom Workwear &amp; Uniform Solutions. Designed for Perfection..&nbsp;",
   "legalContent": {
     "privacyText": "We rigorously respect corporate client privacy. All design specifications, technical CAD sketches, and logo attachments submitted through our quotation engine remain confidential between Fabric8 and your enterprise.",
     "termsText": "By accessing and using the Fabric8 website and Branding Atelier, you agree to abide by our manufacturing timelines, minimum order quantities (MOQ), and intellectual property warranty requirements when uploading custom company logos and artwork."
@@ -205,12 +205,6 @@
       "id": "brand_1789433500642",
       "name": "VISIOTECH",
       "src": "assets/site_images/1789433505412_6_visiotech.png"
-    },
-    {
-      "id": "brand_1789493031217",
-      "name": "meenotek",
-      "src": "assets/site_images/1789493034661_7_meenotek.png",
-      "fileName": "1789354338656_8_meenotek.png"
     }
   ]
 }
