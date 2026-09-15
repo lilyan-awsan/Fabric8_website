@@ -9,7 +9,7 @@
   <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/pattern.webp" as="image" type="image/webp">
-<link href="site.css?v=14" rel="stylesheet">
+<link href="site.css?v=15" rel="stylesheet">
 </head>
 <body class="page-ready" style="">
 <div aria-hidden="true" class="royal-door">
@@ -244,16 +244,20 @@
 <!-- Firebase SDK -->
 <script src="site.js?v=40"></script>
 <script>
-      // Fast & elegant branding entrance: plays briefly on first visit, then skips on subpages/reloads
-      if (sessionStorage.getItem('f8_door_seen')) {
-        var door = document.querySelector('.royal-door');
-        if (door) door.style.display = 'none';
-      } else {
-        sessionStorage.setItem('f8_door_seen', '1');
-        document.body.style.overflow = 'hidden';
-        setTimeout(function() {
+      // Royal door branding entrance (4.0s duration, click/tap anywhere to skip)
+      document.body.style.overflow = 'hidden';
+      var unlockTimer = setTimeout(function() {
+        document.body.style.overflow = '';
+      }, 4000);
+      var door = document.querySelector('.royal-door');
+      if (door) {
+        door.addEventListener('click', function() {
+          clearTimeout(unlockTimer);
+          door.style.transition = 'opacity 0.4s ease';
+          door.style.opacity = '0';
+          setTimeout(function() { door.style.display = 'none'; }, 400);
           document.body.style.overflow = '';
-        }, 1100);
+        });
       }
     </script>
 
