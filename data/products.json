@@ -365,9 +365,7 @@
     "image": "assets/products/Cargo Vest Beige.webp",
     "mainImageSelection": {
       "type": "existing",
-      "index": 0,
-      "url": "assets/products/Cargo Vest Beige.webp",
-      "name": null
+      "index": 4
     },
     "images": [
       "assets/products/Cargo Vest Beige.webp",
