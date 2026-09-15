@@ -268,7 +268,7 @@
     "id": "F8-003",
     "sku": "F8-003",
     "name": "Cargo Vest",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Hospitality, Corporate, Healthcare, Industrial, Aviation",
     "short": "Rugged utility vest with functional storage.",
@@ -290,7 +290,7 @@
     "colorHexMap": {},
     "colorImageMap": {
       "Army Green": "assets/products/Cargo Vest Army Green.webp",
-      "Beige": "assets/products/Cargo Vest Beige.webp",
+      "Beige": "assets/products/Cargo Vest Beige Side.webp",
       "Black": "assets/products/Cargo Vest Black.webp",
       "Navy": "assets/products/Cargo Vest Navy.webp"
     },
@@ -360,18 +360,18 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Cargo Vest Beige.webp",
+    "image": "assets/products/Cargo Vest Army Green.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Cargo Vest Beige.webp",
+      "url": "assets/products/Cargo Vest Army Green.webp",
       "name": null
     },
     "images": [
-      "assets/products/Cargo Vest Beige.webp",
       "assets/products/Cargo Vest Army Green.webp",
       "assets/products/Cargo Vest Beige Side.webp",
       "assets/products/Cargo Vest Beige Back.webp",
+      "assets/products/Cargo Vest Beige.webp",
       "assets/products/Cargo Vest Black.webp",
       "assets/products/Cargo Vest Navy.webp"
     ]
