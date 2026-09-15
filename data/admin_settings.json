@@ -164,14 +164,6 @@
         "name": "Facebook",
         "shape": "square",
         "url": ""
-      },
-      {
-        "active": true,
-        "iconKey": "telegram",
-        "id": "social_1789419780270",
-        "name": "Telegram",
-        "shape": "square",
-        "url": "https://thefabric8.com"
       }
     ],
     "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
