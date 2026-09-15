@@ -860,8 +860,16 @@ productForm.addEventListener("submit", async (e) => {
       const map = {};
       existingImages.forEach((imgUrl, idx) => {
         const assigned = existingImageColorMap[idx];
-        if (assigned) map[assigned] = imgUrl;
+        if (assigned && !map[assigned]) map[assigned] = imgUrl;
       });
+      // Ensure the designated main photo is the primary image mapped for its color variant!
+      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+        const mainImg = existingImages[selectedMainPhoto.index];
+        const mainColor = existingImageColorMap[selectedMainPhoto.index];
+        if (mainColor) {
+          map[mainColor] = mainImg;
+        }
+      }
       return map;
     })(),
     fabric: document.getElementById("fabric").value,
@@ -893,9 +901,17 @@ productForm.addEventListener("submit", async (e) => {
       if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
         return existingImages[selectedMainPhoto.index];
       }
+      if (selectedMainPhoto.type === 'pending' && pendingImages[selectedMainPhoto.index]) {
+        return `PENDING_${pendingImages[selectedMainPhoto.index].name}`;
+      }
       return existingImages[0] || "";
     })(),
-    mainImageSelection: selectedMainPhoto
+    mainImageSelection: {
+      type: selectedMainPhoto.type,
+      index: selectedMainPhoto.type === 'existing' ? 0 : selectedMainPhoto.index,
+      url: selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index] ? existingImages[selectedMainPhoto.index] : null,
+      name: selectedMainPhoto.type === 'pending' && pendingImages[selectedMainPhoto.index] ? pendingImages[selectedMainPhoto.index].name : null
+    }
   };
 
   if (pendingSketchFile) {

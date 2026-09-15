@@ -2020,30 +2020,56 @@ body {
   gap: 8px !important;
   background: #ffffff !important;
   padding: 6px 10px !important;
-  border: 1px solid var(--line) !important;
+  border: 1.5px solid var(--line) !important;
   border-radius: 8px !important;
-  transition: all 0.25s ease !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-sizing: border-box !important;
+}
+
+.size-row:hover {
+  border-color: #999 !important;
+}
+
+.size-row.is-active,
+.size-row:focus-within {
+  border-color: var(--ink, #111) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09) !important;
+  transform: translateY(-1px);
 }
 
 .size-select-btn {
   flex: 1 !important;
   min-height: 36px !important;
   height: 36px !important;
-  padding: 0 10px !important;
+  padding: 0 12px !important;
   background: transparent !important;
-  border: 1px solid var(--line) !important;
+  border: 1.5px solid var(--line) !important;
   border-radius: 6px !important;
   font-weight: 800 !important;
   font-size: 13px !important;
   text-align: left !important;
   cursor: pointer !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
   color: var(--ink) !important;
   box-sizing: border-box !important;
+}
+
+/* Stand out / Highlight when active or when quantity is entered */
+.size-row.is-active .size-select-btn,
+.size-row:focus-within .size-select-btn,
+.size-select-btn.selected {
+  background: var(--ink, #111) !important;
+  color: #ffffff !important;
+  border-color: var(--ink, #111) !important;
+}
+
+.size-row.is-active .size-select-btn .chk-indicator,
+.size-row:focus-within .size-select-btn .chk-indicator,
+.size-select-btn.selected .chk-indicator {
+  color: var(--yellow, #ffd700) !important;
 }
 
 .matrix-qty-input {
@@ -2052,7 +2078,7 @@ body {
   height: 36px !important;
   padding: 0 8px !important;
   text-align: center !important;
-  border: 1px solid var(--line) !important;
+  border: 1.5px solid var(--line) !important;
   border-radius: 6px !important;
   font-family: inherit !important;
   font-size: 13px !important;
@@ -2066,6 +2092,6 @@ body {
 .matrix-qty-input:focus {
   outline: none !important;
   border-color: var(--ink) !important;
-  box-shadow: 0 0 0 2px rgba(35, 31, 32, 0.12) !important;
+  box-shadow: 0 0 0 2px rgba(35, 31, 32, 0.15) !important;
 }
 

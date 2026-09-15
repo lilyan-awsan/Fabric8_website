@@ -232,8 +232,12 @@ export default async function handler(req, res) {
     // 1. If there are new images or sketch attachments, upload them to GitHub first
     let finalImages = product?.existingImages ? [...product.existingImages] : [];
     let mainImageUrl = product?.image || null;
-    if (product?.mainImageSelection?.type === 'existing' && product.mainImageSelection.url) {
-      mainImageUrl = product.mainImageSelection.url;
+    if (product?.mainImageSelection?.type === 'existing') {
+      if (product.mainImageSelection.url) {
+        mainImageUrl = product.mainImageSelection.url;
+      } else if (typeof product.mainImageSelection.index === 'number' && finalImages[product.mainImageSelection.index]) {
+        mainImageUrl = finalImages[product.mainImageSelection.index];
+      }
     }
     
     if (newImages && Array.isArray(newImages) && newImages.length > 0) {
@@ -258,8 +262,10 @@ export default async function handler(req, res) {
             throw new Error("Failed to upload image: " + err.message);
           }
           finalImages.push(imgPath);
-          if (product?.mainImageSelection?.type === 'pending' && product.mainImageSelection.index === i) {
-            mainImageUrl = imgPath;
+          if (product?.mainImageSelection?.type === 'pending') {
+            if (product.mainImageSelection.index === i || (product.mainImageSelection.name && img.name === product.mainImageSelection.name)) {
+              mainImageUrl = imgPath;
+            }
           }
         }
       }
@@ -396,6 +402,8 @@ export default async function handler(req, res) {
       // Ensure designated main image is placed at index 0 of finalImages
       if (mainImageUrl && finalImages.includes(mainImageUrl)) {
         finalImages = [mainImageUrl, ...finalImages.filter(img => img !== mainImageUrl)];
+      } else if (mainImageUrl && !mainImageUrl.startsWith('PENDING_')) {
+        finalImages = [mainImageUrl, ...finalImages];
       }
 
       const colorImageMap = (product.colorImageMap && typeof product.colorImageMap === 'object') ? { ...product.colorImageMap } : {};
@@ -410,6 +418,14 @@ export default async function handler(req, res) {
       });
 
       const chosenMainImage = finalImages.length > 0 ? finalImages[0] : (product.image || "assets/white.png");
+
+      // Ensure that if the chosen main photo has an assigned color, it is mapped in colorImageMap
+      for (const col of (product.colors || [])) {
+        if (chosenMainImage.toLowerCase().includes(col.toLowerCase())) {
+          colorImageMap[col] = chosenMainImage;
+          break;
+        }
+      }
 
       const newProduct = { 
         ...product, 

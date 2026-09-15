@@ -857,13 +857,16 @@ function renderProducts() {
   }
 
   grid.innerHTML = filtered.map(p => {
-    let mainImg = p.image || 'White Polo Shirt.png';
-    if (p.images && p.images.length > 0) mainImg = p.images[0];
+    let cardImages = p.images && p.images.length > 0 ? [...p.images] : (p.image ? [p.image] : ['White Polo Shirt.png']);
+    if (p.image && cardImages.includes(p.image)) {
+      cardImages = [p.image, ...cardImages.filter(img => img !== p.image)];
+    }
+    const mainImg = cardImages[0] || p.image || 'White Polo Shirt.png';
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
     let imagesHtml = '';
-    if (p.images && p.images.length > 1) {
-      imagesHtml = p.images.map((img, idx) => 
+    if (cardImages.length > 1) {
+      imagesHtml = cardImages.map((img, idx) => 
         idx === 0
           ? `<img id="img-${p.sku}-${idx}" src="${img}" alt="${p.name}" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;">`
           : `<img id="img-${p.sku}-${idx}" data-src="${img}" alt="${p.name}" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">`
@@ -946,16 +949,19 @@ function openProductModal(sku) {
   selectedProductSku = sku;
   if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
 
-  let mainImg = selected.image || 'White Polo Shirt.png';
-  if (selected.images && selected.images.length > 0) mainImg = selected.images[0];
+  let modalImages = selected.images && selected.images.length > 0 ? [...selected.images] : (selected.image ? [selected.image] : ['White Polo Shirt.png']);
+  if (selected.image && modalImages.includes(selected.image)) {
+    modalImages = [selected.image, ...modalImages.filter(img => img !== selected.image)];
+  }
+  let mainImg = modalImages[0] || selected.image || 'White Polo Shirt.png';
   const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
   $("#modalProductImage").src = imgSrc;
   
   const thumbnailsContainer = $("#modalThumbnails");
   if (thumbnailsContainer) {
-    if (selected.images && selected.images.length > 1) {
+    if (modalImages.length > 1) {
       thumbnailsContainer.style.display = "flex";
-      thumbnailsContainer.innerHTML = selected.images.map(img => {
+      thumbnailsContainer.innerHTML = modalImages.map(img => {
         return `<img src="${img}" alt="Thumbnail" style="width: 60px; height: 60px; object-fit: contain; padding: 2px; background: #f0f0f0; border-radius: 4px; cursor: pointer; border: 1px solid var(--line);" onclick="document.getElementById('modalProductImage').src='${img}'">`;
       }).join("");
     } else {
@@ -2722,8 +2728,23 @@ function initProductPage(sku) {
 
       btn.addEventListener("click", () => {
         btn.classList.toggle("selected");
-        if (btn.classList.contains("selected") && !input.value) {
+        if (btn.classList.contains("selected")) {
           input.focus();
+        }
+        updateHighlight();
+      });
+
+      input.addEventListener("focus", () => {
+        row.classList.add("is-active");
+        btn.classList.add("selected");
+        chk.textContent = "●";
+        updateHighlight();
+      });
+
+      input.addEventListener("blur", () => {
+        row.classList.remove("is-active");
+        if (!parseInt(input.value)) {
+          btn.classList.remove("selected");
         }
         updateHighlight();
       });
