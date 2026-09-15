@@ -371,26 +371,26 @@ input, select, textarea, button { font: inherit; }
   z-index: 50;
   display: grid;
   place-items: center;
-  background: rgba(5, 7, 6, 0.2);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  background: rgba(10, 12, 11, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   pointer-events: none;
-  animation: introOut 1s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards;
+  animation: introOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
   overflow: hidden;
 }
 .royal-door::before {
   content: "";
   position: absolute;
-  inset: -10%;
-  background: url('assets/pattern.webp') center / cover no-repeat;
-  opacity: 0.8;
-  filter: blur(4px) brightness(0.5);
+  inset: -5%;
+  background: url('assets/pattern.webp') center / 380px repeat;
+  opacity: 0.28;
+  filter: invert(1);
   z-index: -1;
-  animation: patternZoom 3s ease-out forwards;
+  animation: patternZoom 1.2s ease-out forwards;
 }
 
 @keyframes patternZoom {
-  0% { transform: scale(1.1); }
+  0% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
 .door-logo {
@@ -401,14 +401,14 @@ input, select, textarea, button { font: inherit; }
   gap: 12px;
   color: #fff;
   text-align: center;
-  animation: logoSlideDown 2.8s ease forwards;
+  animation: logoSlideDown 0.7s ease forwards;
 }
 
 .door-logo img {
   width: min(360px, 58vw);
   max-height: 130px;
   object-fit: contain;
-  filter: drop-shadow(0 18px 30px rgba(0,0,0,.22));
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
 }
 
 .door-logo p {
@@ -418,7 +418,7 @@ input, select, textarea, button { font: inherit; }
   letter-spacing: .08em;
   text-transform: uppercase;
   opacity: 0;
-  animation: introTextIn 1.2s ease 1s forwards;
+  animation: introTextIn 0.5s ease 0.15s forwards;
 }
 
 .door-logo span {
@@ -429,7 +429,7 @@ input, select, textarea, button { font: inherit; }
   letter-spacing: .12em;
   text-transform: uppercase;
   opacity: 0;
-  animation: introTextIn 1.2s ease 1.35s forwards;
+  animation: introTextIn 0.5s ease 0.25s forwards;
 }
 
 .landing {

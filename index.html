@@ -9,7 +9,7 @@
   <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/pattern.webp" as="image" type="image/webp">
-<link href="site.css?v=13" rel="stylesheet">
+<link href="site.css?v=14" rel="stylesheet">
 </head>
 <body class="page-ready" style="">
 <div aria-hidden="true" class="royal-door">
@@ -244,11 +244,17 @@
 <!-- Firebase SDK -->
 <script src="site.js?v=40"></script>
 <script>
-      // Lock scrolling while the door animation plays with pattern, then unlock it
-      document.body.style.overflow = 'hidden';
-      setTimeout(function() {
-        document.body.style.overflow = '';
-      }, 3000);
+      // Fast & elegant branding entrance: plays briefly on first visit, then skips on subpages/reloads
+      if (sessionStorage.getItem('f8_door_seen')) {
+        var door = document.querySelector('.royal-door');
+        if (door) door.style.display = 'none';
+      } else {
+        sessionStorage.setItem('f8_door_seen', '1');
+        document.body.style.overflow = 'hidden';
+        setTimeout(function() {
+          document.body.style.overflow = '';
+        }, 1100);
+      }
     </script>
 
 
