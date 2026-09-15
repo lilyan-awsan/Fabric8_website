@@ -267,9 +267,11 @@
     ]
   },
   {
+    "id": "F8-003",
     "sku": "F8-003",
     "name": "Cargo Vest",
     "category": "Top Wear",
+    "gender": "Men / Women / Unisex",
     "sectors": "Hospitality, Corporate, Healthcare, Industrial, Aviation",
     "short": "Rugged utility vest with functional storage.",
     "long": "Built for staff who need hands-free storage on the job, with secure pockets for tools, phones, and equipment.",
@@ -287,34 +289,28 @@
       "Black",
       "Navy"
     ],
-    "gender": "Men / Women / Unisex",
-    "image": "assets/products/Cargo Vest Army Green.webp",
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Army Green": "assets/products/Cargo Vest Army Green.webp",
+      "Beige": "assets/products/Cargo Vest Beige.webp",
+      "Black": "assets/products/Cargo Vest Black.webp",
+      "Navy": "assets/products/Cargo Vest Navy.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "moq": "50 pieces",
     "leadTime": "14-21 Business Days",
-    "care": "Machine wash cold, do not bleach.",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
+    "moq": "50 pieces",
+    "maxQty": "",
     "availability": "In Stock",
-    "images": [
-      "assets/products/Cargo Vest Army Green.webp",
-      "assets/products/Cargo Vest Beige Side.webp",
-      "assets/products/Cargo Vest Beige Back.webp",
-      "assets/products/Cargo Vest Beige Back 1.webp",
-      "assets/products/Cargo Vest Beige.webp",
-      "assets/products/Cargo Vest Black.webp",
-      "assets/products/Cargo Vest Navy.webp"
-    ],
-    "supportedFinishes": [
-      "Embroidery"
-    ],
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
     ],
-    "customizationCapability": "Embroidery",
     "placements": [
       {
         "name": "Left Chest",
@@ -360,6 +356,27 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "image": "assets/products/Cargo Vest Beige.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Cargo Vest Beige.webp",
+      "name": null
+    },
+    "images": [
+      "assets/products/Cargo Vest Beige.webp",
+      "assets/products/Cargo Vest Army Green.webp",
+      "assets/products/Cargo Vest Beige Side.webp",
+      "assets/products/Cargo Vest Beige Back.webp",
+      "assets/products/Cargo Vest Beige Back 1.webp",
+      "assets/products/Cargo Vest Black.webp",
+      "assets/products/Cargo Vest Navy.webp"
     ]
   },
   {
