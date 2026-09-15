@@ -139,14 +139,14 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Polo White Front.webp",
+    "image": "assets/products/Polo American Blue 3.webp",
     "mainImageSelection": {
       "type": "existing",
-      "index": 0
+      "index": 1
     },
     "images": [
-      "assets/products/Polo White Front.webp",
       "assets/products/Polo American Blue 3.webp",
+      "assets/products/Polo White Front.webp",
       "assets/products/Polo White Side.webp",
       "assets/products/Polo White Back.webp",
       "assets/products/Polo Army Green 3.webp",
