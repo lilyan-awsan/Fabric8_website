@@ -21,7 +21,6 @@
       "American Blue",
       "Army Green",
       "Beige",
-      "Black",
       "Blue",
       "Brown",
       "Burgundy",
@@ -43,10 +42,39 @@
       "Deep Turquoise",
       "Yellow"
     ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Polo White Back.webp",
+      "American Blue": "assets/products/Polo American Blue 3.webp",
+      "Army Green": "assets/products/Polo Army Green 3.webp",
+      "Beige": "assets/products/Polo Beige 2.webp",
+      "Black": "assets/products/Polo Black 3.webp",
+      "Blue": "assets/products/Polo Turquoise blue 1-2.webp",
+      "Brown": "assets/products/Polo Brown 3.webp",
+      "Burgundy": "assets/products/Polo Burgundy 2.webp",
+      "Charcoal": "assets/products/Polo Charcoal 2.webp",
+      "Dark Green": "assets/products/Polo Dark Green 2.webp",
+      "Green": "assets/products/Polo Olive Green 2.webp",
+      "Kiwi": "assets/products/Polo Kiwi 4.webp",
+      "Light Grey": "assets/products/Polo Light grey (2).webp",
+      "Light Yellow": "assets/products/Polo Light Yellow.webp",
+      "Navy": "assets/products/Polo Navy 3.webp",
+      "Orange": "assets/products/Polo Orange 4.webp",
+      "Pink": "assets/products/Polo Pink 2.webp",
+      "Purple": "assets/products/Polo Purple 3.webp",
+      "Red": "assets/products/Polo Red 2.webp",
+      "Deep Turquoise": "assets/products/Polo Deep Turquoise.webp",
+      "Yellow": "assets/products/Polo Yellow 4.webp",
+      "Light Blue": "assets/products/Polo Light Blue 2 (2).webp",
+      "Olive Green": "assets/products/Polo Olive Green 2.webp",
+      "Purple Blue": "assets/products/Polo Purple Blue.webp",
+      "Turquoise Blue": "assets/products/Polo Turquoise blue 1-2.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
     "moq": "50 pieces",
+    "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
     "sketch": "",
@@ -108,6 +136,11 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
+    "image": "assets/products/Polo White Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0
+    },
     "images": [
       "assets/products/Polo White Front.webp",
       "assets/products/Polo American Blue 3.webp",
@@ -136,8 +169,7 @@
       "assets/products/Polo Turquoise blue 1-2.webp",
       "assets/products/Polo Deep Turquoise.webp",
       "assets/products/Polo Yellow 4.webp"
-    ],
-    "image": "assets/products/Polo White Front.webp"
+    ]
   },
   {
     "sku": "F8-002",
