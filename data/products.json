@@ -783,8 +783,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "American Blue": "assets/products/Cap American Blue.webp",
       "White": "assets/products/Cap White Back.webp",
+      "American Blue": "assets/products/Cap American Blue.webp",
       "Black": "assets/products/Cap Black.webp",
       "Brown": "assets/products/Cap Brown.webp",
       "Burgundy": "assets/products/Cap Burgundy.webp",
@@ -843,7 +843,7 @@
     "image": "assets/products/Cap White.webp",
     "mainImageSelection": {
       "type": "existing",
-      "index": 1
+      "index": 0
     },
     "images": [
       "assets/products/Cap White.webp",
