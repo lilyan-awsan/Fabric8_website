@@ -166,7 +166,7 @@
         "url": ""
       },
       {
-        "active": false,
+        "active": true,
         "iconKey": "telegram",
         "id": "social_1789419780270",
         "name": "Telegram",
