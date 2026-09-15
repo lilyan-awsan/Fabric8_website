@@ -1624,6 +1624,12 @@
       "Black",
       "Grey"
     ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Black": "assets/products/Oversize Tshirt Black 1.webp",
+      "White": "assets/products/Oversize Tshirt White 1.webp",
+      "Grey": "assets/products/Oversize Tshirt Grey 1.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
@@ -1690,14 +1696,20 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
+    "image": "assets/products/Oversize Tshirt White 1.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Oversize Tshirt White 1.webp",
+      "name": null
+    },
     "images": [
+      "assets/products/Oversize Tshirt White 1.webp",
       "assets/products/Oversize Tshirt Black 1.webp",
       "assets/products/Oversize Tshirt White Side.webp",
       "assets/products/Oversize Tshirt White Back.webp",
-      "assets/products/Oversize Tshirt Grey 1.webp",
-      "assets/products/Oversize Tshirt White 1.webp"
-    ],
-    "image": "assets/products/Oversize Tshirt Black 1.webp"
+      "assets/products/Oversize Tshirt Grey 1.webp"
+    ]
   },
   {
     "id": "F8-020",
