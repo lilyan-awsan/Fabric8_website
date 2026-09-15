@@ -265,22 +265,84 @@
     ]
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
-    "colorImageMap": {
-      "Army Green": "assets/products/Cargo Vest Army Green.webp",
-      "Beige": "assets/products/Cargo Vest Beige Back 1.webp",
-      "Black": "assets/products/Cargo Vest Black.webp",
-      "Navy": "assets/products/Cargo Vest Navy.webp"
-    },
+    "id": "F8-003",
+    "sku": "F8-003",
+    "name": "Cargo Vest",
+    "category": "Top Wear",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Hospitality, Corporate, Healthcare, Industrial, Aviation",
+    "short": "Rugged utility vest with functional storage.",
+    "long": "Built for staff who need hands-free storage on the job, with secure pockets for tools, phones, and equipment.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "Army Green",
       "Beige",
       "Black",
       "Navy"
     ],
-    "customizationCapability": "both",
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Army Green": "assets/products/Cargo Vest Army Green.webp",
+      "Beige": "assets/products/Cargo Vest Beige.webp",
+      "Black": "assets/products/Cargo Vest Black.webp",
+      "Navy": "assets/products/Cargo Vest Navy.webp"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "50 pieces",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 63,
+        "y": 44,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 37,
+        "y": 44,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Center Back",
+        "x": 50,
+        "y": 52,
+        "w": 42,
+        "h": 42,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 76,
+        "y": 48,
+        "w": 14,
+        "h": 14,
+        "r": 8
+      }
+    ],
     "dtfPlacements": [
       "Left Chest",
       "Right Chest",
@@ -293,84 +355,25 @@
       "Center Back",
       "Upper Sleeve"
     ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-003",
-    "image": "assets/products/Cargo Vest Beige.webp",
-    "images": [
-      "assets/products/Cargo Vest Beige.webp",
-      "assets/products/Cargo Vest Army Green.webp",
-      "assets/products/Cargo Vest Beige Side.webp",
-      "assets/products/Cargo Vest Beige Back 1.webp",
-      "assets/products/Cargo Vest Black.webp",
-      "assets/products/Cargo Vest Navy.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "Built for staff who need hands-free storage on the job, with secure pockets for tools, phones, and equipment.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing"
-    },
-    "maxQty": "",
-    "moq": "50 pieces",
-    "name": "Cargo Vest",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Hospitality, Corporate, Healthcare, Industrial, Aviation",
-    "short": "Rugged utility vest with functional storage.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-003",
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+    "customizationCapability": "both",
+    "image": "assets/products/Cargo Vest Beige.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Cargo Vest Beige.webp",
+      "name": null
+    },
+    "images": [
+      "assets/products/Cargo Vest Beige.webp",
+      "assets/products/Cargo Vest Army Green.webp",
+      "assets/products/Cargo Vest Beige Side.webp",
+      "assets/products/Cargo Vest Beige Back.webp",
+      "assets/products/Cargo Vest Black.webp",
+      "assets/products/Cargo Vest Navy.webp"
     ]
   },
   {
