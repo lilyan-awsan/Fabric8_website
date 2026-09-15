@@ -213,6 +213,12 @@
       "id": "brand_1789433500642",
       "name": "VISIOTECH",
       "src": "assets/site_images/1789433505412_6_visiotech.png"
+    },
+    {
+      "id": "brand_1789492705778",
+      "name": "test",
+      "src": "assets/site_images/1789492710888_7_test.png",
+      "fileName": "1789148602513_img.png"
     }
   ]
 }
