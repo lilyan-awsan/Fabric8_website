@@ -140,7 +140,8 @@ function applySiteSettings() {
       if (!sc.heroImage.startsWith('http') && !sc.heroImage.startsWith('data:')) {
         const testImg = new Image();
         testImg.onerror = () => {
-          const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${sc.heroImage.replace(/^\/+/, '')}`;
+          const cleanPath = sc.heroImage.replace(/^\/+/, '');
+          const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${cleanPath}?v=${Date.now()}`;
           applyHeroUrl(ghUrl);
         };
         testImg.src = sc.heroImage;
@@ -604,11 +605,11 @@ async function loadProducts() {
     } catch (e) {}
   }
 
-  // 3. Background Async Sync with Firebase Realtime Database (Throttled to 300s to keep site instant)
+  // 3. Background Async Sync with Firebase Realtime Database (Throttled to 15s to keep site instant and live)
   const isInsideIframe = window.self !== window.top;
   const forceRefresh = window.location.search.includes('t=') || isInsideIframe;
   const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-  const isCacheRecent = (Date.now() - lastSettingsSync) < 300000;
+  const isCacheRecent = (Date.now() - lastSettingsSync) < 15000;
   
   if (!isCacheRecent || !siteInitialized || forceRefresh) {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -681,6 +682,16 @@ window.addEventListener('storage', (e) => {
         }
       }
     } catch (err) {}
+  }
+});
+
+// Real-time tab-focus refresh (checks Firebase if page has been open > 15s)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
+    if (Date.now() - lastSettingsSync > 15000) {
+      loadProducts();
+    }
   }
 });
 
@@ -4252,7 +4263,11 @@ function renderShowcase() {
   showcase.style.alignItems = 'stretch';
   
   showcase.innerHTML = selected.map(p => {
-    const mainImg = (p.images && p.images.length > 0) ? p.images[0] : (p.image || 'White Polo Shirt.png');
+    let cardImages = p.images && p.images.length > 0 ? [...p.images] : (p.image ? [p.image] : ['White Polo Shirt.png']);
+    if (p.image && cardImages.includes(p.image)) {
+      cardImages = [p.image, ...cardImages.filter(img => img !== p.image)];
+    }
+    const mainImg = cardImages[0] || p.image || 'White Polo Shirt.png';
     const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
     
     return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column;">

@@ -302,6 +302,70 @@ function updateSyncBadge(statusMsg, isSuccess = false, isError = false) {
   }
 }
 
+// --- Client-Side Smart Image Compressor ---
+// Resizes and compresses images locally in the browser to ensure instant uploads,
+// preventing serverless payload timeouts (413 Payload Too Large) and eliminating photo delays.
+function compressImage(file, maxWidth = 1920, maxHeight = 1200, quality = 0.85) {
+  return new Promise((resolve) => {
+    if (!file) return resolve({ base64: '', name: '' });
+    
+    // Skip compression for SVGs
+    if (file.type === 'image/svg+xml') {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve({ base64: e.target.result, name: file.name });
+      reader.onerror = () => resolve({ base64: '', name: file.name });
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.naturalWidth || img.width;
+        let height = img.naturalHeight || img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width = Math.round(width * ratio);
+          height = Math.round(height * ratio);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        let outputType = 'image/webp';
+        let base64 = '';
+        try {
+          base64 = canvas.toDataURL('image/webp', quality);
+        } catch (err) {}
+
+        if (!base64 || base64.length < 50 || base64.startsWith('data:image/png')) {
+          outputType = 'image/jpeg';
+          base64 = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        const baseName = (file.name || 'image').replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, '_');
+        const ext = outputType === 'image/webp' ? 'webp' : 'jpg';
+        const finalName = `${baseName}.${ext}`;
+
+        resolve({ base64, name: finalName });
+      };
+      img.onerror = () => {
+        resolve({ base64: e.target.result, name: file.name });
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve({ base64: '', name: file.name });
+    reader.readAsDataURL(file);
+  });
+}
+
 // --- Sync Helper ---
 async function syncWithGithub(action, product) {
   updateSyncBadge("Syncing with server...", false, false);
@@ -430,15 +494,15 @@ let pendingSiteImages = {};
   const uploadInput = document.getElementById(`setting${item.input}Upload`);
   const textInput = document.getElementById(`setting${item.input}`);
   if (uploadInput && textInput) {
-    uploadInput.addEventListener('change', (e) => {
+    uploadInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        pendingSiteImages[item.key] = { base64: evt.target.result, name: file.name };
-        textInput.value = `[Pending Upload: ${file.name}]`;
-      };
-      reader.readAsDataURL(file);
+      const isHero = item.key.toLowerCase().includes('hero') || item.key.toLowerCase().includes('image');
+      const maxW = isHero ? 1920 : 1200;
+      const maxH = isHero ? 1080 : 1200;
+      const optimized = await compressImage(file, maxW, maxH, 0.85);
+      pendingSiteImages[item.key] = { base64: optimized.base64, name: optimized.name };
+      textInput.value = `[Pending Upload: ${optimized.name}]`;
     });
   }
 });
@@ -1149,17 +1213,9 @@ imageUpload.addEventListener("change", async (e) => {
   const files = e.target.files;
   if (!files || files.length === 0) return;
 
-  uploadStatus.textContent = "Processing images...";
+  uploadStatus.textContent = "Optimizing and processing images...";
   
-  const readPromises = Array.from(files).map(file => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        resolve({ name: file.name, base64: event.target.result });
-      };
-      reader.readAsDataURL(file);
-    });
-  });
+  const readPromises = Array.from(files).map(file => compressImage(file, 1400, 1400, 0.85));
   
   const results = await Promise.all(readPromises);
   pendingImages = [...pendingImages, ...results];
@@ -1168,7 +1224,7 @@ imageUpload.addEventListener("change", async (e) => {
   }
   
   renderImagePreviews();
-  uploadStatus.textContent = "Images ready to be uploaded upon saving!";
+  uploadStatus.textContent = "Images optimized & ready to be uploaded upon saving!";
   imageUpload.value = ""; // reset input
 });
 
@@ -2618,15 +2674,12 @@ if (iframe && navBtns.length > 0) {
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.accept = 'image/*';
-            fileInput.onchange = (event) => {
+            fileInput.onchange = async (event) => {
               const file = event.target.files[0];
               if (file) {
-                const reader = new FileReader();
-                reader.onload = (e2) => {
-                  img.src = e2.target.result;
-                  img.setAttribute('data-new-upload', file.name);
-                };
-                reader.readAsDataURL(file);
+                const optimized = await compressImage(file, 1200, 1200, 0.85);
+                img.src = optimized.base64;
+                img.setAttribute('data-new-upload', optimized.name);
               }
             };
             fileInput.click();
@@ -3185,7 +3238,7 @@ if (saveVisualEditorBtn) {
 }
 
 // Function to apply selected hero image file to currently previewed page
-function applyHeroImageFile(file) {
+async function applyHeroImageFile(file) {
   if (!file) return;
   try {
     const doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -3201,20 +3254,22 @@ function applyHeroImageFile(file) {
       alert("No hero banner was found on the currently previewed page.");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (e2) => {
-      const base64 = e2.target.result;
-      hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}")`;
-      hero.style.backgroundPosition = 'center center';
-      hero.style.backgroundSize = 'cover';
-      hero.style.backgroundRepeat = 'no-repeat';
-      hero.setAttribute('data-new-bg-upload', file.name);
-      hero.setAttribute('data-new-bg-base64', base64);
-      if (window.showToast) {
-        window.showToast(`Selected "${file.name}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
-      }
-    };
-    reader.readAsDataURL(file);
+    if (window.showToast) {
+      window.showToast("Optimizing hero image for instant loading...", "info", 1500);
+    }
+    const optimized = await compressImage(file, 1920, 1080, 0.85);
+    const base64 = optimized.base64;
+    const finalName = optimized.name;
+
+    hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}")`;
+    hero.style.backgroundPosition = 'center center';
+    hero.style.backgroundSize = 'cover';
+    hero.style.backgroundRepeat = 'no-repeat';
+    hero.setAttribute('data-new-bg-upload', finalName);
+    hero.setAttribute('data-new-bg-base64', base64);
+    if (window.showToast) {
+      window.showToast(`Selected "${finalName}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
+    }
   } catch(err) {
     console.warn("Could not apply hero image:", err);
     alert("Please wait for the page to finish loading in the editor before changing photo.");

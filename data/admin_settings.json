@@ -8,32 +8,48 @@
     "services": "",
     "shop": ""
   },
+  "brandLogos": [
+    {
+      "id": "brand_district",
+      "name": "DISTRICT",
+      "src": "assets/site_images/district.png"
+    },
+    {
+      "id": "brand_alibi",
+      "name": "ALIBI",
+      "src": "assets/site_images/alibi.png"
+    },
+    {
+      "id": "brand_cewas",
+      "name": "CEWAS",
+      "src": "assets/site_images/cewas.png"
+    },
+    {
+      "id": "brand_blaze_n_puff",
+      "name": "BLAZE N PUFF",
+      "src": "assets/site_images/blaze_n_puff.png"
+    },
+    {
+      "id": "brand_royal",
+      "name": "ROYAL",
+      "src": "assets/site_images/royal.png"
+    },
+    {
+      "id": "brand_mazaj_resto_cafe",
+      "name": "MAZAJ Resto Cafe",
+      "src": "assets/site_images/mazaj_resto_cafe.png"
+    },
+    {
+      "fileName": "VISIOTECH NAVY PNG.png",
+      "id": "brand_1789433500642",
+      "name": "VISIOTECH",
+      "src": "assets/site_images/1789433505412_6_visiotech.png"
+    }
+  ],
   "brandingSettings": {
     "dtfHelperNote": "Direct-to-fabric (DTF) printing is recommended for larger, multi-color, or photo-realistic designs, and works best on flatter areas like full front/back placements on t-shirts and hoodies.",
     "embroideryHelperNote": "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics."
   },
-  "countries": [
-    {
-      "code": "US",
-      "name": "USA"
-    },
-    {
-      "code": "JO",
-      "name": "Jordan"
-    },
-    {
-      "code": "YE",
-      "name": "Yemen"
-    },
-    {
-      "code": "INT",
-      "name": "International"
-    },
-    {
-      "code": "MD",
-      "name": "mdry"
-    }
-  ],
   "categories1stLayer": [
     {
       "enabled": true,
@@ -92,6 +108,28 @@
     {
       "enabled": true,
       "name": "FOOT WEAR"
+    }
+  ],
+  "countries": [
+    {
+      "code": "US",
+      "name": "USA"
+    },
+    {
+      "code": "JO",
+      "name": "Jordan"
+    },
+    {
+      "code": "YE",
+      "name": "Yemen"
+    },
+    {
+      "code": "INT",
+      "name": "International"
+    },
+    {
+      "code": "MD",
+      "name": "mdry"
     }
   ],
   "footerLegal": "© 2026 Fabric8. All rights reserved. Custom Workwear &amp; Uniform Solutions. Designed for Perfection..&nbsp;",
@@ -168,43 +206,5 @@
     ],
     "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
     "socialLinkedIn": "https://www.linkedin.com/company/the-fabric8/"
-  },
-  "brandLogos": [
-    {
-      "id": "brand_district",
-      "name": "DISTRICT",
-      "src": "assets/site_images/district.png"
-    },
-    {
-      "id": "brand_alibi",
-      "name": "ALIBI",
-      "src": "assets/site_images/alibi.png"
-    },
-    {
-      "id": "brand_cewas",
-      "name": "CEWAS",
-      "src": "assets/site_images/cewas.png"
-    },
-    {
-      "id": "brand_blaze_n_puff",
-      "name": "BLAZE N PUFF",
-      "src": "assets/site_images/blaze_n_puff.png"
-    },
-    {
-      "id": "brand_royal",
-      "name": "ROYAL",
-      "src": "assets/site_images/royal.png"
-    },
-    {
-      "id": "brand_mazaj_resto_cafe",
-      "name": "MAZAJ Resto Cafe",
-      "src": "assets/site_images/mazaj_resto_cafe.png"
-    },
-    {
-      "fileName": "VISIOTECH NAVY PNG.png",
-      "id": "brand_1789433500642",
-      "name": "VISIOTECH",
-      "src": "assets/site_images/1789433505412_6_visiotech.png"
-    }
-  ]
+  }
 }
