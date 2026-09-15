@@ -2800,6 +2800,16 @@ if (saveVisualEditorBtn) {
       const injectedStyleTag = cleanDoc.querySelector('#visual-editor-style');
       if (injectedStyleTag) injectedStyleTag.remove();
 
+      // Safeguard: Ensure royal-door intro is never saved with hidden inline styles
+      const royalDoorEl = cleanDoc.querySelector('.royal-door');
+      if (royalDoorEl) {
+        royalDoorEl.style.display = '';
+        royalDoorEl.removeAttribute('style');
+      }
+
+      // Safeguard: Strip any external antivirus / security extension injections
+      cleanDoc.querySelectorAll('link[href*="kaspersky"], script[src*="kaspersky"], style.abn_style').forEach(el => el.remove());
+
       // Extract newly uploaded images and backgrounds
       const newSiteImages = [];
       
