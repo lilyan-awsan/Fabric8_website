@@ -183,7 +183,7 @@
     "servicesProdImg": "",
     "servicesSub": "Fabric8 manages the full uniform lifecycle from textile advice to branded delivery.",
     "servicesTitle": "Service uniforms, designed like fashion.",
-    "socialFacebook": "https://hello",
+    "socialFacebook": "",
     "socialIcons": [
       {
         "active": true,
@@ -200,14 +200,6 @@
         "name": "Instagram",
         "shape": "square",
         "url": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag=="
-      },
-      {
-        "active": true,
-        "iconKey": "facebook",
-        "id": "facebook",
-        "name": "Facebook",
-        "shape": "square",
-        "url": "https://hello"
       }
     ],
     "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
