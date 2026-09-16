@@ -37,7 +37,11 @@ export default async function handler(req, res) {
 
         const mergedSettings = {
           ...existingSettings,
-          ...siteSettingsPayload
+          ...siteSettingsPayload,
+          siteContent: {
+            ...(existingSettings.siteContent || {}),
+            ...((siteSettingsPayload && siteSettingsPayload.siteContent) || {})
+          }
         };
 
         const newSettingsStr = JSON.stringify(mergedSettings, null, 2);
@@ -61,9 +65,16 @@ export default async function handler(req, res) {
           });
         } catch(e) {}
 
-        // Sync to Firebase Realtime DB
+        // Sync to Firebase Realtime DB with PATCH to prevent wiping unmentioned root settings
+        if (siteSettingsPayload && siteSettingsPayload.siteContent) {
+          await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings/siteContent.json", {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(siteSettingsPayload.siteContent)
+          }).catch(e => console.error("Firebase siteContent sync error:", e));
+        }
         await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
-          method: 'PUT',
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(mergedSettings)
         }).catch(e => console.error("Firebase sync error:", e));
@@ -180,10 +191,17 @@ export default async function handler(req, res) {
           };
           if (currentSettingsSha) settingsPayload.sha = currentSettingsSha;
 
-          // Sync to Firebase Realtime DB first
+          // Sync to Firebase Realtime DB first with PATCH
           try {
+            if (siteSettingsPayload && siteSettingsPayload.siteContent) {
+              await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings/siteContent.json", {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(siteSettingsPayload.siteContent)
+              });
+            }
             await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
-              method: 'PUT',
+              method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(mergedSettings)
             });
@@ -382,10 +400,10 @@ export default async function handler(req, res) {
         const err = await updateRes.json();
         throw new Error("Failed to save settings to server: " + err.message);
       }
-      // Sync settings to Firebase Realtime Database
+      // Sync settings to Firebase Realtime Database with PATCH
       try {
         await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/admin_settings.json", {
-          method: 'PUT',
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(mergedSettings)
         });

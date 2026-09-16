@@ -2060,19 +2060,22 @@ if (saveTaxonomyBtn) {
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
       } catch(e) {}
 
-      // 3. Save to Firebase Realtime Database
+      // 3. Save to Firebase Realtime Database with granular PATCH (prevents wiping unrelated settings)
       try {
         const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
         await fetch(`${FIREBASE_DB}/admin_settings.json`, {
-          method: 'PUT',
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(currentSiteSettings)
+          body: JSON.stringify({
+            categories1stLayer: currentSectors,
+            categories2ndLayer: currentCategories
+          })
         });
       } catch(fbErr) {
         console.warn("Firebase sync notice:", fbErr);
       }
 
-      // 4. Save to GitHub via /api/githubSync
+      // 4. Save to GitHub via /api/githubSync with isolated payload
       let ghSynced = false;
       try {
         const res = await fetch('/api/githubSync', {
@@ -2080,7 +2083,10 @@ if (saveTaxonomyBtn) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'save_settings',
-            siteSettingsPayload: currentSiteSettings,
+            siteSettingsPayload: {
+              categories1stLayer: currentSectors,
+              categories2ndLayer: currentCategories
+            },
             commitMessage: 'Update Sectors and Categories filter order and visibility'
           })
         });
@@ -2148,64 +2154,45 @@ if (saveBrandsBtn) {
         return b;
       });
 
-      // 2. Fetch latest index.html
-      const resHtml = await fetch('index.html?t=' + Date.now());
-      let htmlText = await resHtml.text();
-
-      // 3. Build Set 1 and Set 2 logo HTML using clean relative paths
-      const logoItemsHtml = updatedLogosList.map(b => `
-            <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-              <img src="${b.src}" alt="${b.name}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
-            </div>`).join('\n');
-
-      const marqueeReplacement = `<div class="marquee-content" style="display: flex; gap: 75px; width: max-content; align-items: center; animation: scrollBelt 25s linear infinite;">
-            <!-- Set 1 -->
-${logoItemsHtml}
-            
-            <!-- Set 2 for seamless loop -->
-${logoItemsHtml}
-          </div>`;
-
-      // 4. Replace marquee-content block in index.html cleanly
-      const parser = new DOMParser();
-      const tempDoc = parser.parseFromString(htmlText, 'text/html');
-      const marqueeEl = tempDoc.querySelector('.marquee-content');
-      if (marqueeEl) {
-        marqueeEl.outerHTML = marqueeReplacement;
-        htmlText = '<!DOCTYPE html>\n<html>\n' + tempDoc.documentElement.innerHTML + '\n</html>';
+      // 2. Immediately save brand logos directly to Firebase Realtime Database
+      try {
+        const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+        await fetch(`${FIREBASE_DB}/admin_settings/brandLogos.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedLogosList)
+        });
+      } catch(fbErr) {
+        console.warn("Firebase brand logos notice:", fbErr);
       }
 
-      // 5. Build siteSettingsPayload to save brandLogos permanently
-      const siteSettingsPayload = {
-        ...currentSiteSettings,
-        brandLogos: updatedLogosList
-      };
+      // 3. Update local caches and live preview
+      brandLogosList = updatedLogosList;
+      try {
+        localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+      } catch(e) {}
+      renderBrandLogosGrid();
+      updateIframeMarquee();
 
-      // 6. Publish to GitHub via /api/githubSync
+      // 4. Save to GitHub repository with isolated payload (never rewrites index.html)
       const syncRes = await fetch('/api/githubSync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           token: authToken || 'admin1234',
-          action: 'save_html',
-          filename: 'index.html',
-          htmlContent: htmlText,
+          action: 'save_settings',
+          siteSettingsPayload: { brandLogos: updatedLogosList },
           siteImages: siteImages,
-          siteSettingsPayload: siteSettingsPayload
+          commitMessage: 'Update Client Brand Logos marquee configuration'
         })
       });
 
       const syncData = await syncRes.json();
       if (syncData.success) {
-        brandLogosList = updatedLogosList;
-        try {
-          localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
-        } catch(e) {}
-        renderBrandLogosGrid();
         if (window.showToast) window.showToast("🚀 Brand logos published successfully to live site!", "success");
         alert("✅ Brand logos published successfully to live site!");
       } else {
-        alert("Failed to publish: " + (syncData.message || "Unknown error"));
+        alert("Notice while syncing repository: " + (syncData.message || "Saved to database"));
       }
     } catch(err) {
       console.error(err);
@@ -2291,26 +2278,26 @@ async function autoPersistCountries() {
     localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
   } catch(e) {}
 
-  // 2. Save directly to Firebase Realtime Database
+  // 2. Save directly to Firebase Realtime Database with targeted path
   try {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
-    await fetch(`${FIREBASE_DB}/admin_settings.json`, {
+    await fetch(`${FIREBASE_DB}/admin_settings/countries.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(currentSiteSettings)
+      body: JSON.stringify(currentCountriesList)
     });
   } catch(fbErr) {
     console.warn("Firebase sync error:", fbErr);
   }
 
-  // 3. Save to GitHub repository
+  // 3. Save to GitHub repository with isolated payload
   try {
     await fetch('/api/githubSync', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'save_settings',
-        siteSettingsPayload: currentSiteSettings,
+        siteSettingsPayload: { countries: currentCountriesList },
         commitMessage: 'Update Header Countries & Regions dropdown list'
       })
     });
@@ -3219,11 +3206,18 @@ if (saveVisualEditorBtn) {
       // Get raw HTML string after all cleanDoc normalizations
       const rawHtml = '<!DOCTYPE html>\n<html>\n' + cleanDoc.innerHTML + '\n</html>';
 
-      // 1. Immediately update Firebase Realtime Database directly from the browser
+      // 1. Immediately update Firebase Realtime Database directly from the browser with PATCH
       try {
         const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+        if (currentSettings.siteContent) {
+          await fetch(`${FIREBASE_DB}/admin_settings/siteContent.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentSettings.siteContent)
+          });
+        }
         await fetch(`${FIREBASE_DB}/admin_settings.json`, {
-          method: 'PUT',
+          method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(currentSettings)
         });
@@ -3723,11 +3717,22 @@ async function saveFooterSettings() {
 
     try {
       const DB_URL = "https://fabric8-50559-default-rtdb.firebaseio.com";
-      await fetch(`${DB_URL}/admin_settings.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(currentSiteSettings)
-      });
+      // 1. Update footerLegal with targeted PUT
+      if (currentSiteSettings.footerLegal) {
+        await fetch(`${DB_URL}/admin_settings/footerLegal.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentSiteSettings.footerLegal)
+        });
+      }
+      // 2. Patch siteContent child keys without overwriting other root settings or images
+      if (currentSiteSettings.siteContent) {
+        await fetch(`${DB_URL}/admin_settings/siteContent.json`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentSiteSettings.siteContent)
+        });
+      }
     } catch(fbErr) {
       console.warn("Firebase RTDB notice:", fbErr);
     }
@@ -3739,7 +3744,10 @@ async function saveFooterSettings() {
         body: JSON.stringify({
           action: 'save_settings',
           token: authToken || 'admin1234',
-          siteSettingsPayload: currentSiteSettings,
+          siteSettingsPayload: {
+            footerLegal: currentSiteSettings.footerLegal,
+            siteContent: currentSiteSettings.siteContent
+          },
           commitMessage: 'Update global footer content and square social icons'
         })
       });

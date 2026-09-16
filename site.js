@@ -108,6 +108,16 @@ function applySiteSettings() {
     });
   }
   
+  const resolveAssetUrl = (url, defaultFallback = '') => {
+    if (!url) return defaultFallback;
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
+    const clean = url.replace(/^\/+/, '');
+    if (window.location.hostname.includes('thefabric8.com') || window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
+      return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+    }
+    return url;
+  };
+
   const sc = siteSettings.siteContent || {};
   // 1. Homepage Engine
   if (sc.homeHeroTag) {
@@ -135,15 +145,16 @@ function applySiteSettings() {
         heroBg.style.backgroundSize = 'cover';
         heroBg.style.backgroundRepeat = 'no-repeat';
       };
-      applyHeroUrl(sc.heroImage);
 
-      // If relative path fails to load (e.g. uploaded via Visual Editor to GitHub but not yet synced locally), fallback to GitHub raw
-      if (!sc.heroImage.startsWith('http') && !sc.heroImage.startsWith('data:')) {
+      const finalHeroUrl = resolveAssetUrl(sc.heroImage, 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
+      applyHeroUrl(finalHeroUrl);
+
+      // Fallback probe in case relative or primary fails
+      if (!finalHeroUrl.startsWith('http') && !finalHeroUrl.startsWith('data:')) {
         const testImg = new Image();
         testImg.onerror = () => {
           const cleanPath = sc.heroImage.replace(/^\/+/, '');
-          const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${cleanPath}?v=${Date.now()}`;
-          applyHeroUrl(ghUrl);
+          applyHeroUrl(`https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${cleanPath}`);
         };
         testImg.src = sc.heroImage;
       }
@@ -151,7 +162,7 @@ function applySiteSettings() {
   }
   if (sc.promoImage) {
     const promoEl = document.getElementById('cmsPromoGraphic');
-    if (promoEl) promoEl.src = sc.promoImage;
+    if (promoEl) promoEl.src = resolveAssetUrl(sc.promoImage);
   }
 
   // 2. Services Page Engine
@@ -165,15 +176,15 @@ function applySiteSettings() {
   }
   if (sc.servicesConsultImg) {
     const el = document.getElementById('cmsServicesConsultImg');
-    if (el) el.src = sc.servicesConsultImg;
+    if (el) el.src = resolveAssetUrl(sc.servicesConsultImg);
   }
   if (sc.servicesBrandImg) {
     const el = document.getElementById('cmsServicesBrandImg');
-    if (el) el.src = sc.servicesBrandImg;
+    if (el) el.src = resolveAssetUrl(sc.servicesBrandImg);
   }
   if (sc.servicesProdImg) {
     const el = document.getElementById('cmsServicesProdImg');
-    if (el) el.src = sc.servicesProdImg;
+    if (el) el.src = resolveAssetUrl(sc.servicesProdImg);
   }
 
   // 3. Method Page Engine
@@ -206,7 +217,7 @@ function applySiteSettings() {
   if (sc.sectorsHeroImg) {
     const el = document.getElementById('cmsSectorsHeroBg');
     if (el) {
-      el.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${sc.sectorsHeroImg}') center / cover`;
+      el.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${resolveAssetUrl(sc.sectorsHeroImg)}') center / cover`;
     }
   }
 
@@ -229,10 +240,10 @@ function applySiteSettings() {
   }
   if (sc.aboutImage) {
     const el = document.getElementById('cmsAboutImage');
-    if (el) el.src = sc.aboutImage;
+    if (el) el.src = resolveAssetUrl(sc.aboutImage);
     const heroBg = document.getElementById('cmsAboutHeroBg');
     if (heroBg) {
-      heroBg.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${sc.aboutImage}') center / cover`;
+      heroBg.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${resolveAssetUrl(sc.aboutImage)}') center / cover`;
     }
   }
 
