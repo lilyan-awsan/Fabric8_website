@@ -613,7 +613,7 @@
     "id": "F8-008",
     "sku": "F8-008",
     "name": "Cargo Pants",
-    "category": "Bottom Wear",
+    "category": "BOTTOM WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Durable, functional pants for on-the-go teams.",
@@ -634,8 +634,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Beige": "assets/products/Cargo Beige trousers.webp",
       "Black": "assets/products/Cargo Black trousers.webp",
+      "Beige": "assets/products/Cargo Beige trousers.webp",
       "Charcoal": "assets/products/Cargo Charcoal trousers.webp",
       "Navy": "assets/products/Cargo Navy trousers.webp"
     },
@@ -705,16 +705,16 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Cargo Black trousers.webp",
+    "image": "assets/products/Cargo Beige trousers.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Cargo Black trousers.webp",
+      "url": "assets/products/Cargo Beige trousers.webp",
       "name": null
     },
     "images": [
-      "assets/products/Cargo Black trousers.webp",
       "assets/products/Cargo Beige trousers.webp",
+      "assets/products/Cargo Black trousers.webp",
       "assets/products/Cargo Beige trousers Side.webp",
       "assets/products/Cargo Beige trousers Back.webp",
       "assets/products/Cargo Charcoal trousers.webp",
