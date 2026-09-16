@@ -50,6 +50,12 @@
       "id": "brand_1789599850650",
       "name": "test",
       "src": "assets/site_images/1789599852819_7_test.png"
+    },
+    {
+      "id": "brand_1789602121609",
+      "name": "test2",
+      "src": "assets/site_images/1789602126369_8_test2.png",
+      "fileName": "favicon2.png"
     }
   ],
   "brandingSettings": {
