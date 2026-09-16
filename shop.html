@@ -1,24 +1,23 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fabric8 | Shop & Quote</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fabric8 | Shop &amp; Quote</title>
 
-  <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
-  <link rel="preconnect" href="https://fabric8-50559-default-rtdb.firebaseio.com" crossorigin />
-  <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="site.css?v=36" />
+  <link rel="icon" type="image/png" href="assets/favicon2.png?v=3">
+  <link rel="preconnect" href="https://fabric8-50559-default-rtdb.firebaseio.com" crossorigin="">
+  <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin="">
+  <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin="">
+  <link rel="stylesheet" href="site.css?v=36">
 </head>
 
 <body class="page-ready">
   <div class="topline"><a href="shop.html" style="color: var(--yellow, #ffd700);">BRING YOUR IDENTITY TO LIFE.</a></div>
   <header class="header">
       <a class="logo-wrapper" href="index.html" title="Fabric 8 Home">
-        <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo No Needle" class="logo-icon-default" />
-        <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);" />
+        <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo No Needle" class="logo-icon-default">
+        <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);">
       </a>
       <nav>
         <a href="services.html">Services</a>
@@ -28,23 +27,23 @@
         <a href="about.html">About Us</a>
       </nav>
       <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
-        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;">
-          <option value="US">USA</option>
-          <option value="JO">Jordan</option>
-          <option value="INT">International</option>
-        </select>
+        <select class="country-selector" style="min-height: 36px; padding: 4px 8px; font-size: 11px; border-radius: 8px; border: 1px solid var(--line); background: transparent; cursor: pointer; text-transform: uppercase; font-weight: 800;" data-country-wired="true"><option value="US">USA</option>
+<option value="JO">Jordan</option>
+<option value="YE">Yemen</option>
+<option value="INT">International</option>
+<option value="MD">mdry</option></select>
         <div class="search-box" style="position: relative;">
-          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 0; font-size: 13px; font-weight: 300; border: none; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; outline: none; color: var(--ink);" />
+          <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 0; font-size: 13px; font-weight: 300; border: none; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; outline: none; color: var(--ink);" data-search-wired="true">
         </div>
         <a class="quote-link" href="checkout.html" aria-label="View Cart">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2H10c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"></path></svg>
           <span id="cartCount" style="font-weight: 900; font-size: 14px;">0</span>
         </a>
       </div>
     </header>
 
   <main>
-    <section class="page-hero shop-hero">
+    <section class="page-hero shop-hero" style="position: relative; background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.34)), url(&quot;assets/site_images/1789593408778_bg_0_pattern.png&quot;); background-position: center center; background-size: cover; background-repeat: no-repeat;">
       <div>
         <p>Product Catalog</p>
         <h1>The Garment Matrix, Made to Order</h1><span>Select items, preview branding, and request one quotation.</span>
@@ -56,39 +55,29 @@
       <div class="catalog-layout">
         <!-- Sidebar Filters -->
         <aside class="catalog-sidebar">
-          <h3 class="filter-toggle"
-            style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+          <h3 class="filter-toggle" style="margin-top: 0; font-size: 16px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
             Filters <span class="toggle-icon" style="display: none; font-size: 20px;">+</span>
           </h3>
           <div class="filter-contents">
             <div class="filter-group">
               <label for="productSearch" style="font-size: 12px; font-weight: bold; margin-bottom: 4px; display: block;">Search Keywords</label>
-              <input type="search" id="productSearch" placeholder="Search by name, category, sector, details, or description..."
-                title="Option to search by name, category, sector, or items details/descriptions as keywords"
-                style="min-height: 36px; width: 140px; padding: 4px 0; font-size: 13px; font-weight: 300; border: none; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; outline: none; color: var(--ink);">
+              <input type="search" id="productSearch" placeholder="Search by name, category, sector, details, or description..." title="Option to search by name, category, sector, or items details/descriptions as keywords" style="min-height: 36px; width: 140px; padding: 4px 0; font-size: 13px; font-weight: 300; border: none; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; outline: none; color: var(--ink);">
               <span style="font-size: 11px; color: var(--muted, #70756e); margin-top: 4px; display: block;">Search by name, category, sector, details, or description.</span>
             </div>
 
             <div class="filter-group" style="margin-top: 20px;">
               <label style="font-size: 12px; font-weight: bold;">Sector</label>
-              <div id="sectorFilterContainer"
-                style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px; margin-bottom: 24px;">
-                <!-- Sectors injected here -->
-              </div>
+              <div id="sectorFilterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px; margin-bottom: 24px;"><button type="button" class="category-btn active" data-sec="All">All Sectors</button><button type="button" class="category-btn " data-sec="Food &amp; beverage">Food &amp; beverage</button><button type="button" class="category-btn " data-sec="Hospitality">Hospitality</button><button type="button" class="category-btn " data-sec="Corporate">Corporate</button><button type="button" class="category-btn " data-sec="Industrial">Industrial</button><button type="button" class="category-btn " data-sec="Healthcare">Healthcare</button><button type="button" class="category-btn " data-sec="Automotive">Automotive</button></div>
             </div>
 
             <div class="filter-group">
               <label style="font-size: 12px; font-weight: bold;">Category</label>
-              <div id="categoryFilterContainer"
-                style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
-                <!-- Categories injected here -->
-              </div>
+              <div id="categoryFilterContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;"><button type="button" class="category-btn active" data-cat="All">All Categories</button><button type="button" class="category-btn " data-cat="HEAD WEAR">HEAD WEAR</button><button type="button" class="category-btn " data-cat="TOP WEAR">TOP WEAR</button><button type="button" class="category-btn " data-cat="BOTTOM WEAR">BOTTOM WEAR</button><button type="button" class="category-btn " data-cat="OUTER WEAR">OUTER WEAR</button><button type="button" class="category-btn " data-cat="ACCESSORIES">ACCESSORIES</button></div>
             </div>
 
             <div class="filter-group" style="margin-top: 24px;">
               <label style="font-size: 12px; font-weight: bold;">Sort By</label>
-              <select id="sortFilter"
-                style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
+              <select id="sortFilter" style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 4px; font-family: inherit; margin-top: 8px;">
                 <option value="featured">Featured</option>
                 <option value="A-Z">Name A-Z</option>
                 <option value="Z-A">Name Z-A</option>
@@ -100,8 +89,342 @@
         <!-- Main Grid -->
         <div class="catalog-main">
           <div id="productGrid" class="catalog-grid">
-            <!-- Product Cards injected here -->
-          </div>
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-010'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-010', 14)" onmouseleave="window.stopSlideshow('F8-010', 14)">
+          <img id="img-F8-010-0" src="assets/products/Cap American Blue.webp" alt="Caps" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-1" data-src="assets/products/Cap White.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-2" data-src="assets/products/Cap White Side.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-3" data-src="assets/products/Cap White Back.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-4" data-src="assets/products/Cap Black.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-5" data-src="assets/products/Cap Brown.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-6" data-src="assets/products/Cap Burgundy.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-7" data-src="assets/products/Cap Charcoal.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-8" data-src="assets/products/Cap Green.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-9" data-src="assets/products/Cap Kiwi 2.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-10" data-src="assets/products/Cap Light Grey.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-11" data-src="assets/products/Cap Navy.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-12" data-src="assets/products/Cap Red.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-010-13" data-src="assets/products/Cap Yellow 2.webp" alt="Caps" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>TOP WEAR</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Adjustable branded cap for outdoor or retail teams.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Caps</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-008'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-008', 6)" onmouseleave="window.stopSlideshow('F8-008', 6)">
+          <img id="img-F8-008-0" src="assets/products/Cargo Beige trousers.webp" alt="Cargo Pants" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-008-1" data-src="assets/products/Cargo Beige trousers Side.webp" alt="Cargo Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-008-2" data-src="assets/products/Cargo Beige trousers Back.webp" alt="Cargo Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-008-3" data-src="assets/products/Cargo Black trousers.webp" alt="Cargo Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-008-4" data-src="assets/products/Cargo Charcoal trousers.webp" alt="Cargo Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-008-5" data-src="assets/products/Cargo Navy trousers.webp" alt="Cargo Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Bottom Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Durable, functional pants for on-the-go teams.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Cargo Pants</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-003'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-003', 6)" onmouseleave="window.stopSlideshow('F8-003', 6)">
+          <img id="img-F8-003-0" src="assets/products/Cargo Vest Beige.webp" alt="Cargo Vest" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-003-1" data-src="assets/products/Cargo Vest Army Green.webp" alt="Cargo Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-003-2" data-src="assets/products/Cargo Vest Beige Side.webp" alt="Cargo Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-003-3" data-src="assets/products/Cargo Vest Beige Back.webp" alt="Cargo Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-003-4" data-src="assets/products/Cargo Vest Black.webp" alt="Cargo Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-003-5" data-src="assets/products/Cargo Vest Navy.webp" alt="Cargo Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>TOP WEAR</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Rugged utility vest with functional storage.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Cargo Vest</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-006'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-006', 5)" onmouseleave="window.stopSlideshow('F8-006', 5)">
+          <img id="img-F8-006-0" src="assets/products/Chef Bandana White Front.webp" alt="Chef Bandana" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-006-1" data-src="assets/products/Chef Bandana Black.webp" alt="Chef Bandana" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-006-2" data-src="assets/products/Chef Bandana White Side.webp" alt="Chef Bandana" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-006-3" data-src="assets/products/Chef Bandana Grey.webp" alt="Chef Bandana" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-006-4" data-src="assets/products/Chef Bandana White.webp" alt="Chef Bandana" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Head Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Practical head covering for active kitchen staff.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Chef Bandana</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-005'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-005', 5)" onmouseleave="window.stopSlideshow('F8-005', 5)">
+          <img id="img-F8-005-0" src="assets/products/Beret Hat Grey 1.webp" alt="Chef Beret" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-005-1" data-src="assets/products/Beret Hat Black.webp" alt="Chef Beret" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-005-2" data-src="assets/products/Beret Hat Grey Side.webp" alt="Chef Beret" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-005-3" data-src="assets/products/Beret Hat White Side.webp" alt="Chef Beret" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-005-4" data-src="assets/products/Beret Hat White 1.png" alt="Chef Beret" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Head Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Modern, low-profile alternative to the toque.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Chef Beret</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-011'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-011', 5)" onmouseleave="window.stopSlideshow('F8-011', 5)">
+          <img id="img-F8-011-0" src="assets/products/Chef jacket white.webp" alt="Chef Jackets" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-011-1" data-src="assets/products/Chef Jacket Black.webp" alt="Chef Jackets" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-011-2" data-src="assets/products/Chef Jacket White Side.webp" alt="Chef Jackets" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-011-3" data-src="assets/products/Chef Jacket White Back.webp" alt="Chef Jackets" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-011-4" data-src="assets/products/Chef Jacket Grey 3.webp" alt="Chef Jackets" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Signature double-breasted jacket for culinary professionals.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Chef Jackets</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-013'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-013', 3)" onmouseleave="window.stopSlideshow('F8-013', 3)">
+          <img id="img-F8-013-0" src="assets/products/Chef Trousers Striped Black.webp" alt="Chef Pants" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-013-1" data-src="assets/products/Chef Trousers black.webp" alt="Chef Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-013-2" data-src="assets/products/Chef Trousers Grey.webp" alt="Chef Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Bottom Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Comfortable, durable pants built for the kitchen.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Chef Pants</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-021'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-021', 10)" onmouseleave="window.stopSlideshow('F8-021', 10)">
+          <img id="img-F8-021-0" src="assets/products/Dri Fit Polo White.webp" alt="Dri-Fit Polo" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-1" data-src="assets/products/Dri Fit Black Polo.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-2" data-src="assets/products/Dri Fit Polo White Side.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-3" data-src="assets/products/Dri Fit Polo White Back.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-4" data-src="assets/products/Dri Fit Blue Polo 2.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-5" data-src="assets/products/Dri Fit Grey Polo.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-6" data-src="assets/products/Dri Fit Green Polo.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-7" data-src="assets/products/Dri Fit Light Blue Polo 1.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-8" data-src="assets/products/Dri Fit polo Red 3.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-021-9" data-src="assets/products/Dri Fit Polo Yellow 3.webp" alt="Dri-Fit Polo" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Performance polo for active, client-facing teams.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Dri-Fit Polo</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-020'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-020', 10)" onmouseleave="window.stopSlideshow('F8-020', 10)">
+          <img id="img-F8-020-0" src="assets/products/Dri Fit Tshirt White.webp" alt="Dri-Fit T-shirt" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-1" data-src="assets/products/Dri Fit Tshirt Baby Blue.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-2" data-src="assets/products/Dri Fit Tshirt White Side.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-3" data-src="assets/products/Dri Fit Tshirt White Back.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-4" data-src="assets/products/Dri Fit Tshirt Black 2.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-5" data-src="assets/products/Dri Fit Tshirt Blue 2.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-6" data-src="assets/products/Dri Fit Tshirt Green 1.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-7" data-src="assets/products/Dri Fit Tshirt Grey 2.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-8" data-src="assets/products/Dri Fit Tshirt Red.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-020-9" data-src="assets/products/Dri Fit Tshirt Yellow.webp" alt="Dri-Fit T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Moisture-wicking tee for active or outdoor roles.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Dri-Fit T-shirt</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-014'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-014', 6)" onmouseleave="window.stopSlideshow('F8-014', 6)">
+          <img id="img-F8-014-0" src="assets/products/Full Apron White.webp" alt="Full Apron" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-014-1" data-src="assets/products/Full Apron Black.webp" alt="Full Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-014-2" data-src="assets/products/Full Apron White Side.webp" alt="Full Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-014-3" data-src="assets/products/Full Apron White Back.webp" alt="Full Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-014-4" data-src="assets/products/Full Apron Grey.webp" alt="Full Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-014-5" data-src="assets/products/Full Apron Striped Black.webp" alt="Full Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Accessories</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Classic full-coverage apron for kitchen and service staff.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Full Apron</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-015'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-015', 4)" onmouseleave="window.stopSlideshow('F8-015', 4)">
+          <img id="img-F8-015-0" src="assets/products/Full Apron W pocket White.webp" alt="Full Apron With Pocket" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-015-1" data-src="assets/products/Full Apron W pocket Grey.webp" alt="Full Apron With Pocket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-015-2" data-src="assets/products/Full W pocket Apron Black.webp" alt="Full Apron With Pocket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-015-3" data-src="assets/products/Full W pocket Striped Black.webp" alt="Full Apron With Pocket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Accessories</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Full-coverage apron with added on-the-job storage.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Full Apron With Pocket</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-016'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-016', 4)" onmouseleave="window.stopSlideshow('F8-016', 4)">
+          <img id="img-F8-016-0" src="assets/products/Half Apron White.webp" alt="Half Apron" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-016-1" data-src="assets/products/Half Apron Black.webp" alt="Half Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-016-2" data-src="assets/products/Half Apron White Back.png" alt="Half Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-016-3" data-src="assets/products/Half Apron Grey.webp" alt="Half Apron" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Accessories</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Lightweight waist apron for quick-service environments.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Half Apron</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-017'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-017', 4)" onmouseleave="window.stopSlideshow('F8-017', 4)">
+          <img id="img-F8-017-0" src="assets/products/Half Apron W Pocket White.webp" alt="Half Apron With Pocket" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-017-1" data-src="assets/products/Half Apron W Pocket Black.webp" alt="Half Apron With Pocket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-017-2" data-src="assets/products/Half Apron W Pocket Grey.webp" alt="Half Apron With Pocket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-017-3" data-src="assets/products/Half Apron W Pocket Striped Black.webp" alt="Half Apron With Pocket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Accessories</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Practical waist apron with built-in storage.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Half Apron With Pocket</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-023'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-023', 7)" onmouseleave="window.stopSlideshow('F8-023', 7)">
+          <img id="img-F8-023-0" src="assets/products/Hoodie White Front.webp" alt="Hoodie" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-023-1" data-src="assets/products/Hoodie Black.webp" alt="Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-023-2" data-src="assets/products/Hoodie White Side.webp" alt="Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-023-3" data-src="assets/products/Hoodie White Back.webp" alt="Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-023-4" data-src="assets/products/Hoodie grey.webp" alt="Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-023-5" data-src="assets/products/Hoodie Navy.webp" alt="Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-023-6" data-src="assets/products/Hoodie White.webp" alt="Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>TOP WEAR</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Comfortable layer for casual or outdoor work settings.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Hoodie</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-007'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-007', 4)" onmouseleave="window.stopSlideshow('F8-007', 4)">
+          <img id="img-F8-007-0" src="assets/products/Lab Coat White.webp" alt="Lab Coats" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-007-1" data-src="assets/products/Lab Coat grey.webp" alt="Lab Coats" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-007-2" data-src="assets/products/Lab Coat White Side.webp" alt="Lab Coats" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-007-3" data-src="assets/products/Lab Coat White Back.webp" alt="Lab Coats" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Outer Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Crisp, professional coats for healthcare teams.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Lab Coats</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-019'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-019', 5)" onmouseleave="window.stopSlideshow('F8-019', 5)">
+          <img id="img-F8-019-0" src="assets/products/Oversize Tshirt Grey 1.webp" alt="Oversized T-shirt" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-019-1" data-src="assets/products/Oversize Tshirt White 1.webp" alt="Oversized T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-019-2" data-src="assets/products/Oversize Tshirt Black 1.webp" alt="Oversized T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-019-3" data-src="assets/products/Oversize Tshirt White Side.webp" alt="Oversized T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-019-4" data-src="assets/products/Oversize Tshirt White Back.webp" alt="Oversized T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Relaxed, modern fit for a trend-forward team look.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Oversized T-shirt</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-001'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-001', 27)" onmouseleave="window.stopSlideshow('F8-001', 27)">
+          <img id="img-F8-001-0" src="assets/products/Polo White Front.webp" alt="Premium Polo Shirt" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-1" data-src="assets/products/Polo American Blue 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-2" data-src="assets/products/Polo White Side.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-3" data-src="assets/products/Polo White Back.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-4" data-src="assets/products/Polo Army Green 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-5" data-src="assets/products/Polo Beige 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-6" data-src="assets/products/Polo Black 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-7" data-src="assets/products/Polo blue 4.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-8" data-src="assets/products/Polo Brown 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-9" data-src="assets/products/Polo Burgundy 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-10" data-src="assets/products/Polo Charcoal 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-11" data-src="assets/products/Polo Dark Green 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-12" data-src="assets/products/Polo Green 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-13" data-src="assets/products/Polo Kiwi 4.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-14" data-src="assets/products/Polo Light Blue 2 (2).webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-15" data-src="assets/products/Polo Light grey (2).webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-16" data-src="assets/products/Polo Light Yellow.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-17" data-src="assets/products/Polo Navy 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-18" data-src="assets/products/Polo Olive Green 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-19" data-src="assets/products/Polo Orange 4.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-20" data-src="assets/products/Polo Pink 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-21" data-src="assets/products/Polo Purple Blue.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-22" data-src="assets/products/Polo Purple 3.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-23" data-src="assets/products/Polo Red 2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-24" data-src="assets/products/Polo Turquoise blue 1-2.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-25" data-src="assets/products/Polo Deep Turquoise.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-001-26" data-src="assets/products/Polo Yellow 4.webp" alt="Premium Polo Shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Premium corporate polo, clean and professional.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Premium Polo Shirt</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-025'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-025', 4)" onmouseleave="window.stopSlideshow('F8-025', 4)">
+          <img id="img-F8-025-0" src="assets/products/Puff Jacket Black.webp" alt="Puffer Jacket" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-025-1" data-src="assets/products/Puff Jacket Black Side.webp" alt="Puffer Jacket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-025-2" data-src="assets/products/Puff Jacket Black Back.webp" alt="Puffer Jacket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-025-3" data-src="assets/products/Puff Jacket Navy.webp" alt="Puffer Jacket" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Outer Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Insulated outerwear for cold-weather work environments.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Puffer Jacket</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-012'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-012', 10)" onmouseleave="window.stopSlideshow('F8-012', 10)">
+          <img id="img-F8-012-0" src="assets/products/Scrub White Set.webp" alt="Scrubs" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-1" data-src="assets/products/Scrub Navy Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-2" data-src="assets/products/Scrub Ocean Blue Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-3" data-src="assets/products/Scrub Black Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-4" data-src="assets/products/Scrub Beige Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-5" data-src="assets/products/Scrub Burgundy Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-6" data-src="assets/products/Scrub Charcoal Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-7" data-src="assets/products/Scrub Green Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-8" data-src="assets/products/Scrub Light Blue Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-012-9" data-src="assets/products/Scrub Olive Green  Set.webp" alt="Scrubs" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Comfortable, easy-care scrubs for clinical teams.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Scrubs</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-022'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-022', 7)" onmouseleave="window.stopSlideshow('F8-022', 7)">
+          <img id="img-F8-022-0" src="assets/products/Shirt White.webp" alt="Shirts" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-022-1" data-src="assets/products/Shirt Black.webp" alt="Shirts" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-022-2" data-src="assets/products/Shirt White Side.webp" alt="Shirts" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-022-3" data-src="assets/products/Shirt White Back.webp" alt="Shirts" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-022-4" data-src="assets/products/Shirt grey.webp" alt="Shirts" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-022-5" data-src="assets/products/Shirt Light blue.webp" alt="Shirts" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-022-6" data-src="assets/products/Shirt Navy.webp" alt="Shirts" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Versatile button-up for a polished corporate look.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Shirts</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-018'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-018', 10)" onmouseleave="window.stopSlideshow('F8-018', 10)">
+          <img id="img-F8-018-0" src="assets/products/T-shirt White.webp" alt="T-shirt" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-1" data-src="assets/products/T-shirt American Blue.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-2" data-src="assets/products/T-shirt White Side.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-3" data-src="assets/products/T-shirt White Back.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-4" data-src="assets/products/T-shirt Army Green.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-5" data-src="assets/products/T-shirt Black.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-6" data-src="assets/products/T-shirt Burgundy.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-7" data-src="assets/products/T-shirt Charcoal.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-8" data-src="assets/products/T-shirt Light Blue.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-018-9" data-src="assets/products/T-shirt Navy.webp" alt="T-shirt" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Everyday essential for casual team uniforms.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">T-shirt</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-002'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-002', 4)" onmouseleave="window.stopSlideshow('F8-002', 4)">
+          <img id="img-F8-002-0" src="assets/products/Vest White.webp" alt="Waiter Vest" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-002-1" data-src="assets/products/Vest Black.webp" alt="Waiter Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-002-2" data-src="assets/products/Vest White Back.webp" alt="Waiter Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-002-3" data-src="assets/products/Vest Grey.webp" alt="Waiter Vest" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Sleek, lightweight vest for front-of-house staff.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Waiter Vest</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-009'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-009', 5)" onmouseleave="window.stopSlideshow('F8-009', 5)">
+          <img id="img-F8-009-0" src="assets/products/Trousers Beige.webp" alt="Workwear / Waiter Pants" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-009-1" data-src="assets/products/Trousers Navy Front.webp" alt="Workwear / Waiter Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-009-2" data-src="assets/products/Trousers Black back.webp" alt="Workwear / Waiter Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-009-3" data-src="assets/products/Trousers Black.webp" alt="Workwear / Waiter Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-009-4" data-src="assets/products/Trousers Charcoal.webp" alt="Workwear / Waiter Pants" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Bottom Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Polished, comfortable pants for service staff.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Workwear / Waiter Pants</h3>
+        </div>
+      </div>
+    
+      <div class="product-card" onclick="window.location.href='product.html?sku=F8-024'">
+        <div class="product-card-img" onmouseenter="window.startSlideshow('F8-024', 7)" onmouseleave="window.stopSlideshow('F8-024', 7)">
+          <img id="img-F8-024-0" src="assets/products/Zip up Black -.webp" alt="Zip-up Hoodie" loading="lazy" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 1; transition: opacity 0.5s ease-in-out;"><img id="img-F8-024-1" data-src="assets/products/Zip up white Side.webp" alt="Zip-up Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-024-2" data-src="assets/products/Zip up white Back.webp" alt="Zip-up Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-024-3" data-src="assets/products/Zip Up Charcoal.webp" alt="Zip-up Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-024-4" data-src="assets/products/Zip up Light Grey-.webp" alt="Zip-up Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-024-5" data-src="assets/products/Zip up Navy-.webp" alt="Zip-up Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;"><img id="img-F8-024-6" data-src="assets/products/Zip up white-.webp" alt="Zip-up Hoodie" decoding="async" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; padding: 20px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+        </div>
+        <div class="product-card-info" style="text-align: center; align-items: center;">
+          <p class="product-card-category" style="margin: 0 0 6px 0; font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; text-align: center;">
+            <span>Top Wear</span>
+            <span style="background: #f0eee9; color: var(--ink); padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; letter-spacing: 0.02em;">Men / Women / Unisex</span>
+            <span style="width: 100%; font-size: 11px; color: var(--muted); text-transform: none; margin-top: 4px; text-align: center; line-height: 1.3; font-weight: 400;">Easy-layer hoodie for year-round versatility.</span>
+          </p>
+          <h3 class="product-card-title" style="text-align: center;">Zip-up Hoodie</h3>
+        </div>
+      </div>
+    </div>
         </div>
       </div>
       </div>
@@ -111,34 +434,28 @@
       <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
         <div>
           <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Overview</h4>
-          <p style="display: flex; flex-direction: column; gap: 8px;">
-            <a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
-            <a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
-            <a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
-            <a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
-            <a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a>
-          </p>
+          <p style="display: flex; flex-direction: column; gap: 8px;"><a href="services.html" style="color: #aaa; text-decoration: none;">Services</a>
+<a href="method.html" style="color: #aaa; text-decoration: none;">The Fabric 8 Method</a>
+<a href="sectors.html" style="color: #aaa; text-decoration: none;">Sectors</a>
+<a href="shop.html" style="color: #aaa; text-decoration: none;">Shop</a>
+<a href="about.html" style="color: #aaa; text-decoration: none;">About Us</a></p>
         </div>
         <div>
           <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Contact Details</h4>
-          <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
-          <div id="cmsSocialLinks" class="footer-social-links" style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center;">
-            <a href="https://www.linkedin.com/company/thefabric8" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: #222222; border: 1px solid #3a3a3a; border-radius: 6px; align-items: center; justify-content: center; color: #ffffff; text-decoration: none; transition: all 0.2s ease;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-            <a href="https://www.instagram.com/thefabric8" target="_blank" rel="noopener noreferrer" title="Instagram" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: #222222; border: 1px solid #3a3a3a; border-radius: 6px; align-items: center; justify-content: center; color: #ffffff; text-decoration: none; transition: all 0.2s ease;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-            <a href="https://wa.me/962796788240" target="_blank" rel="noopener noreferrer" title="WhatsApp" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: #222222; border: 1px solid #3a3a3a; border-radius: 6px; align-items: center; justify-content: center; color: #ffffff; text-decoration: none; transition: all 0.2s ease;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg></a>
-          </div>
+          <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br>United States<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
+          <div id="cmsSocialLinks" class="footer-social-links" style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center;"><a href="https://www.linkedin.com/company/the-fabric8/" target="_blank" rel="noopener noreferrer" title="Click to edit social media link" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: rgb(34, 34, 34); border: 1px solid rgb(58, 58, 58); border-radius: 6px; align-items: center; justify-content: center; color: rgb(255, 255, 255); text-decoration: none; transition: 0.2s; margin-right: 8px; margin-bottom: 6px; box-sizing: border-box; cursor: pointer;" onmouseover="this.style.background='#2f873d';this.style.borderColor='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.borderColor='#3a3a3a';this.style.transform='none';"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a><a href="https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==" target="_blank" rel="noopener noreferrer" title="Click to edit social media link" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: rgb(34, 34, 34); border: 1px solid rgb(58, 58, 58); border-radius: 6px; align-items: center; justify-content: center; color: rgb(255, 255, 255); text-decoration: none; transition: 0.2s; margin-right: 8px; margin-bottom: 6px; box-sizing: border-box; cursor: pointer;" onmouseover="this.style.background='#2f873d';this.style.borderColor='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.borderColor='#3a3a3a';this.style.transform='none';"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a></div>
         </div>
         <div>
           <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Legal</h4>
-          <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms & Conditions</a></p>
+          <p><a href="privacy.html" style="color: #aaa; text-decoration: none;">Privacy Policy</a><br><a href="terms.html" style="color: #aaa; text-decoration: none;">Terms &amp; Conditions</a></p>
         </div>
       </div>
-      <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">
-        &copy; 2026 Fabric8. All rights reserved.
-      </div>
+      <div style="max-width: 1200px; margin: 40px auto 0; border-top: 1px solid #333; padding-top: 20px; text-align: left;">© 2026 Fabric8. All rights reserved. Custom Workwear &amp; Uniform Solutions. Designed for Perfection.</div>
     </footer>
 
   <!-- Firebase SDK -->
   <script src="site.js?v=40"></script>
-</body>
+
+
+</main></body>
 </html>
