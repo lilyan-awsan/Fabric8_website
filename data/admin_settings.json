@@ -214,7 +214,7 @@
         "name": "WhatsApp",
         "iconKey": "whatsapp",
         "url": "https://hello",
-        "active": true,
+        "active": false,
         "shape": "square"
       }
     ],
