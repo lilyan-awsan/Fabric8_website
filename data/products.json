@@ -262,7 +262,8 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "id": "F8-002"
   },
   {
     "id": "F8-003",
@@ -371,7 +372,6 @@
       "assets/products/Cargo Vest Beige.webp",
       "assets/products/Cargo Vest Army Green.webp",
       "assets/products/Cargo Vest Beige Side.webp",
-      "assets/products/Cargo Vest Beige Back.webp",
       "assets/products/Cargo Vest Black.webp",
       "assets/products/Cargo Vest Navy.webp"
     ]
@@ -515,7 +515,8 @@
     ],
     "supportedPlacements": [
       "Front Center"
-    ]
+    ],
+    "id": "F8-006"
   },
   {
     "availability": "In Stock",
@@ -605,7 +606,8 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "id": "F8-007"
   },
   {
     "availability": "In Stock",
@@ -1010,7 +1012,8 @@
       "Left Chest",
       "Right Chest",
       "Upper Left Sleeve"
-    ]
+    ],
+    "id": "F8-011"
   },
   {
     "availability": "In Stock",
@@ -1114,7 +1117,8 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "id": "F8-012"
   },
   {
     "availability": "In Stock",
@@ -1202,7 +1206,8 @@
       "Right Hip Pocket",
       "Left Cargo Pocket / Leg",
       "Right Cargo Pocket / Leg"
-    ]
+    ],
+    "id": "F8-013"
   },
   {
     "availability": "",

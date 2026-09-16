@@ -110,12 +110,16 @@ function applySiteSettings() {
   
   const resolveAssetUrl = (url, defaultFallback = '') => {
     if (!url) return defaultFallback;
-    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url;
-    const clean = url.replace(/^\/+/, '');
+    let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
+    while (clean.includes('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+      clean = clean.replace('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/', 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/');
+    }
+    if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('data:')) return clean;
+    clean = clean.replace(/^\/+/, '');
     if (window.location.hostname.includes('thefabric8.com') || window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
       return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
     }
-    return url;
+    return clean;
   };
 
   const sc = siteSettings.siteContent || {};
@@ -136,7 +140,7 @@ function applySiteSettings() {
     const heroBtn = document.getElementById('cmsHomeHeroBtn');
     if (heroBtn) heroBtn.textContent = sc.homeHeroBtnText;
   }
-  if (sc.heroImage && document.getElementById('cmsHomeHeroTitle')) {
+  if (document.getElementById('cmsHomeHeroTitle')) {
     const heroBg = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
     if (heroBg) {
       const applyHeroUrl = (imgUrl) => {
@@ -146,18 +150,19 @@ function applySiteSettings() {
         heroBg.style.backgroundRepeat = 'no-repeat';
       };
 
-      const finalHeroUrl = resolveAssetUrl(sc.heroImage, 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
+      const heroImg = sc.heroImage || 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+      const finalHeroUrl = resolveAssetUrl(heroImg, 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
       applyHeroUrl(finalHeroUrl);
 
-      // Fallback probe in case relative or primary fails
-      if (!finalHeroUrl.startsWith('http') && !finalHeroUrl.startsWith('data:')) {
-        const testImg = new Image();
-        testImg.onerror = () => {
-          const cleanPath = sc.heroImage.replace(/^\/+/, '');
-          applyHeroUrl(`https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${cleanPath}`);
-        };
-        testImg.src = sc.heroImage;
-      }
+      // Verify hero image can load; if not, fallback to raw GitHub or default image
+      const testImg = new Image();
+      testImg.onerror = () => {
+        const ghFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+        if (finalHeroUrl !== ghFallback) {
+          applyHeroUrl(ghFallback);
+        }
+      };
+      testImg.src = finalHeroUrl;
     }
   }
   if (sc.promoImage) {
@@ -457,20 +462,19 @@ function applySiteSettings() {
   const heroEl = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
   if (heroEl) {
     const styleBg = heroEl.getAttribute('style') || '';
-    const match = styleBg.match(/url\(["']?(assets\/site_images\/[^"')]+)["']?\)/);
+    const match = styleBg.match(/url\((?:&quot;|["'])?([^"')&]+)(?:&quot;|["'])?\)/);
     if (match && match[1]) {
-      const imgPath = match[1];
+      let imgPath = match[1].replace(/&quot;/g, '').trim();
+      while (imgPath.includes('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+        imgPath = imgPath.replace('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/', 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/');
+      }
+      const ghUrl = imgPath.startsWith('http') ? imgPath : ('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + imgPath.replace(/^\/+/, ''));
       const testImg = new Image();
       testImg.onerror = () => {
-        const ghUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + imgPath;
-        if (heroEl.style.backgroundImage) {
-          heroEl.style.backgroundImage = heroEl.style.backgroundImage.replace(imgPath, ghUrl);
-        }
-        if (heroEl.style.background) {
-          heroEl.style.background = heroEl.style.background.replace(imgPath, ghUrl);
-        }
+        const safeFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+        heroEl.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url('${safeFallback}')`;
       };
-      testImg.src = imgPath;
+      testImg.src = ghUrl;
     }
   }
 }
@@ -646,12 +650,13 @@ async function loadProducts(forceSync = false) {
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
       } catch (e) {}
 
-      if (productsData && Array.isArray(productsData) && productsData.length > 0) {
+      const rawList = Array.isArray(productsData) ? productsData.filter(Boolean) : (productsData && typeof productsData === 'object' ? Object.values(productsData).filter(Boolean) : []);
+      if (rawList.length > 0) {
         const oldProductsStr = JSON.stringify(products);
-        productsData.sort((a, b) => a.name.localeCompare(b.name));
-        const newProductsStr = JSON.stringify(productsData);
+        rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        const newProductsStr = JSON.stringify(rawList);
         if (oldProductsStr !== newProductsStr || !siteInitialized) {
-          products = productsData;
+          products = rawList;
           colorMatchCache.clear();
           try {
             localStorage.setItem("fabric8_products_cache", newProductsStr);

@@ -138,23 +138,50 @@ logoutBtn.addEventListener("click", () => {
 
 // --- GitHub CMS CRUD ---
 async function fetchProducts() {
+  const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+
+  // 1. Instant load from local cache if available
   try {
     const cached = localStorage.getItem("fabric8_products_cache");
     if (cached) {
       const parsed = JSON.parse(cached);
       if (Array.isArray(parsed) && parsed.length > 0) {
         productsList = parsed;
-        productsList.sort((a, b) => a.name.localeCompare(b.name));
+        productsList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
         renderTable();
       }
     }
   } catch (e) {}
 
+  // 2. Fetch directly from Firebase Realtime Database
+  try {
+    const fbRes = await fetch(`${FIREBASE_DB}/products.json?t=${Date.now()}`);
+    if (fbRes.ok) {
+      const data = await fbRes.json();
+      let list = [];
+      if (Array.isArray(data)) {
+        list = data.filter(Boolean);
+      } else if (data && typeof data === 'object') {
+        list = Object.values(data).filter(Boolean);
+      }
+      if (list.length > 0) {
+        productsList = list;
+        productsList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
+        renderTable();
+        return;
+      }
+    }
+  } catch (fbErr) {
+    console.warn("Firebase products direct fetch fallback:", fbErr);
+  }
+
+  // 3. Fallback to static data/products.json if Firebase is unreachable
   try {
     const res = await fetch('data/products.json?t=' + Date.now());
     if (res.ok) {
       productsList = await res.json();
-      productsList.sort((a, b) => a.name.localeCompare(b.name));
+      productsList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
       try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
       renderTable();
     }
@@ -1000,10 +1027,17 @@ productForm.addEventListener("submit", async (e) => {
 
   // 1. Instant save to LocalStorage and Firebase RTDB if no pending new image uploads
   if (pendingImages.length === 0 && !pendingSketchFile) {
-    const existingIndex = productsList.findIndex(p => (p.sku && p.sku === productData.sku) || (p.id && p.id === productData.id));
+    const targetSku = (productData.sku || '').trim().toLowerCase();
+    const targetName = (productData.name || '').trim().toLowerCase();
+    const existingIndex = productsList.findIndex(p => 
+      (p.sku && p.sku.trim().toLowerCase() === targetSku) || 
+      (p.id && p.id === productData.id) ||
+      (p.name && targetName && p.name.trim().toLowerCase() === targetName)
+    );
     const mergedProduct = {
       ...(existingIndex >= 0 ? productsList[existingIndex] : {}),
-      ...productData
+      ...productData,
+      id: productData.sku || productData.id
     };
     if (existingIndex >= 0) {
       productsList[existingIndex] = mergedProduct;
