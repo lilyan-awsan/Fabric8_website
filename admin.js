@@ -2075,30 +2075,7 @@ if (saveTaxonomyBtn) {
         console.warn("Firebase sync notice:", fbErr);
       }
 
-      // 4. Save to GitHub via /api/githubSync with isolated payload
-      let ghSynced = false;
-      try {
-        const res = await fetch('/api/githubSync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'save_settings',
-            siteSettingsPayload: {
-              categories1stLayer: currentSectors,
-              categories2ndLayer: currentCategories
-            },
-            commitMessage: 'Update Sectors and Categories filter order and visibility'
-          })
-        });
-        if (res.ok) {
-          const resData = await res.json();
-          if (resData.success) ghSynced = true;
-        }
-      } catch(ghErr) {
-        console.warn("GitHub API notice:", ghErr);
-      }
-
-      // 5. Update UI
+      // 4. Update UI immediately (changes are live on Firebase RTDB in ~150ms!)
       if (taxonomyStatusBadge) {
         taxonomyStatusBadge.textContent = "● Changes Published to Live Site!";
         taxonomyStatusBadge.style.display = "inline-block";
@@ -2111,14 +2088,32 @@ if (saveTaxonomyBtn) {
       renderSectorButtons();
 
       if (window.showToast) {
-        window.showToast("✅ Sectors and Categories filter order updated successfully!", "success", 5000);
+        window.showToast("✅ Sectors and Categories filter order updated live!", "success", 4000);
       } else {
         alert("Sectors and Categories filter order updated successfully!");
       }
+
+      // Re-enable button immediately so user is never stuck waiting
+      saveTaxonomyBtn.innerHTML = originalText;
+      saveTaxonomyBtn.disabled = false;
+
+      // 5. Sync to GitHub in background without blocking UI
+      fetch('/api/githubSync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save_settings',
+          token: authToken || 'admin1234',
+          siteSettingsPayload: {
+            categories1stLayer: currentSectors,
+            categories2ndLayer: currentCategories
+          },
+          commitMessage: 'Update Sectors and Categories filter order and visibility'
+        })
+      }).catch(ghErr => console.warn("GitHub API background notice:", ghErr));
     } catch(err) {
       console.error("Failed to save taxonomy:", err);
       alert("Error publishing filter changes: " + (err.message || err));
-    } finally {
       saveTaxonomyBtn.innerHTML = originalText;
       saveTaxonomyBtn.disabled = false;
     }
@@ -2166,7 +2161,7 @@ if (saveBrandsBtn) {
         console.warn("Firebase brand logos notice:", fbErr);
       }
 
-      // 3. Update local caches and live preview
+      // 3. Update local caches and live preview immediately
       brandLogosList = updatedLogosList;
       try {
         localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
@@ -2174,8 +2169,13 @@ if (saveBrandsBtn) {
       renderBrandLogosGrid();
       updateIframeMarquee();
 
-      // 4. Save to GitHub repository with isolated payload (never rewrites index.html)
-      const syncRes = await fetch('/api/githubSync', {
+      // 4. Instant UI response - changes already saved in Firebase RTDB!
+      if (window.showToast) window.showToast("🚀 Brand logos published live immediately! Syncing backup in background...", "success", 4000);
+      saveBrandsBtn.textContent = 'Publish Brand Changes';
+      saveBrandsBtn.disabled = false;
+
+      // 5. Save to GitHub repository in background (never blocks the button)
+      fetch('/api/githubSync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2185,19 +2185,10 @@ if (saveBrandsBtn) {
           siteImages: siteImages,
           commitMessage: 'Update Client Brand Logos marquee configuration'
         })
-      });
-
-      const syncData = await syncRes.json();
-      if (syncData.success) {
-        if (window.showToast) window.showToast("🚀 Brand logos published successfully to live site!", "success");
-        alert("✅ Brand logos published successfully to live site!");
-      } else {
-        alert("Notice while syncing repository: " + (syncData.message || "Saved to database"));
-      }
+      }).catch(err => console.warn("GitHub background sync notice:", err));
     } catch(err) {
       console.error(err);
       alert("Error publishing brand changes: " + err.message);
-    } finally {
       saveBrandsBtn.textContent = 'Publish Brand Changes';
       saveBrandsBtn.disabled = false;
     }
@@ -3231,7 +3222,8 @@ if (saveVisualEditorBtn) {
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
       } catch(e) {}
 
-      updateSyncBadge("Publishing visual page changes...", false, false);
+      updateSyncBadge("⚡ Live in Database (Syncing Git...)", true, false);
+      if (window.showToast) showToast("⚡ Changes saved to live database! Syncing Git backup in background...", "info", 3000);
 
       // 45 second fetch timeout controller for full payload & API sync
       const controller = new AbortController();
@@ -3737,38 +3729,33 @@ async function saveFooterSettings() {
       console.warn("Firebase RTDB notice:", fbErr);
     }
 
-    try {
-      const syncRes = await fetch('/api/githubSync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'save_settings',
-          token: authToken || 'admin1234',
-          siteSettingsPayload: {
-            footerLegal: currentSiteSettings.footerLegal,
-            siteContent: currentSiteSettings.siteContent
-          },
-          commitMessage: 'Update global footer content and square social icons'
-        })
-      });
-      if (syncRes.ok) {
-        console.log("GitHub sync successful for footer settings");
-      }
-    } catch(ghErr) {
-      console.warn("GitHub API notice:", ghErr);
-    }
-
     if (statusEl) {
       statusEl.style.display = 'inline-block';
       setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
     }
     if (window.showToast) {
-      window.showToast("Global Footer & Square Social Icons published live!", "success");
+      window.showToast("✅ Global Footer & Social Icons published live immediately!", "success", 4000);
     }
+    if (topBtn) { topBtn.textContent = origTopText; topBtn.disabled = false; }
+    if (bottomBtn) { bottomBtn.textContent = origBottomText; bottomBtn.disabled = false; }
+
+    // Sync to GitHub in background (non-blocking)
+    fetch('/api/githubSync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'save_settings',
+        token: authToken || 'admin1234',
+        siteSettingsPayload: {
+          footerLegal: currentSiteSettings.footerLegal,
+          siteContent: currentSiteSettings.siteContent
+        },
+        commitMessage: 'Update global footer content and square social icons'
+      })
+    }).catch(ghErr => console.warn("GitHub API background notice:", ghErr));
   } catch(err) {
     console.error("Save footer error:", err);
     alert("Could not publish footer settings. Please check connection and try again.");
-  } finally {
     if (topBtn) { topBtn.textContent = origTopText; topBtn.disabled = false; }
     if (bottomBtn) { bottomBtn.textContent = origBottomText; bottomBtn.disabled = false; }
   }
