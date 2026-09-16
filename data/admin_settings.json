@@ -208,6 +208,14 @@
         "name": "Facebook",
         "shape": "square",
         "url": ""
+      },
+      {
+        "id": "social_1789598714302",
+        "name": "WhatsApp",
+        "iconKey": "whatsapp",
+        "url": "https://hello",
+        "active": true,
+        "shape": "square"
       }
     ],
     "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
