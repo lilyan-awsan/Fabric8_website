@@ -289,8 +289,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Beige": "assets/products/Cargo Vest Beige.webp",
       "Army Green": "assets/products/Cargo Vest Army Green.webp",
-      "Beige": "assets/products/Cargo Vest Beige Side.webp",
       "Black": "assets/products/Cargo Vest Black.webp",
       "Navy": "assets/products/Cargo Vest Navy.webp"
     },
@@ -360,18 +360,19 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Cargo Vest Army Green.webp",
+    "image": "assets/products/Cargo Vest Beige.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Cargo Vest Army Green.webp",
+      "url": "assets/products/Cargo Vest Beige.webp",
       "name": null
     },
     "images": [
+      "assets/products/Cargo Vest Beige.webp",
       "assets/products/Cargo Vest Army Green.webp",
       "assets/products/Cargo Vest Beige Side.webp",
       "assets/products/Cargo Vest Beige Back.webp",
-      "assets/products/Cargo Vest Beige.webp",
+      "assets/products/Cargo Vest Beige Back 1.webp",
       "assets/products/Cargo Vest Black.webp",
       "assets/products/Cargo Vest Navy.webp"
     ]
