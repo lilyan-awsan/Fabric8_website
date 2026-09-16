@@ -420,10 +420,19 @@ export default async function handler(req, res) {
       const chosenMainImage = finalImages.length > 0 ? finalImages[0] : (product.image || "assets/white.png");
 
       // Ensure that if the chosen main photo has an assigned color, it is mapped in colorImageMap
-      for (const col of (product.colors || [])) {
-        if (chosenMainImage.toLowerCase().includes(col.toLowerCase())) {
-          colorImageMap[col] = chosenMainImage;
+      let mainColorMapped = false;
+      for (const [cName, cImg] of Object.entries(colorImageMap)) {
+        if (cImg === chosenMainImage || (chosenMainImage && cImg && cImg.split('?')[0] === chosenMainImage.split('?')[0])) {
+          mainColorMapped = true;
           break;
+        }
+      }
+      if (!mainColorMapped) {
+        for (const col of (product.colors || [])) {
+          if (chosenMainImage.toLowerCase().includes(col.toLowerCase())) {
+            colorImageMap[col] = chosenMainImage;
+            break;
+          }
         }
       }
 

@@ -33,6 +33,7 @@ window.showToast = function(message, type = 'success', duration = 6000) {
 
 let products = [];
 let siteSettings = {};
+const colorMatchCache = new Map();
 
 function populateCountrySelectors(countries) {
   const selectors = document.querySelectorAll('.country-selector');
@@ -538,7 +539,7 @@ function loadCart() {
   }
 }
 
-async function loadProducts() {
+async function loadProducts(forceSync = false) {
   let siteInitialized = false;
 
   // 1. Instant load from localStorage cache if available
@@ -595,6 +596,7 @@ async function loadProducts() {
       if (localProducts && Array.isArray(localProducts) && localProducts.length > 0) {
         products = localProducts;
         products.sort((a, b) => a.name.localeCompare(b.name));
+        colorMatchCache.clear();
         try {
           localStorage.setItem("fabric8_products_cache", JSON.stringify(localProducts));
           localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
@@ -605,11 +607,11 @@ async function loadProducts() {
     } catch (e) {}
   }
 
-  // 3. Background Async Sync with Firebase Realtime Database (Throttled to 15s to keep site instant and live)
+  // 3. Background Async Sync with Firebase Realtime Database
   const isInsideIframe = window.self !== window.top;
-  const forceRefresh = window.location.search.includes('t=') || isInsideIframe;
+  const forceRefresh = window.location.search.includes('t=') || isInsideIframe || forceSync;
   const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-  const isCacheRecent = (Date.now() - lastSettingsSync) < 15000;
+  const isCacheRecent = (Date.now() - lastSettingsSync) < 5000;
   
   if (!isCacheRecent || !siteInitialized || forceRefresh) {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -639,6 +641,7 @@ async function loadProducts() {
         const newProductsStr = JSON.stringify(productsData);
         if (oldProductsStr !== newProductsStr || !siteInitialized) {
           products = productsData;
+          colorMatchCache.clear();
           try {
             localStorage.setItem("fabric8_products_cache", newProductsStr);
             localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
@@ -676,21 +679,23 @@ window.addEventListener('storage', (e) => {
         if (Array.isArray(parsed) && parsed.length > 0) {
           products = parsed;
           products.sort((a, b) => a.name.localeCompare(b.name));
-          if (typeof renderCatalog === 'function') renderCatalog();
-          if (typeof renderShopGrid === 'function') renderShopGrid();
-          if (typeof initProductDetail === 'function') initProductDetail();
+          colorMatchCache.clear();
+          if (typeof renderProducts === 'function') renderProducts();
+          if (typeof renderShowcase === 'function') renderShowcase();
+          const sku = new URLSearchParams(window.location.search).get('sku') || (typeof selectedProductSku !== 'undefined' ? selectedProductSku : null);
+          if (sku && typeof initProductPage === 'function') initProductPage(sku);
         }
       }
     } catch (err) {}
   }
 });
 
-// Real-time tab-focus refresh (checks Firebase if page has been open > 15s)
+// Real-time tab-focus refresh (checks Firebase when switching back to tab)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') {
     const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-    if (Date.now() - lastSettingsSync > 15000) {
-      loadProducts();
+    if (Date.now() - lastSettingsSync > 3000) {
+      loadProducts(true);
     }
   }
 });
@@ -2434,8 +2439,6 @@ function normalizeForMatch(str) {
     .replace(/strips|stripe|striped/g, "striped")
     .replace(/\s+/g, " ");
 }
-
-const colorMatchCache = new Map();
 
 function getImagesForColor(product, targetColor) {
   if (!product.images || !product.images.length) return [product.image || 'White Polo Shirt.png'];

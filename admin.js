@@ -388,6 +388,12 @@ async function syncWithGithub(action, product) {
         try { 
           localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); 
           localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+          const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+          fetch(`${FIREBASE_DB}/products.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productsList)
+          }).catch(() => {});
         } catch (e) {}
       }
       if (action === "save_settings" && product) {
@@ -908,8 +914,48 @@ productForm.addEventListener("submit", async (e) => {
                             custCap === "embroidery_only" ? ["Embroidery"] :
                             custCap === "none" ? [] : ["Embroidery", "Direct To Fabric (DTF) Printing"];
   
+  const orderedExistingImages = (function() {
+    let ordered = [...existingImages];
+    if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+      if (selectedMainPhoto.index > 0 && selectedMainPhoto.index < ordered.length) {
+        const [picked] = ordered.splice(selectedMainPhoto.index, 1);
+        ordered.unshift(picked);
+      }
+    }
+    return ordered;
+  })();
+
+  let chosenMainImage = "";
+  if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+    chosenMainImage = existingImages[selectedMainPhoto.index];
+  } else if (selectedMainPhoto.type === 'pending' && pendingImages[selectedMainPhoto.index]) {
+    chosenMainImage = `PENDING_${pendingImages[selectedMainPhoto.index].name}`;
+  } else {
+    chosenMainImage = orderedExistingImages[0] || "";
+  }
+
+  const calculatedColorImageMap = (function() {
+    const map = {};
+    existingImages.forEach((imgUrl, idx) => {
+      const assigned = existingImageColorMap[idx];
+      if (assigned && !map[assigned]) map[assigned] = imgUrl;
+    });
+    // Ensure the designated main photo is the primary image mapped for its color variant!
+    if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+      const mainImg = existingImages[selectedMainPhoto.index];
+      let mainColor = existingImageColorMap[selectedMainPhoto.index];
+      if (!mainColor) {
+        mainColor = activeColors.find(c => mainImg.toLowerCase().includes(c.toLowerCase()));
+      }
+      if (mainColor) {
+        map[mainColor] = mainImg;
+      }
+    }
+    return map;
+  })();
+
   const productData = {
-    id: docId,
+    id: docId || document.getElementById("sku").value,
     sku: document.getElementById("sku").value,
     name: document.getElementById("name").value,
     category: document.getElementById("category").value,
@@ -920,22 +966,7 @@ productForm.addEventListener("submit", async (e) => {
     sizes: activeSizes,
     colors: activeColors,
     colorHexMap: activeColorHexMap,
-    colorImageMap: (function() {
-      const map = {};
-      existingImages.forEach((imgUrl, idx) => {
-        const assigned = existingImageColorMap[idx];
-        if (assigned && !map[assigned]) map[assigned] = imgUrl;
-      });
-      // Ensure the designated main photo is the primary image mapped for its color variant!
-      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
-        const mainImg = existingImages[selectedMainPhoto.index];
-        const mainColor = existingImageColorMap[selectedMainPhoto.index];
-        if (mainColor) {
-          map[mainColor] = mainImg;
-        }
-      }
-      return map;
-    })(),
+    colorImageMap: calculatedColorImageMap,
     fabric: document.getElementById("fabric").value,
     gsm: document.getElementById("gsm").value,
     leadTime: document.getElementById("leadTime").value,
@@ -951,25 +982,9 @@ productForm.addEventListener("submit", async (e) => {
     embroideryPlacements: activeEmbPlacements,
     supportedFinishes: supportedFinishes,
     customizationCapability: custCap,
-    existingImages: (function() {
-      let ordered = [...existingImages];
-      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
-        if (selectedMainPhoto.index > 0 && selectedMainPhoto.index < ordered.length) {
-          const [picked] = ordered.splice(selectedMainPhoto.index, 1);
-          ordered.unshift(picked);
-        }
-      }
-      return ordered;
-    })(),
-    image: (function() {
-      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
-        return existingImages[selectedMainPhoto.index];
-      }
-      if (selectedMainPhoto.type === 'pending' && pendingImages[selectedMainPhoto.index]) {
-        return `PENDING_${pendingImages[selectedMainPhoto.index].name}`;
-      }
-      return existingImages[0] || "";
-    })(),
+    existingImages: orderedExistingImages,
+    images: orderedExistingImages,
+    image: chosenMainImage,
     mainImageSelection: {
       type: selectedMainPhoto.type,
       index: selectedMainPhoto.type === 'existing' ? 0 : selectedMainPhoto.index,
@@ -983,6 +998,51 @@ productForm.addEventListener("submit", async (e) => {
     productData.sketchName = pendingSketchFile.name;
   }
 
+  // 1. Instant save to LocalStorage and Firebase RTDB if no pending new image uploads
+  if (pendingImages.length === 0 && !pendingSketchFile) {
+    const existingIndex = productsList.findIndex(p => (p.sku && p.sku === productData.sku) || (p.id && p.id === productData.id));
+    const mergedProduct = {
+      ...(existingIndex >= 0 ? productsList[existingIndex] : {}),
+      ...productData
+    };
+    if (existingIndex >= 0) {
+      productsList[existingIndex] = mergedProduct;
+    } else {
+      productsList.push(mergedProduct);
+    }
+
+    // Instant LocalStorage broadcast to other tabs
+    try {
+      localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList));
+      localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+    } catch (e) {}
+
+    // Direct ~100ms Firebase Realtime Database update
+    const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+    fetch(`${FIREBASE_DB}/products.json`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productsList)
+    }).catch(fbErr => console.warn("Firebase direct save:", fbErr));
+
+    renderTable();
+    closeModal();
+    submitBtn.textContent = "Save Product";
+    submitBtn.disabled = false;
+    showToast("✅ Product saved & live immediately! Syncing repository in background...", "success", 4000);
+    updateSyncBadge("⚡ Live Updated (Syncing Git...)", true, false);
+
+    // Sync to GitHub in background without blocking UI
+    syncWithGithub("save", productData).then(ok => {
+      if (ok) {
+        updateSyncBadge("✅ Synced Live & Saved", true, false);
+      }
+    });
+    return;
+  }
+
+  // If there are pending uploaded images, upload and save via syncWithGithub
+  submitBtn.textContent = "Uploading & Saving...";
   const success = await syncWithGithub("save", productData);
   if (success) closeModal();
 
