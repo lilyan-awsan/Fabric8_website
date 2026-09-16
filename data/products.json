@@ -45,8 +45,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Polo White Front.webp",
       "American Blue": "assets/products/Polo American Blue 3.webp",
+      "White": "assets/products/Polo White Front.webp",
       "Army Green": "assets/products/Polo Army Green 3.webp",
       "Beige": "assets/products/Polo Beige 2.webp",
       "Black": "assets/products/Polo Black 3.webp",
@@ -137,16 +137,16 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Polo American Blue 3.webp",
+    "image": "assets/products/Polo White Front.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Polo American Blue 3.webp",
+      "url": "assets/products/Polo White Front.webp",
       "name": null
     },
     "images": [
-      "assets/products/Polo American Blue 3.webp",
       "assets/products/Polo White Front.webp",
+      "assets/products/Polo American Blue 3.webp",
       "assets/products/Polo White Side.webp",
       "assets/products/Polo White Back.webp",
       "assets/products/Polo Army Green 3.webp",
