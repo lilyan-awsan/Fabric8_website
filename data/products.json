@@ -814,23 +814,23 @@
     ]
   },
   {
-    "availability": "Made to Order",
-    "care": "",
+    "id": "F8-010",
+    "sku": "F8-010",
+    "name": "Caps",
     "category": "TOP WEAR",
-    "colorImageMap": {
-      "American Blue": "assets/products/Cap American Blue.webp",
-      "Black": "assets/products/Cap Black.webp",
-      "Brown": "assets/products/Cap Brown.webp",
-      "Burgundy": "assets/products/Cap Burgundy.webp",
-      "Charcoal": "assets/products/Cap Charcoal.webp",
-      "Green": "assets/products/Cap Green.webp",
-      "Kiwi": "assets/products/Cap Kiwi 2.webp",
-      "Light Grey": "assets/products/Cap Light Grey.webp",
-      "Navy": "assets/products/Cap Navy.webp",
-      "Red": "assets/products/Cap Red.webp",
-      "White": "assets/products/Cap White.webp",
-      "Yellow": "assets/products/Cap Yellow 2.webp"
-    },
+    "gender": "Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Adjustable branded cap for outdoor or retail teams.",
+    "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL",
+      "5XL"
+    ],
     "colors": [
       "White",
       "American Blue",
@@ -845,45 +845,34 @@
       "Red",
       "Yellow"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "embroideryPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-010",
-    "image": "assets/products/Cap White.webp",
-    "images": [
-      "assets/products/Cap White.webp",
-      "assets/products/Cap American Blue.webp",
-      "assets/products/Cap White Side.webp",
-      "assets/products/Cap White Back.webp",
-      "assets/products/Cap Black.webp",
-      "assets/products/Cap Brown.webp",
-      "assets/products/Cap Burgundy.webp",
-      "assets/products/Cap Charcoal.webp",
-      "assets/products/Cap Green.webp",
-      "assets/products/Cap Kiwi 2.webp",
-      "assets/products/Cap Light Grey.webp",
-      "assets/products/Cap Navy.webp",
-      "assets/products/Cap Red.webp",
-      "assets/products/Cap Yellow 2.webp"
-    ],
-    "leadTime": "",
-    "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
-    "mainImageSelection": {
-      "index": 1,
-      "type": "existing"
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Cap White.webp",
+      "American Blue": "assets/products/Cap American Blue.webp",
+      "Black": "assets/products/Cap Black.webp",
+      "Brown": "assets/products/Cap Brown.webp",
+      "Burgundy": "assets/products/Cap Burgundy.webp",
+      "Charcoal": "assets/products/Cap Charcoal.webp",
+      "Green": "assets/products/Cap Green.webp",
+      "Kiwi": "assets/products/Cap Kiwi 2.webp",
+      "Light Grey": "assets/products/Cap Light Grey.webp",
+      "Navy": "assets/products/Cap Navy.webp",
+      "Red": "assets/products/Cap Red.webp",
+      "Yellow": "assets/products/Cap Yellow 2.webp"
     },
-    "maxQty": "",
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "",
     "moq": "8",
-    "name": "Caps",
+    "maxQty": "",
+    "availability": "Made to Order",
+    "care": "",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ],
     "placements": [
       {
         "h": 22,
@@ -902,27 +891,41 @@
         "y": 56
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Adjustable branded cap for outdoor or retail teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL",
-      "5XL"
+    "dtfPlacements": [
+      "Front Center Panel",
+      "Side Panel"
     ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-010",
+    "embroideryPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ],
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
-    "supportedPlacements": [
-      "Front Center Panel",
-      "Side Panel"
+    "customizationCapability": "both",
+    "image": "assets/products/Cap American Blue.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Cap American Blue.webp",
+      "name": null
+    },
+    "images": [
+      "assets/products/Cap American Blue.webp",
+      "assets/products/Cap White.webp",
+      "assets/products/Cap White Side.webp",
+      "assets/products/Cap White Back.webp",
+      "assets/products/Cap Black.webp",
+      "assets/products/Cap Brown.webp",
+      "assets/products/Cap Burgundy.webp",
+      "assets/products/Cap Charcoal.webp",
+      "assets/products/Cap Green.webp",
+      "assets/products/Cap Kiwi 2.webp",
+      "assets/products/Cap Light Grey.webp",
+      "assets/products/Cap Navy.webp",
+      "assets/products/Cap Red.webp",
+      "assets/products/Cap Yellow 2.webp"
     ]
   },
   {
