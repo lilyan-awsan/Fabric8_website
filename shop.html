@@ -10,6 +10,52 @@
   <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="stylesheet" href="site.css?v=36">
+<script>
+window.resolveAssetUrl = function(url, defaultFallback) {
+  if (!url) return defaultFallback || '';
+  var clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
+  if (!clean) return defaultFallback || '';
+  if (clean.indexOf('data:') === 0) return clean;
+  while (clean.indexOf('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com') !== -1 ||
+         clean.indexOf('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http') !== -1) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+  }
+  if (clean.indexOf('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/') === 0) return clean;
+  if (clean.indexOf('http://') === 0 || clean.indexOf('https://') === 0) return clean;
+  clean = clean.replace(/^\/+/, '');
+  var host = (window.location && window.location.hostname ? window.location.hostname : '').toLowerCase();
+  if (host.indexOf('thefabric8.com') !== -1 || host.indexOf('web.app') !== -1 || host.indexOf('firebaseapp.com') !== -1) {
+    return 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + clean;
+  }
+  return clean;
+};
+window.handleImgError = function(img, fallbackSrc) {
+  if (!img || img.dataset.ghFallback) {
+    if (img && fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
+    return;
+  }
+  img.dataset.ghFallback = '1';
+  var src = (img.getAttribute('src') || img.src || '').trim();
+  src = src.replace(/^https?:\/\/[^\/]+\//, '');
+  src = src.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+  while (src.indexOf('raw.githubusercontent.com') !== -1) {
+    src = src.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  }
+  src = src.replace(/^\/+/, '');
+  if (src && (src.indexOf('assets/') === 0 || src.indexOf('site_images/') === 0)) {
+    img.src = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + src;
+  } else if (fallbackSrc) {
+    img.src = fallbackSrc;
+  } else {
+    img.style.visibility = 'hidden';
+  }
+};
+window.addEventListener('error', function(e) {
+  if (e && e.target && e.target.tagName === 'IMG') {
+    window.handleImgError(e.target);
+  }
+}, true);
+</script>
 </head>
 
 <body class="page-ready">

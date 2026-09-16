@@ -31,6 +31,66 @@ window.showToast = function(message, type = 'success', duration = 6000) {
   }
 };
 
+window.resolveAssetUrl = function(url, defaultFallback = '') {
+  if (!url) return defaultFallback;
+  let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
+  if (!clean) return defaultFallback;
+  if (clean.startsWith('data:')) return clean;
+
+  while (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com') ||
+         clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http')) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+  }
+
+  if (clean.startsWith('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+    return clean;
+  }
+  if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    return clean;
+  }
+
+  clean = clean.replace(/^\/+/, '');
+  const host = (typeof window !== 'undefined' && window.location && window.location.hostname ? window.location.hostname : '').toLowerCase();
+  if (host.includes('thefabric8.com') || host.includes('web.app') || host.includes('firebaseapp.com')) {
+    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+  }
+  return clean;
+};
+
+window.handleImgError = function(img, fallbackSrc = '') {
+  if (!img || img.dataset.ghFallback) {
+    if (img && fallbackSrc && img.src !== fallbackSrc) {
+      img.src = fallbackSrc;
+    }
+    return;
+  }
+  img.dataset.ghFallback = '1';
+
+  let src = (img.getAttribute('src') || img.src || '').trim();
+  src = src.replace(/^https?:\/\/[^\/]+\//, '');
+  src = src.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+  while (src.includes('raw.githubusercontent.com')) {
+    src = src.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  }
+  src = src.replace(/^\/+/, '');
+
+  if (src && (src.startsWith('assets/') || src.startsWith('site_images/'))) {
+    img.src = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${src}`;
+  } else if (fallbackSrc) {
+    img.src = fallbackSrc;
+  } else {
+    img.style.visibility = 'hidden';
+  }
+};
+
+if (typeof window !== 'undefined' && window.addEventListener) {
+  window.addEventListener('error', function(e) {
+    if (e && e.target && e.target.tagName === 'IMG') {
+      window.handleImgError(e.target);
+    }
+  }, true);
+}
+
 // Make the page visible (removes opacity: 0 from site.css)
 document.body.classList.add("page-ready");
 
@@ -1564,10 +1624,13 @@ function updateIframeMarquee() {
     const marquee = doc.querySelector('.marquee-content');
     if (!marquee) return;
 
-    const logoItemsHtml = brandLogosList.map(b => `
+    const logoItemsHtml = brandLogosList.map(b => {
+      const resolvedSrc = window.resolveAssetUrl(b.src);
+      return `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
-              <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
-            </div>`).join('\n');
+              <img src="${resolvedSrc}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`;
+    }).join('\n');
 
     marquee.innerHTML = `<!-- Set 1 -->\n${logoItemsHtml}\n            \n<!-- Set 2 for seamless loop -->\n${logoItemsHtml}`;
   } catch(e) {}
@@ -1606,7 +1669,7 @@ function renderBrandLogosGrid() {
       <div class="delete-brand-circle-btn" data-index="${idx}" style="position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); line-height: 1; user-select: none; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" title="Delete ${brand.name} Logo">&minus;</div>
       
       <div style="flex: 1; width: 100%; display: flex; align-items: center; justify-content: center;">
-        <img src="${brand.src}" alt="${brand.name}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 55px; max-width: 130px; object-fit: contain;">
+        <img src="${window.resolveAssetUrl(brand.src)}" alt="${brand.name}" onerror="window.handleImgError(this)" style="max-height: 55px; max-width: 130px; object-fit: contain;">
       </div>
       <span style="font-size: 11px; font-weight: 700; color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; margin-top: 6px;">${brand.name}</span>
     `;
@@ -1619,7 +1682,7 @@ function renderBrandLogosGrid() {
       if (saveBrandBtn) saveBrandBtn.textContent = "Save Changes";
       if (brandNameInput) brandNameInput.value = targetBrand.name || "";
       if (brandLogoUrlInput) brandLogoUrlInput.value = targetBrand.src || "";
-      if (brandLogoPreviewImg) brandLogoPreviewImg.src = targetBrand.src;
+      if (brandLogoPreviewImg) brandLogoPreviewImg.src = window.resolveAssetUrl(targetBrand.src);
       if (brandLogoPreviewBox) brandLogoPreviewBox.style.display = "block";
       if (addBrandModal) addBrandModal.style.display = "flex";
     });
@@ -3036,10 +3099,13 @@ if (saveVisualEditorBtn) {
       if (currentVisualPage === 'index.html') {
         const marqueeEl = cleanDoc.querySelector('.marquee-content');
         if (marqueeEl && brandLogosList.length > 0) {
-          const logoItemsHtml = brandLogosList.map(b => `
+          const logoItemsHtml = brandLogosList.map(b => {
+            const resolvedSrc = window.resolveAssetUrl(b.src);
+            return `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
-              <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
-            </div>`).join('\n');
+              <img src="${resolvedSrc}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`;
+          }).join('\n');
 
           marqueeEl.innerHTML = `\n            <!-- Set 1 -->\n${logoItemsHtml}\n            \n            <!-- Set 2 for seamless loop -->\n${logoItemsHtml}\n          `;
         }

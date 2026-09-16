@@ -35,6 +35,58 @@ let products = [];
 let siteSettings = {};
 const colorMatchCache = new Map();
 
+window.resolveAssetUrl = function(url, defaultFallback = '') {
+  if (!url) return defaultFallback;
+  let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
+  if (!clean) return defaultFallback;
+  if (clean.startsWith('data:')) return clean;
+
+  while (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com') ||
+         clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http')) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+  }
+
+  if (clean.startsWith('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+    return clean;
+  }
+  if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    return clean;
+  }
+
+  clean = clean.replace(/^\/+/, '');
+  const host = (typeof window !== 'undefined' && window.location && window.location.hostname ? window.location.hostname : '').toLowerCase();
+  if (host.includes('thefabric8.com') || host.includes('web.app') || host.includes('firebaseapp.com')) {
+    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+  }
+  return clean;
+};
+
+window.handleImgError = function(img, fallbackSrc = '') {
+  if (!img || img.dataset.ghFallback) {
+    if (img && fallbackSrc && img.src !== fallbackSrc) {
+      img.src = fallbackSrc;
+    }
+    return;
+  }
+  img.dataset.ghFallback = '1';
+
+  let src = (img.getAttribute('src') || img.src || '').trim();
+  src = src.replace(/^https?:\/\/[^\/]+\//, '');
+  src = src.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+  while (src.includes('raw.githubusercontent.com')) {
+    src = src.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  }
+  src = src.replace(/^\/+/, '');
+
+  if (src && (src.startsWith('assets/') || src.startsWith('site_images/'))) {
+    img.src = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${src}`;
+  } else if (fallbackSrc) {
+    img.src = fallbackSrc;
+  } else {
+    img.style.visibility = 'hidden';
+  }
+};
+
 function populateCountrySelectors(countries) {
   const selectors = document.querySelectorAll('.country-selector');
   if (!selectors.length) return;
@@ -108,18 +160,13 @@ function applySiteSettings() {
     });
   }
   
-  const resolveAssetUrl = (url, defaultFallback = '') => {
-    if (!url) return defaultFallback;
-    let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
-    while (clean.includes('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
-      clean = clean.replace('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/', 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/');
-    }
-    if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('data:')) return clean;
-    clean = clean.replace(/^\/+/, '');
-    if (window.location.hostname.includes('thefabric8.com') || window.location.hostname.includes('web.app') || window.location.hostname.includes('firebaseapp.com')) {
-      return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
-    }
-    return clean;
+  const resolveAssetUrl = window.resolveAssetUrl;
+  const applyHeroBg = (el, url) => {
+    if (!el || !url) return;
+    el.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url('${url}')`;
+    el.style.backgroundPosition = 'center center';
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundRepeat = 'no-repeat';
   };
 
   const sc = siteSettings.siteContent || {};
@@ -143,23 +190,16 @@ function applySiteSettings() {
   if (document.getElementById('cmsHomeHeroTitle')) {
     const heroBg = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
     if (heroBg) {
-      const applyHeroUrl = (imgUrl) => {
-        heroBg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url('${imgUrl}')`;
-        heroBg.style.backgroundPosition = 'center center';
-        heroBg.style.backgroundSize = 'cover';
-        heroBg.style.backgroundRepeat = 'no-repeat';
-      };
-
       const heroImg = sc.heroImage || 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
       const finalHeroUrl = resolveAssetUrl(heroImg, 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
-      applyHeroUrl(finalHeroUrl);
+      applyHeroBg(heroBg, finalHeroUrl);
 
       // Verify hero image can load; if not, fallback to raw GitHub or default image
       const testImg = new Image();
       testImg.onerror = () => {
         const ghFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
         if (finalHeroUrl !== ghFallback) {
-          applyHeroUrl(ghFallback);
+          applyHeroBg(heroBg, ghFallback);
         }
       };
       testImg.src = finalHeroUrl;
@@ -450,33 +490,48 @@ function applySiteSettings() {
   if (Array.isArray(siteSettings.brandLogos) && siteSettings.brandLogos.length > 0) {
     const marqueeEl = document.querySelector('.marquee-content');
     if (marqueeEl) {
-      const logosHtml = siteSettings.brandLogos.map(b => `
+      const logosHtml = siteSettings.brandLogos.map(b => {
+        const resolvedSrc = resolveAssetUrl(b.src);
+        return `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
-              <img src="${b.src}" alt="${b.name || ''}" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/'+this.getAttribute('src');}" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
-            </div>`).join('\n');
+              <img src="${resolvedSrc}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+            </div>`;
+      }).join('\n');
       marqueeEl.innerHTML = `<!-- Set 1 -->\n${logosHtml}\n            \n<!-- Set 2 for seamless loop -->\n${logosHtml}`;
     }
   }
 
-  // 10. Hero Background Image Fallback
-  const heroEl = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
-  if (heroEl) {
-    const styleBg = heroEl.getAttribute('style') || '';
+  // 10. Dynamic Hero Background Image Fallback & Resolution for all pages
+  document.querySelectorAll('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, #cmsHomeHeroBg, #cmsAboutHeroBg, #cmsSectorsHeroBg').forEach(heroEl => {
+    if (heroEl.id === 'cmsHomeHeroBg' && sc.heroImage) return;
+
+    const path = (window.location.pathname || '').toLowerCase();
+    let pageSpecificImg = null;
+    if (path.includes('about') && sc.aboutImage) pageSpecificImg = sc.aboutImage;
+    else if (path.includes('sectors') && sc.sectorsHeroImg) pageSpecificImg = sc.sectorsHeroImg;
+
+    if (pageSpecificImg) {
+      const resolved = resolveAssetUrl(pageSpecificImg);
+      applyHeroBg(heroEl, resolved);
+      return;
+    }
+
+    const styleBg = heroEl.getAttribute('style') || heroEl.style.backgroundImage || '';
     const match = styleBg.match(/url\((?:&quot;|["'])?([^"')&]+)(?:&quot;|["'])?\)/);
     if (match && match[1]) {
-      let imgPath = match[1].replace(/&quot;/g, '').trim();
-      while (imgPath.includes('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
-        imgPath = imgPath.replace('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/', 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/');
+      const currentUrl = match[1].replace(/&quot;/g, '').trim();
+      const resolvedUrl = resolveAssetUrl(currentUrl);
+      if (resolvedUrl) {
+        applyHeroBg(heroEl, resolvedUrl);
+        const testImg = new Image();
+        testImg.onerror = () => {
+          const safeFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+          applyHeroBg(heroEl, safeFallback);
+        };
+        testImg.src = resolvedUrl;
       }
-      const ghUrl = imgPath.startsWith('http') ? imgPath : ('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + imgPath.replace(/^\/+/, ''));
-      const testImg = new Image();
-      testImg.onerror = () => {
-        const safeFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
-        heroEl.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url('${safeFallback}')`;
-      };
-      testImg.src = ghUrl;
     }
-  }
+  });
 }
 
 const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
@@ -4771,12 +4826,10 @@ function initDeliveryDatePicker() {
 
 
 // Global automatic GitHub fallback for newly uploaded images before Hosting CDN propagation
-window.addEventListener('error', function(e) {
-  if (e && e.target && e.target.tagName === 'IMG') {
-    const src = e.target.getAttribute('src');
-    if (src && src.startsWith('assets/') && !e.target.dataset.ghFallback) {
-      e.target.dataset.ghFallback = '1';
-      e.target.src = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + src;
+if (typeof window !== 'undefined' && window.addEventListener) {
+  window.addEventListener('error', function(e) {
+    if (e && e.target && e.target.tagName === 'IMG') {
+      window.handleImgError(e.target);
     }
-  }
-}, true);
+  }, true);
+}
