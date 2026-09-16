@@ -289,8 +289,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Army Green": "assets/products/Cargo Vest Army Green.webp",
       "Beige": "assets/products/Cargo Vest Beige.webp",
+      "Army Green": "assets/products/Cargo Vest Army Green.webp",
       "Black": "assets/products/Cargo Vest Black.webp",
       "Navy": "assets/products/Cargo Vest Navy.webp"
     },
