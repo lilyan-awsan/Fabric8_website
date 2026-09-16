@@ -380,7 +380,7 @@
     "id": "F8-005",
     "sku": "F8-005",
     "name": "Chef Beret",
-    "category": "HEAD WEAR",
+    "category": "Head Wear",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Modern, low-profile alternative to the toque.",
@@ -401,8 +401,8 @@
     "colorHexMap": {},
     "colorImageMap": {
       "Black": "assets/products/Beret Hat Black.webp",
-      "Grey": "assets/products/Beret Hat Grey Side.webp",
-      "White": "assets/products/Beret Hat White 1.png"
+      "Grey": "assets/products/Beret Hat Grey 1.webp",
+      "White": "assets/products/Beret Hat White Side.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -439,19 +439,19 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Beret Hat White 1.png",
+    "image": "assets/products/Beret Hat Grey 1.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Beret Hat White 1.png",
+      "url": "assets/products/Beret Hat Grey 1.webp",
       "name": null
     },
     "images": [
-      "assets/products/Beret Hat White 1.png",
+      "assets/products/Beret Hat Grey 1.webp",
       "assets/products/Beret Hat Black.webp",
       "assets/products/Beret Hat Grey Side.webp",
       "assets/products/Beret Hat White Side.webp",
-      "assets/products/Beret Hat Grey 1.webp"
+      "assets/products/Beret Hat White 1.png"
     ]
   },
   {
