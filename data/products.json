@@ -377,51 +377,14 @@
     ]
   },
   {
-    "availability": "In Stock",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "Head Wear",
-    "colors": [
-      "White",
-      "Black",
-      "Grey"
-    ],
-    "customizationCapability": "Embroidery",
-    "dtfPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "embroideryPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "image": "assets/products/Beret Hat White Side.webp",
-    "images": [
-      "assets/products/Beret Hat Black.webp",
-      "assets/products/Beret Hat Grey Side.webp",
-      "assets/products/Beret Hat White Side.webp",
-      "assets/products/Beret Hat Grey 1.webp",
-      "assets/products/Beret Hat White 1.png"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A soft, flat-topped kitchen cap offering a contemporary look for culinary teams.",
-    "moq": "50 pieces",
+    "id": "F8-005",
+    "sku": "F8-005",
     "name": "Chef Beret",
-    "placements": [
-      {
-        "h": 25,
-        "name": "Front Center",
-        "r": 0,
-        "w": 25,
-        "x": 50,
-        "y": 48
-      }
-    ],
+    "category": "HEAD WEAR",
+    "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Modern, low-profile alternative to the toque.",
+    "long": "A soft, flat-topped kitchen cap offering a contemporary look for culinary teams.",
     "sizes": [
       "XS",
       "S",
@@ -430,12 +393,65 @@
       "XL",
       "2XL"
     ],
-    "sku": "F8-005",
-    "supportedFinishes": [
-      "Embroidery"
+    "colors": [
+      "White",
+      "Black",
+      "Grey"
     ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Black": "assets/products/Beret Hat Black.webp",
+      "Grey": "assets/products/Beret Hat Grey Side.webp",
+      "White": "assets/products/Beret Hat White 1.png"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "50 pieces",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
     "supportedPlacements": [
       "Front Center"
+    ],
+    "placements": [
+      {
+        "name": "Front Center",
+        "x": 50,
+        "y": 48,
+        "w": 25,
+        "h": 25,
+        "r": 0
+      }
+    ],
+    "dtfPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ],
+    "embroideryPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "image": "assets/products/Beret Hat White 1.png",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Beret Hat White 1.png",
+      "name": null
+    },
+    "images": [
+      "assets/products/Beret Hat White 1.png",
+      "assets/products/Beret Hat Black.webp",
+      "assets/products/Beret Hat Grey Side.webp",
+      "assets/products/Beret Hat White Side.webp",
+      "assets/products/Beret Hat Grey 1.webp"
     ]
   },
   {
