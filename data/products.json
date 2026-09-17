@@ -1035,10 +1035,22 @@
     "id": "F8-011"
   },
   {
-    "availability": "In Stock",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-012",
+    "sku": "F8-012",
+    "name": "Scrubs",
     "category": "Top Wear",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Healthcare",
+    "short": "Comfortable, easy-care scrubs for clinical teams.",
+    "long": "A two-piece top-and-pant set made from soft, breathable, easy-care fabric suited to long clinical shifts.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Beige",
@@ -1051,38 +1063,34 @@
       "Ocean Blue",
       "Olive Green"
     ],
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Navy": "assets/products/Scrub Navy Set.webp",
+      "Ocean Blue": "assets/products/Scrub Ocean Blue Set.webp",
+      "Black": "assets/products/Scrub Black Set.webp",
+      "Beige": "assets/products/Scrub Beige Set.webp",
+      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
+      "Charcoal": "assets/products/Scrub Charcoal Set.webp",
+      "Green": "assets/products/Scrub Green Set.webp",
+      "Light Blue": "assets/products/Scrub Light Blue Set.webp",
+      "White": "assets/products/Scrub White Set.webp",
+      "Olive Green": "assets/products/Scrub Olive Green  Set.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "image": "assets/products/Scrub White Set.webp",
-    "images": [
-      "assets/products/Scrub Navy Set.webp",
-      "assets/products/Scrub Ocean Blue Set.webp",
-      "assets/products/Scrub Black Set.webp",
-      "assets/products/Scrub Beige Set.webp",
-      "assets/products/Scrub Burgundy Set.webp",
-      "assets/products/Scrub Charcoal Set.webp",
-      "assets/products/Scrub Green Set.webp",
-      "assets/products/Scrub Light Blue Set.webp",
-      "assets/products/Scrub Olive Green  Set.webp",
-      "assets/products/Scrub White Set.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A two-piece top-and-pant set made from soft, breathable, easy-care fabric suited to long clinical shifts.",
     "moq": "50 pieces",
-    "name": "Scrubs",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "placements": [
       {
         "h": 18,
@@ -1117,27 +1125,43 @@
         "y": 48
       }
     ],
-    "sectors": "Healthcare",
-    "short": "Comfortable, easy-care scrubs for clinical teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sku": "F8-012",
-    "supportedFinishes": [
-      "Embroidery"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
     ],
-    "id": "F8-012"
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Scrub White Set.webp",
+      "assets/products/Scrub Navy Set.webp",
+      "assets/products/Scrub Ocean Blue Set.webp",
+      "assets/products/Scrub Black Set.webp",
+      "assets/products/Scrub Beige Set.webp",
+      "assets/products/Scrub Burgundy Set.webp",
+      "assets/products/Scrub Charcoal Set.webp",
+      "assets/products/Scrub Green Set.webp",
+      "assets/products/Scrub Light Blue Set.webp",
+      "assets/products/Scrub Olive Green  Set.webp",
+      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
+    ],
+    "image": "assets/products/Scrub White Set.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Scrub White Set.webp",
+      "name": null
+    }
   },
   {
     "availability": "In Stock",
