@@ -1065,6 +1065,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "White": "assets/products/Scrub White Set.webp",
       "Navy": "assets/products/Scrub Navy Set.webp",
       "Ocean Blue": "assets/products/Scrub Ocean Blue Set.webp",
       "Black": "assets/products/Scrub Black Set.webp",
@@ -1073,7 +1074,6 @@
       "Charcoal": "assets/products/Scrub Charcoal Set.webp",
       "Green": "assets/products/Scrub Green Set.webp",
       "Light Blue": "assets/products/Scrub Light Blue Set.webp",
-      "White": "assets/products/Scrub White Set.webp",
       "Olive Green": "assets/products/Scrub Olive Green  Set.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
