@@ -1708,11 +1708,12 @@ function updateIframeMarquee() {
     if (!marquee) return;
 
     const logoItemsHtml = brandLogosList.map(b => {
-      const resolvedSrc = window.resolveAssetUrl(b.src);
-      const backup = b.backupSrc || (b.src && b.src.startsWith('data:image') ? b.src : '');
+      const resolvedSrc = (b.backupSrc && b.backupSrc.startsWith('data:image'))
+        ? b.backupSrc
+        : window.resolveAssetUrl(b.src);
       return `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
-              <img src="${resolvedSrc}" data-backup-src="${backup}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+              <img src="${resolvedSrc}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
             </div>`;
     }).join('\n');
 
@@ -1749,12 +1750,15 @@ function renderBrandLogosGrid() {
     card.onmouseover = () => { card.style.borderColor = '#2ecc71'; card.style.boxShadow = '0 6px 16px rgba(46,204,113,0.2)'; };
     card.onmouseout = () => { card.style.borderColor = 'var(--line)'; card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.04)'; };
     
-    const backup = brand.backupSrc || (brand.src && brand.src.startsWith('data:image') ? brand.src : '');
+    const cardSrc = (brand.backupSrc && brand.backupSrc.startsWith('data:image')) 
+      ? brand.backupSrc 
+      : window.resolveAssetUrl(brand.src);
+
     card.innerHTML = `
       <div class="delete-brand-circle-btn" data-index="${idx}" style="position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; cursor: pointer; border: 2px solid white; box-shadow: 0 3px 8px rgba(231,76,60,0.4); line-height: 1; user-select: none; transition: transform 0.15s ease;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'" title="Delete ${brand.name} Logo">&minus;</div>
       
       <div style="flex: 1; width: 100%; display: flex; align-items: center; justify-content: center;">
-        <img src="${window.resolveAssetUrl(brand.src)}" data-backup-src="${backup}" alt="${brand.name}" onerror="window.handleImgError(this)" style="max-height: 55px; max-width: 130px; object-fit: contain;">
+        <img src="${cardSrc}" alt="${brand.name}" onerror="window.handleImgError(this)" style="max-height: 55px; max-width: 130px; object-fit: contain;">
       </div>
       <span style="font-size: 11px; font-weight: 700; color: var(--ink); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; margin-top: 6px;">${brand.name}</span>
     `;
