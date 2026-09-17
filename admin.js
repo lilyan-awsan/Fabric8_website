@@ -433,12 +433,12 @@ function compressImage(file, maxWidth = 1920, maxHeight = 1200, quality = 0.85) 
         } catch (err) {}
 
         if (!base64 || base64.length < 50 || base64.startsWith('data:image/png')) {
-          outputType = 'image/jpeg';
-          base64 = canvas.toDataURL('image/jpeg', quality);
+          outputType = (file.type === 'image/png') ? 'image/png' : 'image/jpeg';
+          base64 = canvas.toDataURL(outputType, quality);
         }
 
         const baseName = (file.name || 'image').replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, '_');
-        const ext = outputType === 'image/webp' ? 'webp' : 'jpg';
+        const ext = outputType === 'image/webp' ? 'webp' : (outputType === 'image/png' ? 'png' : 'jpg');
         const finalName = `${baseName}.${ext}`;
 
         resolve({ base64, name: finalName });
@@ -1211,7 +1211,7 @@ function renderImagePreviews() {
     div.innerHTML = `
       <div style="position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; background: #f9f8f5; border-radius: 6px; overflow: hidden; border: 1px solid var(--line);">
         ${isMain ? `<span style="position: absolute; top: 3px; left: 3px; background: #f39c12; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; box-shadow: 0 1px 3px rgba(0,0,0,0.25); z-index: 2; pointer-events: none; letter-spacing: 0.03em;">★ Main</span>` : ''}
-        <img src="${imgUrl}" alt="Existing" style="max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer;" onclick="window.setMainProductPhoto('existing', ${index})" title="Click to make this the Main Photo">
+        <img src="${imgUrl}" alt="Existing" onerror="if(!this.dataset.retry){this.dataset.retry='1'; const cur=this.getAttribute('src')||''; const alt1=cur.replace(/Set\.webp/i, 'set.webp'); if(alt1!==cur){this.src=alt1;return;} const alt2=cur.replace(/set\.webp/i, 'Set.webp'); if(alt2!==cur){this.src=alt2;return;}}" style="max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer;" onclick="window.setMainProductPhoto('existing', ${index})" title="Click to make this the Main Photo">
         <button type="button" class="remove-btn" onclick="window.removeExistingImage(${index})" style="position: absolute; top: 2px; right: 2px; background: #e74c3c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-weight: bold; line-height: 1; box-shadow: 0 1px 3px rgba(0,0,0,0.3); z-index: 3;">&times;</button>
       </div>
       <div style="width: 100%; margin-top: 2px;">
@@ -1713,10 +1713,22 @@ if (cancelBrandModalBtn) cancelBrandModalBtn.addEventListener('click', () => add
 // File Upload Preview
 let currentUploadedBrandFileName = '';
 if (brandLogoFileInput) {
-  brandLogoFileInput.addEventListener('change', (e) => {
+  brandLogoFileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (file) {
       currentUploadedBrandFileName = file.name;
+      try {
+        const compressed = await compressImage(file, 400, 200, 0.85);
+        if (compressed && compressed.base64) {
+          brandLogoUrlInput.value = compressed.base64;
+          brandLogoPreviewImg.src = compressed.base64;
+          brandLogoPreviewBox.style.display = "block";
+          if (compressed.name) currentUploadedBrandFileName = compressed.name;
+          return;
+        }
+      } catch (err) {
+        console.warn("Brand logo compression fallback:", err);
+      }
       const reader = new FileReader();
       reader.onload = (e2) => {
         brandLogoUrlInput.value = e2.target.result;
