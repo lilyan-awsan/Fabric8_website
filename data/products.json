@@ -1088,24 +1088,11 @@
       "Charcoal": "assets/products/Scrub Charcoal Set.webp",
       "Green": "assets/products/Scrub Green Set.webp",
       "Light Blue": "assets/products/Scrub Light Blue Set.webp",
-      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
-      "Olive Green": "assets/products/Scrub Olive Green  Set.webp"
+      "Olive Green": "assets/products/Scrub Olive Green  Set.webp",
+      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
-    "image": "assets/products/Scrub White Set.webp",
-    "images": [
-      "assets/products/Scrub White Set.webp",
-      "assets/products/Scrub Navy Set.webp",
-      "assets/products/Scrub Black Set.webp",
-      "assets/products/Scrub Beige Set.webp",
-      "assets/products/Scrub Burgundy Set.webp",
-      "assets/products/Scrub Charcoal Set.webp",
-      "assets/products/Scrub Green Set.webp",
-      "assets/products/Scrub Light Blue Set.webp",
-      "assets/products/Scrub Olive Green  Set.webp",
-      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
-    ],
     "leadTime": "14-21 Business Days",
     "moq": "50 pieces",
     "maxQty": "",
@@ -1170,6 +1157,19 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
+    "images": [
+      "assets/products/Scrub White Set.webp",
+      "assets/products/Scrub Navy Set.webp",
+      "assets/products/Scrub Black Set.webp",
+      "assets/products/Scrub Beige Set.webp",
+      "assets/products/Scrub Burgundy Set.webp",
+      "assets/products/Scrub Charcoal Set.webp",
+      "assets/products/Scrub Green Set.webp",
+      "assets/products/Scrub Light Blue Set.webp",
+      "assets/products/Scrub Olive Green  Set.webp",
+      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
+    ],
+    "image": "assets/products/Scrub White Set.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
