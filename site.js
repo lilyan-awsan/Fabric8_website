@@ -509,6 +509,9 @@ function applySiteSettings() {
     let pageSpecificImg = null;
     if (path.includes('about') && sc.aboutImage) pageSpecificImg = sc.aboutImage;
     else if (path.includes('sectors') && sc.sectorsHeroImg) pageSpecificImg = sc.sectorsHeroImg;
+    else if (path.includes('contact') && sc.contactHeroImg) pageSpecificImg = sc.contactHeroImg;
+    else if (path.includes('services') && sc.servicesHeroImg) pageSpecificImg = sc.servicesHeroImg;
+    else if (path.includes('method') && sc.methodHeroImg) pageSpecificImg = sc.methodHeroImg;
 
     if (pageSpecificImg) {
       const resolved = resolveAssetUrl(pageSpecificImg);
