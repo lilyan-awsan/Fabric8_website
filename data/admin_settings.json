@@ -44,6 +44,12 @@
       "id": "brand_1789433500642",
       "name": "VISIOTECH",
       "src": "assets/site_images/1789433505412_6_visiotech.png"
+    },
+    {
+      "id": "brand_1789674321868",
+      "name": "tessst",
+      "src": "assets/site_images/1789674341331_7_tessst.webp",
+      "fileName": "1789602401106_bg_0_contact_hero_bg.webp"
     }
   ],
   "brandingSettings": {
@@ -197,6 +203,7 @@
       }
     ],
     "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
-    "socialLinkedIn": "https://www.linkedin.com/company/the-fabric8/"
+    "socialLinkedIn": "https://www.linkedin.com/company/the-fabric8/",
+    "contactHeroImg": "assets/site_images/1789674432305_bg_0_Screenshot_2026-07-28_194511.webp"
   }
 }
