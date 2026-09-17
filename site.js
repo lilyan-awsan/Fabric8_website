@@ -62,8 +62,16 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
 };
 
 window.handleImgError = function(img, fallbackSrc = '') {
-  if (!img || img.dataset.ghFallback) {
-    if (img && fallbackSrc && img.src !== fallbackSrc) {
+  if (!img) return;
+
+  // 1. If image has a high-res base64 backupSrc, immediately fallback to it so user never sees a broken image
+  if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc) {
+    img.src = img.dataset.backupSrc;
+    return;
+  }
+
+  if (img.dataset.ghFallback) {
+    if (fallbackSrc && img.src !== fallbackSrc) {
       img.src = fallbackSrc;
     }
     return;
@@ -492,9 +500,10 @@ function applySiteSettings() {
     if (marqueeEl) {
       const logosHtml = siteSettings.brandLogos.map(b => {
         const resolvedSrc = resolveAssetUrl(b.src);
+        const backup = b.backupSrc || (b.src && b.src.startsWith('data:image') ? b.src : '');
         return `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
-              <img src="${resolvedSrc}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+              <img src="${resolvedSrc}" data-backup-src="${backup}" alt="${b.name || ''}" onerror="window.handleImgError(this)" style="max-height: 85px; max-width: 230px; width: auto; height: auto; object-fit: contain; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
             </div>`;
       }).join('\n');
       marqueeEl.innerHTML = `<!-- Set 1 -->\n${logosHtml}\n            \n<!-- Set 2 for seamless loop -->\n${logosHtml}`;

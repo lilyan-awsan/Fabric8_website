@@ -13,9 +13,92 @@ export default async function handler(req, res) {
   const jsonPath = "data/products.json";
 
   try {
-    // Handler for save_settings action (Sectors, Categories, and general site settings)
+    // Handler for save_settings action (Sectors, Categories, brand logos, and general site settings)
     if (action === "save_settings") {
-      const { siteSettingsPayload } = req.body;
+      const { siteSettingsPayload, siteImages, pendingSiteImages, commitMessage } = req.body;
+
+      // 1. Upload any new siteImages to GitHub first (e.g. newly added brand logos)
+      if (siteImages && Array.isArray(siteImages)) {
+        for (const img of siteImages) {
+          if (img && img.base64 && img.name) {
+            const cleanName = img.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+            const targetPath = img.newPath || `assets/site_images/${Date.now()}_${cleanName}`;
+            
+            let existingSha = null;
+            try {
+              const checkRes = await fetch(`https://api.github.com/repos/${repo}/contents/${targetPath}`, {
+                headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
+              });
+              if (checkRes.ok) {
+                const checkData = await checkRes.json();
+                existingSha = checkData.sha;
+              }
+            } catch (e) {}
+
+            const uploadPayload = {
+              message: `Upload site image ${cleanName}`,
+              content: img.base64.includes(',') ? img.base64.split(',')[1] : img.base64
+            };
+            if (existingSha) uploadPayload.sha = existingSha;
+
+            const upRes = await fetch(`https://api.github.com/repos/${repo}/contents/${targetPath}`, {
+              method: 'PUT',
+              headers: { 
+                'Authorization': `Bearer ${githubToken}`, 
+                'Content-Type': 'application/json',
+                'User-Agent': 'Fabric8-Admin'
+              },
+              body: JSON.stringify(uploadPayload)
+            });
+            if (!upRes.ok) {
+              const err = await upRes.json().catch(() => ({}));
+              console.error(`Failed to upload ${targetPath}:`, err);
+            }
+          }
+        }
+      }
+
+      // 2. Upload any pendingSiteImages (e.g. from Settings tab)
+      if (pendingSiteImages && typeof pendingSiteImages === 'object') {
+        for (const [key, img] of Object.entries(pendingSiteImages)) {
+          if (img && img.base64 && img.name) {
+            const cleanName = img.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+            const targetPath = `assets/site_images/${Date.now()}_${key}_${cleanName}`;
+            
+            let existingSha = null;
+            try {
+              const checkRes = await fetch(`https://api.github.com/repos/${repo}/contents/${targetPath}`, {
+                headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
+              });
+              if (checkRes.ok) {
+                const checkData = await checkRes.json();
+                existingSha = checkData.sha;
+              }
+            } catch (e) {}
+
+            const uploadPayload = {
+              message: `Upload site graphic for ${key}`,
+              content: img.base64.includes(',') ? img.base64.split(',')[1] : img.base64
+            };
+            if (existingSha) uploadPayload.sha = existingSha;
+
+            const upRes = await fetch(`https://api.github.com/repos/${repo}/contents/${targetPath}`, {
+              method: 'PUT',
+              headers: { 
+                'Authorization': `Bearer ${githubToken}`, 
+                'Content-Type': 'application/json',
+                'User-Agent': 'Fabric8-Admin'
+              },
+              body: JSON.stringify(uploadPayload)
+            });
+
+            if (upRes.ok && siteSettingsPayload && siteSettingsPayload.siteContent) {
+              siteSettingsPayload.siteContent[key] = targetPath;
+            }
+          }
+        }
+      }
+
       if (siteSettingsPayload && typeof siteSettingsPayload === 'object') {
         const settingsPath = "data/admin_settings.json";
         let currentSettingsSha = null;
@@ -48,7 +131,7 @@ export default async function handler(req, res) {
         const newSettingsBase64 = Buffer.from(newSettingsStr).toString('base64');
 
         const settingsPayload = {
-          message: 'Update admin settings (Sectors & Categories)',
+          message: commitMessage || 'Update admin settings',
           content: newSettingsBase64
         };
         if (currentSettingsSha) settingsPayload.sha = currentSettingsSha;
