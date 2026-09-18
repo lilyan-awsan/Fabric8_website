@@ -1825,9 +1825,22 @@
     ]
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-020",
+    "sku": "F8-020",
+    "name": "Dri-Fit T-shirt",
     "category": "Top Wear",
+    "gender": "Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Moisture-wicking tee for active or outdoor roles.",
+    "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Baby Blue",
@@ -1838,41 +1851,32 @@
       "Red",
       "Yellow"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Dri Fit Tshirt White.webp",
+      "Baby Blue": "assets/products/Dri Fit Tshirt Baby Blue.webp",
+      "Black": "assets/products/Dri Fit Tshirt Black 2.webp",
+      "Blue": "assets/products/Dri Fit Tshirt Blue 2.webp",
+      "Green": "assets/products/Dri Fit Tshirt Green 1.webp",
+      "Grey": "assets/products/Dri Fit Tshirt Grey 2.webp",
+      "Red": "assets/products/Dri Fit Tshirt Red.webp",
+      "Yellow": "assets/products/Dri Fit Tshirt Yellow.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-020",
-    "image": "assets/products/Dri Fit Tshirt White.webp",
-    "images": [
-      "assets/products/Dri Fit Tshirt White.webp",
-      "assets/products/Dri Fit Tshirt Baby Blue.webp",
-      "assets/products/Dri Fit Tshirt White Side.webp",
-      "assets/products/Dri Fit Tshirt White Back.webp",
-      "assets/products/Dri Fit Tshirt Black 2.webp",
-      "assets/products/Dri Fit Tshirt Blue 2.webp",
-      "assets/products/Dri Fit Tshirt Green 1.webp",
-      "assets/products/Dri Fit Tshirt Grey 2.webp",
-      "assets/products/Dri Fit Tshirt Red.webp",
-      "assets/products/Dri Fit Tshirt Yellow.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
-    "maxQty": "",
     "moq": "24 pieces",
-    "name": "Dri-Fit T-shirt",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "placements": [
       {
         "h": 18,
@@ -1907,29 +1911,43 @@
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Moisture-wicking tee for active or outdoor roles.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-020",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Dri Fit Tshirt White.webp",
+      "assets/products/Dri Fit Tshirt Baby Blue.webp",
+      "assets/products/Dri Fit Tshirt White Side.webp",
+      "assets/products/Dri Fit Tshirt White Back.webp",
+      "assets/products/Dri Fit Tshirt Black 2.webp",
+      "assets/products/Dri Fit Tshirt Blue 2.webp",
+      "assets/products/Dri Fit Tshirt Green 1.webp",
+      "assets/products/Dri Fit Tshirt Grey 2.webp",
+      "assets/products/Dri Fit Tshirt Red.webp",
+      "assets/products/Dri Fit Tshirt Yellow.webp",
+      "assets/products/1789768662694_Zip_up_Light_Grey-.webp"
+    ],
+    "image": "assets/products/Dri Fit Tshirt White.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Dri Fit Tshirt White.webp",
+      "name": null
+    }
   },
   {
     "id": "F8-021",
