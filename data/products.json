@@ -1952,7 +1952,7 @@
     "id": "F8-021",
     "sku": "F8-021",
     "name": "Dri-Fit Polo",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Performance polo for active, client-facing teams.",
@@ -1982,9 +1982,9 @@
       "Blue": "assets/products/Dri Fit Blue Polo 2.webp",
       "Grey": "assets/products/Dri Fit Grey Polo.webp",
       "Green": "assets/products/Dri Fit Green Polo.webp",
+      "Light Blue": "assets/products/Dri Fit Light Blue Polo 1.webp",
       "Red": "assets/products/Dri Fit polo Red 3.webp",
-      "Yellow": "assets/products/Dri Fit Polo Yellow 3.webp",
-      "Light Blue": "assets/products/Dri Fit Light Blue Polo 1.webp"
+      "Yellow": "assets/products/Dri Fit Polo Yellow 3.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -2062,8 +2062,7 @@
       "assets/products/Dri Fit Green Polo.webp",
       "assets/products/Dri Fit Light Blue Polo 1.webp",
       "assets/products/Dri Fit polo Red 3.webp",
-      "assets/products/Dri Fit Polo Yellow 3.webp",
-      "assets/products/1789768593110_Zip_up_Light_Grey-.webp"
+      "assets/products/Dri Fit Polo Yellow 3.webp"
     ],
     "image": "assets/products/Dri Fit Polo White.webp",
     "mainImageSelection": {
