@@ -45,8 +45,8 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "American Blue": "assets/products/Polo American Blue 3.webp",
       "White": "assets/products/Polo White Front.webp",
+      "American Blue": "assets/products/Polo American Blue 3.webp",
       "Army Green": "assets/products/Polo Army Green 3.webp",
       "Beige": "assets/products/Polo Beige 2.webp",
       "Black": "assets/products/Polo Black 3.webp",
@@ -59,7 +59,6 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Kiwi": "assets/products/Polo Kiwi 4.webp",
       "Light Blue": "assets/products/Polo Light Blue 2 (2).webp",
       "Light Grey": "assets/products/Polo Light grey (2).webp",
-      "Light Yellow": "assets/products/Polo Light Yellow.webp",
       "Navy": "assets/products/Polo Navy 3.webp",
       "Olive Green": "assets/products/Polo Olive Green 2.webp",
       "Orange": "assets/products/Polo Orange 4.webp",
@@ -69,7 +68,8 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Red": "assets/products/Polo Red 2.webp",
       "Turquoise Blue": "assets/products/Polo Turquoise blue 1-2.webp",
       "Deep Turquoise": "assets/products/Polo Deep Turquoise.webp",
-      "Yellow": "assets/products/Polo Yellow 4.webp"
+      "Yellow": "assets/products/Polo Yellow 4.webp",
+      "Light Yellow": "assets/products/Polo Light Yellow.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -137,13 +137,6 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Polo White Front.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Polo White Front.webp",
-      "name": null
-    },
     "images": [
       "assets/products/Polo White Front.webp",
       "assets/products/Polo American Blue 3.webp",
@@ -161,7 +154,6 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/Polo Kiwi 4.webp",
       "assets/products/Polo Light Blue 2 (2).webp",
       "assets/products/Polo Light grey (2).webp",
-      "assets/products/Polo Light Yellow.webp",
       "assets/products/Polo Navy 3.webp",
       "assets/products/Polo Olive Green 2.webp",
       "assets/products/Polo Orange 4.webp",
@@ -171,8 +163,16 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/Polo Red 2.webp",
       "assets/products/Polo Turquoise blue 1-2.webp",
       "assets/products/Polo Deep Turquoise.webp",
-      "assets/products/Polo Yellow 4.webp"
-    ]
+      "assets/products/Polo Yellow 4.webp",
+      "assets/products/Polo Light Yellow.webp"
+    ],
+    "image": "assets/products/Polo White Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Polo White Front.webp",
+      "name": null
+    }
   },
   {
     "id": "F8-002",
@@ -472,39 +472,45 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ]
   },
   {
-    "availability": "In Stock",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "Head Wear",
+    "id": "F8-006",
+    "sku": "F8-006",
+    "name": "Chef Bandana",
+    "category": "Accessories",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality",
+    "short": "Practical head covering for active kitchen staff.",
+    "long": "A tie-back bandana that keeps hair contained and sweat away from the face during high-heat kitchen work.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Black",
       "Grey"
     ],
-    "customizationCapability": "Both",
-    "dtfPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "embroideryPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Chef Bandana White Front.webp",
+      "Black": "assets/products/Chef Bandana Black.webp",
+      "Grey": "assets/products/Chef Bandana Grey.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "image": "assets/products/Chef Bandana White Front.webp",
-    "images": [
-      "assets/products/Chef Bandana White Front.webp",
-      "assets/products/Chef Bandana Black.webp",
-      "assets/products/Chef Bandana White Side.webp",
-      "assets/products/Chef Bandana Grey.webp",
-      "assets/products/Chef Bandana White.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A tie-back bandana that keeps hair contained and sweat away from the face during high-heat kitchen work.",
     "moq": "50 pieces",
-    "name": "Chef Bandana",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Front Center"
+    ],
     "placements": [
       {
         "h": 25,
@@ -515,25 +521,32 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality",
-    "short": "Practical head covering for active kitchen staff.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
+    "dtfPlacements": [
+      "Front Center Panel",
+      "Side Panel"
     ],
-    "sku": "F8-006",
+    "embroideryPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ],
     "supportedFinishes": [
       "Embroidery",
-      "DTF"
+      "Direct To Fabric (DTF) Printing"
     ],
-    "supportedPlacements": [
-      "Front Center"
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Chef Bandana White Front.webp",
+      "assets/products/Chef Bandana Black.webp",
+      "assets/products/Chef Bandana Grey.webp",
+      "assets/products/Chef Bandana White.webp"
     ],
-    "id": "F8-006"
+    "image": "assets/products/Chef Bandana White Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Chef Bandana White Front.webp",
+      "name": null
+    }
   },
   {
     "availability": "In Stock",
@@ -624,7 +637,11 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Center Back",
       "Upper Sleeve"
     ],
-    "id": "F8-007"
+    "id": "F8-007",
+    "colorImageMap": {
+      "White": "assets/products/Lab Coat White.webp",
+      "Grey": "assets/products/Lab Coat grey.webp"
+    }
   },
   {
     "id": "F8-008",
@@ -1047,7 +1064,12 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Right Chest",
       "Upper Left Sleeve"
     ],
-    "id": "F8-011"
+    "id": "F8-011",
+    "colorImageMap": {
+      "White": "assets/products/Chef jacket white.webp",
+      "Black": "assets/products/Chef Jacket Black.webp",
+      "Grey": "assets/products/Chef Jacket Grey 3.webp"
+    }
   },
   {
     "id": "F8-012",
@@ -1272,7 +1294,12 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Left Cargo Pocket / Leg",
       "Right Cargo Pocket / Leg"
     ],
-    "id": "F8-013"
+    "id": "F8-013",
+    "colorImageMap": {
+      "Black Striped": "assets/products/Chef Trousers Striped Black.webp",
+      "Black": "assets/products/Chef Trousers Striped Black.webp",
+      "Grey": "assets/products/Chef Trousers Grey.webp"
+    }
   },
   {
     "availability": "",
@@ -1360,7 +1387,13 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Center Chest (Bib)",
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Full Apron White.webp",
+      "Black": "assets/products/Full Apron Black.webp",
+      "Grey": "assets/products/Full Apron Grey.webp",
+      "Black Striped": "assets/products/Full Apron Striped Black.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1446,7 +1479,13 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Center Chest (Bib)",
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Full Apron W pocket White.webp",
+      "Grey": "assets/products/Full Apron W pocket Grey.webp",
+      "Black": "assets/products/Full W pocket Apron Black.webp",
+      "Black Striped": "assets/products/Full W pocket Striped Black.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1520,7 +1559,12 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "supportedPlacements": [
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Half Apron White.webp",
+      "Black": "assets/products/Half Apron Black.webp",
+      "Grey": "assets/products/Half Apron Grey.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1595,7 +1639,13 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "supportedPlacements": [
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Half Apron W Pocket White.webp",
+      "Black": "assets/products/Half Apron W Pocket Black.webp",
+      "Grey": "assets/products/Half Apron W Pocket Grey.webp",
+      "Black Striped": "assets/products/Half Apron W Pocket Striped Black.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1702,7 +1752,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/T-shirt White.webp",
+      "American Blue": "assets/products/T-shirt American Blue.webp",
+      "Army Green": "assets/products/T-shirt Army Green.webp",
+      "Black": "assets/products/T-shirt Black.webp",
+      "Burgundy": "assets/products/T-shirt Burgundy.webp",
+      "Charcoal": "assets/products/T-shirt Charcoal.webp",
+      "Light Blue": "assets/products/T-shirt Light Blue.webp",
+      "Navy": "assets/products/T-shirt Navy.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1812,9 +1872,22 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ]
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "Top Wear",
+    "id": "F8-020",
+    "sku": "F8-020",
+    "name": "Dri-Fit T-shirt",
+    "category": "TOP WEAR",
+    "gender": "Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Moisture-wicking tee for active or outdoor roles.",
+    "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Baby Blue",
@@ -1825,7 +1898,66 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Red",
       "Yellow"
     ],
-    "customizationCapability": "both",
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Dri Fit Tshirt White.webp",
+      "Baby Blue": "assets/products/Dri Fit Tshirt Baby Blue.webp",
+      "Black": "assets/products/Dri Fit Tshirt Black 2.webp",
+      "Blue": "assets/products/Dri Fit Tshirt Blue 2.webp",
+      "Green": "assets/products/Dri Fit Tshirt Green 1.webp",
+      "Grey": "assets/products/Dri Fit Tshirt Grey 2.webp",
+      "Red": "assets/products/Dri Fit Tshirt Red.webp",
+      "Yellow": "assets/products/Dri Fit Tshirt Yellow.webp"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "24 pieces",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
     "dtfPlacements": [
       "Left Chest",
       "Right Chest",
@@ -1838,11 +1970,11 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Center Back",
       "Upper Sleeve"
     ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-020",
-    "image": "assets/products/Dri Fit Tshirt White.webp",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
     "images": [
       "assets/products/Dri Fit Tshirt White.webp",
       "assets/products/Dri Fit Tshirt Baby Blue.webp",
@@ -1855,11 +1987,67 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/Dri Fit Tshirt Red.webp",
       "assets/products/Dri Fit Tshirt Yellow.webp"
     ],
+    "image": "assets/products/Dri Fit Tshirt White.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Dri Fit Tshirt White.webp",
+      "name": null
+    }
+  },
+  {
+    "id": "F8-021",
+    "sku": "F8-021",
+    "name": "Dri-Fit Polo",
+    "category": "TOP WEAR",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Performance polo for active, client-facing teams.",
+    "long": "A professional polo silhouette with moisture-wicking performance fabric for active or outdoor staff.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "White",
+      "Black",
+      "Blue",
+      "Green",
+      "Grey",
+      "Light Blue",
+      "Red",
+      "Yellow"
+    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Dri Fit Polo White.webp",
+      "Black": "assets/products/Dri Fit Black Polo.webp",
+      "Blue": "assets/products/Dri Fit Blue Polo 2.webp",
+      "Grey": "assets/products/Dri Fit Grey Polo.webp",
+      "Green": "assets/products/Dri Fit Green Polo.webp",
+      "Light Blue": "assets/products/Dri Fit Light Blue Polo 1.webp",
+      "Red": "assets/products/Dri Fit polo Red 3.webp",
+      "Yellow": "assets/products/Dri Fit Polo Yellow 3.webp"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
-    "maxQty": "",
     "moq": "24 pieces",
-    "name": "Dri-Fit T-shirt",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "placements": [
       {
         "h": 18,
@@ -1894,45 +2082,6 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Moisture-wicking tee for active or outdoor roles.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-020",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "Top Wear",
-    "colors": [
-      "White",
-      "Black",
-      "Blue",
-      "Green",
-      "Grey",
-      "Light Blue",
-      "Red",
-      "Yellow"
-    ],
-    "customizationCapability": "both",
     "dtfPlacements": [
       "Left Chest",
       "Right Chest",
@@ -1945,11 +2094,11 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Center Back",
       "Upper Sleeve"
     ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-021",
-    "image": "assets/products/Dri Fit Polo White.webp",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
     "images": [
       "assets/products/Dri Fit Polo White.webp",
       "assets/products/Dri Fit Black Polo.webp",
@@ -1962,68 +2111,13 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/Dri Fit polo Red 3.webp",
       "assets/products/Dri Fit Polo Yellow 3.webp"
     ],
-    "leadTime": "14-21 Business Days",
-    "long": "A professional polo silhouette with moisture-wicking performance fabric for active or outdoor staff.",
-    "maxQty": "",
-    "moq": "24 pieces",
-    "name": "Dri-Fit Polo",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Performance polo for active, client-facing teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-021",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
+    "image": "assets/products/Dri Fit Polo White.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Dri Fit Polo White.webp",
+      "name": null
+    }
   },
   {
     "availability": "In Stock",
@@ -2124,7 +2218,14 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Shirt White.webp",
+      "Black": "assets/products/Shirt Black.webp",
+      "Grey": "assets/products/Shirt grey.webp",
+      "Light Blue": "assets/products/Shirt Light blue.webp",
+      "Navy": "assets/products/Shirt Navy.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -2236,9 +2337,22 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ]
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-024",
+    "sku": "F8-024",
+    "name": "Zip-up Hoodie",
     "category": "Top Wear",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
+    "short": "Easy-layer hoodie for year-round versatility.",
+    "long": "A full-zip hoodie with easy on/off wear over uniforms, durable fabric, and a relaxed fit.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Black",
@@ -2246,38 +2360,29 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Light Grey",
       "Navy"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Zip up white-.webp",
+      "Black": "assets/products/Zip up Black -.webp",
+      "Charcoal": "assets/products/Zip Up Charcoal.webp",
+      "Light Grey": "assets/products/Zip up Light Grey-.webp",
+      "Navy": "assets/products/Zip up Navy-.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-024",
-    "image": "assets/products/Zip up Black -.webp",
-    "images": [
-      "assets/products/Zip up Black -.webp",
-      "assets/products/Zip up white Side.webp",
-      "assets/products/Zip up white Back.webp",
-      "assets/products/Zip Up Charcoal.webp",
-      "assets/products/Zip up Light Grey-.webp",
-      "assets/products/Zip up Navy-.webp",
-      "assets/products/Zip up white-.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A full-zip hoodie with easy on/off wear over uniforms, durable fabric, and a relaxed fit.",
-    "maxQty": "",
     "moq": "12 pieces",
-    "name": "Zip-up Hoodie",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "placements": [
       {
         "h": 18,
@@ -2312,29 +2417,39 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
-    "short": "Easy-layer hoodie for year-round versatility.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-024",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Zip up white-.webp",
+      "assets/products/Zip up Black -.webp",
+      "assets/products/Zip Up Charcoal.webp",
+      "assets/products/Zip up Light Grey-.webp",
+      "assets/products/Zip up Navy-.webp",
+      "assets/products/1789768845404_Zip_up_white_Back.webp",
+      "assets/products/1789768846520_Zip_up_white_Side.webp"
+    ],
+    "image": "assets/products/Zip up white-.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Zip up white-.webp",
+      "name": null
+    }
   },
   {
     "availability": "In Stock",
@@ -2429,6 +2544,10 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "colorImageMap": {
+      "Black": "assets/products/Puff Jacket Black.webp",
+      "Navy": "assets/products/Puff Jacket Navy.webp"
+    }
   }
 ];

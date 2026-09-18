@@ -68,7 +68,8 @@
       "Red": "assets/products/Polo Red 2.webp",
       "Turquoise Blue": "assets/products/Polo Turquoise blue 1-2.webp",
       "Deep Turquoise": "assets/products/Polo Deep Turquoise.webp",
-      "Yellow": "assets/products/Polo Yellow 4.webp"
+      "Yellow": "assets/products/Polo Yellow 4.webp",
+      "Light Yellow": "assets/products/Polo Light Yellow.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -162,7 +163,8 @@
       "assets/products/Polo Red 2.webp",
       "assets/products/Polo Turquoise blue 1-2.webp",
       "assets/products/Polo Deep Turquoise.webp",
-      "assets/products/Polo Yellow 4.webp"
+      "assets/products/Polo Yellow 4.webp",
+      "assets/products/Polo Light Yellow.webp"
     ],
     "image": "assets/products/Polo White Front.webp",
     "mainImageSelection": {
@@ -635,7 +637,11 @@
       "Center Back",
       "Upper Sleeve"
     ],
-    "id": "F8-007"
+    "id": "F8-007",
+    "colorImageMap": {
+      "White": "assets/products/Lab Coat White.webp",
+      "Grey": "assets/products/Lab Coat grey.webp"
+    }
   },
   {
     "id": "F8-008",
@@ -1058,7 +1064,12 @@
       "Right Chest",
       "Upper Left Sleeve"
     ],
-    "id": "F8-011"
+    "id": "F8-011",
+    "colorImageMap": {
+      "White": "assets/products/Chef jacket white.webp",
+      "Black": "assets/products/Chef Jacket Black.webp",
+      "Grey": "assets/products/Chef Jacket Grey 3.webp"
+    }
   },
   {
     "id": "F8-012",
@@ -1283,7 +1294,12 @@
       "Left Cargo Pocket / Leg",
       "Right Cargo Pocket / Leg"
     ],
-    "id": "F8-013"
+    "id": "F8-013",
+    "colorImageMap": {
+      "Black Striped": "assets/products/Chef Trousers Striped Black.webp",
+      "Black": "assets/products/Chef Trousers Striped Black.webp",
+      "Grey": "assets/products/Chef Trousers Grey.webp"
+    }
   },
   {
     "availability": "",
@@ -1371,7 +1387,13 @@
       "Center Chest (Bib)",
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Full Apron White.webp",
+      "Black": "assets/products/Full Apron Black.webp",
+      "Grey": "assets/products/Full Apron Grey.webp",
+      "Black Striped": "assets/products/Full Apron Striped Black.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1457,7 +1479,13 @@
       "Center Chest (Bib)",
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Full Apron W pocket White.webp",
+      "Grey": "assets/products/Full Apron W pocket Grey.webp",
+      "Black": "assets/products/Full W pocket Apron Black.webp",
+      "Black Striped": "assets/products/Full W pocket Striped Black.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1531,7 +1559,12 @@
     "supportedPlacements": [
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Half Apron White.webp",
+      "Black": "assets/products/Half Apron Black.webp",
+      "Grey": "assets/products/Half Apron Grey.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1606,7 +1639,13 @@
     "supportedPlacements": [
       "Bottom Left Corner",
       "Bottom Right Corner"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Half Apron W Pocket White.webp",
+      "Black": "assets/products/Half Apron W Pocket Black.webp",
+      "Grey": "assets/products/Half Apron W Pocket Grey.webp",
+      "Black Striped": "assets/products/Half Apron W Pocket Striped Black.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -1713,7 +1752,17 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/T-shirt White.webp",
+      "American Blue": "assets/products/T-shirt American Blue.webp",
+      "Army Green": "assets/products/T-shirt Army Green.webp",
+      "Black": "assets/products/T-shirt Black.webp",
+      "Burgundy": "assets/products/T-shirt Burgundy.webp",
+      "Charcoal": "assets/products/T-shirt Charcoal.webp",
+      "Light Blue": "assets/products/T-shirt Light Blue.webp",
+      "Navy": "assets/products/T-shirt Navy.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -2169,7 +2218,14 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "colorImageMap": {
+      "White": "assets/products/Shirt White.webp",
+      "Black": "assets/products/Shirt Black.webp",
+      "Grey": "assets/products/Shirt grey.webp",
+      "Light Blue": "assets/products/Shirt Light blue.webp",
+      "Navy": "assets/products/Shirt Navy.webp"
+    }
   },
   {
     "availability": "In Stock",
@@ -2488,6 +2544,10 @@
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "colorImageMap": {
+      "Black": "assets/products/Puff Jacket Black.webp",
+      "Navy": "assets/products/Puff Jacket Navy.webp"
+    }
   }
 ]

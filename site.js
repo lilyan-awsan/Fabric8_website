@@ -2616,7 +2616,27 @@ function getImagesForColor(product, targetColor) {
     return colorMatchCache.get(cacheKey);
   }
 
-  // 1. Direct explicit colorImageMap check
+  // 1. Direct explicit colorImageMap check with dynamic self-healing
+  if (!product.colorImageMap || typeof product.colorImageMap !== "object") {
+    product.colorImageMap = {};
+  }
+  if (Array.isArray(product.colors) && Array.isArray(product.images)) {
+    product.colors.forEach(col => {
+      if (!product.colorImageMap[col]) {
+        const colNorm = normalizeForMatch(col);
+        const colTokens = colNorm.split(/\s+/).filter(Boolean);
+        const candidate = product.images.find(img => {
+          const imgNorm = normalizeForMatch(img);
+          if (imgNorm.includes('side') || imgNorm.includes('back')) return false;
+          return colTokens.every(t => new RegExp('(^|[^a-z0-9])' + t + '([^a-z0-9]|$)', 'i').test(imgNorm));
+        });
+        if (candidate) {
+          product.colorImageMap[col] = candidate;
+        }
+      }
+    });
+  }
+
   if (product.colorImageMap && typeof product.colorImageMap === "object") {
     let explicitImg = product.colorImageMap[targetColor];
     if (!explicitImg) {
