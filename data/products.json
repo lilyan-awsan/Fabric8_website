@@ -45,8 +45,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "American Blue": "assets/products/Polo American Blue 3.webp",
       "White": "assets/products/Polo White Front.webp",
+      "American Blue": "assets/products/Polo American Blue 3.webp",
       "Army Green": "assets/products/Polo Army Green 3.webp",
       "Beige": "assets/products/Polo Beige 2.webp",
       "Black": "assets/products/Polo Black 3.webp",
@@ -59,7 +59,6 @@
       "Kiwi": "assets/products/Polo Kiwi 4.webp",
       "Light Blue": "assets/products/Polo Light Blue 2 (2).webp",
       "Light Grey": "assets/products/Polo Light grey (2).webp",
-      "Light Yellow": "assets/products/Polo Light Yellow.webp",
       "Navy": "assets/products/Polo Navy 3.webp",
       "Olive Green": "assets/products/Polo Olive Green 2.webp",
       "Orange": "assets/products/Polo Orange 4.webp",
@@ -137,13 +136,6 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Polo White Front.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Polo White Front.webp",
-      "name": null
-    },
     "images": [
       "assets/products/Polo White Front.webp",
       "assets/products/Polo American Blue 3.webp",
@@ -161,7 +153,6 @@
       "assets/products/Polo Kiwi 4.webp",
       "assets/products/Polo Light Blue 2 (2).webp",
       "assets/products/Polo Light grey (2).webp",
-      "assets/products/Polo Light Yellow.webp",
       "assets/products/Polo Navy 3.webp",
       "assets/products/Polo Olive Green 2.webp",
       "assets/products/Polo Orange 4.webp",
@@ -172,7 +163,14 @@
       "assets/products/Polo Turquoise blue 1-2.webp",
       "assets/products/Polo Deep Turquoise.webp",
       "assets/products/Polo Yellow 4.webp"
-    ]
+    ],
+    "image": "assets/products/Polo White Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Polo White Front.webp",
+      "name": null
+    }
   },
   {
     "id": "F8-002",
