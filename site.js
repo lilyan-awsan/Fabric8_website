@@ -2731,6 +2731,15 @@ function updateGalleryForColor(product, targetColor) {
       return `<img src="${resolvedThumb}" alt="Thumbnail" onerror="window.handleImgError(this)" onload="this.style.visibility='visible'; this.style.opacity='1';" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
     }).join("");
   }
+
+  // Preload all carousel images into browser cache so thumbnail switches are instantaneous
+  if (Array.isArray(currentCarouselImages)) {
+    currentCarouselImages.forEach(img => {
+      if (!img) return;
+      const pre = new Image();
+      pre.src = window.resolveAssetUrl ? window.resolveAssetUrl(img) : img;
+    });
+  }
 }
 
 function initProductPage(sku) {
