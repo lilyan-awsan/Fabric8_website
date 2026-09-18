@@ -1289,6 +1289,7 @@ input.error, select.error, textarea.error {
   object-fit: contain !important;
   box-sizing: border-box !important;
   padding: 16px !important;
+  visibility: visible !important;
 }
 
 .product-card-info {
