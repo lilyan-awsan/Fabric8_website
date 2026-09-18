@@ -109,15 +109,19 @@ window.handleImgError = function(img, fallbackSrc = '') {
   const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
 
   if (retryCount === 0) {
-    if (isLocal) {
-      img.src = liveUrl;
-    } else {
-      img.src = ghUrl;
+    // 1. Try alternate format locally first before remote network delay
+    if (clean.endsWith('.png')) {
+      img.src = clean.replace(/\.png$/i, '.webp');
+      return;
+    } else if (clean.endsWith('.webp')) {
+      img.src = clean.replace(/\.webp$/i, '.png');
+      return;
     }
+    img.src = isLocal ? liveUrl : ghUrl;
   } else if (retryCount === 1) {
-    if (img.src !== ghUrl) {
+    if (img.src !== ghUrl && !img.src.includes('raw.githubusercontent.com')) {
       img.src = ghUrl;
-    } else if (img.src !== liveUrl) {
+    } else if (img.src !== liveUrl && !img.src.includes('thefabric8.com')) {
       img.src = liveUrl;
     } else if (fallbackSrc) {
       img.src = fallbackSrc;
@@ -735,7 +739,8 @@ async function loadProducts(forceSync = false) {
   const isInsideIframe = window.self !== window.top;
   const forceRefresh = window.location.search.includes('t=') || isInsideIframe || forceSync;
   const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-  const isCacheRecent = (Date.now() - lastSettingsSync) < 5000;
+  // Cache for 30 minutes unless forced or unitialized, avoiding multi-second cloud delays
+  const isCacheRecent = (Date.now() - lastSettingsSync) < (30 * 60 * 1000);
   
   if (!isCacheRecent || !siteInitialized || forceRefresh) {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -812,16 +817,6 @@ window.addEventListener('storage', (e) => {
         }
       }
     } catch (err) {}
-  }
-});
-
-// Real-time tab-focus refresh (checks Firebase when switching back to tab)
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-    if (Date.now() - lastSettingsSync > 3000) {
-      loadProducts(true);
-    }
   }
 });
 
@@ -994,8 +989,20 @@ function renderProducts() {
 
   if (filtered.length === 0) {
     grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--muted); padding: 40px;'>No products found matching your filters.</p>";
+    grid.dataset.renderedKey = "empty";
     return;
   }
+
+  const renderKey = `${activeSectorFilter}|${activeCategoryFilter}|${activeSearchTerm}|${activeSortTerm}|${filtered.length}|${filtered.map(p => p.sku).join(',')}`;
+  // If initial static HTML cards match default query, preserve them to eliminate image flashing and re-downloads
+  if (!grid.dataset.renderedKey && activeSectorFilter === "All" && activeCategoryFilter === "All" && !activeSearchTerm && activeSortTerm === "featured" && grid.querySelectorAll('.product-card').length >= filtered.length) {
+    grid.dataset.renderedKey = renderKey;
+    return;
+  }
+  if (grid.dataset.renderedKey === renderKey) {
+    return;
+  }
+  grid.dataset.renderedKey = renderKey;
 
   grid.innerHTML = filtered.map(p => {
     let cardImages = p.images && p.images.length > 0 ? [...p.images] : (p.image ? [p.image] : ['White Polo Shirt.png']);
@@ -1040,12 +1047,10 @@ window.slideshowTimers = {};
 window.slideshowIndices = {};
 
 window.startSlideshow = function(sku, maxIdx) {
-  // Preload secondary images for this card on hover
-  for (let i = 1; i < maxIdx; i++) {
-    const el = document.getElementById(`img-${sku}-${i}`);
-    if (el && el.dataset.src && !el.src) {
-      el.src = el.dataset.src;
-    }
+  // Preload only the immediate next image on hover
+  const nextEl = document.getElementById(`img-${sku}-1`);
+  if (nextEl && nextEl.dataset.src && !nextEl.src) {
+    nextEl.src = nextEl.dataset.src;
   }
   if (window.slideshowTimers[sku]) clearInterval(window.slideshowTimers[sku]);
   window.slideshowIndices[sku] = window.slideshowIndices[sku] || 0;
@@ -1068,7 +1073,7 @@ window.stopSlideshow = function(sku, maxIdx) {
 };
 
 window.nextImage = function(sku, maxIdx) {
-  let curr = window.slideshowIndices[sku];
+  let curr = window.slideshowIndices[sku] || 0;
   let next = curr + 1;
   if (next >= maxIdx) next = 0;
   window.slideshowIndices[sku] = next;
@@ -1076,6 +1081,12 @@ window.nextImage = function(sku, maxIdx) {
   const targetImg = document.getElementById(`img-${sku}-${next}`);
   if (targetImg && targetImg.dataset.src && !targetImg.src) {
     targetImg.src = targetImg.dataset.src;
+  }
+  // Preload upcoming image for next cycle
+  const upcomingIdx = (next + 1) % maxIdx;
+  const upcomingImg = document.getElementById(`img-${sku}-${upcomingIdx}`);
+  if (upcomingImg && upcomingImg.dataset.src && !upcomingImg.src) {
+    upcomingImg.src = upcomingImg.dataset.src;
   }
 
   for (let i = 0; i < maxIdx; i++) {
@@ -2728,17 +2739,9 @@ function updateGalleryForColor(product, targetColor) {
   if (thumbnailsContainer) {
     thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
       const resolvedThumb = window.resolveAssetUrl ? window.resolveAssetUrl(img) : img;
-      return `<img src="${resolvedThumb}" alt="Thumbnail" onerror="window.handleImgError(this)" onload="this.style.visibility='visible'; this.style.opacity='1';" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
+      const lazyAttr = idx > 4 ? 'loading="lazy"' : 'loading="eager"';
+      return `<img src="${resolvedThumb}" alt="Thumbnail" ${lazyAttr} decoding="async" onerror="window.handleImgError(this)" onload="this.style.visibility='visible'; this.style.opacity='1';" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
     }).join("");
-  }
-
-  // Preload all carousel images into browser cache so thumbnail switches are instantaneous
-  if (Array.isArray(currentCarouselImages)) {
-    currentCarouselImages.forEach(img => {
-      if (!img) return;
-      const pre = new Image();
-      pre.src = window.resolveAssetUrl ? window.resolveAssetUrl(img) : img;
-    });
   }
 }
 
@@ -4431,6 +4434,8 @@ document.addEventListener("change", (e) => {
 function renderShowcase() {
   const showcase = document.getElementById('dynamicShowcase');
   if (!showcase || !products || products.length === 0) return;
+  if (showcase.dataset.rendered === "true") return;
+  showcase.dataset.rendered = "true";
 
   const shuffled = [...products].sort(() => 0.5 - Math.random());
   const selected = shuffled.slice(0, 4);
@@ -4451,7 +4456,7 @@ function renderShowcase() {
     return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column;">
       <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; position: relative;">
         <div style="background: transparent; height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: none !important; padding: 10px;">
-          <img src="${imgSrc}" alt="${p.name}" loading="lazy" decoding="async" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
+          <img src="${imgSrc}" alt="${p.name}" onerror="window.handleImgError(this)" loading="lazy" decoding="async" style="max-height: 310px; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.4s ease;">
         </div>
         <div class="product-card-info" style="padding: 14px 0 0 0; background: transparent !important; border: none !important; display: flex; flex-direction: column; align-items: center; text-align: center;">
           <p style="margin: 0 0 6px; font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.06em;">${p.category || 'Apparel'}</p>

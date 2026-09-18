@@ -14,7 +14,7 @@
       color: "American Blue",
       size: "L",
       qty: 50,
-      image: "assets/products/Polo American Blue 3.png?v=5",
+      image: "assets/products/Polo American Blue 3.webp?v=5",
       category: "Top Wear",
       capability: "Both", // "DTF Only", "Embroidery Only", "Both", "None"
       supportedFinishes: ["Embroidery", "DTF"],
@@ -781,7 +781,7 @@
     img.onerror = function () {
       img.src = "assets/fabric8_logo_noneedle_cropped.png";
     };
-    img.src = state.product.image || "assets/products/Polo American Blue 3.png?v=5";
+    img.src = state.product.image || "assets/products/Polo American Blue 3.webp?v=5";
   }
 
   // Main Real-Time Canvas Preview Engine
