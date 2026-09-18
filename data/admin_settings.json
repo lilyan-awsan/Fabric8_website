@@ -10,47 +10,47 @@
   },
   "brandLogos": [
     {
+      "backupSrc": "",
       "id": "brand_district",
       "name": "DISTRICT",
-      "src": "assets/site_images/district.png",
-      "backupSrc": ""
+      "src": "assets/site_images/district.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_alibi",
       "name": "ALIBI",
-      "src": "assets/site_images/alibi.png",
-      "backupSrc": ""
+      "src": "assets/site_images/alibi.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_cewas",
       "name": "CEWAS",
-      "src": "assets/site_images/cewas.png",
-      "backupSrc": ""
+      "src": "assets/site_images/cewas.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_blaze_n_puff",
       "name": "BLAZE N PUFF",
-      "src": "assets/site_images/blaze_n_puff.png",
-      "backupSrc": ""
+      "src": "assets/site_images/blaze_n_puff.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_royal",
       "name": "ROYAL",
-      "src": "assets/site_images/royal.png",
-      "backupSrc": ""
+      "src": "assets/site_images/royal.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_mazaj_resto_cafe",
       "name": "MAZAJ Resto Cafe",
-      "src": "assets/site_images/mazaj_resto_cafe.png",
-      "backupSrc": ""
+      "src": "assets/site_images/mazaj_resto_cafe.png"
     },
     {
+      "backupSrc": "",
       "fileName": "VISIOTECH NAVY PNG.png",
       "id": "brand_1789433500642",
       "name": "VISIOTECH",
-      "src": "assets/site_images/1789433505412_6_visiotech.png",
-      "backupSrc": ""
+      "src": "assets/site_images/1789433505412_6_visiotech.png"
     }
   ],
   "brandingSettings": {
