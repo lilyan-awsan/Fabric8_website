@@ -42,52 +42,69 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
     clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
 
-  if (clean.startsWith('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
-    return clean;
+  if (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
+
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
     return clean;
   }
 
   clean = clean.replace(/^\/+/, '');
-  const host = (typeof window !== 'undefined' && window.location && window.location.hostname ? window.location.hostname : '').toLowerCase();
-  if (host.includes('thefabric8.com') || host.includes('web.app') || host.includes('firebaseapp.com')) {
-    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
-  }
   return clean;
 };
 
 window.handleImgError = function(img, fallbackSrc = '') {
   if (!img) return;
 
-  // 1. If image has a high-res base64 backupSrc, immediately fallback to it so user never sees a broken image
+  const rawSrc = (img.getAttribute('src') || img.src || '').trim();
+  if (!rawSrc || rawSrc.startsWith('data:') || rawSrc === window.location.href) return;
+
   if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc) {
     img.src = img.dataset.backupSrc;
+    img.style.visibility = 'visible';
+    img.style.opacity = '1';
     return;
   }
 
-  if (img.dataset.ghFallback) {
+  const retryCount = parseInt(img.dataset.retryCount || '0', 10);
+  if (retryCount >= 3) {
     if (fallbackSrc && img.src !== fallbackSrc) {
       img.src = fallbackSrc;
+      img.style.visibility = 'visible';
+      img.style.opacity = '1';
     }
     return;
   }
-  img.dataset.ghFallback = '1';
+  img.dataset.retryCount = (retryCount + 1).toString();
 
-  let src = (img.getAttribute('src') || img.src || '').trim();
-  src = src.replace(/^https?:\/\/[^\/]+\//, '');
-  src = src.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
-  while (src.includes('raw.githubusercontent.com')) {
-    src = src.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  let clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
+  clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+  while (clean.includes('raw.githubusercontent.com')) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
   }
-  src = src.replace(/^\/+/, '');
+  clean = clean.replace(/^\/+/, '');
 
-  if (src && (src.startsWith('assets/') || src.startsWith('site_images/'))) {
-    img.src = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${src}`;
-  } else if (fallbackSrc) {
+  img.style.visibility = 'visible';
+  img.style.opacity = '1';
+
+  if (!clean || (!clean.startsWith('assets/') && !clean.startsWith('site_images/'))) {
+    if (fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
+    return;
+  }
+
+  const isLocal = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const liveUrl = `https://thefabric8.com/${clean}`;
+  const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+
+  if (retryCount === 0) {
+    img.src = isLocal ? liveUrl : ghUrl;
+  } else if (retryCount === 1) {
+    if (img.src !== ghUrl) img.src = ghUrl;
+    else if (img.src !== liveUrl) img.src = liveUrl;
+    else if (fallbackSrc) img.src = fallbackSrc;
+  } else if (fallbackSrc && img.src !== fallbackSrc) {
     img.src = fallbackSrc;
-  } else {
-    img.style.visibility = 'hidden';
   }
 };
 

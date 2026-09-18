@@ -46,61 +46,84 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
     clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
 
-  if (clean.startsWith('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
-    return clean;
+  // Strip github raw prefix if already stored in data, so it resolves directly from current host first
+  if (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
+
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
     return clean;
   }
 
   clean = clean.replace(/^\/+/, '');
-  const host = (typeof window !== 'undefined' && window.location && window.location.hostname ? window.location.hostname : '').toLowerCase();
-  if (host.includes('thefabric8.com') || host.includes('web.app') || host.includes('firebaseapp.com')) {
-    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
-  }
   return clean;
 };
 
 window.handleImgError = function(img, fallbackSrc = '') {
   if (!img) return;
 
-  // 1. If image has a high-res base64 backupSrc, immediately fallback to it so user never sees a broken image
+  const rawSrc = (img.getAttribute('src') || img.src || '').trim();
+  // Never hide on empty src, data urls, or matching page URL
+  if (!rawSrc || rawSrc.startsWith('data:') || rawSrc === window.location.href) {
+    return;
+  }
+
+  // 1. If image has a high-res base64 backupSrc, immediately fallback to it
   if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc) {
     img.src = img.dataset.backupSrc;
+    img.style.visibility = 'visible';
     img.style.opacity = '1';
     return;
   }
 
-  const rawSrc = (img.getAttribute('src') || img.src || '').trim();
-  // Prevent infinite retry loop for the exact same failed URL
-  if (img.dataset.lastFailedSrc === rawSrc) {
+  const retryCount = parseInt(img.dataset.retryCount || '0', 10);
+  if (retryCount >= 3) {
     if (fallbackSrc && img.src !== fallbackSrc) {
       img.src = fallbackSrc;
+      img.style.visibility = 'visible';
       img.style.opacity = '1';
     }
     return;
   }
-  img.dataset.lastFailedSrc = rawSrc;
+  img.dataset.retryCount = (retryCount + 1).toString();
 
-  let src = rawSrc;
-  src = src.replace(/^https?:\/\/[^\/]+\//, '');
-  src = src.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
-  while (src.includes('raw.githubusercontent.com')) {
-    src = src.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  let clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
+  clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+  while (clean.includes('raw.githubusercontent.com')) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
   }
-  src = src.replace(/^\/+/, '');
+  clean = clean.replace(/^\/+/, '');
 
-  if (src && (src.startsWith('assets/') || src.startsWith('site_images/'))) {
-    const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${src}`;
+  img.style.visibility = 'visible';
+  img.style.opacity = '1';
+
+  if (!clean || (!clean.startsWith('assets/') && !clean.startsWith('site_images/'))) {
+    if (fallbackSrc && img.src !== fallbackSrc) {
+      img.src = fallbackSrc;
+    }
+    return;
+  }
+
+  const isLocal = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const liveUrl = `https://thefabric8.com/${clean}`;
+  const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+
+  if (retryCount === 0) {
+    if (isLocal) {
+      img.src = liveUrl;
+    } else {
+      img.src = ghUrl;
+    }
+  } else if (retryCount === 1) {
     if (img.src !== ghUrl) {
       img.src = ghUrl;
-      img.style.opacity = '1';
+    } else if (img.src !== liveUrl) {
+      img.src = liveUrl;
+    } else if (fallbackSrc) {
+      img.src = fallbackSrc;
     }
-  } else if (fallbackSrc) {
+  } else if (fallbackSrc && img.src !== fallbackSrc) {
     img.src = fallbackSrc;
-    img.style.opacity = '1';
-  } else {
-    img.style.visibility = 'hidden';
   }
 };
 
@@ -655,6 +678,15 @@ async function loadProducts(forceSync = false) {
       }
     }
   } catch (e) {}
+
+  // Fallback to embedded/window product dataset (crucial for offline and local file:/// viewing)
+  if ((!products || products.length === 0) && typeof window.FABRIC8_DEFAULT_PRODUCTS !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS) && window.FABRIC8_DEFAULT_PRODUCTS.length > 0) {
+    products = [...window.FABRIC8_DEFAULT_PRODUCTS];
+    products.sort((a, b) => a.name.localeCompare(b.name));
+    colorMatchCache.clear();
+    initSite();
+    siteInitialized = true;
+  }
 
   const needsProducts = document.getElementById('productsGrid') || 
                         document.getElementById('productList') || 
@@ -2512,18 +2544,27 @@ window.updateMainImageSmooth = function(newSrc, newIdx = -1) {
   const resolved = window.resolveAssetUrl ? window.resolveAssetUrl(newSrc) : newSrc;
   
   // Clear any past failure record for the new image switch
+  delete mainImg.dataset.retryCount;
   delete mainImg.dataset.lastFailedSrc;
 
   mainImg.style.transition = 'opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
   mainImg.style.opacity = '0';
   setTimeout(() => {
+    mainImg.style.visibility = 'visible';
     mainImg.src = resolved;
-    mainImg.onload = () => { mainImg.style.opacity = '1'; };
+    mainImg.onload = () => { 
+      mainImg.style.visibility = 'visible';
+      mainImg.style.opacity = '1'; 
+    };
     mainImg.onerror = () => { 
+      mainImg.style.visibility = 'visible';
       mainImg.style.opacity = '1'; 
       window.handleImgError(mainImg);
     };
-    setTimeout(() => { mainImg.style.opacity = '1'; }, 150);
+    setTimeout(() => { 
+      mainImg.style.visibility = 'visible';
+      mainImg.style.opacity = '1'; 
+    }, 150);
   }, 200);
 };
 
@@ -2644,10 +2685,17 @@ function updateGalleryForColor(product, targetColor) {
   const mainImg = currentCarouselImages[0] || product.image;
   const mainImageEl = document.getElementById('productMainImage');
   if (mainImageEl) {
+    delete mainImageEl.dataset.retryCount;
     delete mainImageEl.dataset.lastFailedSrc;
     const resolvedMain = window.resolveAssetUrl ? window.resolveAssetUrl(mainImg) : mainImg;
+    mainImageEl.style.visibility = 'visible';
     mainImageEl.src = resolvedMain;
+    mainImageEl.onload = () => {
+      mainImageEl.style.visibility = 'visible';
+      mainImageEl.style.opacity = '1';
+    };
     mainImageEl.onerror = () => {
+      mainImageEl.style.visibility = 'visible';
       mainImageEl.style.opacity = '1';
       window.handleImgError(mainImageEl);
     };
@@ -2680,7 +2728,7 @@ function updateGalleryForColor(product, targetColor) {
   if (thumbnailsContainer) {
     thumbnailsContainer.innerHTML = currentCarouselImages.map((img, idx) => {
       const resolvedThumb = window.resolveAssetUrl ? window.resolveAssetUrl(img) : img;
-      return `<img src="${resolvedThumb}" alt="Thumbnail" onerror="window.handleImgError(this)" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
+      return `<img src="${resolvedThumb}" alt="Thumbnail" onerror="window.handleImgError(this)" onload="this.style.visibility='visible'; this.style.opacity='1';" style="width: 80px; height: 80px; object-fit: contain; padding: 4px; background: #f0f0f0; border-radius: 8px; cursor: pointer; border: ${idx === activeCarouselIdx ? '2px solid var(--ink)' : '1px solid var(--line)'}; transform: ${idx === activeCarouselIdx ? 'scale(1.04)' : 'scale(1)'}; transition: all 0.2s ease;" onclick="window.updateMainImageSmooth('${img}', ${idx})">`;
     }).join("");
   }
 }

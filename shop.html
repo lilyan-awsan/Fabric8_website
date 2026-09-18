@@ -10,6 +10,7 @@
   <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="stylesheet" href="site.css?v=36">
+<script src="data/products-data.js"></script>
 <script>
 window.resolveAssetUrl = function(url, defaultFallback) {
   if (!url) return defaultFallback || '';
@@ -20,34 +21,56 @@ window.resolveAssetUrl = function(url, defaultFallback) {
          clean.indexOf('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http') !== -1) {
     clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
-  if (clean.indexOf('https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/') === 0) return clean;
+  if (clean.indexOf('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/') !== -1) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+  }
   if (clean.indexOf('http://') === 0 || clean.indexOf('https://') === 0) return clean;
   clean = clean.replace(/^\/+/, '');
-  var host = (window.location && window.location.hostname ? window.location.hostname : '').toLowerCase();
-  if (host.indexOf('thefabric8.com') !== -1 || host.indexOf('web.app') !== -1 || host.indexOf('firebaseapp.com') !== -1) {
-    return 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + clean;
-  }
   return clean;
 };
 window.handleImgError = function(img, fallbackSrc) {
-  if (!img || img.dataset.ghFallback) {
-    if (img && fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
+  if (!img) return;
+  var rawSrc = (img.getAttribute('src') || img.src || '').trim();
+  if (!rawSrc || rawSrc.indexOf('data:') === 0 || rawSrc === window.location.href) return;
+  if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc) {
+    img.src = img.dataset.backupSrc;
+    img.style.visibility = 'visible';
+    img.style.opacity = '1';
     return;
   }
-  img.dataset.ghFallback = '1';
-  var src = (img.getAttribute('src') || img.src || '').trim();
-  src = src.replace(/^https?:\/\/[^\/]+\//, '');
-  src = src.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
-  while (src.indexOf('raw.githubusercontent.com') !== -1) {
-    src = src.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  var retry = parseInt(img.dataset.retryCount || '0', 10);
+  if (retry >= 3) {
+    if (fallbackSrc && img.src !== fallbackSrc) {
+      img.src = fallbackSrc;
+      img.style.visibility = 'visible';
+      img.style.opacity = '1';
+    }
+    return;
   }
-  src = src.replace(/^\/+/, '');
-  if (src && (src.indexOf('assets/') === 0 || src.indexOf('site_images/') === 0)) {
-    img.src = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + src;
-  } else if (fallbackSrc) {
+  img.dataset.retryCount = (retry + 1).toString();
+  var clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
+  clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+  while (clean.indexOf('raw.githubusercontent.com') !== -1) {
+    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  }
+  clean = clean.replace(/^\/+/, '');
+  img.style.visibility = 'visible';
+  img.style.opacity = '1';
+  if (!clean || (clean.indexOf('assets/') !== 0 && clean.indexOf('site_images/') !== 0)) {
+    if (fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
+    return;
+  }
+  var isLocal = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  var liveUrl = 'https://thefabric8.com/' + clean;
+  var ghUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/' + clean;
+  if (retry === 0) {
+    img.src = isLocal ? liveUrl : ghUrl;
+  } else if (retry === 1) {
+    if (img.src !== ghUrl) img.src = ghUrl;
+    else if (img.src !== liveUrl) img.src = liveUrl;
+    else if (fallbackSrc) img.src = fallbackSrc;
+  } else if (fallbackSrc && img.src !== fallbackSrc) {
     img.src = fallbackSrc;
-  } else {
-    img.style.visibility = 'hidden';
   }
 };
 window.addEventListener('error', function(e) {
