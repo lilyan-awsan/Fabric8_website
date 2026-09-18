@@ -2311,10 +2311,10 @@
     "colorHexMap": {},
     "colorImageMap": {
       "Black": "assets/products/Zip up Black -.webp",
-      "White": "assets/products/Zip up white Side.webp",
       "Charcoal": "assets/products/Zip Up Charcoal.webp",
       "Light Grey": "assets/products/Zip up Light Grey-.webp",
-      "Navy": "assets/products/Zip up Navy-.webp"
+      "Navy": "assets/products/Zip up Navy-.webp",
+      "White": "assets/products/Zip up white-.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -2383,19 +2383,19 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Zip up white-.webp",
       "assets/products/Zip up Black -.webp",
-      "assets/products/Zip up white Side.webp",
-      "assets/products/Zip up white Back.webp",
       "assets/products/Zip Up Charcoal.webp",
       "assets/products/Zip up Light Grey-.webp",
       "assets/products/Zip up Navy-.webp",
-      "assets/products/Zip up white-.webp"
+      "assets/products/1789768845404_Zip_up_white_Back.webp",
+      "assets/products/1789768846520_Zip_up_white_Side.webp"
     ],
-    "image": "assets/products/Zip up Black -.webp",
+    "image": "assets/products/Zip up white-.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Zip up Black -.webp",
+      "url": "assets/products/Zip up white-.webp",
       "name": null
     }
   },
