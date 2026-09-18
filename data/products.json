@@ -2309,11 +2309,11 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "White": "assets/products/Zip up white-.webp",
       "Black": "assets/products/Zip up Black -.webp",
       "Charcoal": "assets/products/Zip Up Charcoal.webp",
       "Light Grey": "assets/products/Zip up Light Grey-.webp",
-      "Navy": "assets/products/Zip up Navy-.webp",
-      "White": "assets/products/Zip up white-.webp"
+      "Navy": "assets/products/Zip up Navy-.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
