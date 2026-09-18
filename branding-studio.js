@@ -816,10 +816,11 @@
             finalSrc = oc.toDataURL(file.type === "image/jpeg" ? "image/jpeg" : "image/png", 0.9);
           }
 
-          // Optional Auto-Background removal if white/light background detected
-          removeWhiteBackground(img, (cleanImg) => {
-            state.artwork.imageObj = cleanImg;
-            state.artwork.src = cleanImg.src || finalSrc;
+          // Keep uploaded artwork exactly as it is (no color alteration or black pixel deletion)
+          const finalImg = new Image();
+          finalImg.onload = () => {
+            state.artwork.imageObj = finalImg;
+            state.artwork.src = finalSrc;
             state.artwork.fileName = file.name;
             state.currentMode = "logo";
             const statusEl = document.getElementById("fileStatus");
@@ -838,61 +839,12 @@
             if (pLogo) pLogo.style.display = "block";
             if (pText) pText.style.display = "none";
             drawCanvas();
-          });
+          };
+          finalImg.src = finalSrc;
         };
         img.src = evt.target.result;
       };
       reader.readAsDataURL(file);
-    }
-
-    // Universal Auto-Background Removal Engine: Detects and strips any solid, white, off-white, or neutral box background
-    function removeWhiteBackground(img, callback) {
-      try {
-        const offCanvas = document.createElement("canvas");
-        const offCtx = offCanvas.getContext("2d");
-        const W = Math.min(img.width || 800, 800);
-        const H = Math.min(img.height || 800, 800);
-        offCanvas.width = W;
-        offCanvas.height = H;
-
-        offCtx.drawImage(img, 0, 0, W, H);
-        const imgData = offCtx.getImageData(0, 0, W, H);
-        const data = imgData.data;
-
-        // Sample primary background reference colors from the image corners
-        const tlR = data[0], tlG = data[1], tlB = data[2];
-        const trIdx = (W - 1) * 4;
-        const trR = data[trIdx], trG = data[trIdx + 1], trB = data[trIdx + 2];
-        const blIdx = ((H - 1) * W) * 4;
-        const blR = data[blIdx], blG = data[blIdx + 1], blB = data[blIdx + 2];
-
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-
-          const isNeutralLight = (r > 210 && g > 210 && b > 210 && Math.abs(r - g) < 25 && Math.abs(g - b) < 25 && Math.abs(r - b) < 25);
-          const distTL = Math.hypot(r - tlR, g - tlG, b - tlB);
-          const distTR = Math.hypot(r - trR, g - trG, b - trB);
-          const distBL = Math.hypot(r - blR, g - blG, b - blB);
-
-          if (isNeutralLight || distTL < 45 || distTR < 45 || distBL < 45) {
-            data[i + 3] = 0; // Turn alpha to transparent
-          }
-        }
-
-        offCtx.putImageData(imgData, 0, 0);
-        const resultImg = new Image();
-        resultImg.onload = function () {
-          callback(resultImg);
-        };
-        resultImg.onerror = function () {
-          callback(img);
-        };
-        resultImg.src = offCanvas.toDataURL("image/png");
-      } catch (err) {
-        callback(img);
-      }
     }
 
     // Finish selection
