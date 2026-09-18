@@ -11,6 +11,9 @@
   --line: rgba(35, 31, 32, 0.08);
   --white: #ffffff;
 }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 html {
   scroll-behavior: smooth;
@@ -1954,6 +1957,79 @@ body {
   .grid-2, .grid-3, .grid-4, .shop-grid, .sectors-grid, .method-grid, .footer-grid, .product-page-layout, .quote-wrap {
     grid-template-columns: 1fr !important;
     gap: 20px !important;
+  }
+
+  /* Prevent horizontal overflow on mobile viewports */
+  main {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-page-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-gallery,
+  .product-info {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-config {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 14px !important;
+  }
+
+  #sizeQtyMatrix {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .size-row {
+    padding: 6px 8px !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .size-select-btn {
+    padding: 0 6px !important;
+    font-size: 12px !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .matrix-qty-input {
+    width: 60px !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    padding: 0 4px !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .color-filter,
+  .studio-color-swatches,
+  .mini-swatches {
+    gap: 8px !important;
+    max-width: 100% !important;
+  }
+
+  .color-dot {
+    width: 36px !important;
+    height: 36px !important;
   }
   
   .service-feature, .service-feature.reverse {

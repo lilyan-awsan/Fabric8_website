@@ -2629,9 +2629,38 @@ function getImagesForColor(product, targetColor) {
     }
     if (explicitImg) {
       const targetNorm = normalizeForMatch(targetColor);
-      const matchingColorAngles = (product.images || []).filter(img => 
-        img !== explicitImg && targetNorm && normalizeForMatch(img).includes(targetNorm)
-      );
+      
+      // Collect URLs that belong to OTHER colors in colorImageMap so they are never leaked
+      const otherColorsAssignedUrls = new Set();
+      for (const [col, colUrl] of Object.entries(product.colorImageMap)) {
+        if (col.toLowerCase() !== targetColor.toLowerCase() && colUrl) {
+          otherColorsAssignedUrls.add(colUrl.split('?')[0].toLowerCase());
+        }
+      }
+
+      const matchingColorAngles = (product.images || []).filter(img => {
+        if (!img || img === explicitImg) return false;
+        const clean = img.split('?')[0].toLowerCase();
+        // Never include an image explicitly assigned to a different color
+        if (otherColorsAssignedUrls.has(clean)) return false;
+
+        const imgNorm = normalizeForMatch(img);
+        // Word boundary check for targetNorm so "blue" does not match "light blue"
+        const reg = new RegExp('(^|[^a-z0-9])' + targetNorm + '([^a-z0-9]|$)', 'i');
+        if (!reg.test(imgNorm)) return false;
+
+        // Ensure it doesn't match another more specific color (e.g. "light blue" vs "blue")
+        const isOther = (product.colors || []).some(otherCol => {
+          if (otherCol.toLowerCase() === targetColor.toLowerCase()) return false;
+          const otherNorm = normalizeForMatch(otherCol);
+          if (otherNorm.length > targetNorm.length && otherNorm.includes(targetNorm) && imgNorm.includes(otherNorm)) {
+            return true;
+          }
+          return false;
+        });
+        return !isOther;
+      });
+
       let res = [explicitImg, ...matchingColorAngles];
       if (product.image && res.some(img => img === product.image || img.split('?')[0] === product.image.split('?')[0])) {
         const matchMain = res.find(img => img === product.image || img.split('?')[0] === product.image.split('?')[0]);
@@ -2652,7 +2681,10 @@ function getImagesForColor(product, targetColor) {
     product.colors.forEach(col => {
       const colNorm = normalizeForMatch(col);
       const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
-      const matchesAll = tokens.every(t => imgNorm.includes(t));
+      const matchesAll = tokens.every(t => {
+        const reg = new RegExp('(^|[^a-z0-9])' + t + '([^a-z0-9]|$)', 'i');
+        return reg.test(imgNorm);
+      });
       if (matchesAll) {
         if (tokens.length > maxTokens || (tokens.length === maxTokens && col.length > maxLen)) {
           maxTokens = tokens.length;
@@ -2673,7 +2705,13 @@ function getImagesForColor(product, targetColor) {
     matchedImgs = colorMap.get(targetColor);
   } else {
     const tokens = normalizeForMatch(targetColor).split(/\s+|[-/]/).filter(t => t.length > 0);
-    const fallback = product.images.filter(img => tokens.every(t => normalizeForMatch(img).includes(t)));
+    const fallback = product.images.filter(img => {
+      const imgNorm = normalizeForMatch(img);
+      return tokens.every(t => {
+        const reg = new RegExp('(^|[^a-z0-9])' + t + '([^a-z0-9]|$)', 'i');
+        return reg.test(imgNorm);
+      });
+    });
     matchedImgs = fallback.length > 0 ? fallback : [product.image || product.images[0]];
   }
 
