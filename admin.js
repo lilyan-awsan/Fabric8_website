@@ -2370,41 +2370,7 @@ if (saveBrandsBtn) {
         };
       });
 
-      // 2. Upload any new logo image files to server/GitHub first
-      if (siteImages.length > 0) {
-        saveBrandsBtn.textContent = 'Uploading Logos to Server...';
-        try {
-          const syncRes = await fetch('/api/githubSync', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              token: authToken || 'admin1234',
-              action: 'save_settings',
-              siteSettingsPayload: { brandLogos: updatedLogosList },
-              siteImages: siteImages,
-              commitMessage: 'Update Client Brand Logos marquee configuration'
-            })
-          });
-          if (!syncRes.ok) {
-            console.warn("GitHub sync notice:", syncRes.status);
-          }
-        } catch(syncErr) {
-          console.warn("GitHub sync notice:", syncErr);
-        }
-      } else {
-        fetch('/api/githubSync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            token: authToken || 'admin1234',
-            action: 'save_settings',
-            siteSettingsPayload: { brandLogos: updatedLogosList },
-            commitMessage: 'Update Client Brand Logos marquee configuration'
-          })
-        }).catch(err => console.warn("GitHub background sync notice:", err));
-      }
-
-      // 3. Immediately save brand logos directly to Firebase Realtime Database
+      // 2. Immediately save brand logos directly to Firebase Realtime Database (~100ms)
       try {
         const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
         await fetch(`${FIREBASE_DB}/admin_settings/brandLogos.json`, {
@@ -2416,10 +2382,11 @@ if (saveBrandsBtn) {
         console.warn("Firebase brand logos notice:", fbErr);
       }
 
-      // 4. Update local caches and live preview immediately
+      // 3. Update local caches and live preview immediately
       brandLogosList = updatedLogosList;
       try {
         localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
       } catch(e) {}
       renderBrandLogosGrid();
       updateIframeMarquee();
@@ -2427,6 +2394,22 @@ if (saveBrandsBtn) {
       if (window.showToast) window.showToast("🚀 Brand logos published live successfully!", "success", 4000);
       saveBrandsBtn.textContent = 'Publish Brand Changes';
       saveBrandsBtn.disabled = false;
+
+      // 4. Background sync to GitHub for repository backup (non-blocking)
+      const ghPayload = {
+        token: authToken || 'admin1234',
+        action: 'save_settings',
+        siteSettingsPayload: { brandLogos: updatedLogosList },
+        commitMessage: 'Update Client Brand Logos marquee configuration'
+      };
+      if (siteImages.length > 0) {
+        ghPayload.siteImages = siteImages;
+      }
+      fetch('/api/githubSync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ghPayload)
+      }).catch(err => console.warn("GitHub background sync notice:", err));
     } catch(err) {
       console.error(err);
       alert("Error publishing brand changes: " + err.message);
@@ -3233,21 +3216,27 @@ if (saveVisualEditorBtn) {
 
         if (currentVisualPage === 'index.html' && (bg.classList.contains('page-hero') || bg.id === 'cmsHomeHeroBg')) {
           currentSettings.siteContent.heroImage = newPath;
+          if (b64) currentSettings.siteContent.heroImageBase64 = b64;
           settingsUpdated = true;
         } else if (currentVisualPage === 'about.html') {
           currentSettings.siteContent.aboutImage = newPath;
+          if (b64) currentSettings.siteContent.aboutImageBase64 = b64;
           settingsUpdated = true;
         } else if (currentVisualPage === 'sectors.html') {
           currentSettings.siteContent.sectorsHeroImg = newPath;
+          if (b64) currentSettings.siteContent.sectorsHeroImgBase64 = b64;
           settingsUpdated = true;
         } else if (currentVisualPage === 'contact.html') {
           currentSettings.siteContent.contactHeroImg = newPath;
+          if (b64) currentSettings.siteContent.contactHeroImgBase64 = b64;
           settingsUpdated = true;
         } else if (currentVisualPage === 'services.html') {
           currentSettings.siteContent.servicesHeroImg = newPath;
+          if (b64) currentSettings.siteContent.servicesHeroImgBase64 = b64;
           settingsUpdated = true;
         } else if (currentVisualPage === 'method.html') {
           currentSettings.siteContent.methodHeroImg = newPath;
+          if (b64) currentSettings.siteContent.methodHeroImgBase64 = b64;
           settingsUpdated = true;
         }
       });
@@ -3264,9 +3253,9 @@ if (saveVisualEditorBtn) {
             base64: b.src,
             newPath: newPath
           });
-          return { ...b, src: newPath };
+          return { ...b, src: newPath, backupSrc: b.src };
         }
-        return b;
+        return { ...b, backupSrc: b.backupSrc || '' };
       });
 
       const allSiteImages = [...newSiteImages, ...pendingBrandImages];

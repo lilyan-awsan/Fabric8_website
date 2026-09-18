@@ -234,16 +234,22 @@ function applySiteSettings() {
   if (document.getElementById('cmsHomeHeroTitle')) {
     const heroBg = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
     if (heroBg) {
-      const heroImg = sc.heroImage || 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+      const heroImg = (sc.heroImageBase64 && sc.heroImageBase64.startsWith('data:image'))
+        ? sc.heroImageBase64
+        : (sc.heroImage || 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
       const finalHeroUrl = resolveAssetUrl(heroImg, 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
       applyHeroBg(heroBg, finalHeroUrl);
 
-      // Verify hero image can load; if not, fallback to raw GitHub or default image
+      // Verify hero image can load; if not, fallback to base64 or default image
       const testImg = new Image();
       testImg.onerror = () => {
-        const ghFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
-        if (finalHeroUrl !== ghFallback) {
-          applyHeroBg(heroBg, ghFallback);
+        if (sc.heroImageBase64 && sc.heroImageBase64.startsWith('data:image')) {
+          applyHeroBg(heroBg, sc.heroImageBase64);
+        } else {
+          const localFallback = 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+          if (finalHeroUrl !== localFallback) {
+            applyHeroBg(heroBg, localFallback);
+          }
         }
       };
       testImg.src = finalHeroUrl;
@@ -549,15 +555,15 @@ function applySiteSettings() {
 
   // 10. Dynamic Hero Background Image Fallback & Resolution for all pages
   document.querySelectorAll('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, #cmsHomeHeroBg, #cmsAboutHeroBg, #cmsSectorsHeroBg').forEach(heroEl => {
-    if (heroEl.id === 'cmsHomeHeroBg' && sc.heroImage) return;
+    if (heroEl.id === 'cmsHomeHeroBg' && (sc.heroImage || sc.heroImageBase64)) return;
 
     const path = (window.location.pathname || '').toLowerCase();
     let pageSpecificImg = null;
-    if (path.includes('about') && sc.aboutImage) pageSpecificImg = sc.aboutImage;
-    else if (path.includes('sectors') && sc.sectorsHeroImg) pageSpecificImg = sc.sectorsHeroImg;
-    else if (path.includes('contact') && sc.contactHeroImg) pageSpecificImg = sc.contactHeroImg;
-    else if (path.includes('services') && sc.servicesHeroImg) pageSpecificImg = sc.servicesHeroImg;
-    else if (path.includes('method') && sc.methodHeroImg) pageSpecificImg = sc.methodHeroImg;
+    if (path.includes('about')) pageSpecificImg = sc.aboutImageBase64 || sc.aboutImage;
+    else if (path.includes('sectors')) pageSpecificImg = sc.sectorsHeroImgBase64 || sc.sectorsHeroImg;
+    else if (path.includes('contact')) pageSpecificImg = sc.contactHeroImgBase64 || sc.contactHeroImg;
+    else if (path.includes('services')) pageSpecificImg = sc.servicesHeroImgBase64 || sc.servicesHeroImg;
+    else if (path.includes('method')) pageSpecificImg = sc.methodHeroImgBase64 || sc.methodHeroImg;
 
     if (pageSpecificImg) {
       const resolved = resolveAssetUrl(pageSpecificImg);
@@ -574,7 +580,7 @@ function applySiteSettings() {
         applyHeroBg(heroEl, resolvedUrl);
         const testImg = new Image();
         testImg.onerror = () => {
-          const safeFallback = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
+          const safeFallback = 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
           applyHeroBg(heroEl, safeFallback);
         };
         testImg.src = resolvedUrl;
