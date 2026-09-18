@@ -10,39 +10,47 @@
   },
   "brandLogos": [
     {
+      "backupSrc": "",
       "id": "brand_district",
       "name": "DISTRICT",
       "src": "assets/site_images/district.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_alibi",
       "name": "ALIBI",
       "src": "assets/site_images/alibi.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_cewas",
       "name": "CEWAS",
       "src": "assets/site_images/cewas.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_blaze_n_puff",
       "name": "BLAZE N PUFF",
       "src": "assets/site_images/blaze_n_puff.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_royal",
       "name": "ROYAL",
       "src": "assets/site_images/royal.png"
     },
     {
+      "backupSrc": "",
       "id": "brand_mazaj_resto_cafe",
       "name": "MAZAJ Resto Cafe",
       "src": "assets/site_images/mazaj_resto_cafe.png"
     },
     {
-      "id": "brand_visiotech",
+      "backupSrc": "",
+      "fileName": "VISIOTECH NAVY PNG.png",
+      "id": "brand_1789433500642",
       "name": "VISIOTECH",
-      "src": "assets/site_images/visiotech.png"
+      "src": "assets/site_images/1789433505412_6_visiotech.png"
     }
   ],
   "brandingSettings": {
@@ -158,7 +166,7 @@
     "footerContactHtml": "6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br>United States<br><br>USA: +1 770-710-2286<br>Jordan: +962 796 788 240<br><a href=\"contact.html\" style=\"color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;\">Contact Us</a>",
     "footerLegalLinksHtml": "<a href=\"privacy.html\" style=\"color: #aaa; text-decoration: none;\">Privacy Policy</a><br><a href=\"terms.html\" style=\"color: #aaa; text-decoration: none;\">Terms &amp; Conditions</a>",
     "footerOverviewHtml": "<a href=\"services.html\" style=\"color: #aaa; text-decoration: none;\">Services</a>\n<a href=\"method.html\" style=\"color: #aaa; text-decoration: none;\">The Fabric 8 Method</a>\n<a href=\"sectors.html\" style=\"color: #aaa; text-decoration: none;\">Sectors</a>\n<a href=\"shop.html\" style=\"color: #aaa; text-decoration: none;\">Shop</a>\n<a href=\"about.html\" style=\"color: #aaa; text-decoration: none;\">About Us</a>",
-    "heroImage": "assets/site_images/1789768008274_bg_0_1789599852819_7_test.webp",
+    "heroImage": "assets/site_images/1789768138820_bg_0_1789599852819_7_test.webp",
     "homeHeroBtnText": "EXPLORE THE COLLECTION",
     "homeHeroSubtitle": "High-performance industrial uniforms & corporate fashion designed for modern teams.",
     "homeHeroTag": "Corporate couture for working teams",
