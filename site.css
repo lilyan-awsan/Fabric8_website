@@ -375,7 +375,7 @@ input, select, textarea, button { font: inherit; }
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   pointer-events: none;
-  animation: introOut 1s cubic-bezier(0.4, 0, 0.2, 1) 3s forwards;
+  animation: introOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
   overflow: hidden;
 }
 .royal-door::before {
@@ -386,7 +386,7 @@ input, select, textarea, button { font: inherit; }
   opacity: 0.8;
   filter: blur(4px) brightness(0.5);
   z-index: -1;
-  animation: patternZoom 4s ease-out forwards;
+  animation: patternZoom 1.4s ease-out forwards;
 }
 
 @keyframes patternZoom {
@@ -401,7 +401,7 @@ input, select, textarea, button { font: inherit; }
   gap: 12px;
   color: #fff;
   text-align: center;
-  animation: logoSlideDown 3.8s ease forwards;
+  animation: logoSlideDown 1.2s ease forwards;
 }
 
 .door-logo img {

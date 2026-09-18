@@ -316,12 +316,21 @@ window.addEventListener('error', function(e) {
 </footer>
 <!-- Firebase SDK -->
 <script src="site.js?v=45"></script>
-<script>
-      // Lock scrolling while the door animation plays with pattern, then unlock it
-      document.body.style.overflow = 'hidden';
-      setTimeout(function() {
+    <script>
+      // Allow instant interaction, smoothly dismiss door without freezing
+      function dismissIntroDoor() {
         document.body.style.overflow = '';
-      }, 4000);
+        var door = document.querySelector('.royal-door');
+        if (door) {
+          door.style.opacity = '0';
+          door.style.pointerEvents = 'none';
+          setTimeout(function() { if (door) door.style.display = 'none'; }, 600);
+        }
+      }
+      setTimeout(dismissIntroDoor, 1200);
+      window.addEventListener('touchstart', dismissIntroDoor, { passive: true, once: true });
+      window.addEventListener('click', dismissIntroDoor, { once: true });
+      window.addEventListener('scroll', dismissIntroDoor, { passive: true, once: true });
     </script>
 
 
