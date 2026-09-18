@@ -472,39 +472,45 @@
     ]
   },
   {
-    "availability": "In Stock",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "Head Wear",
+    "id": "F8-006",
+    "sku": "F8-006",
+    "name": "Chef Bandana",
+    "category": "HEAD WEAR",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality",
+    "short": "Practical head covering for active kitchen staff.",
+    "long": "A tie-back bandana that keeps hair contained and sweat away from the face during high-heat kitchen work.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Black",
       "Grey"
     ],
-    "customizationCapability": "Both",
-    "dtfPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "embroideryPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Chef Bandana White Front.webp",
+      "Black": "assets/products/Chef Bandana Black.webp",
+      "Grey": "assets/products/Chef Bandana Grey.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "image": "assets/products/Chef Bandana White Front.webp",
-    "images": [
-      "assets/products/Chef Bandana White Front.webp",
-      "assets/products/Chef Bandana Black.webp",
-      "assets/products/Chef Bandana White Side.webp",
-      "assets/products/Chef Bandana Grey.webp",
-      "assets/products/Chef Bandana White.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A tie-back bandana that keeps hair contained and sweat away from the face during high-heat kitchen work.",
     "moq": "50 pieces",
-    "name": "Chef Bandana",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Front Center"
+    ],
     "placements": [
       {
         "h": 25,
@@ -515,25 +521,32 @@
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality",
-    "short": "Practical head covering for active kitchen staff.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
+    "dtfPlacements": [
+      "Front Center Panel",
+      "Side Panel"
     ],
-    "sku": "F8-006",
+    "embroideryPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ],
     "supportedFinishes": [
       "Embroidery",
-      "DTF"
+      "Direct To Fabric (DTF) Printing"
     ],
-    "supportedPlacements": [
-      "Front Center"
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Chef Bandana White Front.webp",
+      "assets/products/Chef Bandana Black.webp",
+      "assets/products/Chef Bandana Grey.webp",
+      "assets/products/Chef Bandana White.webp"
     ],
-    "id": "F8-006"
+    "image": "assets/products/Chef Bandana White Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Chef Bandana White Front.webp",
+      "name": null
+    }
   },
   {
     "availability": "In Stock",
