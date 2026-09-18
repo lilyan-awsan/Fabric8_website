@@ -2252,7 +2252,7 @@
     "id": "F8-024",
     "sku": "F8-024",
     "name": "Zip-up Hoodie",
-    "category": "Accessories",
+    "category": "Top Wear",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
     "short": "Easy-layer hoodie for year-round versatility.",
@@ -2275,10 +2275,10 @@
     "colorHexMap": {},
     "colorImageMap": {
       "Black": "assets/products/Zip up Black -.webp",
-      "Charcoal": "assets/products/Zip Up Charcoal.webp",
+      "Charcoal": "assets/products/Zip up white Side.webp",
+      "White": "assets/products/Zip up white Back.webp",
       "Light Grey": "assets/products/Zip up Light Grey-.webp",
-      "Navy": "assets/products/Zip up Navy-.webp",
-      "White": "assets/products/Zip up white-.webp"
+      "Navy": "assets/products/Zip up Navy-.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -2348,12 +2348,12 @@
     "customizationCapability": "both",
     "images": [
       "assets/products/Zip up Black -.webp",
+      "assets/products/Zip up white Side.webp",
+      "assets/products/Zip up white Back.webp",
       "assets/products/Zip Up Charcoal.webp",
       "assets/products/Zip up Light Grey-.webp",
       "assets/products/Zip up Navy-.webp",
-      "assets/products/Zip up white-.webp",
-      "assets/products/1789767593716_Zip_up_white_Back.webp",
-      "assets/products/1789767594569_Zip_up_white_Side.webp"
+      "assets/products/Zip up white-.webp"
     ],
     "image": "assets/products/Zip up Black -.webp",
     "mainImageSelection": {
