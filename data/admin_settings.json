@@ -127,16 +127,8 @@
       "name": "Jordan"
     },
     {
-      "code": "YE",
-      "name": "Yemen"
-    },
-    {
       "code": "INT",
       "name": "International"
-    },
-    {
-      "code": "MD",
-      "name": "mdry"
     }
   ],
   "footerLegal": "© 2026 Fabric8. All rights reserved.",
