@@ -87,7 +87,7 @@
       "name": "Aviation"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "Automotive"
     }
   ],
