@@ -195,14 +195,6 @@
         "name": "Instagram",
         "shape": "square",
         "url": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag=="
-      },
-      {
-        "id": "social_1789777507637",
-        "name": "WhatsApp",
-        "iconKey": "whatsapp",
-        "url": "https://s",
-        "active": true,
-        "shape": "square"
       }
     ],
     "socialInstagram": "https://www.instagram.com/the.fabric8?stkn=MWlicWo2czVrMXUyag==",
