@@ -113,7 +113,7 @@
       "name": "ACCESSORIES"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "FOOT WEAR"
     }
   ],
