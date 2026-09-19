@@ -113,8 +113,12 @@
       "name": "ACCESSORIES"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "FOOT WEAR"
+    },
+    {
+      "name": "mdry",
+      "enabled": true
     }
   ],
   "countries": [
