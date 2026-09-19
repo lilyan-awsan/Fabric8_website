@@ -1788,8 +1788,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Grey": "assets/products/Oversize Tshirt Grey 1.webp",
       "White": "assets/products/Oversize Tshirt White 1.webp",
+      "Grey": "assets/products/Oversize Tshirt Grey 1.webp",
       "Black": "assets/products/Oversize Tshirt Black 1.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
