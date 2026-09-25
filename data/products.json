@@ -1794,6 +1794,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/T-shirt Navy.webp",
       "assets/products/T-shirt Burgundy.webp",
       "assets/products/T-shirt White.webp",
       "assets/products/T-shirt American Blue.webp",
@@ -1802,14 +1803,13 @@
       "assets/products/T-shirt Army Green.webp",
       "assets/products/T-shirt Black.webp",
       "assets/products/T-shirt Charcoal.webp",
-      "assets/products/T-shirt Light Blue.webp",
-      "assets/products/T-shirt Navy.webp"
+      "assets/products/T-shirt Light Blue.webp"
     ],
-    "image": "assets/products/T-shirt Burgundy.webp",
+    "image": "assets/products/T-shirt Navy.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/T-shirt Burgundy.webp",
+      "url": "assets/products/T-shirt Navy.webp",
       "name": null
     }
   },
