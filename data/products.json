@@ -900,6 +900,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Red": "assets/products/Cap Red.webp",
       "White": "assets/products/Cap White.webp",
       "American Blue": "assets/products/Cap American Blue.webp",
       "Black": "assets/products/Cap Black.webp",
@@ -909,13 +910,12 @@
       "Green": "assets/products/Cap Green.webp",
       "Kiwi": "assets/products/Cap Kiwi 2.webp",
       "Navy": "assets/products/Cap Navy.webp",
-      "Red": "assets/products/Cap Red.webp",
       "Yellow": "assets/products/Cap Yellow 2.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "",
-    "moq": "8",
+    "moq": "24",
     "maxQty": "",
     "availability": "Made to Order",
     "care": "",
