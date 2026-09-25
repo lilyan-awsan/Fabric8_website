@@ -536,40 +536,46 @@
     }
   },
   {
-    "availability": "In Stock",
-    "branding": "Embroidery, Screen Print, Heat Transfer",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-007",
+    "sku": "F8-007",
+    "name": "Lab Coats",
     "category": "Outer Wear",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Healthcare",
+    "short": "Crisp, professional coats for healthcare teams.",
+    "long": "A knee-length lab coat designed for clinical and laboratory environments, with durable easy-care fabric and convenient pockets.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Grey"
     ],
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Lab Coat White Side.webp",
+      "Grey": "assets/products/1790359031221_Lab_Coat_grey.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "image": "assets/products/Lab Coat White.webp",
-    "images": [
-      "assets/products/Lab Coat White.webp",
-      "assets/products/Lab Coat grey.webp",
-      "assets/products/Lab Coat White Side.webp",
-      "assets/products/Lab Coat White Back.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A knee-length lab coat designed for clinical and laboratory environments, with durable easy-care fabric and convenient pockets.",
-    "moq": "50 pieces",
-    "name": "Lab Coats",
+    "moq": "8 pieces",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "placements": [
       {
         "h": 18,
@@ -604,30 +610,35 @@
         "y": 48
       }
     ],
-    "sectors": "Healthcare",
-    "short": "Crisp, professional coats for healthcare teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sku": "F8-007",
-    "supportedFinishes": [
-      "Embroidery"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
     ],
-    "id": "F8-007",
-    "colorImageMap": {
-      "White": "assets/products/Lab Coat White.webp",
-      "Grey": "assets/products/Lab Coat grey.webp"
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Lab Coat White Side.webp",
+      "assets/products/Lab Coat White Back.webp",
+      "assets/products/1790359031221_Lab_Coat_grey.webp",
+      "assets/products/1790359032241_Lab_Coat_White.webp"
+    ],
+    "image": "assets/products/Lab Coat White Side.webp",
+    "mainImageSelection": {
+      "type": "pending",
+      "index": 1,
+      "url": null,
+      "name": "Lab_Coat_White.webp"
     }
   },
   {
