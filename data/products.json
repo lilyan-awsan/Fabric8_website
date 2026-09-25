@@ -1577,40 +1577,48 @@
     }
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-017",
+    "sku": "F8-017",
+    "name": "Half Apron With Pocket",
     "category": "Accessories",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality",
+    "short": "Practical waist apron with built-in storage.",
+    "long": "A lightweight waist apron with a front pocket for order pads, cash, or small tools.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Black",
       "Grey",
       "Black Striped"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Bottom Left Corner",
-      "Bottom Right Corner"
-    ],
-    "embroideryPlacements": [
-      "Bottom Left Corner",
-      "Bottom Right Corner"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Half Apron W Pocket White.webp",
+      "Black": "assets/products/Half Apron W Pocket Black.webp",
+      "Grey": "assets/products/Half Apron W Pocket Grey.webp",
+      "Black Striped": "assets/products/Half Apron W Pocket Striped Black.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-017",
-    "image": "assets/products/Half Apron W Pocket White.webp",
-    "images": [
-      "assets/products/Half Apron W Pocket White.webp",
-      "assets/products/Half Apron W Pocket Black.webp",
-      "assets/products/Half Apron W Pocket Grey.webp",
-      "assets/products/Half Apron W Pocket Striped Black.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A lightweight waist apron with a front pocket for order pads, cash, or small tools.",
+    "moq": "12 pieces",
     "maxQty": "",
-    "moq": "24 pieces",
-    "name": "Half Apron With Pocket",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ],
     "placements": [
       {
         "h": 13,
@@ -1629,32 +1637,31 @@
         "y": 64
       }
     ],
-    "sectors": "Food and beverage, Hospitality",
-    "short": "Practical waist apron with built-in storage.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
+    "dtfPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-017",
+    "embroideryPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ],
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
-    "supportedPlacements": [
-      "Bottom Left Corner",
-      "Bottom Right Corner"
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Half Apron W Pocket Striped Black.webp",
+      "assets/products/Half Apron W Pocket White.webp",
+      "assets/products/Half Apron W Pocket Black.webp",
+      "assets/products/Half Apron W Pocket Grey.webp"
     ],
-    "colorImageMap": {
-      "White": "assets/products/Half Apron W Pocket White.webp",
-      "Black": "assets/products/Half Apron W Pocket Black.webp",
-      "Grey": "assets/products/Half Apron W Pocket Grey.webp",
-      "Black Striped": "assets/products/Half Apron W Pocket Striped Black.webp"
+    "image": "assets/products/Half Apron W Pocket Striped Black.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Half Apron W Pocket Striped Black.webp",
+      "name": null
     }
   },
   {
