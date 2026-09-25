@@ -46,7 +46,7 @@
     "colorHexMap": {},
     "colorImageMap": {
       "White": "assets/products/Polo White Front.webp",
-      "Green": "assets/products/1790358658500_Olive_Green_Army_Green.webp",
+      "Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "Beige": "assets/products/1790358659699_Polo_Beige.webp",
       "Black": "assets/products/1790358660717_Polo_Black.webp",
       "Blue": "assets/products/1790358661712_Polo_blue.webp",
@@ -64,7 +64,7 @@
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "moq": "8 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
@@ -128,6 +128,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "assets/products/Polo White Front.webp",
       "assets/products/Polo White Side.webp",
       "assets/products/Polo White Back.webp",
@@ -138,7 +139,6 @@
       "assets/products/1790358662661_Polo_Brown.webp",
       "assets/products/1790358663502_Polo_Burgundy.webp",
       "assets/products/1790358664388_Polo_Charcoal.webp",
-      "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "assets/products/1790358666198_Polo_Green.webp",
       "assets/products/1790358666999_Polo_Kiwi.webp",
       "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
@@ -153,12 +153,12 @@
       "assets/products/1790358677712_Polo_Yellow.webp",
       "assets/products/1790358678682_American_Blue_American_Blue.webp"
     ],
-    "image": "assets/products/Polo White Front.webp",
+    "image": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
     "mainImageSelection": {
-      "type": "pending",
-      "index": 7,
-      "url": null,
-      "name": "Dark Green_Dark_Green.webp"
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "name": null
     }
   },
   {
