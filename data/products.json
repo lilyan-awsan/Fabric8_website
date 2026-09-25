@@ -1535,14 +1535,14 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Half Apron White.webp",
       "Black": "assets/products/Half Apron Black.webp",
+      "White": "assets/products/Half Apron White.webp",
       "Grey": "assets/products/Half Apron Grey.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "12 pieces",
+    "moq": "24 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
