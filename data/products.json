@@ -1002,8 +1002,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Chef jacket white.webp",
       "Black": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
+      "White": "assets/products/Chef jacket white.webp",
       "Grey": "assets/products/Chef Jacket Grey 3.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
@@ -1013,7 +1013,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790361494921_sketch_TECHNICALS-05.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
@@ -1068,10 +1068,12 @@
       "assets/products/Chef jacket white.webp",
       "assets/products/Chef Jacket Black.webp",
       "assets/products/Chef Jacket White Side.webp",
-      "assets/products/Chef Jacket White Back.webp",
       "assets/products/Chef Jacket Grey 3.webp",
       "assets/products/1790360610510_Chef_Jacket_Grey_1-1.webp",
-      "assets/products/1790360611444_chef_jacket_white_1-4.webp"
+      "assets/products/1790360611444_chef_jacket_white_1-4.webp",
+      "assets/products/1790361492168_Chef_Jacket_White_Back_1-2.webp",
+      "assets/products/1790361493146_Chef_Jacket_White_Side_1-1.webp",
+      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp"
     ],
     "image": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
     "mainImageSelection": {
