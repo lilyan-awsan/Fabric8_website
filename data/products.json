@@ -1869,17 +1869,17 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Oversize Tshirt Black 1.webp",
       "assets/products/Oversize Tshirt White 1.webp",
       "assets/products/Oversize Tshirt Grey 1.webp",
-      "assets/products/Oversize Tshirt Black 1.webp",
       "assets/products/Oversize Tshirt White Side.webp",
       "assets/products/Oversize Tshirt White Back.webp"
     ],
-    "image": "assets/products/Oversize Tshirt White 1.webp",
+    "image": "assets/products/Oversize Tshirt Black 1.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Oversize Tshirt White 1.webp",
+      "url": "assets/products/Oversize Tshirt Black 1.webp",
       "name": null
     }
   },
