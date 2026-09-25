@@ -1340,10 +1340,10 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Black Striped": "assets/products/Full Apron Striped Black.webp",
       "White": "assets/products/Full Apron White.webp",
       "Black": "assets/products/Full Apron Black.webp",
-      "Grey": "assets/products/Full Apron Grey.webp",
-      "Black Striped": "assets/products/Full Apron Striped Black.webp"
+      "Grey": "assets/products/Full Apron Grey.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1352,7 +1352,7 @@
     "maxQty": "",
     "availability": "",
     "care": "",
-    "sketch": "",
+    "sketch": "assets/products/1790361740483_sketch_TECHNICALS-15.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Center Chest (Bib)",
