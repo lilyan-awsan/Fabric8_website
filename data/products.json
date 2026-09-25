@@ -294,6 +294,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Army Green": "assets/products/1790358817639_Cargo_Vest_Army_Green_1-1.webp",
       "Beige": "assets/products/1790358818658_Cargo_Vest_Beige_1-1.webp",
       "Black": "assets/products/1790358821426_Cargo_Vest_Black_1-1.webp",
       "Navy": "assets/products/1790358822316_Cargo_Vest_Navy_1-1.webp"
@@ -374,10 +375,10 @@
     ],
     "image": "assets/products/1790358817639_Cargo_Vest_Army_Green_1-1.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "Cargo_Vest_Army_Green_1-1.webp"
+      "url": "assets/products/1790358817639_Cargo_Vest_Army_Green_1-1.webp",
+      "name": null
     }
   },
   {
