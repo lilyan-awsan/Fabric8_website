@@ -779,15 +779,15 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Black": "assets/products/Trousers Black.webp",
       "Beige": "assets/products/Trousers Beige.webp",
       "Navy": "assets/products/Trousers Navy Front.webp",
-      "Black": "assets/products/Trousers Black.webp",
       "Charcoal": "assets/products/Trousers Charcoal.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "moq": "8 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
@@ -850,20 +850,20 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Trousers Black.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Trousers Black.webp",
-      "name": null
-    },
     "images": [
       "assets/products/Trousers Black.webp",
       "assets/products/Trousers Beige.webp",
       "assets/products/Trousers Navy Front.webp",
       "assets/products/Trousers Black back.webp",
       "assets/products/Trousers Charcoal.webp"
-    ]
+    ],
+    "image": "assets/products/Trousers Black.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Trousers Black.webp",
+      "name": null
+    }
   },
   {
     "id": "F8-010",
