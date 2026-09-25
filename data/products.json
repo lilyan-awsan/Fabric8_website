@@ -558,7 +558,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Lab Coat White Side.webp",
+      "White": "assets/products/1790359032241_Lab_Coat_White.webp",
       "Grey": "assets/products/1790359031221_Lab_Coat_grey.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
@@ -628,17 +628,17 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790359032241_Lab_Coat_White.webp",
       "assets/products/Lab Coat White Side.webp",
       "assets/products/Lab Coat White Back.webp",
-      "assets/products/1790359031221_Lab_Coat_grey.webp",
-      "assets/products/1790359032241_Lab_Coat_White.webp"
+      "assets/products/1790359031221_Lab_Coat_grey.webp"
     ],
-    "image": "assets/products/Lab Coat White Side.webp",
+    "image": "assets/products/1790359032241_Lab_Coat_White.webp",
     "mainImageSelection": {
-      "type": "pending",
-      "index": 1,
-      "url": null,
-      "name": "Lab_Coat_White.webp"
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790359032241_Lab_Coat_White.webp",
+      "name": null
     }
   },
   {
