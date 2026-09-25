@@ -2112,8 +2112,8 @@
     ],
     "customizationCapability": "both",
     "images": [
-      "assets/products/Dri Fit Polo White.webp",
       "assets/products/Dri Fit Black Polo.webp",
+      "assets/products/Dri Fit Polo White.webp",
       "assets/products/Dri Fit Polo White Side.webp",
       "assets/products/Dri Fit Polo White Back.webp",
       "assets/products/Dri Fit Blue Polo 2.webp",
@@ -2123,11 +2123,11 @@
       "assets/products/Dri Fit polo Red 3.webp",
       "assets/products/Dri Fit Polo Yellow 3.webp"
     ],
-    "image": "assets/products/Dri Fit Polo White.webp",
+    "image": "assets/products/Dri Fit Black Polo.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Dri Fit Polo White.webp",
+      "url": "assets/products/Dri Fit Black Polo.webp",
       "name": null
     }
   },
