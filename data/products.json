@@ -2273,9 +2273,9 @@
       "Black": "#111111"
     },
     "colorImageMap": {
+      "Grey": "assets/products/Hoodie grey.webp",
       "White": "assets/products/Hoodie White Front.webp",
       "Black": "assets/products/Hoodie Black.webp",
-      "Grey": "assets/products/Hoodie grey.webp",
       "Navy": "assets/products/Hoodie Navy.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
