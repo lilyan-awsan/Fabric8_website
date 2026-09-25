@@ -666,15 +666,15 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/Cargo Black trousers.webp",
-      "Beige": "assets/products/Cargo Beige trousers.webp",
-      "Charcoal": "assets/products/Cargo Charcoal trousers.webp",
-      "Navy": "assets/products/Cargo Navy trousers.webp"
+      "Beige": "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+      "Black": "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
+      "Charcoal": "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
+      "Navy": "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "moq": "8 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
@@ -737,21 +737,21 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Cargo Beige trousers.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Cargo Beige trousers.webp",
-      "name": null
-    },
     "images": [
-      "assets/products/Cargo Beige trousers.webp",
-      "assets/products/Cargo Black trousers.webp",
-      "assets/products/Cargo Beige trousers Side.webp",
-      "assets/products/Cargo Beige trousers Back.webp",
-      "assets/products/Cargo Charcoal trousers.webp",
-      "assets/products/Cargo Navy trousers.webp"
-    ]
+      "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+      "assets/products/1790360459985_Cargo_Beige_trousers_Side_1-2.webp",
+      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
+      "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
+      "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
+      "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
+    ],
+    "image": "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+    "mainImageSelection": {
+      "type": "pending",
+      "index": 0,
+      "url": null,
+      "name": "Cargo_Beige_trousers_Back_1-1.webp"
+    }
   },
   {
     "id": "F8-009",
