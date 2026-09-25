@@ -1406,42 +1406,49 @@
     }
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-015",
+    "sku": "F8-015",
+    "name": "Full Apron With Pocket",
     "category": "Accessories",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
+    "short": "Full-coverage apron with added on-the-job storage.",
+    "long": "A full protective apron with a front pocket for order pads, tools, or a phone.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Grey",
       "Black",
       "Black Striped"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Center Chest (Bib)",
-      "Bottom Left Corner",
-      "Bottom Right Corner"
-    ],
-    "embroideryPlacements": [
-      "Center Chest (Bib)",
-      "Bottom Left Corner",
-      "Bottom Right Corner"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Full Apron W pocket White.webp",
+      "Grey": "assets/products/Full Apron W pocket Grey.webp",
+      "Black": "assets/products/Full W pocket Apron Black.webp",
+      "Black Striped": "assets/products/Full W pocket Striped Black.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-015",
-    "image": "assets/products/Full Apron W pocket White.webp",
-    "images": [
-      "assets/products/Full Apron W pocket White.webp",
-      "assets/products/Full Apron W pocket Grey.webp",
-      "assets/products/Full W pocket Apron Black.webp",
-      "assets/products/Full W pocket Striped Black.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A full protective apron with a front pocket for order pads, tools, or a phone.",
+    "moq": "12 pieces",
     "maxQty": "",
-    "moq": "24 pieces",
-    "name": "Full Apron With Pocket",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ],
     "placements": [
       {
         "h": 15,
@@ -1468,33 +1475,33 @@
         "y": 73.5
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
-    "short": "Full-coverage apron with added on-the-job storage.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-015",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Center Chest (Bib)",
       "Bottom Left Corner",
       "Bottom Right Corner"
     ],
-    "colorImageMap": {
-      "White": "assets/products/Full Apron W pocket White.webp",
-      "Grey": "assets/products/Full Apron W pocket Grey.webp",
-      "Black": "assets/products/Full W pocket Apron Black.webp",
-      "Black Striped": "assets/products/Full W pocket Striped Black.webp"
+    "embroideryPlacements": [
+      "Center Chest (Bib)",
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Full Apron W pocket Grey.webp",
+      "assets/products/Full Apron W pocket White.webp",
+      "assets/products/Full W pocket Apron Black.webp",
+      "assets/products/Full W pocket Striped Black.webp"
+    ],
+    "image": "assets/products/Full Apron W pocket Grey.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Full Apron W pocket Grey.webp",
+      "name": null
     }
   },
   {
