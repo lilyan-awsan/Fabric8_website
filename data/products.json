@@ -1951,10 +1951,10 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Blue": "assets/products/Dri Fit Tshirt Blue 2.webp",
       "White": "assets/products/Dri Fit Tshirt White.webp",
       "Baby Blue": "assets/products/Dri Fit Tshirt Baby Blue.webp",
       "Black": "assets/products/Dri Fit Tshirt Black 2.webp",
-      "Blue": "assets/products/Dri Fit Tshirt Blue 2.webp",
       "Green": "assets/products/Dri Fit Tshirt Green 1.webp",
       "Grey": "assets/products/Dri Fit Tshirt Grey 2.webp",
       "Red": "assets/products/Dri Fit Tshirt Red.webp",
@@ -1967,7 +1967,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790361874831_sketch_TECHNICALS-03.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
