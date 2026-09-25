@@ -666,7 +666,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Beige": "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+      "Beige": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
       "Black": "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
       "Charcoal": "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
       "Navy": "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
@@ -738,19 +738,19 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
       "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
       "assets/products/1790360459985_Cargo_Beige_trousers_Side_1-2.webp",
-      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
       "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
       "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
       "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
     ],
-    "image": "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+    "image": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "Cargo_Beige_trousers_Back_1-1.webp"
+      "url": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
+      "name": null
     }
   },
   {
