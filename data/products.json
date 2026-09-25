@@ -482,7 +482,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Chef Bandana White Front.webp",
+      "White": "assets/products/Chef Bandana White.webp",
       "Black": "assets/products/Chef Bandana Black.webp",
       "Grey": "assets/products/Chef Bandana Grey.webp"
     },
@@ -522,16 +522,16 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Chef Bandana White.webp",
       "assets/products/Chef Bandana White Front.webp",
       "assets/products/Chef Bandana Black.webp",
-      "assets/products/Chef Bandana Grey.webp",
-      "assets/products/Chef Bandana White.webp"
+      "assets/products/Chef Bandana Grey.webp"
     ],
-    "image": "assets/products/Chef Bandana White Front.webp",
+    "image": "assets/products/Chef Bandana White.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Chef Bandana White Front.webp",
+      "url": "assets/products/Chef Bandana White.webp",
       "name": null
     }
   },
