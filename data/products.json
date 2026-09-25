@@ -2157,16 +2157,16 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Light Blue": "assets/products/Shirt Light blue.webp",
       "White": "assets/products/Shirt White.webp",
       "Black": "assets/products/Shirt Black.webp",
       "Grey": "assets/products/Shirt grey.webp",
-      "Light Blue": "assets/products/Shirt Light blue.webp",
       "Navy": "assets/products/Shirt Navy.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "24 pieces",
+    "moq": "8 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
