@@ -1003,7 +1003,7 @@
     "colorHexMap": {},
     "colorImageMap": {
       "White": "assets/products/Chef jacket white.webp",
-      "Black": "assets/products/Chef Jacket Black.webp",
+      "Black": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
       "Grey": "assets/products/Chef Jacket Grey 3.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
@@ -1064,21 +1064,21 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
       "assets/products/Chef jacket white.webp",
       "assets/products/Chef Jacket Black.webp",
       "assets/products/Chef Jacket White Side.webp",
       "assets/products/Chef Jacket White Back.webp",
       "assets/products/Chef Jacket Grey 3.webp",
-      "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
       "assets/products/1790360610510_Chef_Jacket_Grey_1-1.webp",
       "assets/products/1790360611444_chef_jacket_white_1-4.webp"
     ],
-    "image": "assets/products/Chef jacket white.webp",
+    "image": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "Chef_Jacket_Black_1-1.webp"
+      "url": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
+      "name": null
     }
   },
   {
