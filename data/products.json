@@ -294,10 +294,9 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Army Green": "assets/products/Cargo Vest Army Green.webp",
-      "Beige": "assets/products/Cargo Vest Beige.webp",
-      "Black": "assets/products/Cargo Vest Black.webp",
-      "Navy": "assets/products/Cargo Vest Navy.webp"
+      "Beige": "assets/products/1790358818658_Cargo_Vest_Beige_1-1.webp",
+      "Black": "assets/products/1790358821426_Cargo_Vest_Black_1-1.webp",
+      "Navy": "assets/products/1790358822316_Cargo_Vest_Navy_1-1.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -306,7 +305,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790358823210_sketch_TECHNICALS-11.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
@@ -365,20 +364,21 @@
       "Direct To Fabric (DTF) Printing"
     ],
     "customizationCapability": "both",
-    "image": "assets/products/Cargo Vest Beige.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Cargo Vest Beige.webp",
-      "name": null
-    },
     "images": [
-      "assets/products/Cargo Vest Beige.webp",
-      "assets/products/Cargo Vest Army Green.webp",
-      "assets/products/Cargo Vest Beige Side.webp",
-      "assets/products/Cargo Vest Black.webp",
-      "assets/products/Cargo Vest Navy.webp"
-    ]
+      "assets/products/1790358817639_Cargo_Vest_Army_Green_1-1.webp",
+      "assets/products/1790358818658_Cargo_Vest_Beige_1-1.webp",
+      "assets/products/1790358819502_Cargo_Vest_Beige_Back_1.webp",
+      "assets/products/1790358820347_Cargo_Vest_Beige_Side.webp",
+      "assets/products/1790358821426_Cargo_Vest_Black_1-1.webp",
+      "assets/products/1790358822316_Cargo_Vest_Navy_1-1.webp"
+    ],
+    "image": "assets/products/1790358817639_Cargo_Vest_Army_Green_1-1.webp",
+    "mainImageSelection": {
+      "type": "pending",
+      "index": 0,
+      "url": null,
+      "name": "Cargo_Vest_Army_Green_1-1.webp"
+    }
   },
   {
     "id": "F8-005",
