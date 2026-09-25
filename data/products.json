@@ -45,8 +45,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Polo White Front.webp",
       "Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "White": "assets/products/Polo White Front.webp",
       "Beige": "assets/products/1790358659699_Polo_Beige.webp",
       "Black": "assets/products/1790358660717_Polo_Black.webp",
       "Blue": "assets/products/1790358661712_Polo_blue.webp",
@@ -68,7 +68,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790361535692_sketch_TECHNICALS-02.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
