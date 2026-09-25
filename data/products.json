@@ -1837,9 +1837,9 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Black": "assets/products/Oversize Tshirt Black 1.webp",
       "White": "assets/products/Oversize Tshirt White 1.webp",
-      "Grey": "assets/products/Oversize Tshirt Grey 1.webp",
-      "Black": "assets/products/Oversize Tshirt Black 1.webp"
+      "Grey": "assets/products/Oversize Tshirt Grey 1.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1848,7 +1848,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790361816579_sketch_TECHNICALS-14.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
