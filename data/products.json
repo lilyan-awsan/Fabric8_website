@@ -2075,8 +2075,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "White": "assets/products/Dri Fit Polo White.webp",
       "Black": "assets/products/Dri Fit Black Polo.webp",
+      "White": "assets/products/Dri Fit Polo White.webp",
       "Blue": "assets/products/Dri Fit Blue Polo 2.webp",
       "Grey": "assets/products/Dri Fit Grey Polo.webp",
       "Green": "assets/products/Dri Fit Green Polo.webp",
@@ -2091,7 +2091,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790361888329_sketch_TECHNICALS-02.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
