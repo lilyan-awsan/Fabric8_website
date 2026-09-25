@@ -1988,22 +1988,22 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Dri Fit Tshirt Blue 2.webp",
       "assets/products/Dri Fit Tshirt White.webp",
       "assets/products/Dri Fit Tshirt Baby Blue.webp",
       "assets/products/Dri Fit Tshirt White Side.webp",
       "assets/products/Dri Fit Tshirt White Back.webp",
       "assets/products/Dri Fit Tshirt Black 2.webp",
-      "assets/products/Dri Fit Tshirt Blue 2.webp",
       "assets/products/Dri Fit Tshirt Green 1.webp",
       "assets/products/Dri Fit Tshirt Grey 2.webp",
       "assets/products/Dri Fit Tshirt Red.webp",
       "assets/products/Dri Fit Tshirt Yellow.webp"
     ],
-    "image": "assets/products/Dri Fit Tshirt White.webp",
+    "image": "assets/products/Dri Fit Tshirt Blue 2.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Dri Fit Tshirt White.webp",
+      "url": "assets/products/Dri Fit Tshirt Blue 2.webp",
       "name": null
     }
   },
