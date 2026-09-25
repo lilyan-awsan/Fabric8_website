@@ -2460,19 +2460,19 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Zip up Navy-.webp",
       "assets/products/Zip up white-.webp",
       "assets/products/Zip up Black -.webp",
       "assets/products/Zip Up Charcoal.webp",
       "assets/products/Zip up Light Grey-.webp",
-      "assets/products/Zip up Navy-.webp",
       "assets/products/1789768845404_Zip_up_white_Back.webp",
       "assets/products/1789768846520_Zip_up_white_Side.webp"
     ],
-    "image": "assets/products/Zip up white-.webp",
+    "image": "assets/products/Zip up Navy-.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Zip up white-.webp",
+      "url": "assets/products/Zip up Navy-.webp",
       "name": null
     }
   },
