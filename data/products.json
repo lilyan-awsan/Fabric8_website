@@ -1498,39 +1498,46 @@
     }
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-016",
+    "sku": "F8-016",
+    "name": "Half Apron",
     "category": "Accessories",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality",
+    "short": "Lightweight waist apron for quick-service environments.",
+    "long": "A waist-down apron that offers essential protection without bulk for counter service, baristas, and retail staff.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "White",
       "Black",
       "Grey"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Bottom Left Corner",
-      "Bottom Right Corner"
-    ],
-    "embroideryPlacements": [
-      "Bottom Left Corner",
-      "Bottom Right Corner"
-    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/products/Half Apron White.webp",
+      "Black": "assets/products/Half Apron Black.webp",
+      "Grey": "assets/products/Half Apron Grey.webp"
+    },
     "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-016",
-    "image": "assets/products/Half Apron White.webp",
-    "images": [
-      "assets/products/Half Apron White.webp",
-      "assets/products/Half Apron Black.webp",
-      "assets/products/Half Apron White Back.png",
-      "assets/products/Half Apron Grey.webp"
-    ],
     "leadTime": "14-21 Business Days",
-    "long": "A waist-down apron that offers essential protection without bulk for counter service, baristas, and retail staff.",
+    "moq": "12 pieces",
     "maxQty": "",
-    "moq": "24 pieces",
-    "name": "Half Apron",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ],
     "placements": [
       {
         "h": 13,
@@ -1549,31 +1556,31 @@
         "y": 64
       }
     ],
-    "sectors": "Food and beverage, Hospitality",
-    "short": "Lightweight waist apron for quick-service environments.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
+    "dtfPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
     ],
-    "sketch": "",
-    "sketchDescription": "",
-    "sku": "F8-016",
+    "embroideryPlacements": [
+      "Bottom Left Corner",
+      "Bottom Right Corner"
+    ],
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
-    "supportedPlacements": [
-      "Bottom Left Corner",
-      "Bottom Right Corner"
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/Half Apron Black.webp",
+      "assets/products/Half Apron White.webp",
+      "assets/products/Half Apron White Back.png",
+      "assets/products/Half Apron Grey.webp"
     ],
-    "colorImageMap": {
-      "White": "assets/products/Half Apron White.webp",
-      "Black": "assets/products/Half Apron Black.webp",
-      "Grey": "assets/products/Half Apron Grey.webp"
+    "image": "assets/products/Half Apron Black.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/Half Apron Black.webp",
+      "name": null
     }
   },
   {
