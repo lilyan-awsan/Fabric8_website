@@ -1718,11 +1718,11 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Burgundy": "assets/products/T-shirt Burgundy.webp",
       "White": "assets/products/T-shirt White.webp",
       "American Blue": "assets/products/T-shirt American Blue.webp",
       "Army Green": "assets/products/T-shirt Army Green.webp",
       "Black": "assets/products/T-shirt Black.webp",
-      "Burgundy": "assets/products/T-shirt Burgundy.webp",
       "Charcoal": "assets/products/T-shirt Charcoal.webp",
       "Light Blue": "assets/products/T-shirt Light Blue.webp",
       "Navy": "assets/products/T-shirt Navy.webp"
@@ -1734,7 +1734,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1790361790301_sketch_TECHNICALS-03.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
