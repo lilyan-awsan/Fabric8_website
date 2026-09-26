@@ -75,7 +75,7 @@
       "name": "Industrial"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Healthcare"
     },
     {
