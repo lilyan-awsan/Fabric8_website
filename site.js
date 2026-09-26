@@ -4459,10 +4459,10 @@ function renderShowcase() {
   showcase.dataset.rendered = "true";
 
   const shuffled = [...products].sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, 4);
+  const selected = shuffled.slice(0, 5);
   
   showcase.style.display = 'grid';
-  showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))';
+  showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
   showcase.style.gap = '32px';
   showcase.style.alignItems = 'stretch';
   
