@@ -654,7 +654,7 @@ function loadCart() {
 async function loadProducts(forceSync = false) {
   let siteInitialized = false;
 
-  // 1. Instant load from local cache if available (0ms fast startup)
+  // 1. Instant 0ms perceived load from localStorage cache if available
   try {
     const cachedSettings = localStorage.getItem("fabric8_admin_settings_cache");
     if (cachedSettings) {
@@ -669,14 +669,30 @@ async function loadProducts(forceSync = false) {
       const parsed = JSON.parse(cachedProducts);
       if (Array.isArray(parsed) && parsed.length > 0) {
         products = parsed;
-        products.sort((a, b) => a.name.localeCompare(b.name));
+        products.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
         initSite();
         siteInitialized = true;
       }
     }
   } catch (e) {}
 
-  // 2. Direct, Primary Real-Time Sync with Firebase Realtime Database
+  // Instant Skeleton Placeholders if completely empty cache on initial visit
+  if (!siteInitialized) {
+    const grid = document.getElementById("productGrid");
+    if (grid && !grid.dataset.renderedKey) {
+      grid.innerHTML = Array(8).fill(0).map(() => `
+        <div class="product-card" style="pointer-events: none; opacity: 0.65;">
+          <div class="product-card-img" style="background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: skeletonShimmer 1.5s infinite; aspect-ratio: 1/1; border-radius: 8px;"></div>
+          <div class="product-card-info" style="padding: 12px 0;">
+            <div style="height: 12px; width: 60%; background: #e0e0e0; margin: 0 auto 8px; border-radius: 4px;"></div>
+            <div style="height: 16px; width: 80%; background: #e0e0e0; margin: 0 auto; border-radius: 4px;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // 2. Direct Background Real-Time Sync with Firebase Realtime Database
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   const freshTime = Date.now();
   try {
@@ -686,29 +702,38 @@ async function loadProducts(forceSync = false) {
     ]);
 
     if (settingsData && typeof settingsData === 'object') {
-      siteSettings = settingsData;
-      try {
-        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(settingsData));
-        localStorage.setItem("fabric8_admin_settings_cache_time", freshTime.toString());
-      } catch (e) {}
-      applySiteSettings();
+      const oldSettingsStr = JSON.stringify(siteSettings || {});
+      const newSettingsStr = JSON.stringify(settingsData);
+      if (oldSettingsStr !== newSettingsStr) {
+        siteSettings = settingsData;
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", newSettingsStr);
+          localStorage.setItem("fabric8_admin_settings_cache_time", freshTime.toString());
+        } catch (e) {}
+        applySiteSettings();
+      }
     }
 
     const rawList = Array.isArray(productsData) ? productsData.filter(Boolean) : (productsData && typeof productsData === 'object' ? Object.values(productsData).filter(Boolean) : []);
     if (rawList.length > 0) {
       rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      products = rawList;
-      colorMatchCache.clear();
-      try {
-        localStorage.setItem("fabric8_products_cache", JSON.stringify(rawList));
-        localStorage.setItem("fabric8_products_cache_time", freshTime.toString());
-      } catch (e) {}
+      const oldStr = JSON.stringify(products || []);
+      const newStr = JSON.stringify(rawList);
       
-      const grid = document.getElementById("productGrid");
-      if (grid) delete grid.dataset.renderedKey;
-      
-      initSite();
-      siteInitialized = true;
+      if (oldStr !== newStr || !siteInitialized) {
+        products = rawList;
+        colorMatchCache.clear();
+        try {
+          localStorage.setItem("fabric8_products_cache", newStr);
+          localStorage.setItem("fabric8_products_cache_time", freshTime.toString());
+        } catch (e) {}
+        
+        const grid = document.getElementById("productGrid");
+        if (grid) delete grid.dataset.renderedKey;
+        
+        initSite();
+        siteInitialized = true;
+      }
       return;
     }
   } catch (err) {
@@ -730,16 +755,8 @@ async function loadProducts(forceSync = false) {
         }
       }
     } catch(e) {}
-    
-    if (typeof window.FABRIC8_DEFAULT_PRODUCTS !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS)) {
-      products = [...window.FABRIC8_DEFAULT_PRODUCTS];
-      products.sort((a, b) => a.name.localeCompare(b.name));
-      initSite();
-      siteInitialized = true;
-    }
   }
 }
-
 // Start loading
 loadProducts();
 
