@@ -17,10 +17,10 @@
       "2XL"
     ],
     "colors": [
+      "Beige",
       "White",
       "American Blue",
       "Army Green",
-      "Beige",
       "Black",
       "Blue",
       "Brown",
@@ -45,13 +45,13 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
       "Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "White": "assets/products/Polo White Front.webp",
       "Beige": "assets/products/1790358659699_Polo_Beige.webp",
       "Black": "assets/products/1790358660717_Polo_Black.webp",
       "Blue": "assets/products/1790358661712_Polo_blue.webp",
       "Brown": "assets/products/1790358662661_Polo_Brown.webp",
-      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
       "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
       "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
       "Navy": "assets/products/1790358670220_Polo_Navy.webp",
@@ -128,13 +128,13 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790358659699_Polo_Beige.webp",
       "assets/products/1790358663502_Polo_Burgundy.webp",
       "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "assets/products/Polo White Front.webp",
       "assets/products/Polo White Side.webp",
       "assets/products/Polo White Back.webp",
       "assets/products/1790358658500_Olive_Green_Army_Green.webp",
-      "assets/products/1790358659699_Polo_Beige.webp",
       "assets/products/1790358660717_Polo_Black.webp",
       "assets/products/1790358661712_Polo_blue.webp",
       "assets/products/1790358662661_Polo_Brown.webp",
@@ -153,11 +153,11 @@
       "assets/products/1790358677712_Polo_Yellow.webp",
       "assets/products/1790358678682_American_Blue_American_Blue.webp"
     ],
-    "image": "assets/products/1790358663502_Polo_Burgundy.webp",
+    "image": "assets/products/1790358659699_Polo_Beige.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/1790358663502_Polo_Burgundy.webp",
+      "url": "assets/products/1790358659699_Polo_Beige.webp",
       "name": null
     }
   },
