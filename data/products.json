@@ -208,36 +208,36 @@
     ],
     "placements": [
       {
+        "h": 18,
         "name": "Left Chest",
+        "r": 0,
+        "w": 18,
         "x": 63,
-        "y": 44,
-        "w": 18,
-        "h": 18,
-        "r": 0
+        "y": 44
       },
       {
+        "h": 18,
         "name": "Right Chest",
-        "x": 37,
-        "y": 44,
+        "r": 0,
         "w": 18,
-        "h": 18,
-        "r": 0
+        "x": 37,
+        "y": 44
       },
       {
-        "name": "Center Back",
-        "x": 50,
-        "y": 52,
-        "w": 42,
         "h": 42,
-        "r": 0
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
       },
       {
-        "name": "Upper Sleeve",
-        "x": 76,
-        "y": 48,
-        "w": 14,
         "h": 14,
-        "r": 8
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
       }
     ],
     "dtfPlacements": [
