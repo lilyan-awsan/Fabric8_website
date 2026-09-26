@@ -93,27 +93,27 @@
   ],
   "categories2ndLayer": [
     {
-      "enabled": false,
-      "name": "HEAD WEAR"
-    },
-    {
-      "enabled": false,
+      "enabled": true,
       "name": "TOP WEAR"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "BOTTOM WEAR"
     },
     {
-      "enabled": false,
+      "enabled": true,
+      "name": "HEAD WEAR"
+    },
+    {
+      "enabled": true,
       "name": "OUTER WEAR"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "ACCESSORIES"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "FOOT WEAR"
     }
   ],
