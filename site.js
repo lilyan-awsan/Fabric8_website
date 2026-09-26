@@ -654,7 +654,7 @@ function loadCart() {
 async function loadProducts(forceSync = false) {
   let siteInitialized = false;
 
-  // 1. Instant load from localStorage cache if available
+  // 1. Instant load from local cache if available (0ms fast startup)
   try {
     const cachedSettings = localStorage.getItem("fabric8_admin_settings_cache");
     if (cachedSettings) {
@@ -676,102 +676,68 @@ async function loadProducts(forceSync = false) {
     }
   } catch (e) {}
 
-  // Fallback to embedded/window product dataset (crucial for offline and local file:/// viewing)
-  if ((!products || products.length === 0) && typeof window.FABRIC8_DEFAULT_PRODUCTS !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS) && window.FABRIC8_DEFAULT_PRODUCTS.length > 0) {
-    products = [...window.FABRIC8_DEFAULT_PRODUCTS];
-    products.sort((a, b) => a.name.localeCompare(b.name));
-    colorMatchCache.clear();
-    initSite();
-    siteInitialized = true;
-  }
-
-  const needsProducts = document.getElementById('productsGrid') || 
-                        document.getElementById('productList') || 
-                        document.getElementById('productTitle') ||
-                        document.querySelector('.shop-container') || 
-                        document.querySelector('.product-card') ||
-                        window.location.pathname.includes('shop') ||
-                        window.location.pathname.includes('product') ||
-                        window.location.pathname.includes('checkout');
-
-  if (!needsProducts && !siteInitialized) {
-    initSite();
-    siteInitialized = true;
-  }
-
-  // 2. Fetch from local static files (to verify & update cache if stale)
-  try {
-    const [localSettings, localProducts] = await Promise.all([
-      (!siteSettings || Object.keys(siteSettings).length === 0) ? fetch('data/admin_settings.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null),
-      needsProducts ? fetch('data/products.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null)
-    ]);
-    if (localSettings && (!siteSettings || Object.keys(siteSettings).length === 0)) {
-      siteSettings = localSettings;
-      try {
-        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(localSettings));
-        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch (e) {}
-      applySiteSettings();
-    }
-    if (localProducts && Array.isArray(localProducts) && localProducts.length > 0) {
-      localProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      const oldStr = JSON.stringify(products || []);
-      const newStr = JSON.stringify(localProducts);
-      if (oldStr !== newStr || !siteInitialized) {
-        products = localProducts;
-        colorMatchCache.clear();
-        try {
-          localStorage.setItem("fabric8_products_cache", newStr);
-          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
-        } catch (e) {}
-        initSite();
-        siteInitialized = true;
-      }
-    }
-  } catch (e) {}
-
-  // 3. Unconditional Real-Time Sync with Firebase Realtime Database
+  // 2. Direct, Primary Real-Time Sync with Firebase Realtime Database
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   const freshTime = Date.now();
-  Promise.all([
-    fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
-  ]).then(([settingsData, productsData]) => {
+  try {
+    const [settingsData, productsData] = await Promise.all([
+      fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
+    ]);
+
     if (settingsData && typeof settingsData === 'object') {
-      const oldSettingsStr = JSON.stringify(siteSettings || {});
-      const newSettingsStr = JSON.stringify(settingsData);
-      if (oldSettingsStr !== newSettingsStr) {
-        siteSettings = settingsData;
-        try {
-          localStorage.setItem("fabric8_admin_settings_cache", newSettingsStr);
-          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch (e) {}
-        applySiteSettings();
-      }
+      siteSettings = settingsData;
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(settingsData));
+        localStorage.setItem("fabric8_admin_settings_cache_time", freshTime.toString());
+      } catch (e) {}
+      applySiteSettings();
     }
 
     const rawList = Array.isArray(productsData) ? productsData.filter(Boolean) : (productsData && typeof productsData === 'object' ? Object.values(productsData).filter(Boolean) : []);
     if (rawList.length > 0) {
-      const oldProductsStr = JSON.stringify(products || []);
       rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      const newProductsStr = JSON.stringify(rawList);
-      if (oldProductsStr !== newProductsStr || !siteInitialized) {
-        products = rawList;
-        colorMatchCache.clear();
-        try {
-          localStorage.setItem("fabric8_products_cache", newProductsStr);
-          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
-        } catch (e) {}
-        initSite();
-        siteInitialized = true;
+      products = rawList;
+      colorMatchCache.clear();
+      try {
+        localStorage.setItem("fabric8_products_cache", JSON.stringify(rawList));
+        localStorage.setItem("fabric8_products_cache_time", freshTime.toString());
+      } catch (e) {}
+      
+      const grid = document.getElementById("productGrid");
+      if (grid) delete grid.dataset.renderedKey;
+      
+      initSite();
+      siteInitialized = true;
+      return;
+    }
+  } catch (err) {
+    console.warn("Firebase primary sync notice:", err);
+  }
+
+  // 3. Fallback to local static files ONLY if Firebase is completely offline/unreachable
+  if (!siteInitialized) {
+    try {
+      const fallbackRes = await fetch('data/products.json?t=' + freshTime);
+      if (fallbackRes.ok) {
+        const fallbackList = await fallbackRes.json();
+        if (Array.isArray(fallbackList) && fallbackList.length > 0) {
+          products = fallbackList;
+          products.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+          initSite();
+          siteInitialized = true;
+          return;
+        }
       }
-    } else if (!siteInitialized) {
+    } catch(e) {}
+    
+    if (typeof window.FABRIC8_DEFAULT_PRODUCTS !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS)) {
+      products = [...window.FABRIC8_DEFAULT_PRODUCTS];
+      products.sort((a, b) => a.name.localeCompare(b.name));
       initSite();
       siteInitialized = true;
     }
-  }).catch(() => {
-    if (!siteInitialized) initSite();
-  });
+  }
 }
 
 // Start loading
