@@ -768,6 +768,7 @@
     "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
     "sizes": [],
     "colors": [
+      "Red",
       "White",
       "American Blue",
       "Black",
@@ -778,7 +779,6 @@
       "Kiwi",
       "Light Grey",
       "Navy",
-      "Red",
       "Yellow"
     ],
     "colorHexMap": {},
@@ -856,10 +856,9 @@
     ],
     "image": "assets/products/Cap Red.webp",
     "mainImageSelection": {
-      "type": "existing",
       "index": 0,
-      "url": "assets/products/Cap Red.webp",
-      "name": null
+      "type": "existing",
+      "url": "assets/products/Cap Red.webp"
     }
   },
   {

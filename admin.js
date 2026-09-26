@@ -1151,7 +1151,17 @@ productForm.addEventListener("submit", async (e) => {
     short: document.getElementById("short").value,
     long: document.getElementById("long").value,
     sizes: activeSizes,
-    colors: activeColors,
+    colors: (function() {
+      let cols = [...activeColors];
+      let mainCol = "";
+      if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
+        mainCol = existingImageColorMap[selectedMainPhoto.index] || activeColors.find(c => existingImages[selectedMainPhoto.index].toLowerCase().includes(c.toLowerCase()));
+      }
+      if (mainCol && cols.includes(mainCol)) {
+        cols = [mainCol, ...cols.filter(c => c !== mainCol)];
+      }
+      return cols;
+    })(),
     colorHexMap: activeColorHexMap,
     colorImageMap: calculatedColorImageMap,
     fabric: document.getElementById("fabric").value,

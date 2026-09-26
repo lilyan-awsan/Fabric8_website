@@ -9,7 +9,7 @@
   <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="site.css?v=51" />
-  <script src="data/products-data.js?v=6"></script>
+  <script src="data/products-data.js?v=60"></script>
   <script>
   window.resolveAssetUrl = function(url, defaultFallback) {
     if (!url) return defaultFallback || '';
@@ -124,8 +124,11 @@
             (function() {
               try {
                 var sku = new URLSearchParams(window.location.search).get('sku') || 'F8-001';
-                if (window.FABRIC8_DEFAULT_PRODUCTS) {
-                  var p = window.FABRIC8_DEFAULT_PRODUCTS.find(function(x) { return x.sku === sku; }) || window.FABRIC8_DEFAULT_PRODUCTS[0];
+                var cached = null;
+                try { cached = JSON.parse(localStorage.getItem("fabric8_products_cache")); } catch(e) {}
+                var prodList = (cached && Array.isArray(cached) && cached.length > 0) ? cached : window.FABRIC8_DEFAULT_PRODUCTS;
+                if (prodList && Array.isArray(prodList)) {
+                  var p = prodList.find(function(x) { return x.sku === sku; }) || prodList[0];
                   if (p && p.image) {
                     var el = document.getElementById('productMainImage');
                     if (el) el.src = p.image;
@@ -269,6 +272,6 @@
     </footer>
 
     <!-- Firebase SDK -->
-    <script src="site.js?v=55"></script>
+    <script src="site.js?v=60"></script>
 </body>
 </html>

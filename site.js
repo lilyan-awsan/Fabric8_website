@@ -712,41 +712,43 @@ async function loadProducts(forceSync = false) {
     siteInitialized = true;
   }
 
-  // 2. Ultra-fast fetch from local static files if not initialized yet
-  if (!siteInitialized) {
-    try {
-      const [localSettings, localProducts] = await Promise.all([
-        fetch('data/admin_settings.json').then(r => r.ok ? r.json() : null).catch(() => null),
-        needsProducts ? fetch('data/products.json').then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null)
-      ]);
-      if (localSettings && (!siteSettings || Object.keys(siteSettings).length === 0)) {
-        siteSettings = localSettings;
-        try {
-          localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(localSettings));
-          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch (e) {}
-        applySiteSettings();
-      }
-      if (localProducts && Array.isArray(localProducts) && localProducts.length > 0) {
+  // 2. Fetch from local static files (to verify & update cache if stale)
+  try {
+    const [localSettings, localProducts] = await Promise.all([
+      (!siteSettings || Object.keys(siteSettings).length === 0) ? fetch('data/admin_settings.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null),
+      needsProducts ? fetch('data/products.json?t=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null) : Promise.resolve(null)
+    ]);
+    if (localSettings && (!siteSettings || Object.keys(siteSettings).length === 0)) {
+      siteSettings = localSettings;
+      try {
+        localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(localSettings));
+        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+      } catch (e) {}
+      applySiteSettings();
+    }
+    if (localProducts && Array.isArray(localProducts) && localProducts.length > 0) {
+      localProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      const oldStr = JSON.stringify(products || []);
+      const newStr = JSON.stringify(localProducts);
+      if (oldStr !== newStr || !siteInitialized) {
         products = localProducts;
-        products.sort((a, b) => a.name.localeCompare(b.name));
         colorMatchCache.clear();
         try {
-          localStorage.setItem("fabric8_products_cache", JSON.stringify(localProducts));
+          localStorage.setItem("fabric8_products_cache", newStr);
           localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
         } catch (e) {}
         initSite();
         siteInitialized = true;
       }
-    } catch (e) {}
-  }
+    }
+  } catch (e) {}
 
   // 3. Background Async Sync with Firebase Realtime Database
   const isInsideIframe = window.self !== window.top;
   const forceRefresh = window.location.search.includes('t=') || isInsideIframe || forceSync;
   const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-  // Cache for 30 minutes unless forced or unitialized, avoiding multi-second cloud delays
-  const isCacheRecent = (Date.now() - lastSettingsSync) < (30 * 60 * 1000);
+  // Stale-while-revalidate: check Firebase in background if cache is older than 15s or uninitialized or forced
+  const isCacheRecent = (Date.now() - lastSettingsSync) < (15 * 1000);
   
   if (!isCacheRecent || !siteInitialized || forceRefresh) {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -999,11 +1001,27 @@ function renderProducts() {
     return;
   }
 
-  const renderKey = `${activeSectorFilter}|${activeCategoryFilter}|${activeSearchTerm}|${activeSortTerm}|${filtered.length}|${filtered.map(p => p.sku).join(',')}`;
-  // If initial static HTML cards match default query, preserve them to eliminate image flashing and re-downloads
+  const renderKey = `${activeSectorFilter}|${activeCategoryFilter}|${activeSearchTerm}|${activeSortTerm}|${filtered.length}|${filtered.map(p => `${p.sku}:${p.image || ''}`).join(',')}`;
+  // If initial static HTML cards match default query, verify their displayed primary images match current products data
   if (!grid.dataset.renderedKey && activeSectorFilter === "All" && activeCategoryFilter === "All" && !activeSearchTerm && activeSortTerm === "featured" && grid.querySelectorAll('.product-card').length >= filtered.length) {
-    grid.dataset.renderedKey = renderKey;
-    return;
+    let staticImagesMatch = true;
+    for (const p of filtered) {
+      const card = grid.querySelector(`.product-card[onclick*="${p.sku}"]`);
+      if (card && p.image) {
+        const firstImg = card.querySelector('img');
+        const firstImgSrc = firstImg ? (firstImg.getAttribute('src') || firstImg.src || '') : '';
+        const cleanFirst = firstImgSrc.split('?')[0].replace(/^https?:\/\/[^\/]+\//, '').replace(/^\/+/, '').toLowerCase();
+        const cleanExpected = (p.image || '').split('?')[0].replace(/^https?:\/\/[^\/]+\//, '').replace(/^\/+/, '').toLowerCase();
+        if (cleanFirst && cleanExpected && cleanFirst !== cleanExpected) {
+          staticImagesMatch = false;
+          break;
+        }
+      }
+    }
+    if (staticImagesMatch) {
+      grid.dataset.renderedKey = renderKey;
+      return;
+    }
   }
   if (grid.dataset.renderedKey === renderKey) {
     return;
