@@ -115,6 +115,10 @@
     {
       "enabled": false,
       "name": "FOOT WEAR"
+    },
+    {
+      "name": "mdry",
+      "enabled": true
     }
   ],
   "countries": [
