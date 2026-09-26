@@ -97,23 +97,23 @@
       "name": "HEAD WEAR"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "TOP WEAR"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "BOTTOM WEAR"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "OUTER WEAR"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "ACCESSORIES"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "FOOT WEAR"
     }
   ],
