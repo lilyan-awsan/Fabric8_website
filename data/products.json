@@ -761,7 +761,7 @@
     "id": "F8-010",
     "sku": "F8-010",
     "name": "Caps",
-    "category": "TOP WEAR",
+    "category": "HEAD WEAR",
     "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Adjustable branded cap for outdoor or retail teams.",
@@ -773,21 +773,23 @@
       "XL"
     ],
     "colors": [
+      "Brown",
+      "Yellow",
+      "Red",
       "White",
       "American Blue",
       "Black",
-      "Brown",
       "Burgundy",
       "Charcoal",
       "Green",
       "Kiwi",
       "Light Grey",
-      "Navy",
-      "Red",
-      "Yellow"
+      "Navy"
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Yellow": "assets/products/Cap Yellow 2.webp",
+      "Kiwi": "assets/products/Cap Kiwi 2.webp",
       "Red": "assets/products/Cap Red.webp",
       "White": "assets/products/Cap White.webp",
       "American Blue": "assets/products/Cap American Blue.webp",
@@ -796,9 +798,7 @@
       "Burgundy": "assets/products/Cap Burgundy.webp",
       "Charcoal": "assets/products/Cap Charcoal.webp",
       "Green": "assets/products/Cap Green.webp",
-      "Kiwi": "assets/products/Cap Kiwi 2.webp",
-      "Navy": "assets/products/Cap Navy.webp",
-      "Yellow": "assets/products/Cap Yellow 2.webp"
+      "Navy": "assets/products/Cap Navy.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -845,25 +845,25 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap Brown.webp",
+      "assets/products/Cap Yellow 2.webp",
+      "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
       "assets/products/Cap White Side.webp",
       "assets/products/Cap Black.webp",
-      "assets/products/Cap Brown.webp",
       "assets/products/Cap Burgundy.webp",
       "assets/products/Cap Charcoal.webp",
       "assets/products/Cap Green.webp",
-      "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Navy.webp",
-      "assets/products/Cap Yellow 2.webp",
       "assets/products/1790357941308_Cap_White_Back_1-1.webp"
     ],
-    "image": "assets/products/Cap Red.webp",
+    "image": "assets/products/Cap Brown.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Cap Red.webp",
+      "url": "assets/products/Cap Brown.webp",
       "name": null
     }
   },
