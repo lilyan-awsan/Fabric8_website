@@ -94,15 +94,15 @@
   "categories2ndLayer": [
     {
       "enabled": true,
+      "name": "HEAD WEAR"
+    },
+    {
+      "enabled": true,
       "name": "TOP WEAR"
     },
     {
       "enabled": true,
       "name": "BOTTOM WEAR"
-    },
-    {
-      "enabled": true,
-      "name": "HEAD WEAR"
     },
     {
       "enabled": true,
@@ -113,7 +113,7 @@
       "name": "ACCESSORIES"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "FOOT WEAR"
     }
   ],
