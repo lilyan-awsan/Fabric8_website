@@ -59,7 +59,7 @@
   },
   "categories1stLayer": [
     {
-      "enabled": false,
+      "enabled": true,
       "name": "Food & beverage"
     },
     {
