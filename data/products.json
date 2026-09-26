@@ -766,7 +766,12 @@
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Adjustable branded cap for outdoor or retail teams.",
     "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
-    "sizes": [],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "colors": [
       "Red",
       "White",
@@ -840,6 +845,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
@@ -849,16 +855,16 @@
       "assets/products/Cap Burgundy.webp",
       "assets/products/Cap Charcoal.webp",
       "assets/products/Cap Green.webp",
-      "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Navy.webp",
       "assets/products/Cap Yellow 2.webp",
       "assets/products/1790357941308_Cap_White_Back_1-1.webp"
     ],
-    "image": "assets/products/Cap Red.webp",
+    "image": "assets/products/Cap Kiwi 2.webp",
     "mainImageSelection": {
-      "index": 0,
       "type": "existing",
-      "url": "assets/products/Cap Red.webp"
+      "index": 0,
+      "url": "assets/products/Cap Kiwi 2.webp",
+      "name": null
     }
   },
   {
