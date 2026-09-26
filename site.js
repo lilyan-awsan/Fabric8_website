@@ -234,25 +234,12 @@ function applySiteSettings() {
   if (document.getElementById('cmsHomeHeroTitle')) {
     const heroBg = document.querySelector('.page-hero') || document.getElementById('cmsHomeHeroBg');
     if (heroBg) {
-      const heroImg = (sc.heroImageBase64 && sc.heroImageBase64.startsWith('data:image'))
-        ? sc.heroImageBase64
-        : (sc.heroImage || 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
-      const finalHeroUrl = resolveAssetUrl(heroImg, 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp');
-      applyHeroBg(heroBg, finalHeroUrl);
-
-      // Verify hero image can load; if not, fallback to base64 or default image
-      const testImg = new Image();
-      testImg.onerror = () => {
-        if (sc.heroImageBase64 && sc.heroImageBase64.startsWith('data:image')) {
-          applyHeroBg(heroBg, sc.heroImageBase64);
-        } else {
-          const localFallback = 'assets/site_images/1789513469550_bg_0_fabric8-service-people.webp';
-          if (finalHeroUrl !== localFallback) {
-            applyHeroBg(heroBg, localFallback);
-          }
-        }
-      };
-      testImg.src = finalHeroUrl;
+      if (sc.heroImageBase64 && sc.heroImageBase64.startsWith('data:image')) {
+        applyHeroBg(heroBg, sc.heroImageBase64);
+      } else if (sc.heroImage && typeof sc.heroImage === 'string' && sc.heroImage.trim() !== '') {
+        const finalHeroUrl = resolveAssetUrl(sc.heroImage);
+        if (finalHeroUrl) applyHeroBg(heroBg, finalHeroUrl);
+      }
     }
   }
   if (sc.promoImage) {
@@ -743,58 +730,48 @@ async function loadProducts(forceSync = false) {
     }
   } catch (e) {}
 
-  // 3. Background Async Sync with Firebase Realtime Database
-  const isInsideIframe = window.self !== window.top;
-  const forceRefresh = window.location.search.includes('t=') || isInsideIframe || forceSync;
-  const lastSettingsSync = parseInt(localStorage.getItem("fabric8_admin_settings_cache_time") || "0", 10);
-  // Stale-while-revalidate: check Firebase in background if cache is older than 15s or uninitialized or forced
-  const isCacheRecent = (Date.now() - lastSettingsSync) < (15 * 1000);
-  
-  if (!isCacheRecent || !siteInitialized || forceRefresh) {
-    const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
-    const freshTime = Date.now();
-    Promise.all([
-      fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
-    ]).then(([settingsData, productsData]) => {
-      if (settingsData) {
-        const oldSettingsStr = JSON.stringify(siteSettings);
-        const newSettingsStr = JSON.stringify(settingsData);
-        if (oldSettingsStr !== newSettingsStr) {
-          siteSettings = settingsData;
-          try {
-            localStorage.setItem("fabric8_admin_settings_cache", newSettingsStr);
-          } catch (e) {}
-          applySiteSettings();
-        }
+  // 3. Unconditional Real-Time Sync with Firebase Realtime Database
+  const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
+  const freshTime = Date.now();
+  Promise.all([
+    fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(`${FIREBASE_DB}/products.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([settingsData, productsData]) => {
+    if (settingsData && typeof settingsData === 'object') {
+      const oldSettingsStr = JSON.stringify(siteSettings || {});
+      const newSettingsStr = JSON.stringify(settingsData);
+      if (oldSettingsStr !== newSettingsStr) {
+        siteSettings = settingsData;
+        try {
+          localStorage.setItem("fabric8_admin_settings_cache", newSettingsStr);
+          localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
+        } catch (e) {}
+        applySiteSettings();
       }
-      try {
-        localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch (e) {}
+    }
 
-      const rawList = Array.isArray(productsData) ? productsData.filter(Boolean) : (productsData && typeof productsData === 'object' ? Object.values(productsData).filter(Boolean) : []);
-      if (rawList.length > 0) {
-        const oldProductsStr = JSON.stringify(products);
-        rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-        const newProductsStr = JSON.stringify(rawList);
-        if (oldProductsStr !== newProductsStr || !siteInitialized) {
-          products = rawList;
-          colorMatchCache.clear();
-          try {
-            localStorage.setItem("fabric8_products_cache", newProductsStr);
-            localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
-          } catch (e) {}
-          initSite();
-          siteInitialized = true;
-        }
-      } else if (!siteInitialized) {
+    const rawList = Array.isArray(productsData) ? productsData.filter(Boolean) : (productsData && typeof productsData === 'object' ? Object.values(productsData).filter(Boolean) : []);
+    if (rawList.length > 0) {
+      const oldProductsStr = JSON.stringify(products || []);
+      rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      const newProductsStr = JSON.stringify(rawList);
+      if (oldProductsStr !== newProductsStr || !siteInitialized) {
+        products = rawList;
+        colorMatchCache.clear();
+        try {
+          localStorage.setItem("fabric8_products_cache", newProductsStr);
+          localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
+        } catch (e) {}
         initSite();
         siteInitialized = true;
       }
-    }).catch(() => {
-      if (!siteInitialized) initSite();
-    });
-  }
+    } else if (!siteInitialized) {
+      initSite();
+      siteInitialized = true;
+    }
+  }).catch(() => {
+    if (!siteInitialized) initSite();
+  });
 }
 
 // Start loading
@@ -1002,27 +979,6 @@ function renderProducts() {
   }
 
   const renderKey = `${activeSectorFilter}|${activeCategoryFilter}|${activeSearchTerm}|${activeSortTerm}|${filtered.length}|${filtered.map(p => `${p.sku}:${p.image || ''}`).join(',')}`;
-  // If initial static HTML cards match default query, verify their displayed primary images match current products data
-  if (!grid.dataset.renderedKey && activeSectorFilter === "All" && activeCategoryFilter === "All" && !activeSearchTerm && activeSortTerm === "featured" && grid.querySelectorAll('.product-card').length >= filtered.length) {
-    let staticImagesMatch = true;
-    for (const p of filtered) {
-      const card = grid.querySelector(`.product-card[onclick*="${p.sku}"]`);
-      if (card && p.image) {
-        const firstImg = card.querySelector('img');
-        const firstImgSrc = firstImg ? (firstImg.getAttribute('src') || firstImg.src || '') : '';
-        const cleanFirst = firstImgSrc.split('?')[0].replace(/^https?:\/\/[^\/]+\//, '').replace(/^\/+/, '').toLowerCase();
-        const cleanExpected = (p.image || '').split('?')[0].replace(/^https?:\/\/[^\/]+\//, '').replace(/^\/+/, '').toLowerCase();
-        if (cleanFirst && cleanExpected && cleanFirst !== cleanExpected) {
-          staticImagesMatch = false;
-          break;
-        }
-      }
-    }
-    if (staticImagesMatch) {
-      grid.dataset.renderedKey = renderKey;
-      return;
-    }
-  }
   if (grid.dataset.renderedKey === renderKey) {
     return;
   }
