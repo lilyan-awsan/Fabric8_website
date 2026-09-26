@@ -17,6 +17,7 @@
       "2XL"
     ],
     "colors": [
+      "Pink",
       "Beige",
       "White",
       "American Blue",
@@ -35,7 +36,6 @@
       "Navy",
       "Olive Green",
       "Orange",
-      "Pink",
       "Purple Blue",
       "Purple",
       "Red",
@@ -45,10 +45,10 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
       "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
       "Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "White": "assets/products/Polo White Front.webp",
-      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
       "Black": "assets/products/1790358660717_Polo_Black.webp",
       "Blue": "assets/products/1790358661712_Polo_blue.webp",
       "Brown": "assets/products/1790358662661_Polo_Brown.webp",
@@ -128,6 +128,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790358673674_Polo_Pink.webp",
       "assets/products/1790358659699_Polo_Beige.webp",
       "assets/products/1790358663502_Polo_Burgundy.webp",
       "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
@@ -146,18 +147,17 @@
       "assets/products/1790358670220_Polo_Navy.webp",
       "assets/products/1790358671142_Army_Green_Olive_Green.webp",
       "assets/products/1790358672817_Polo_Orange.webp",
-      "assets/products/1790358673674_Polo_Pink.webp",
       "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "assets/products/1790358675503_Polo_Red.webp",
       "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
       "assets/products/1790358677712_Polo_Yellow.webp",
       "assets/products/1790358678682_American_Blue_American_Blue.webp"
     ],
-    "image": "assets/products/1790358659699_Polo_Beige.webp",
+    "image": "assets/products/1790358673674_Polo_Pink.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/1790358659699_Polo_Beige.webp",
+      "url": "assets/products/1790358673674_Polo_Pink.webp",
       "name": null
     }
   },
