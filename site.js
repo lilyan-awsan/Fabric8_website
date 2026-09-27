@@ -256,21 +256,30 @@ function applySiteSettings() {
     const el = document.getElementById('cmsServicesSub');
     if (el) el.textContent = sc.servicesSub;
   }
-  if (sc.servicesConsultImg) {
-    const el = document.getElementById('cmsServicesConsultImg');
-    if (el) el.src = resolveAssetUrl(sc.servicesConsultImg);
-  }
-  if (sc.servicesBrandImg) {
-    const el = document.getElementById('cmsServicesBrandImg');
-    if (el) el.src = resolveAssetUrl(sc.servicesBrandImg);
-  }
-  if (sc.servicesProdImg) {
-    const el = document.getElementById('cmsServicesProdImg');
-    if (el) el.src = resolveAssetUrl(sc.servicesProdImg);
-  }
   if (sc.servicesContentHtml) {
     const el = document.querySelector('.service-showcase');
     if (el) el.innerHTML = sc.servicesContentHtml;
+  }
+  if (sc.servicesConsultImg) {
+    const el = document.getElementById('cmsServicesConsultImg');
+    if (el) {
+      if (sc.servicesConsultImgBase64 && sc.servicesConsultImgBase64.startsWith('data:image')) el.src = sc.servicesConsultImgBase64;
+      else el.src = resolveAssetUrl(sc.servicesConsultImg);
+    }
+  }
+  if (sc.servicesBrandImg) {
+    const el = document.getElementById('cmsServicesBrandImg');
+    if (el) {
+      if (sc.servicesBrandImgBase64 && sc.servicesBrandImgBase64.startsWith('data:image')) el.src = sc.servicesBrandImgBase64;
+      else el.src = resolveAssetUrl(sc.servicesBrandImg);
+    }
+  }
+  if (sc.servicesProdImg) {
+    const el = document.getElementById('cmsServicesProdImg');
+    if (el) {
+      if (sc.servicesProdImgBase64 && sc.servicesProdImgBase64.startsWith('data:image')) el.src = sc.servicesProdImgBase64;
+      else el.src = resolveAssetUrl(sc.servicesProdImg);
+    }
   }
 
   // 3. Method Page Engine

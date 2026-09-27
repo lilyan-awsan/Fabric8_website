@@ -3228,6 +3228,7 @@ if (saveVisualEditorBtn) {
           newPath: newPath
         });
         
+        img.setAttribute('data-new-base64', img.src);
         img.src = newPath;
         img.removeAttribute('data-new-upload');
       });
@@ -3429,6 +3430,34 @@ if (saveVisualEditorBtn) {
         const showcase = cleanDoc.querySelector('.service-showcase');
         if (showcase) {
           currentSettings.siteContent.servicesContentHtml = showcase.innerHTML.trim();
+          
+          const imgC = showcase.querySelector('#cmsServicesConsultImg');
+          if (imgC) {
+            if (imgC.getAttribute('src')) currentSettings.siteContent.servicesConsultImg = imgC.getAttribute('src');
+            if (imgC.hasAttribute('data-new-base64')) {
+              currentSettings.siteContent.servicesConsultImgBase64 = imgC.getAttribute('data-new-base64');
+              imgC.removeAttribute('data-new-base64');
+            }
+          }
+          
+          const imgB = showcase.querySelector('#cmsServicesBrandImg');
+          if (imgB) {
+            if (imgB.getAttribute('src')) currentSettings.siteContent.servicesBrandImg = imgB.getAttribute('src');
+            if (imgB.hasAttribute('data-new-base64')) {
+              currentSettings.siteContent.servicesBrandImgBase64 = imgB.getAttribute('data-new-base64');
+              imgB.removeAttribute('data-new-base64');
+            }
+          }
+          
+          const imgP = showcase.querySelector('#cmsServicesProdImg');
+          if (imgP) {
+            if (imgP.getAttribute('src')) currentSettings.siteContent.servicesProdImg = imgP.getAttribute('src');
+            if (imgP.hasAttribute('data-new-base64')) {
+              currentSettings.siteContent.servicesProdImgBase64 = imgP.getAttribute('data-new-base64');
+              imgP.removeAttribute('data-new-base64');
+            }
+          }
+          
           settingsUpdated = true;
         }
       } else if (currentVisualPage === 'method.html') {
