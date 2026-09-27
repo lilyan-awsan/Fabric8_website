@@ -2807,16 +2807,13 @@ if (iframe && navBtns.length > 0) {
             outline-offset: 2px !important;
             box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25) !important; 
           }
+          /* Keep method flip cards stationary during visual editing so content can be typed without spinning */
+          .method-flip-card:hover .method-flip-inner { transform: none !important; }
+          .method-flip-card.is-flipped .method-flip-inner { transform: rotateY(180deg) !important; }
           .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
           .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.8; }
           .editable-image::after { content: "✏️ Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
           .editable-image:hover::after { opacity: 1; }
-
-          /* Flip Card Editor Controls: Disable hover-flipping in admin editor so cards stay steady */
-          .method-flip-card:hover .method-flip-inner { transform: none !important; }
-          .method-flip-card.flipped .method-flip-inner,
-          .method-flip-card.is-flipped .method-flip-inner { transform: rotateY(180deg) !important; }
-          .flip-card, .method-flip-card { cursor: pointer; }
         `;
         doc.head.appendChild(style);
       }
@@ -2865,7 +2862,7 @@ if (iframe && navBtns.length > 0) {
         });
       }
       
-      // Intercept all link clicks in capture phase to prevent accidental iframe navigation
+      // Intercept link and button clicks to prevent navigating away and ensure immediate focus for editing
       if (!doc.body.getAttribute('data-click-intercepted')) {
         doc.body.setAttribute('data-click-intercepted', 'true');
         doc.addEventListener('click', (e) => {
@@ -2873,33 +2870,33 @@ if (iframe && navBtns.length > 0) {
           const link = e.target.closest('a, button');
           if (link) {
             e.preventDefault();
+            const editable = link.closest('[contenteditable="true"]') || (link.getAttribute('contenteditable') === 'true' ? link : null);
+            if (editable) {
+              e.stopPropagation();
+              editable.focus();
+            }
           }
         }, true);
       }
 
-      // Handle all flip cards (Sectors & Method):
-      // - When clicking inside editable text ([contenteditable="true"]) or editable image, stop propagation so card DOES NOT flip.
-      // - When clicking outside the text (card background / container), toggle flip so the user can see and edit the back side.
-      const flipCards = doc.querySelectorAll('.flip-card, .method-flip-card');
-      flipCards.forEach(card => {
-        if (!card.getAttribute('data-flip-editor-handled')) {
-          card.setAttribute('data-flip-editor-handled', 'true');
-          
-          // Remove inline onclick attribute (like in sectors.html) so we handle it cleanly
-          if (card.hasAttribute('onclick')) {
-            card.setAttribute('data-orig-onclick', card.getAttribute('onclick'));
-            card.removeAttribute('onclick');
+      // Prevent flipping cards away when clicking to edit text on both Sectors and Method cards
+      if (!doc.body.getAttribute('data-flip-intercepted')) {
+        doc.body.setAttribute('data-flip-intercepted', 'true');
+        doc.addEventListener('click', (e) => {
+          const editable = e.target.closest('[contenteditable="true"]');
+          if (editable) {
+            e.stopPropagation();
+            editable.focus();
           }
+        }, false);
+      }
 
+      // Enable manual click-to-flip on method cards in editor (clicking card background flips, clicking text edits)
+      doc.querySelectorAll('.method-flip-card').forEach(card => {
+        if (!card.getAttribute('data-method-click-handled')) {
+          card.setAttribute('data-method-click-handled', 'true');
           card.addEventListener('click', (e) => {
-            const isEditable = e.target.closest('[contenteditable="true"], .editable-image, .editor-change-bg-btn, input, button.reorder-btn, a[data-social-click-handled]');
-            if (isEditable) {
-              // Clicked directly on editable text/image -> DO NOT FLIP, allow user to type/edit
-              e.stopPropagation();
-              return;
-            }
-            // Clicked outside text (on card body/background) -> FLIP the card
-            card.classList.toggle('flipped');
+            if (e.target.closest('[contenteditable="true"], .editor-change-bg-btn')) return;
             card.classList.toggle('is-flipped');
           });
         }
@@ -2942,12 +2939,10 @@ if (iframe && navBtns.length > 0) {
         if (!el.getAttribute('data-editor-click-handled')) {
           el.setAttribute('data-editor-click-handled', 'true');
           el.addEventListener('click', (e) => {
-            const isEditable = el.getAttribute('contenteditable') === 'true' || el.closest('[contenteditable="true"]');
-            if (isEditable) {
-              e.preventDefault();
-              if (el.closest('.flip-card, .method-flip-card')) {
-                e.stopPropagation();
-              }
+            // Allow text focus instead of navigating
+            e.preventDefault();
+            if (el.getAttribute('contenteditable') === 'true') {
+              el.focus();
             }
           });
         }
@@ -3178,16 +3173,6 @@ if (saveVisualEditorBtn) {
           el.style.display = 'inline-flex';
         }
         el.removeAttribute('data-updated-href');
-      });
-      cleanDoc.querySelectorAll('.flip-card, .method-flip-card').forEach(card => {
-        card.classList.remove('flipped', 'is-flipped');
-        card.removeAttribute('data-flip-editor-handled');
-        if (card.getAttribute('data-orig-onclick')) {
-          card.setAttribute('onclick', card.getAttribute('data-orig-onclick'));
-          card.removeAttribute('data-orig-onclick');
-        } else if (card.classList.contains('flip-card') && !card.getAttribute('onclick')) {
-          card.setAttribute('onclick', "this.classList.toggle('flipped')");
-        }
       });
       cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"]').forEach(el => el.remove());
 
