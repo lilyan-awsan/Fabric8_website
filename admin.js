@@ -2795,8 +2795,6 @@ if (iframe && navBtns.length > 0) {
             outline-offset: 2px !important;
             cursor: text !important; 
             transition: outline 0.15s ease, box-shadow 0.15s ease !important; 
-            user-select: text !important;
-            -webkit-user-select: text !important;
           }
           [contenteditable="true"]:hover { 
             outline: 2px solid #2ecc71 !important; 
@@ -2807,9 +2805,6 @@ if (iframe && navBtns.length > 0) {
             outline-offset: 2px !important;
             box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25) !important; 
           }
-          /* Keep method flip cards stationary during visual editing so content can be typed without spinning */
-          .method-flip-card:hover .method-flip-inner { transform: none !important; }
-          .method-flip-card.is-flipped .method-flip-inner { transform: rotateY(180deg) !important; }
           .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
           .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.8; }
           .editable-image::after { content: "✏️ Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
@@ -2862,7 +2857,7 @@ if (iframe && navBtns.length > 0) {
         });
       }
       
-      // Intercept link and button clicks to prevent navigating away and ensure immediate focus for editing
+      // Intercept all link clicks in capture phase to prevent accidental iframe navigation
       if (!doc.body.getAttribute('data-click-intercepted')) {
         doc.body.setAttribute('data-click-intercepted', 'true');
         doc.addEventListener('click', (e) => {
@@ -2870,37 +2865,20 @@ if (iframe && navBtns.length > 0) {
           const link = e.target.closest('a, button');
           if (link) {
             e.preventDefault();
-            const editable = link.closest('[contenteditable="true"]') || (link.getAttribute('contenteditable') === 'true' ? link : null);
-            if (editable) {
-              e.stopPropagation();
-              editable.focus();
-            }
           }
         }, true);
       }
 
-      // Prevent flipping cards away when clicking to edit text on both Sectors and Method cards
+      // Prevent flipping card away when clicking to edit text on flip cards
       if (!doc.body.getAttribute('data-flip-intercepted')) {
         doc.body.setAttribute('data-flip-intercepted', 'true');
         doc.addEventListener('click', (e) => {
           const editable = e.target.closest('[contenteditable="true"]');
-          if (editable) {
+          if (editable && e.target.closest('.flip-back')) {
             e.stopPropagation();
-            editable.focus();
           }
         }, false);
       }
-
-      // Enable manual click-to-flip on method cards in editor (clicking card background flips, clicking text edits)
-      doc.querySelectorAll('.method-flip-card').forEach(card => {
-        if (!card.getAttribute('data-method-click-handled')) {
-          card.setAttribute('data-method-click-handled', 'true');
-          card.addEventListener('click', (e) => {
-            if (e.target.closest('[contenteditable="true"], .editor-change-bg-btn')) return;
-            card.classList.toggle('is-flipped');
-          });
-        }
-      });
 
       // Ensure Contact Page blocks have clean single editable containers
       const hqTitle = doc.getElementById('cmsContactHQTitle');
@@ -2941,9 +2919,6 @@ if (iframe && navBtns.length > 0) {
           el.addEventListener('click', (e) => {
             // Allow text focus instead of navigating
             e.preventDefault();
-            if (el.getAttribute('contenteditable') === 'true') {
-              el.focus();
-            }
           });
         }
       });
