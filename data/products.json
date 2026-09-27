@@ -773,13 +773,13 @@
       "XL"
     ],
     "colors": [
+      "Green",
       "White",
       "American Blue",
       "Black",
       "Brown",
       "Burgundy",
       "Charcoal",
-      "Green",
       "Kiwi",
       "Light Grey",
       "Navy",
@@ -845,6 +845,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap Green.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
@@ -853,17 +854,16 @@
       "assets/products/Cap Brown.webp",
       "assets/products/Cap Burgundy.webp",
       "assets/products/Cap Charcoal.webp",
-      "assets/products/Cap Green.webp",
       "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Navy.webp",
       "assets/products/Cap Yellow 2.webp",
       "assets/products/1790357941308_Cap_White_Back_1-1.webp"
     ],
-    "image": "assets/products/Cap Red.webp",
+    "image": "assets/products/Cap Green.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Cap Red.webp",
+      "url": "assets/products/Cap Green.webp",
       "name": null
     }
   },
