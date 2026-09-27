@@ -268,6 +268,10 @@ function applySiteSettings() {
     const el = document.getElementById('cmsServicesProdImg');
     if (el) el.src = resolveAssetUrl(sc.servicesProdImg);
   }
+  if (sc.servicesContentHtml) {
+    const el = document.querySelector('.service-showcase');
+    if (el) el.innerHTML = sc.servicesContentHtml;
+  }
 
   // 3. Method Page Engine
   if (sc.methodTitle) {
@@ -286,6 +290,10 @@ function applySiteSettings() {
     const el = document.getElementById('cmsAboutProfileLink');
     if (el) el.href = sc.companyProfileUrl;
   }
+  if (sc.methodCardsHtml) {
+    const el = document.querySelector('.method-grid-layout');
+    if (el) el.innerHTML = sc.methodCardsHtml;
+  }
 
   // 4. Sectors Showcase Engine
   if (sc.sectorsTitle) {
@@ -301,6 +309,10 @@ function applySiteSettings() {
     if (el) {
       el.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${resolveAssetUrl(sc.sectorsHeroImg)}') center / cover`;
     }
+  }
+  if (sc.sectorsCardsHtml) {
+    const el = document.querySelector('.sector-cards');
+    if (el) el.innerHTML = sc.sectorsCardsHtml;
   }
 
   // 5. About Us & Core Values Engine
