@@ -43,7 +43,7 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
   }
 
   if (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
-    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+    return clean;
   }
 
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
@@ -51,6 +51,11 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
   }
 
   clean = clean.replace(/^\/+/, '');
+
+  if (clean.startsWith('assets/products/17') || clean.startsWith('assets/site_images/17') || clean.includes('/1790') || clean.startsWith('assets/products/sketch_')) {
+    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+  }
+
   return clean;
 };
 

@@ -117,9 +117,8 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
     clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
 
-  // Strip github raw prefix if already stored in data, so it resolves directly from current host first
   if (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
-    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+    return clean;
   }
 
   if (clean.startsWith('http://') || clean.startsWith('https://')) {
@@ -127,6 +126,13 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
   }
 
   clean = clean.replace(/^\/+/, '');
+
+  // Dynamic uploads (with timestamp or admin upload pattern) exist on GitHub and must resolve directly to GitHub Raw
+  // to avoid 404 and broken image flicker on the live hosting domain
+  if (clean.startsWith('assets/products/17') || clean.startsWith('assets/site_images/17') || clean.includes('/1790') || clean.startsWith('assets/products/sketch_')) {
+    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+  }
+
   return clean;
 };
 
@@ -2581,29 +2587,30 @@ window.updateMainImageSmooth = function(newSrc, newIdx = -1) {
 
   const resolved = window.resolveAssetUrl ? window.resolveAssetUrl(newSrc) : newSrc;
   
-  // Clear any past failure record for the new image switch
+  // Clear any past failure record and cached clean path so new image is never locked to previous image
   delete mainImg.dataset.retryCount;
   delete mainImg.dataset.lastFailedSrc;
+  delete mainImg.dataset.originalClean;
 
-  mainImg.style.transition = 'opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1)';
-  mainImg.style.opacity = '0';
-  setTimeout(() => {
+  // Preload image before changing display so main image container NEVER breaks or flickers
+  const preloader = new Image();
+  preloader.onload = () => {
     mainImg.style.visibility = 'visible';
     mainImg.src = resolved;
-    mainImg.onload = () => { 
-      mainImg.style.visibility = 'visible';
-      mainImg.style.opacity = '1'; 
-    };
-    mainImg.onerror = () => { 
-      mainImg.style.visibility = 'visible';
-      mainImg.style.opacity = '1'; 
-      window.handleImgError(mainImg);
-    };
-    setTimeout(() => { 
-      mainImg.style.visibility = 'visible';
-      mainImg.style.opacity = '1'; 
-    }, 150);
-  }, 200);
+    mainImg.style.opacity = '1';
+  };
+  preloader.onerror = () => {
+    mainImg.style.visibility = 'visible';
+    mainImg.src = resolved;
+    window.handleImgError(mainImg);
+  };
+  preloader.src = resolved;
+
+  if (preloader.complete) {
+    mainImg.style.visibility = 'visible';
+    mainImg.src = resolved;
+    mainImg.style.opacity = '1';
+  }
 };
 
 window.highlightActiveThumbnail = function() {
@@ -2682,31 +2689,26 @@ function getImagesForColor(product, targetColor) {
       const matchingColorAngles = (product.images || []).filter(img => {
         if (!img || img === explicitImg) return false;
         const clean = img.split('?')[0].toLowerCase();
-        // Never include an image explicitly assigned to a different color
+        // Never include an image explicitly assigned to a different color in colorImageMap
         if (otherColorsAssignedUrls.has(clean)) return false;
 
         const imgNorm = normalizeForMatch(img);
-        // Word boundary check for targetNorm so "blue" does not match "light blue"
-        const reg = new RegExp('(^|[^a-z0-9])' + targetNorm + '([^a-z0-9]|$)', 'i');
-        if (!reg.test(imgNorm)) return false;
 
-        // Ensure it doesn't match another more specific color (e.g. "light blue" vs "blue")
-        const isOther = (product.colors || []).some(otherCol => {
+        // Check if this image explicitly belongs to any OTHER color
+        const belongsToOtherColor = (product.colors || []).some(otherCol => {
           if (otherCol.toLowerCase() === targetColor.toLowerCase()) return false;
           const otherNorm = normalizeForMatch(otherCol);
-          if (otherNorm.length > targetNorm.length && otherNorm.includes(targetNorm) && imgNorm.includes(otherNorm)) {
-            return true;
-          }
-          return false;
+          return new RegExp('(^|[^a-z0-9])' + otherNorm + '([^a-z0-9]|$)', 'i').test(imgNorm);
         });
-        return !isOther;
+        if (belongsToOtherColor) return false;
+
+        // Matches this color directly OR is a neutral angle (e.g. back, side, technical view)
+        const matchesTarget = new RegExp('(^|[^a-z0-9])' + targetNorm + '([^a-z0-9]|$)', 'i').test(imgNorm);
+        return matchesTarget || !belongsToOtherColor;
       });
 
+      // explicitImg for the chosen color variant is ALWAYS the hero image at index 0
       let res = [explicitImg, ...matchingColorAngles];
-      if (product.image && res.some(img => img === product.image || img.split('?')[0] === product.image.split('?')[0])) {
-        const matchMain = res.find(img => img === product.image || img.split('?')[0] === product.image.split('?')[0]);
-        if (matchMain) res = [matchMain, ...res.filter(img => img !== matchMain)];
-      }
       colorMatchCache.set(cacheKey, res);
       return res;
     }
@@ -2781,22 +2783,8 @@ function updateGalleryForColor(product, targetColor) {
   activeCarouselIdx = 0;
 
   const mainImg = currentCarouselImages[0] || product.image;
-  const mainImageEl = document.getElementById('productMainImage');
-  if (mainImageEl) {
-    delete mainImageEl.dataset.retryCount;
-    delete mainImageEl.dataset.lastFailedSrc;
-    const resolvedMain = window.resolveAssetUrl ? window.resolveAssetUrl(mainImg) : mainImg;
-    mainImageEl.style.visibility = 'visible';
-    mainImageEl.src = resolvedMain;
-    mainImageEl.onload = () => {
-      mainImageEl.style.visibility = 'visible';
-      mainImageEl.style.opacity = '1';
-    };
-    mainImageEl.onerror = () => {
-      mainImageEl.style.visibility = 'visible';
-      mainImageEl.style.opacity = '1';
-      window.handleImgError(mainImageEl);
-    };
+  if (mainImg && typeof window.updateMainImageSmooth === 'function') {
+    window.updateMainImageSmooth(mainImg, 0);
   }
 
   const prevBtn = document.getElementById('carouselPrevBtn');
