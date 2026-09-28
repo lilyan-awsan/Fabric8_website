@@ -2620,9 +2620,9 @@
       "5xl"
     ],
     "colors": [
+      "Navy",
       "Black",
       "White",
-      "Navy",
       "Grey",
       "dark sky"
     ],
@@ -2652,36 +2652,36 @@
     ],
     "placements": [
       {
+        "h": 18,
         "name": "Left Chest",
+        "r": 0,
+        "w": 18,
         "x": 65,
-        "y": 36,
-        "w": 18,
-        "h": 18,
-        "r": 0
+        "y": 36
       },
       {
+        "h": 18,
         "name": "Right Chest",
-        "x": 35,
-        "y": 36,
+        "r": 0,
         "w": 18,
-        "h": 18,
-        "r": 0
+        "x": 35,
+        "y": 36
       },
       {
-        "name": "Full Back",
-        "x": 50,
-        "y": 45,
-        "w": 45,
         "h": 45,
-        "r": 0
+        "name": "Full Back",
+        "r": 0,
+        "w": 45,
+        "x": 50,
+        "y": 45
       },
       {
-        "name": "Upper Sleeve",
-        "x": 84,
-        "y": 34,
-        "w": 13,
         "h": 13,
-        "r": 6
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 84,
+        "y": 34
       }
     ],
     "dtfPlacements": [
@@ -2705,7 +2705,6 @@
       "assets/products/1790604400034_dark_sky_American_Blue_American_Blue.webp",
       "assets/products/1790604401270_White_Cargo_Vest_Army_Green_1-1.webp",
       "assets/products/1790604402348_1790358821426_Cargo_Vest_Black_1-1.webp",
-      "assets/products/1790604403275_Scrub_White_Set.webp",
       "assets/products/1790604404219_Navy_Purple_Blue.webp",
       "assets/products/1790604405335_Grey_Red_2.webp",
       "assets/products/1790604406381_Polo_White_Back.webp",
@@ -2713,10 +2712,10 @@
     ],
     "image": "assets/products/1790604398838_1790358670220_Polo_Navy.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "1790358670220_Polo_Navy.webp"
+      "url": "assets/products/1790604398838_1790358670220_Polo_Navy.webp",
+      "name": null
     }
   }
 ]
