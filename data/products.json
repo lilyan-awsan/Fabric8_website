@@ -2516,5 +2516,119 @@
       "url": "assets/products/Puff Jacket Black.webp",
       "name": null
     }
+  },
+  {
+    "id": "nnn",
+    "sku": "nnn",
+    "name": "lll",
+    "category": "HEAD WEAR",
+    "gender": "Women",
+    "sectors": "Corporate, Hospitality",
+    "short": "ssss",
+    "long": "ss",
+    "sizes": [
+      "one size"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey",
+      "Burgundy",
+      "pink"
+    ],
+    "colorHexMap": {
+      "Burgundy": "#6b1d2f",
+      "pink": "#e28da1"
+    },
+    "colorImageMap": {
+      "White": "assets/products/1790630132970_1790604406381_Polo_White_Back.webp",
+      "Grey": "assets/products/1790630134194_1790621620092_1789253757232_Cap_Light_Grey.webp",
+      "Burgundy": "assets/products/1790630135600_Burgundy_sketch_1790604400034_dark_sky_American_Blue_American_Blue.webp",
+      "pink": "assets/products/1790630136429_pink_Turquoise_Blue_Turquoise_blue_1-2.webp",
+      "Black": "assets/products/1790630139101_1790608918819_1790360461773_Cargo_Black_trousers_with_black.webp"
+    },
+    "fabric": "ss",
+    "gsm": "180-220 GSM",
+    "leadTime": "",
+    "moq": "47",
+    "maxQty": "",
+    "availability": "dd",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "assets/products/1790630141098_sketch_1790358823210_sketch_TECHNICALS-11.webp",
+    "sketchDescription": "mm",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "customizationCapability": "embroidery_only",
+    "images": [
+      "assets/products/1790630132970_1790604406381_Polo_White_Back.webp",
+      "assets/products/1790630134194_1790621620092_1789253757232_Cap_Light_Grey.webp",
+      "assets/products/1790630135600_Burgundy_sketch_1790604400034_dark_sky_American_Blue_American_Blue.webp",
+      "assets/products/1790630136429_pink_Turquoise_Blue_Turquoise_blue_1-2.webp",
+      "assets/products/1790630137216_1790608916674_1790358924541_Beret_Hat_Grey_1.webp",
+      "assets/products/1790630138176_White_1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+      "assets/products/1790630139101_1790608918819_1790360461773_Cargo_Black_trousers_with_black.webp",
+      "assets/products/1790630140080_1790604402348_1790358821426_Cargo_Vest_Black_1-1.webp"
+    ],
+    "image": "assets/products/1790630132970_1790604406381_Polo_White_Back.webp",
+    "mainImageSelection": {
+      "type": "pending",
+      "index": 2,
+      "url": null,
+      "name": "Burgundy_sketch_1790604400034_dark_sky_American_Blue_American_Blue.webp"
+    }
   }
 ]
