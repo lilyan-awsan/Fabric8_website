@@ -2540,8 +2540,8 @@
       "ss"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Navy",
       "Grey"
     ],
@@ -2557,7 +2557,7 @@
     "maxQty": "",
     "availability": "s",
     "care": "s",
-    "sketch": "",
+    "sketch": "assets/products/1790637367198_sketch_1790630141098_sketch_1790358823210_sketch_TECHNICALS-11.webp",
     "sketchDescription": "kk",
     "supportedPlacements": [
       "Left Chest",
@@ -2622,10 +2622,10 @@
     ],
     "image": "assets/products/1790637340418_Scrub_White_Female_Side.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "Scrub_White_Female_Side.webp"
+      "url": "assets/products/1790637340418_Scrub_White_Female_Side.webp",
+      "name": null
     }
   }
 ]
