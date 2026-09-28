@@ -2629,20 +2629,22 @@
       "2XL"
     ],
     "colors": [
+      "Khaki",
       "Black",
       "White",
       "Navy",
       "Grey",
-      "Burgundy",
-      "Khaki"
+      "Burgundy"
     ],
     "colorHexMap": {
       "Burgundy": "#6b1d2f",
       "Khaki": "#c3b091"
     },
     "colorImageMap": {
+      "Khaki": "assets/products/1790608914485_1790358818658_Cargo_Vest_Beige_1-1.webp",
       "Navy": "assets/products/1790608915625_1790358822316_Cargo_Vest_Navy_1-1.webp",
       "Grey": "assets/products/1790608916674_1790358924541_Beret_Hat_Grey_1.webp",
+      "Burgundy": "assets/products/1790608917715_1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
       "Black": "assets/products/1790608918819_1790360461773_Cargo_Black_trousers_with_black.webp"
     },
     "fabric": "",
@@ -2720,10 +2722,10 @@
     ],
     "image": "assets/products/1790608914485_1790358818658_Cargo_Vest_Beige_1-1.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "1790358818658_Cargo_Vest_Beige_1-1.webp"
+      "url": "assets/products/1790608914485_1790358818658_Cargo_Vest_Beige_1-1.webp",
+      "name": null
     }
   }
 ]
