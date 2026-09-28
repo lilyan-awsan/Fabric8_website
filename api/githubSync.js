@@ -362,6 +362,7 @@ export default async function handler(req, res) {
             const err = await imgRes.json();
             throw new Error("Failed to upload image: " + err.message);
           }
+          img.finalPath = imgPath;
           finalImages.push(imgPath);
           if (product?.mainImageSelection?.type === 'pending') {
             if (product.mainImageSelection.index === i || (product.mainImageSelection.name && img.name === product.mainImageSelection.name)) {
@@ -566,6 +567,23 @@ export default async function handler(req, res) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(productsList)
         });
+        
+        if (newImages && Array.isArray(newImages) && newImages.length > 0) {
+           const fallbackPayload = {};
+           for (let i = 0; i < newImages.length; i++) {
+              if (newImages[i].finalPath && newImages[i].base64) {
+                 const fallbackKey = newImages[i].finalPath.replace(/[^a-zA-Z0-9]/g, '_');
+                 fallbackPayload[fallbackKey] = newImages[i].base64;
+              }
+           }
+           if (Object.keys(fallbackPayload).length > 0) {
+             await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/image_fallbacks.json", {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(fallbackPayload)
+             });
+           }
+        }
       } catch (fbErr) {
         console.error("Firebase Products Sync Error:", fbErr);
       }

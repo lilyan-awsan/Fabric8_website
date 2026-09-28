@@ -87,12 +87,16 @@ window.handleImgError = function(img, fallbackSrc = '') {
   }
   img.dataset.retryCount = (retryCount + 1).toString();
 
-  let clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
-  clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
-  while (clean.includes('raw.githubusercontent.com')) {
-    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+  if (!img.dataset.originalClean) {
+    let clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
+    clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+    while (clean.includes('raw.githubusercontent.com')) {
+      clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+    }
+    clean = clean.replace(/^\/+/, '');
+    img.dataset.originalClean = clean;
   }
-  clean = clean.replace(/^\/+/, '');
+  const clean = img.dataset.originalClean;
 
   img.style.visibility = 'visible';
   img.style.opacity = '1';
@@ -109,20 +113,28 @@ window.handleImgError = function(img, fallbackSrc = '') {
   const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
 
   if (retryCount === 0) {
-    // 1. Try alternate format locally first before remote network delay
-    if (clean.endsWith('.png')) {
-      img.src = clean.replace(/\.png$/i, '.webp');
-      return;
-    } else if (clean.endsWith('.webp')) {
-      img.src = clean.replace(/\.webp$/i, '.png');
-      return;
-    }
-    img.src = isLocal ? liveUrl : ghUrl;
+    // Attempt to fetch instant base64 fallback from Firebase RTDB
+    const fallbackKey = clean.replace(/[^a-zA-Z0-9]/g, '_');
+    fetch(`https://fabric8-50559-default-rtdb.firebaseio.com/image_fallbacks/${fallbackKey}.json`)
+      .then(r => r.json())
+      .then(b64 => {
+        if (b64 && typeof b64 === 'string' && b64.startsWith('data:')) {
+          img.dataset.backupSrc = b64;
+          img.src = b64;
+        } else {
+          // If no fallback, try ghUrl since it bypasses Firebase Hosting 2 min delay
+          img.src = isLocal ? ghUrl : ghUrl;
+        }
+      }).catch(() => {
+        img.src = isLocal ? ghUrl : ghUrl;
+      });
   } else if (retryCount === 1) {
-    if (img.src !== ghUrl && !img.src.includes('raw.githubusercontent.com')) {
-      img.src = ghUrl;
-    } else if (img.src !== liveUrl && !img.src.includes('thefabric8.com')) {
+    if (img.src !== liveUrl && !img.src.includes('thefabric8.com')) {
       img.src = liveUrl;
+    } else if (clean.endsWith('.png') && !rawSrc.includes('.webp')) {
+      img.src = ghUrl.replace(/\.png$/i, '.webp');
+    } else if (clean.endsWith('.webp') && !rawSrc.includes('.png')) {
+      img.src = ghUrl.replace(/\.webp$/i, '.png');
     } else if (fallbackSrc) {
       img.src = fallbackSrc;
     }
