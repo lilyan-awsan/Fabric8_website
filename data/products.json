@@ -17,6 +17,7 @@
       "2XL"
     ],
     "colors": [
+      "Blue",
       "Purple",
       "Purple Blue",
       "Pink",
@@ -25,7 +26,6 @@
       "American Blue",
       "Army Green",
       "Black",
-      "Blue",
       "Brown",
       "Burgundy",
       "Charcoal",
@@ -66,7 +66,8 @@
       "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
       "Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
       "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp"
+      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -135,6 +136,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "assets/products/1790358673674_Polo_Pink.webp",
       "assets/products/1790358659699_Polo_Beige.webp",
@@ -158,14 +160,13 @@
       "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
       "assets/products/1790358677712_Polo_Yellow.webp",
       "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
     ],
-    "image": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+    "image": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "url": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "name": null
     }
   },
