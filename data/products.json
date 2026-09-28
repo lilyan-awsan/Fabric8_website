@@ -1330,10 +1330,10 @@
       "2XL"
     ],
     "colors": [
+      "Black Striped",
       "White",
       "Grey",
-      "Black",
-      "Black Striped"
+      "Black"
     ],
     "colorHexMap": {},
     "colorImageMap": {
@@ -1398,16 +1398,16 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Full W pocket Striped Black.webp",
       "assets/products/Full Apron W pocket Grey.webp",
       "assets/products/Full Apron W pocket White.webp",
-      "assets/products/Full W pocket Apron Black.webp",
-      "assets/products/Full W pocket Striped Black.webp"
+      "assets/products/Full W pocket Apron Black.webp"
     ],
-    "image": "assets/products/Full Apron W pocket Grey.webp",
+    "image": "assets/products/Full W pocket Striped Black.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Full Apron W pocket Grey.webp",
+      "url": "assets/products/Full W pocket Striped Black.webp",
       "name": null
     }
   },
