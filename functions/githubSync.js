@@ -554,10 +554,22 @@ export default async function handler(req, res) {
       productsList = productsList.filter(p => p.id !== product.id && p.sku !== product.sku);
     }
 
-    // 4. Save the updated products.json back to GitHub & Firebase
+    // 4. Save the updated products.json back to GitHub & Firebase & Local Disk
     if (action === "save" || action === "delete") {
       const newContentStr = JSON.stringify(productsList, null, 2);
       const newContentBase64 = Buffer.from(newContentStr).toString('base64');
+
+      // Sync to Local File System for instant local testing (Zero Delay)
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const localPath = path.join(process.cwd(), 'data', 'products.json');
+        if (fs.existsSync(localPath)) {
+          fs.writeFileSync(localPath, newContentStr);
+        }
+      } catch (e) {
+        console.warn("Local sync skipped (not in local dev or missing fs)");
+      }
 
       // Sync to Firebase Realtime Database
       try {
@@ -587,6 +599,45 @@ export default async function handler(req, res) {
       if (!updateRes.ok) {
         const err = await updateRes.json();
         throw new Error("Failed to save products database to server: " + err.message);
+      }
+
+      // Sync local disk if running in development mode
+      try {
+        const fs = require('fs');
+        const path = require('path');
+        const localPath = path.join(process.cwd(), 'data', 'products.json');
+        const localJsPath = path.join(process.cwd(), 'data', 'products-data.js');
+        if (fs.existsSync(localPath)) {
+          fs.writeFileSync(localPath, newContentStr);
+          fs.writeFileSync(localJsPath, `window.FABRIC8_DEFAULT_PRODUCTS = ${newContentStr};\n`);
+        }
+      } catch (e) {}
+
+      // Keep products-data.js synchronized on GitHub
+      try {
+        const jsPath = "data/products-data.js";
+        let jsSha = null;
+        const jsFileRes = await fetch(`https://api.github.com/repos/${repo}/contents/${jsPath}`, {
+          headers: { 'Authorization': `Bearer ${githubToken}`, 'User-Agent': 'Fabric8-Admin' }
+        });
+        if (jsFileRes.ok) {
+          const jsData = await jsFileRes.json();
+          jsSha = jsData.sha;
+        }
+        const jsContentStr = `window.FABRIC8_DEFAULT_PRODUCTS = ${newContentStr};\n`;
+        const jsContentBase64 = Buffer.from(jsContentStr).toString('base64');
+        const jsBody = {
+          message: `Sync products-data.js with products.json for ${product.sku || product.id}`,
+          content: jsContentBase64
+        };
+        if (jsSha) jsBody.sha = jsSha;
+        await fetch(`https://api.github.com/repos/${repo}/contents/${jsPath}`, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${githubToken}`, 'Content-Type': 'application/json', 'User-Agent': 'Fabric8-Admin' },
+          body: JSON.stringify(jsBody)
+        });
+      } catch(jsErr) {
+        console.warn("Failed to sync products-data.js to GitHub:", jsErr);
       }
 
       return res.status(200).json({ success: true, message: 'Saved successfully', products: productsList });

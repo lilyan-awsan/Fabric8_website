@@ -3,7 +3,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-001",
     "sku": "F8-001",
     "name": "Premium Polo Shirt",
-    "category": "Top Wear",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage",
     "short": "Premium corporate polo, clean and professional.",
@@ -17,12 +17,15 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Blue",
+      "Purple",
+      "Purple Blue",
+      "Pink",
+      "Beige",
       "White",
       "American Blue",
       "Army Green",
-      "Beige",
       "Black",
-      "Blue",
       "Brown",
       "Burgundy",
       "Charcoal",
@@ -35,9 +38,6 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Navy",
       "Olive Green",
       "Orange",
-      "Pink",
-      "Purple Blue",
-      "Purple",
       "Red",
       "Turquoise Blue",
       "Deep Turquoise",
@@ -45,20 +45,29 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
-      "White": "assets/products/Polo White Front.webp",
-      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
-      "Black": "assets/products/1790358660717_Polo_Black.webp",
-      "Blue": "assets/products/1790358661712_Polo_blue.webp",
-      "Brown": "assets/products/1790358662661_Polo_Brown.webp",
-      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
-      "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
-      "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
-      "Navy": "assets/products/1790358670220_Polo_Navy.webp",
-      "Orange": "assets/products/1790358672817_Polo_Orange.webp",
-      "Pink": "assets/products/1790358673674_Polo_Pink.webp",
+      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "Pink": "assets/products/1790358673674_Polo_Pink.webp",
+      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
+      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
+      "Dark Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "White": "assets/products/Polo White Front.webp",
+      "Olive Green": "assets/products/1790358658500_Olive_Green_Army_Green.webp",
+      "Black": "assets/products/1790358660717_Polo_Black.webp",
+      "Brown": "assets/products/1790358662661_Polo_Brown.webp",
+      "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
+      "Green": "assets/products/1790358666198_Polo_Green.webp",
+      "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
+      "Light Blue": "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
+      "Light Grey": "assets/products/1790358669131_Light_Grey_Light_grey.webp",
+      "Navy": "assets/products/1790358670220_Polo_Navy.webp",
+      "Army Green": "assets/products/1790358671142_Army_Green_Olive_Green.webp",
+      "Orange": "assets/products/1790358672817_Polo_Orange.webp",
       "Red": "assets/products/1790358675503_Polo_Red.webp",
+      "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
+      "Light Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
+      "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
+      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp",
       "Yellow": "assets/products/1790358677712_Polo_Yellow.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
@@ -128,16 +137,18 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "assets/products/1790358673674_Polo_Pink.webp",
+      "assets/products/1790358659699_Polo_Beige.webp",
+      "assets/products/1790358663502_Polo_Burgundy.webp",
       "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
       "assets/products/Polo White Front.webp",
       "assets/products/Polo White Side.webp",
       "assets/products/Polo White Back.webp",
       "assets/products/1790358658500_Olive_Green_Army_Green.webp",
-      "assets/products/1790358659699_Polo_Beige.webp",
       "assets/products/1790358660717_Polo_Black.webp",
-      "assets/products/1790358661712_Polo_blue.webp",
       "assets/products/1790358662661_Polo_Brown.webp",
-      "assets/products/1790358663502_Polo_Burgundy.webp",
       "assets/products/1790358664388_Polo_Charcoal.webp",
       "assets/products/1790358666198_Polo_Green.webp",
       "assets/products/1790358666999_Polo_Kiwi.webp",
@@ -146,18 +157,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/1790358670220_Polo_Navy.webp",
       "assets/products/1790358671142_Army_Green_Olive_Green.webp",
       "assets/products/1790358672817_Polo_Orange.webp",
-      "assets/products/1790358673674_Polo_Pink.webp",
-      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "assets/products/1790358675503_Polo_Red.webp",
       "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
       "assets/products/1790358677712_Polo_Yellow.webp",
-      "assets/products/1790358678682_American_Blue_American_Blue.webp"
+      "assets/products/1790358678682_American_Blue_American_Blue.webp",
+      "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
     ],
-    "image": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+    "image": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "url": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "name": null
     }
   },
@@ -198,7 +208,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790358823210_sketch_TECHNICALS-11.webp",
+    "sketch": "assets/products/1790556550433_sketch_TECHNICALS-20.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
@@ -763,26 +773,29 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "name": "Caps",
     "category": "TOP WEAR",
     "gender": "Unisex",
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage, Automotive",
     "short": "Adjustable branded cap for outdoor or retail teams.",
     "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
-    "sizes": [],
+    "sizes": [
+      "One Size"
+    ],
     "colors": [
-      "Red",
+      "Green",
       "White",
       "American Blue",
       "Black",
       "Brown",
       "Burgundy",
       "Charcoal",
-      "Green",
       "Kiwi",
       "Light Grey",
       "Navy",
+      "Red",
       "Yellow"
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Green": "assets/products/Cap Green.webp",
       "Red": "assets/products/Cap Red.webp",
       "White": "assets/products/Cap White.webp",
       "American Blue": "assets/products/Cap American Blue.webp",
@@ -790,7 +803,6 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Brown": "assets/products/Cap Brown.webp",
       "Burgundy": "assets/products/Cap Burgundy.webp",
       "Charcoal": "assets/products/Cap Charcoal.webp",
-      "Green": "assets/products/Cap Green.webp",
       "Kiwi": "assets/products/Cap Kiwi 2.webp",
       "Navy": "assets/products/Cap Navy.webp",
       "Yellow": "assets/products/Cap Yellow 2.webp"
@@ -810,20 +822,20 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "placements": [
       {
-        "h": 22,
+        "h": 100,
         "name": "Front Center Panel",
-        "r": 3,
-        "w": 22,
-        "x": 55,
-        "y": 58
+        "r": 100,
+        "w": 100,
+        "x": 100,
+        "y": 100
       },
       {
-        "h": 16,
+        "h": 100,
         "name": "Side Panel",
-        "r": -12,
-        "w": 16,
-        "x": 33,
-        "y": 56
+        "r": 100,
+        "w": 100,
+        "x": 100,
+        "y": 100
       }
     ],
     "dtfPlacements": [
@@ -840,6 +852,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap Green.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap White.webp",
       "assets/products/Cap American Blue.webp",
@@ -848,17 +861,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/Cap Brown.webp",
       "assets/products/Cap Burgundy.webp",
       "assets/products/Cap Charcoal.webp",
-      "assets/products/Cap Green.webp",
       "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Navy.webp",
       "assets/products/Cap Yellow 2.webp",
       "assets/products/1790357941308_Cap_White_Back_1-1.webp"
     ],
-    "image": "assets/products/Cap Red.webp",
+    "image": "assets/products/Cap Green.webp",
     "mainImageSelection": {
-      "index": 0,
       "type": "existing",
-      "url": "assets/products/Cap Red.webp"
+      "index": 0,
+      "url": "assets/products/Cap Green.webp",
+      "name": null
     }
   },
   {
@@ -1714,9 +1727,9 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Grey",
       "White",
-      "Black",
-      "Grey"
+      "Black"
     ],
     "colorHexMap": {},
     "colorImageMap": {
@@ -1791,17 +1804,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Oversize Tshirt Grey 1.webp",
       "assets/products/Oversize Tshirt Black 1.webp",
       "assets/products/Oversize Tshirt White 1.webp",
-      "assets/products/Oversize Tshirt Grey 1.webp",
       "assets/products/Oversize Tshirt White Side.webp",
       "assets/products/Oversize Tshirt White Back.webp"
     ],
-    "image": "assets/products/Oversize Tshirt Black 1.webp",
+    "image": "assets/products/Oversize Tshirt Grey 1.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Oversize Tshirt Black 1.webp",
+      "url": "assets/products/Oversize Tshirt Grey 1.webp",
       "name": null
     }
   },

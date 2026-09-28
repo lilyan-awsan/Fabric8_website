@@ -177,7 +177,7 @@
     if (!targetSku && savedState && savedState.sku) targetSku = savedState.sku;
     if (!targetSku) targetSku = "F8-001";
 
-    // Fetch full catalog product details from cache or data/products.json
+    // Fetch full catalog product details from cache, Firebase RTDB, or data/products.json
     let catalogProduct = null;
     try {
       const cached = localStorage.getItem("fabric8_products_cache");
@@ -189,13 +189,26 @@
 
     if (!catalogProduct) {
       try {
-        const res = await fetch('data/products.json?t=' + Date.now());
-        if (res.ok) {
+        const fbRes = await fetch("https://fabric8-50559-default-rtdb.firebaseio.com/products.json?t=" + Date.now());
+        if (fbRes.ok) {
+          const fbData = await fbRes.json();
+          const list = Array.isArray(fbData) ? fbData : (fbData && typeof fbData === 'object' ? Object.values(fbData) : []);
+          catalogProduct = list.find(p => p && (p.sku === targetSku || p.id === targetSku));
+        }
+      } catch (e) {}
+    }
+
+    if (!catalogProduct) {
+      try {
+        const rawUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/data/products.json?t=' + Date.now();
+        const localUrl = 'data/products.json?t=' + Date.now();
+        const res = await fetch(rawUrl).catch(() => fetch(localUrl));
+        if (res && res.ok) {
           const catalog = await res.json();
-          catalogProduct = catalog.find(p => p.sku === targetSku);
+          catalogProduct = catalog.find(p => p.sku === targetSku || p.id === targetSku);
         }
       } catch (err) {
-        console.warn("Could not fetch data/products.json in customizer", err);
+        console.warn("Could not fetch products database in customizer", err);
       }
     }
 
@@ -313,7 +326,8 @@
         }
       }
 
-    if (catalogProduct && catalogProduct.images && state.product.color) {
+    // Only match color image if user did NOT explicitly navigate with a specific image selection
+    if (!params.get("img") && catalogProduct && catalogProduct.images && state.product.color) {
       const matchCol = catalogProduct.images.find(img => img.toLowerCase().includes(state.product.color.toLowerCase()));
       if (matchCol) state.product.image = matchCol;
     }
@@ -725,17 +739,38 @@
     }
 
     const img = new Image();
-    if (state.product.image && state.product.image.startsWith("http") && !state.product.image.includes(window.location.hostname)) {
-      img.crossOrigin = "anonymous";
-    }
+    img.crossOrigin = "anonymous";
     img.onload = function () {
       state.garmentImgObj = img;
       drawCanvas();
     };
+    let retryAttempt = 0;
     img.onerror = function () {
+      retryAttempt++;
+      if (retryAttempt === 1) {
+        // Retry with GitHub Raw to immediately load newly uploaded admin assets
+        let clean = (state.product.image || "").replace(/^https?:\/\/[^\/]+\//, '');
+        clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+        clean = clean.replace(/^\/+/, '');
+        if (clean) {
+          img.src = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
+          return;
+        }
+      }
+      if (retryAttempt === 2 && catalogProduct && catalogProduct.image) {
+        img.src = catalogProduct.image;
+        return;
+      }
       img.src = "assets/fabric8_logo_noneedle_cropped.png";
     };
-    img.src = state.product.image || "assets/products/Polo American Blue 3.webp?v=5";
+
+    let initialSrc = state.product.image || "assets/products/Polo American Blue 3.webp?v=5";
+    if (initialSrc.startsWith('assets/') && typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+      // Prioritize raw GitHub url if newly added to ensure zero 404 delay
+      img.src = initialSrc;
+    } else {
+      img.src = initialSrc;
+    }
   }
 
   // Main Real-Time Canvas Preview Engine

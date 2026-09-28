@@ -807,6 +807,8 @@ async function loadProducts(forceSync = false) {
   // 3. Background Real-Time Sync with Firebase Realtime Database (non-blocking)
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   const freshTime = Date.now();
+  let firebaseSuccess = false;
+  
   try {
     const [settingsData, productsData] = await Promise.all([
       fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
@@ -828,6 +830,7 @@ async function loadProducts(forceSync = false) {
 
     const rawList = Array.isArray(productsData) ? productsData.filter(Boolean) : (productsData && typeof productsData === 'object' ? Object.values(productsData).filter(Boolean) : []);
     if (rawList.length > 0) {
+      firebaseSuccess = true;
       rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
       const oldStr = JSON.stringify(products || []);
       const newStr = JSON.stringify(rawList);
@@ -846,24 +849,47 @@ async function loadProducts(forceSync = false) {
         initSite();
         siteInitialized = true;
       }
-      return;
     }
   } catch (err) {
     console.warn("Firebase primary sync notice:", err);
   }
 
-  // 4. Fallback to local static files ONLY if Firebase is completely offline/unreachable
-  if (!siteInitialized) {
+  // 4. Fallback to GitHub Raw and local static files if Firebase is offline/unreachable or returns null (e.g. Permission Denied)
+  if (!firebaseSuccess) {
     try {
-      const fallbackRes = await fetch('data/products.json?t=' + freshTime);
-      if (fallbackRes.ok) {
+      const freshTime = Date.now();
+      const rawUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/data/products.json?t=' + freshTime;
+      const localUrl = 'data/products.json?t=' + freshTime;
+      
+      let fallbackRes;
+      const host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168')) {
+        fallbackRes = await fetch(localUrl).catch(() => fetch(rawUrl));
+      } else {
+        fallbackRes = await fetch(rawUrl).catch(() => fetch(localUrl));
+      }
+
+      if (fallbackRes && fallbackRes.ok) {
         const fallbackList = await fallbackRes.json();
         if (Array.isArray(fallbackList) && fallbackList.length > 0) {
-          products = fallbackList;
-          products.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-          initSite();
-          siteInitialized = true;
-          return;
+          fallbackList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+          const oldStr = JSON.stringify(products || []);
+          const newStr = JSON.stringify(fallbackList);
+          
+          if (oldStr !== newStr || !siteInitialized) {
+            products = fallbackList;
+            colorMatchCache.clear();
+            try {
+              localStorage.setItem("fabric8_products_cache", newStr);
+              localStorage.setItem("fabric8_products_cache_time", freshTime.toString());
+            } catch (e) {}
+            
+            const grid = document.getElementById("productGrid");
+            if (grid) delete grid.dataset.renderedKey;
+            
+            initSite();
+            siteInitialized = true;
+          }
         }
       }
     } catch(e) {}
@@ -2727,7 +2753,9 @@ function getImagesForColor(product, targetColor) {
         return reg.test(imgNorm);
       });
     });
-    matchedImgs = fallback.length > 0 ? fallback : [product.image || product.images[0]];
+    matchedImgs = fallback.length > 0 
+      ? fallback 
+      : (Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : [product.image || "assets/white.png"]);
   }
 
   matchedImgs.sort((a, b) => {
