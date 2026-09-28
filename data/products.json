@@ -17,6 +17,7 @@
       "2XL"
     ],
     "colors": [
+      "Purple Blue",
       "Pink",
       "Beige",
       "White",
@@ -36,7 +37,6 @@
       "Navy",
       "Olive Green",
       "Orange",
-      "Purple Blue",
       "Purple",
       "Red",
       "Turquoise Blue",
@@ -55,11 +55,13 @@
       "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
       "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
       "Blue": "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
+      "Light Grey": "assets/products/1790358669131_Light_Grey_Light_grey.webp",
       "Navy": "assets/products/1790358670220_Polo_Navy.webp",
       "Orange": "assets/products/1790358672817_Polo_Orange.webp",
-      "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "Purple Blue": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "Red": "assets/products/1790358675503_Polo_Red.webp",
-      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp"
+      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
+      "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -128,6 +130,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "assets/products/1790358673674_Polo_Pink.webp",
       "assets/products/1790358659699_Polo_Beige.webp",
       "assets/products/1790358663502_Polo_Burgundy.webp",
@@ -146,17 +149,16 @@
       "assets/products/1790358670220_Polo_Navy.webp",
       "assets/products/1790358671142_Army_Green_Olive_Green.webp",
       "assets/products/1790358672817_Polo_Orange.webp",
-      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "assets/products/1790358675503_Polo_Red.webp",
       "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
       "assets/products/1790358677712_Polo_Yellow.webp",
       "assets/products/1790358678682_American_Blue_American_Blue.webp"
     ],
-    "image": "assets/products/1790358673674_Polo_Pink.webp",
+    "image": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/1790358673674_Polo_Pink.webp",
+      "url": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "name": null
     }
   },
