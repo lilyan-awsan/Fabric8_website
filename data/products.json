@@ -2521,7 +2521,7 @@
     "id": "nnn",
     "sku": "nnn",
     "name": "lll",
-    "category": "HEAD WEAR",
+    "category": "Top Wear",
     "gender": "Women",
     "sectors": "Corporate, Hospitality",
     "short": "ssss",
@@ -2530,8 +2530,8 @@
       "one size"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Navy",
       "Grey",
       "Burgundy",
@@ -2625,10 +2625,10 @@
     ],
     "image": "assets/products/1790630132970_1790604406381_Polo_White_Back.webp",
     "mainImageSelection": {
-      "type": "pending",
-      "index": 2,
-      "url": null,
-      "name": "Burgundy_sketch_1790604400034_dark_sky_American_Blue_American_Blue.webp"
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790630132970_1790604406381_Polo_White_Back.webp",
+      "name": null
     }
   }
 ]
