@@ -997,10 +997,10 @@
       "2XL"
     ],
     "colors": [
+      "Burgundy",
       "White",
       "Beige",
       "Black",
-      "Burgundy",
       "Charcoal",
       "Green",
       "Light Blue",
@@ -1087,21 +1087,21 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Scrub Burgundy Set.webp",
       "assets/products/Scrub Navy Set.webp",
       "assets/products/Scrub White Set.webp",
       "assets/products/Scrub Black Set.webp",
-      "assets/products/Scrub Burgundy Set.webp",
       "assets/products/Scrub Charcoal Set.webp",
       "assets/products/Scrub Green Set.webp",
       "assets/products/Scrub Light Blue Set.webp",
       "assets/products/Scrub Olive Green  Set.webp",
       "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
     ],
-    "image": "assets/products/Scrub Navy Set.webp",
+    "image": "assets/products/Scrub Burgundy Set.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Scrub Navy Set.webp",
+      "url": "assets/products/Scrub Burgundy Set.webp",
       "name": null
     }
   },
