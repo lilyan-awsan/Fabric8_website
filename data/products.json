@@ -767,10 +767,7 @@
     "short": "Adjustable branded cap for outdoor or retail teams.",
     "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
     "sizes": [
-      "S",
-      "M",
-      "L",
-      "XL"
+      "One Size"
     ],
     "colors": [
       "Green",
@@ -788,6 +785,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Green": "assets/products/Cap Green.webp",
       "Red": "assets/products/Cap Red.webp",
       "White": "assets/products/Cap White.webp",
       "American Blue": "assets/products/Cap American Blue.webp",
@@ -795,7 +793,6 @@
       "Brown": "assets/products/Cap Brown.webp",
       "Burgundy": "assets/products/Cap Burgundy.webp",
       "Charcoal": "assets/products/Cap Charcoal.webp",
-      "Green": "assets/products/Cap Green.webp",
       "Kiwi": "assets/products/Cap Kiwi 2.webp",
       "Navy": "assets/products/Cap Navy.webp",
       "Yellow": "assets/products/Cap Yellow 2.webp"
