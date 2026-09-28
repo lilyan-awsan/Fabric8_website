@@ -35,6 +35,77 @@ let products = [];
 let siteSettings = {};
 const colorMatchCache = new Map();
 
+let activeCatalogColor = "all";
+let activeStudioColor = "White";
+let selectedProductSku = "F8-001";
+let selectedCustomization = null;
+
+let textWizardStep = 1;
+let embroideryData = {
+  type: '', size: 'medium', fontStyle: 'block', threadColor: 'Black',
+  lineCount: 1, selectedStyleSku: '', position: '',
+  textLines: { line1: '', line2: '', line3: '' }
+};
+const threadColors = [
+  { name: 'Red', hex: '#b7342b' },
+  { name: 'Blue', hex: '#2f6fb3' },
+  { name: 'Black', hex: '#111111' },
+  { name: 'White', hex: '#ffffff' },
+  { name: 'Gold', hex: '#ffd700' },
+  { name: 'Navy', hex: '#17233f' },
+  { name: 'Grey', hex: '#9a9a96' },
+  { name: 'Green', hex: '#2f873d' },
+  { name: 'Burgundy', hex: '#800020' },
+  { name: 'Orange', hex: '#ff8c00' },
+  { name: 'Purple', hex: '#800080' },
+  { name: 'Pink', hex: '#ffc0cb' }
+];
+
+const colorMap = {
+  Black: "#111111",
+  White: "#ffffff",
+  Navy: "#17233f",
+  Grey: "#9a9a96",
+  "Light Grey": "#d3d3d3",
+  Green: "#2f873d",
+  "Dark Green": "#1e4d2b",
+  "Light Green": "#7bc676",
+  "light green": "#7bc676",
+  Lime: "#a3e635",
+  Mint: "#86efac",
+  "Olive Green": "#556b2f",
+  "Forest Green": "#1e4d2b",
+  "Army Green": "#4b5320",
+  Red: "#b7342b",
+  Burgundy: "#6e1f32",
+  Beige: "#cbb99d",
+  Charcoal: "#3a3d3d",
+  Blue: "#2f6fb3",
+  "Light Blue": "#add8e6",
+  "Baby Blue": "#89cff0",
+  "Turquoise Blue": "#00b5e2",
+  "Deep Turquoise": "#008a90",
+  "Ocean Blue": "#0077be",
+  "American Blue": "#3b3b6d",
+  "Puple Blue": "#4b0082",
+  "Purple Blue": "#4b0082",
+  Kiwi: "#8ee53f",
+  Pink: "#ffc0cb",
+  Brown: "#5c4033",
+  Orange: "#ffa500",
+  Yellow: "#ffd700",
+  "Light Yellow": "#fffacd",
+  Purple: "#800080",
+  "Black Striped": "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
+  Striped: "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
+  "Custom Colors": "linear-gradient(135deg,#2f873d,#75aee0,#e79aa3,#d3d116)"
+};
+
+let activeSectorFilter = "All";
+let activeCategoryFilter = "All";
+let activeSearchTerm = "";
+let activeSortTerm = "featured";
+
 window.resolveAssetUrl = function(url, defaultFallback = '') {
   if (!url) return defaultFallback;
   let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
@@ -798,8 +869,7 @@ async function loadProducts(forceSync = false) {
     } catch(e) {}
   }
 }
-// Start loading
-loadProducts();
+// loadProducts is executed safely after all declarations at the bottom of the script
 
 // Real-time cross-tab synchronization listener
 window.addEventListener('storage', (e) => {
@@ -828,79 +898,6 @@ window.addEventListener('storage', (e) => {
     } catch (err) {}
   }
 });
-
-
-let activeCatalogColor = "all";
-let activeStudioColor = "White";
-let selectedProductSku = "F8-001";
-let selectedCustomization = null;
-
-let textWizardStep = 1;
-let embroideryData = {
-  type: '', size: 'medium', fontStyle: 'block', threadColor: 'Black',
-  lineCount: 1, selectedStyleSku: '', position: '',
-  textLines: { line1: '', line2: '', line3: '' }
-};
-const threadColors = [
-  { name: 'Red', hex: '#b7342b' },
-  { name: 'Blue', hex: '#2f6fb3' },
-  { name: 'Black', hex: '#111111' },
-  { name: 'White', hex: '#ffffff' },
-  { name: 'Gold', hex: '#ffd700' },
-  { name: 'Navy', hex: '#17233f' },
-  { name: 'Grey', hex: '#9a9a96' },
-  { name: 'Green', hex: '#2f873d' },
-  { name: 'Burgundy', hex: '#800020' },
-  { name: 'Orange', hex: '#ff8c00' },
-  { name: 'Purple', hex: '#800080' },
-  { name: 'Pink', hex: '#ffc0cb' }
-];
-
-const colorMap = {
-  Black: "#111111",
-  White: "#ffffff",
-  Navy: "#17233f",
-  Grey: "#9a9a96",
-  "Light Grey": "#d3d3d3",
-  Green: "#2f873d",
-  "Dark Green": "#1e4d2b",
-  "Light Green": "#7bc676",
-  "light green": "#7bc676",
-  Lime: "#a3e635",
-  Mint: "#86efac",
-  "Olive Green": "#556b2f",
-  "Forest Green": "#1e4d2b",
-  "Army Green": "#4b5320",
-  Red: "#b7342b",
-  Burgundy: "#6e1f32",
-  Beige: "#cbb99d",
-  Charcoal: "#3a3d3d",
-  Blue: "#2f6fb3",
-  "Light Blue": "#add8e6",
-  "Baby Blue": "#89cff0",
-  "Turquoise Blue": "#00b5e2",
-  "Deep Turquoise": "#008a90",
-  "Ocean Blue": "#0077be",
-  "American Blue": "#3b3b6d",
-  "Puple Blue": "#4b0082",
-  "Purple Blue": "#4b0082",
-  Kiwi: "#8ee53f",
-  Pink: "#ffc0cb",
-  Brown: "#5c4033",
-  Orange: "#ffa500",
-  Yellow: "#ffd700",
-  "Light Yellow": "#fffacd",
-  Purple: "#800080",
-  "Black Striped": "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
-  Striped: "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
-  "Custom Colors": "linear-gradient(135deg,#2f873d,#75aee0,#e79aa3,#d3d116)"
-};
-
-
-let activeSectorFilter = "All";
-let activeCategoryFilter = "All";
-let activeSearchTerm = "";
-let activeSortTerm = "featured";
 
 function renderFilters() {
   let allowedSectors = ["Food & beverage", "Hospitality", "Corporate", "Healthcare", "Industrial"];
@@ -5003,4 +5000,13 @@ if (typeof window !== 'undefined' && window.addEventListener) {
       window.handleImgError(e.target);
     }
   }, true);
+}
+
+// Start loading products and initializing site safely
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { loadProducts(); });
+  } else {
+    loadProducts();
+  }
 }
