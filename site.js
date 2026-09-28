@@ -687,7 +687,7 @@ function loadCart() {
 async function loadProducts(forceSync = false) {
   let siteInitialized = false;
 
-  // 1. Instant 0ms perceived load from localStorage cache if available
+  // 1. Instant 0ms perceived load: LocalStorage Cache
   try {
     const cachedSettings = localStorage.getItem("fabric8_admin_settings_cache");
     if (cachedSettings) {
@@ -709,7 +709,15 @@ async function loadProducts(forceSync = false) {
     }
   } catch (e) {}
 
-  // Instant Skeleton Placeholders if completely empty cache on initial visit
+  // 2. If localStorage has no products, instantly initialize from embedded data (0ms delay)
+  if (!siteInitialized && typeof window !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS) && window.FABRIC8_DEFAULT_PRODUCTS.length > 0) {
+    products = [...window.FABRIC8_DEFAULT_PRODUCTS];
+    products.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    initSite();
+    siteInitialized = true;
+  }
+
+  // Instant Skeleton Placeholders ONLY if absolutely no data exists yet
   if (!siteInitialized) {
     const grid = document.getElementById("productGrid");
     if (grid && !grid.dataset.renderedKey) {
@@ -725,7 +733,7 @@ async function loadProducts(forceSync = false) {
     }
   }
 
-  // 2. Direct Background Real-Time Sync with Firebase Realtime Database
+  // 3. Background Real-Time Sync with Firebase Realtime Database (non-blocking)
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   const freshTime = Date.now();
   try {
@@ -773,7 +781,7 @@ async function loadProducts(forceSync = false) {
     console.warn("Firebase primary sync notice:", err);
   }
 
-  // 3. Fallback to local static files ONLY if Firebase is completely offline/unreachable
+  // 4. Fallback to local static files ONLY if Firebase is completely offline/unreachable
   if (!siteInitialized) {
     try {
       const fallbackRes = await fetch('data/products.json?t=' + freshTime);
