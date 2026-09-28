@@ -1010,15 +1010,16 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
       "Navy": "assets/products/Scrub Navy Set.webp",
       "White": "assets/products/Scrub White Set.webp",
       "Black": "assets/products/Scrub Black Set.webp",
-      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
       "Charcoal": "assets/products/Scrub Charcoal Set.webp",
       "Green": "assets/products/Scrub Green Set.webp",
       "Light Blue": "assets/products/Scrub Light Blue Set.webp",
       "Olive Green": "assets/products/Scrub Olive Green  Set.webp",
-      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
+      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
+      "Beige": "assets/products/1790636863936_Scrub_Beige_Set.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1095,7 +1096,12 @@
       "assets/products/Scrub Green Set.webp",
       "assets/products/Scrub Light Blue Set.webp",
       "assets/products/Scrub Olive Green  Set.webp",
-      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
+      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
+      "assets/products/1790636863936_Scrub_Beige_Set.webp",
+      "assets/products/1790636864944_Scrub_Beige_Side.webp",
+      "assets/products/1790636865792_Scrub_Beige_Trousers_Back.webp",
+      "assets/products/1790636866705_Scrub_Beige_Trousers_Side.webp",
+      "assets/products/1790636867576_Scrub_Beige.webp"
     ],
     "image": "assets/products/Scrub Burgundy Set.webp",
     "mainImageSelection": {
