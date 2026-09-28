@@ -45,6 +45,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
       "Pink": "assets/products/1790358673674_Polo_Pink.webp",
       "Beige": "assets/products/1790358659699_Polo_Beige.webp",
@@ -66,7 +67,6 @@
       "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
       "Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
       "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
       "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
