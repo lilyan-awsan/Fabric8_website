@@ -1229,9 +1229,9 @@
       "2XL"
     ],
     "colors": [
+      "Grey",
       "White",
       "Black",
-      "Grey",
       "Black Striped"
     ],
     "colorHexMap": {},
@@ -1297,18 +1297,18 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Full Apron Grey.webp",
       "assets/products/Full Apron Striped Black.webp",
       "assets/products/Full Apron White.webp",
       "assets/products/Full Apron Black.webp",
       "assets/products/Full Apron White Side.webp",
-      "assets/products/Full Apron White Back.webp",
-      "assets/products/Full Apron Grey.webp"
+      "assets/products/Full Apron White Back.webp"
     ],
-    "image": "assets/products/Full Apron Striped Black.webp",
+    "image": "assets/products/Full Apron Grey.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Full Apron Striped Black.webp",
+      "url": "assets/products/Full Apron Grey.webp",
       "name": null
     }
   },
