@@ -2300,7 +2300,7 @@
     "id": "F8-024",
     "sku": "F8-024",
     "name": "Zip-up Hoodie",
-    "category": "Top Wear",
+    "category": "Outer Wear",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
     "short": "Easy-layer hoodie for year-round versatility.",
@@ -2314,11 +2314,11 @@
       "2XL"
     ],
     "colors": [
+      "Navy",
       "White",
       "Black",
       "Charcoal",
-      "Light Grey",
-      "Navy"
+      "Light Grey"
     ],
     "colorHexMap": {},
     "colorImageMap": {
