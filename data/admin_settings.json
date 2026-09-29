@@ -81,7 +81,7 @@
         "name": "WhatsApp",
         "iconKey": "whatsapp",
         "url": "https://wa.me/962796788240",
-        "active": true,
+        "active": false,
         "shape": "square"
       }
     ],
