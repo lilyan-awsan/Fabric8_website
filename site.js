@@ -4513,7 +4513,7 @@ function renderShowcase() {
   showcase.dataset.rendered = "true";
 
   const shuffled = [...products].sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, 5);
+  const selected = shuffled.slice(0, 4);
   
   showcase.style.display = 'grid';
   showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
@@ -4526,7 +4526,7 @@ function renderShowcase() {
       cardImages = [p.image, ...cardImages.filter(img => img !== p.image)];
     }
     const mainImg = cardImages[0] || p.image || 'White Polo Shirt.png';
-    const imgSrc = mainImg.startsWith('http') ? mainImg : mainImg;
+    const imgSrc = window.resolveAssetUrl ? window.resolveAssetUrl(mainImg) : (mainImg.startsWith('http') ? mainImg : mainImg);
     
     return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column;">
       <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; position: relative;">
