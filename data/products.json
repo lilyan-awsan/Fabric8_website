@@ -1520,9 +1520,9 @@
       "2XL"
     ],
     "colors": [
+      "Grey",
       "White",
       "Black",
-      "Grey",
       "Black Striped"
     ],
     "colorHexMap": {},
@@ -1577,16 +1577,16 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Half Apron W Pocket Grey.webp",
       "assets/products/Half Apron W Pocket Striped Black.webp",
       "assets/products/Half Apron W Pocket White.webp",
-      "assets/products/Half Apron W Pocket Black.webp",
-      "assets/products/Half Apron W Pocket Grey.webp"
+      "assets/products/Half Apron W Pocket Black.webp"
     ],
-    "image": "assets/products/Half Apron W Pocket Striped Black.webp",
+    "image": "assets/products/Half Apron W Pocket Grey.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Half Apron W Pocket Striped Black.webp",
+      "url": "assets/products/Half Apron W Pocket Grey.webp",
       "name": null
     }
   },
