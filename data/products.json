@@ -1109,7 +1109,7 @@
     "id": "F8-013",
     "sku": "F8-013",
     "name": "Chef Pants",
-    "category": "Bottom Wear",
+    "category": "BOTTOM WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Comfortable, durable pants built for the kitchen.",
@@ -1123,8 +1123,8 @@
       "2XL"
     ],
     "colors": [
-      "Black Striped",
       "Black",
+      "Black Striped",
       "Grey"
     ],
     "colorHexMap": {},
@@ -1135,7 +1135,7 @@
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "moq": "18 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
