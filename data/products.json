@@ -306,8 +306,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/Beret Hat Black.webp",
       "White": "assets/products/Beret Hat White Side.webp",
+      "Black": "assets/products/Beret Hat Black.webp",
       "Grey": "assets/products/1790358924541_Beret_Hat_Grey_1.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
@@ -317,7 +317,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790358926338_sketch_TECHNICALS-13.webp",
+    "sketch": "",
     "sketchDescription": "",
     "supportedPlacements": [
       "Front Center"
