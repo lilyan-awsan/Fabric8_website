@@ -2546,7 +2546,7 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/1790803047025_Formal_trousers_Black_Back.webp"
+      "Black": "assets/products/1790803047818_Formal_trousers_Black_Front.webp"
     },
     "fabric": "Premium Poly-Viscos Blend",
     "gsm": "180  GSM",
@@ -2612,17 +2612,17 @@
     "supportedFinishes": [],
     "customizationCapability": "none",
     "images": [
-      "assets/products/1790803047025_Formal_trousers_Black_Back.webp",
       "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+      "assets/products/1790803047025_Formal_trousers_Black_Back.webp",
       "assets/products/1790803048750_Formal_trousers_Black_Side_2.webp",
       "assets/products/1790803049605_Formal_trousers_Black_Side.webp"
     ],
-    "image": "assets/products/1790803047025_Formal_trousers_Black_Back.webp",
+    "image": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
     "mainImageSelection": {
-      "type": "pending",
-      "index": 1,
-      "url": null,
-      "name": "Formal_trousers_Black_Front.webp"
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+      "name": null
     }
   }
 ]
