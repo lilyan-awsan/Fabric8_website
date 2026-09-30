@@ -2624,5 +2624,131 @@
       "url": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
       "name": null
     }
+  },
+  {
+    "id": "F8-004",
+    "sku": "F8-004",
+    "name": "Long-sleeved T-Shirt",
+    "category": "TOP WEAR",
+    "gender": "Unisex",
+    "sectors": "Corporate, Hospitality, Food & beverage, Healthcare, Industrial",
+    "short": "Comfortable layer for casual or outdoor work settings.",
+    "long": "Comfortable layer for casual or outdoor work settings.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "American Blue",
+      "Burgundy",
+      "Charcoal",
+      "Army Green",
+      "Light Blue"
+    ],
+    "colorHexMap": {
+      "American Blue": "#0910d7",
+      "Burgundy": "#6b1d2f",
+      "Charcoal": "#333333",
+      "Army Green": "#647f5c",
+      "Light Blue": "#bedafe"
+    },
+    "colorImageMap": {
+      "Black": "assets/products/1790804040719_T-shirt_Long_sleeve_Black.webp",
+      "Burgundy": "assets/products/1790804041558_T-shirt_Long_sleeve_Burgundy_2.webp",
+      "Charcoal": "assets/products/1790804042435_T-shirt_Long_sleeve_Charcoal.webp",
+      "Navy": "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp",
+      "White": "assets/products/1790804045533_T-shirt_Long_sleeve_White_Back.webp"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "12",
+    "maxQty": "",
+    "availability": "Made to Order",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/1790804038398_American_Blue_Long_sleeve_American_Blue.webp",
+      "assets/products/1790804039571_Army_Green_Long_sleeve_Army_Green.webp",
+      "assets/products/1790804040719_T-shirt_Long_sleeve_Black.webp",
+      "assets/products/1790804041558_T-shirt_Long_sleeve_Burgundy_2.webp",
+      "assets/products/1790804042435_T-shirt_Long_sleeve_Charcoal.webp",
+      "assets/products/1790804043576_Light_Blue_Long_sleeve_Light_Blue.webp",
+      "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp",
+      "assets/products/1790804045533_T-shirt_Long_sleeve_White_Back.webp",
+      "assets/products/1790804046425_T-shirt_Long_sleeve_White_Side.webp",
+      "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp"
+    ],
+    "image": "assets/products/1790804038398_American_Blue_Long_sleeve_American_Blue.webp",
+    "mainImageSelection": {
+      "type": "pending",
+      "index": 9,
+      "url": null,
+      "name": "T-shirt_Long_sleeve_White.webp"
+    }
   }
 ]
