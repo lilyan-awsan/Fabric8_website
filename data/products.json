@@ -2642,8 +2642,8 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "White",
+      "Black",
       "Navy",
       "American Blue",
       "Burgundy",
@@ -2663,7 +2663,7 @@
       "Burgundy": "assets/products/1790804041558_T-shirt_Long_sleeve_Burgundy_2.webp",
       "Charcoal": "assets/products/1790804042435_T-shirt_Long_sleeve_Charcoal.webp",
       "Navy": "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp",
-      "White": "assets/products/1790804045533_T-shirt_Long_sleeve_White_Back.webp"
+      "White": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -2732,6 +2732,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
       "assets/products/1790804038398_American_Blue_Long_sleeve_American_Blue.webp",
       "assets/products/1790804039571_Army_Green_Long_sleeve_Army_Green.webp",
       "assets/products/1790804040719_T-shirt_Long_sleeve_Black.webp",
@@ -2740,15 +2741,14 @@
       "assets/products/1790804043576_Light_Blue_Long_sleeve_Light_Blue.webp",
       "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp",
       "assets/products/1790804045533_T-shirt_Long_sleeve_White_Back.webp",
-      "assets/products/1790804046425_T-shirt_Long_sleeve_White_Side.webp",
-      "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp"
+      "assets/products/1790804046425_T-shirt_Long_sleeve_White_Side.webp"
     ],
-    "image": "assets/products/1790804038398_American_Blue_Long_sleeve_American_Blue.webp",
+    "image": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
     "mainImageSelection": {
-      "type": "pending",
-      "index": 9,
-      "url": null,
-      "name": "T-shirt_Long_sleeve_White.webp"
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
+      "name": null
     }
   },
   {
