@@ -2754,7 +2754,7 @@
   {
     "id": "F8-026",
     "sku": "F8-026",
-    "name": "Crewneck Pullover",
+    "name": "Crewneck  Pullover",
     "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Corporate, Hospitality, Food & beverage, Healthcare, Industrial",
@@ -2857,10 +2857,10 @@
     ],
     "image": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
     "mainImageSelection": {
-      "type": "pending",
+      "type": "existing",
       "index": 0,
-      "url": null,
-      "name": "Crewneck_pullover_long-sleeve_Black_Front.webp"
+      "url": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+      "name": null
     }
   }
 ]
