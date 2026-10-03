@@ -1236,8 +1236,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Grey": "assets/products/Full Apron Grey.webp",
       "Black Striped": "assets/products/Full Apron Striped Black.webp",
+      "Grey": "assets/products/Full Apron Grey.webp",
       "White": "assets/products/Full Apron White.webp",
       "Black": "assets/products/Full Apron Black.webp"
     },
@@ -1248,7 +1248,7 @@
     "maxQty": "",
     "availability": "",
     "care": "",
-    "sketch": "assets/products/1790361740483_sketch_TECHNICALS-15.webp",
+    "sketch": "assets/products/1791036418301_sketch_TECHNICALS-26.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Center Chest (Bib)",
