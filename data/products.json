@@ -2654,11 +2654,11 @@
       "Light Blue": "#bedafe"
     },
     "colorImageMap": {
+      "White": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
       "Black": "assets/products/1790804040719_T-shirt_Long_sleeve_Black.webp",
       "Burgundy": "assets/products/1790804041558_T-shirt_Long_sleeve_Burgundy_2.webp",
       "Charcoal": "assets/products/1790804042435_T-shirt_Long_sleeve_Charcoal.webp",
-      "Navy": "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp",
-      "White": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp"
+      "Navy": "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -2667,7 +2667,7 @@
     "maxQty": "",
     "availability": "Made to Order",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1791036365303_sketch_TECHNICALS-24.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
