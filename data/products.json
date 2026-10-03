@@ -891,13 +891,13 @@
       "2XL"
     ],
     "colors": [
-      "Black",
-      "White"
+      "White",
+      "Black"
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/Chef Jacket Black.webp",
-      "White": "assets/products/Chef jacket white.webp"
+      "White": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
+      "Black": "assets/products/1791036529233_chef_jacket_black_front_snaps.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -957,20 +957,18 @@
     ],
     "customizationCapability": "both",
     "images": [
-      "assets/products/Chef Jacket Black.webp",
-      "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
-      "assets/products/Chef jacket white.webp",
-      "assets/products/Chef Jacket White Side.webp",
       "assets/products/1790360611444_chef_jacket_white_1-4.webp",
       "assets/products/1790361492168_Chef_Jacket_White_Back_1-2.webp",
       "assets/products/1790361493146_Chef_Jacket_White_Side_1-1.webp",
-      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp"
+      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp",
+      "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
+      "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
     ],
-    "image": "assets/products/Chef Jacket Black.webp",
+    "image": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Chef Jacket Black.webp",
+      "url": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
       "name": null
     }
   },
