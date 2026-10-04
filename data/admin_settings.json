@@ -104,5 +104,61 @@
     "contactHQTitle": "Corporate Headquarters",
     "contactGlobalTitle": "Global Contact",
     "contactEmailTitle": "Direct Email"
-  }
+  },
+  "categories1stLayer": [
+    {
+      "name": "Food & beverage",
+      "enabled": true
+    },
+    {
+      "name": "Hospitality",
+      "enabled": true
+    },
+    {
+      "name": "Corporate",
+      "enabled": true
+    },
+    {
+      "name": "Healthcare",
+      "enabled": true
+    },
+    {
+      "name": "Industrial",
+      "enabled": true
+    },
+    {
+      "name": "Education",
+      "enabled": false
+    },
+    {
+      "name": "Aviation",
+      "enabled": false
+    }
+  ],
+  "categories2ndLayer": [
+    {
+      "name": "HEAD WEAR",
+      "enabled": true
+    },
+    {
+      "name": "TOP WEAR",
+      "enabled": true
+    },
+    {
+      "name": "BOTTOM WEAR",
+      "enabled": true
+    },
+    {
+      "name": "OUTER WEAR",
+      "enabled": true
+    },
+    {
+      "name": "ACCESSORIES",
+      "enabled": true
+    },
+    {
+      "name": "eyas",
+      "enabled": true
+    }
+  ]
 }
