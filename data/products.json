@@ -1499,7 +1499,7 @@
     "id": "F8-017",
     "sku": "F8-017",
     "name": "Half Apron With Pocket",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Practical waist apron with built-in storage.",
@@ -1520,10 +1520,10 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Grey": "assets/products/Half Apron W Pocket Grey.webp",
       "Black Striped": "assets/products/Half Apron W Pocket Striped Black.webp",
       "White": "assets/products/Half Apron W Pocket White.webp",
-      "Black": "assets/products/Half Apron W Pocket Black.webp",
-      "Grey": "assets/products/Half Apron W Pocket Grey.webp"
+      "Black": "assets/products/Half Apron W Pocket Black.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
