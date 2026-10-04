@@ -2068,7 +2068,7 @@
     "id": "F8-022",
     "sku": "F8-022",
     "name": "Shirts",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Versatile button-up for a polished corporate look.",
@@ -2082,10 +2082,10 @@
       "2XL"
     ],
     "colors": [
+      "Light Blue",
       "White",
       "Black",
       "Grey",
-      "Light Blue",
       "Navy"
     ],
     "colorHexMap": {},
