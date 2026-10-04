@@ -1109,7 +1109,7 @@
     "name": "Chef Pants",
     "category": "BOTTOM WEAR",
     "gender": "Men / Women / Unisex",
-    "sectors": "Food and beverage, Hospitality",
+    "sectors": "Food and beverage, Hospitality, Food & beverage",
     "short": "Comfortable, durable pants built for the kitchen.",
     "long": "Loose-fit pants designed for comfort and safety in hot kitchen environments with durable stain-resistant fabric.",
     "sizes": [
@@ -1137,7 +1137,7 @@
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790361722109_sketch_TECHNICALS-09.webp",
+    "sketch": "",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Hip Pocket",
