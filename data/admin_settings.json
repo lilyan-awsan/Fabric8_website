@@ -133,6 +133,10 @@
     {
       "enabled": false,
       "name": "Aviation"
+    },
+    {
+      "name": "Sa2labaza",
+      "enabled": true
     }
   ],
   "categories2ndLayer": [
