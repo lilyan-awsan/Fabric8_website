@@ -1587,7 +1587,7 @@
     "id": "F8-018",
     "sku": "F8-018",
     "name": "T-shirt",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Everyday essential for casual team uniforms.",
@@ -1601,25 +1601,25 @@
       "2XL"
     ],
     "colors": [
+      "Navy",
       "White",
       "American Blue",
       "Army Green",
       "Black",
       "Burgundy",
       "Charcoal",
-      "Light Blue",
-      "Navy"
+      "Light Blue"
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Navy": "assets/products/T-shirt Navy.webp",
       "Burgundy": "assets/products/T-shirt Burgundy.webp",
       "White": "assets/products/T-shirt White.webp",
       "American Blue": "assets/products/T-shirt American Blue.webp",
       "Army Green": "assets/products/T-shirt Army Green.webp",
       "Black": "assets/products/T-shirt Black.webp",
       "Charcoal": "assets/products/T-shirt Charcoal.webp",
-      "Light Blue": "assets/products/T-shirt Light Blue.webp",
-      "Navy": "assets/products/T-shirt Navy.webp"
+      "Light Blue": "assets/products/T-shirt Light Blue.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
