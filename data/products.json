@@ -1314,7 +1314,7 @@
     "id": "F8-015",
     "sku": "F8-015",
     "name": "Full Apron With Pocket",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
     "short": "Full-coverage apron with added on-the-job storage.",
@@ -1335,8 +1335,8 @@
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black Striped": "assets/products/Full W pocket Striped Black.webp",
       "Grey": "assets/products/Full Apron W pocket Grey.webp",
+      "Black Striped": "assets/products/Full W pocket Striped Black.webp",
       "White": "assets/products/Full Apron W pocket White.webp",
       "Black": "assets/products/Full W pocket Apron Black.webp"
     },
