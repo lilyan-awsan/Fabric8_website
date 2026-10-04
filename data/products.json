@@ -1121,13 +1121,14 @@
       "2XL"
     ],
     "colors": [
-      "Black",
       "Black Striped",
+      "Black",
       "Grey"
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/Chef Trousers Striped Black.webp",
+      "Black Striped": "assets/products/Chef Trousers Striped Black.webp",
+      "Black": "assets/products/Chef Trousers black.webp",
       "Grey": "assets/products/Chef Trousers Grey.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
