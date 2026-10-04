@@ -659,7 +659,7 @@
     "id": "F8-009",
     "sku": "F8-009",
     "name": "Workwear / Waiter Pants",
-    "category": "Bottom Wear",
+    "category": "BOTTOM WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Polished, comfortable pants for service staff.",
@@ -673,8 +673,8 @@
       "2XL"
     ],
     "colors": [
-      "Beige",
       "Black",
+      "Beige",
       "Navy",
       "Charcoal"
     ],
