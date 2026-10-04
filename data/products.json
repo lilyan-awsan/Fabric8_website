@@ -2857,5 +2857,104 @@
       "url": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
       "name": null
     }
+  },
+  {
+    "id": "F8-26",
+    "sku": "F8-26",
+    "name": "Premium Polo Shirt (Copy)",
+    "category": "TOP WEAR",
+    "gender": "Unisex",
+    "sectors": "Corporate, Hospitality",
+    "short": "Premium corporate polo, clean and professional.",
+    "long": "A tailored, comfortable polo shirt made from durable cotton or cotton-blend fabric. Reinforced collar and cuffs hold their shape through repeated washing, making it ideal for daily corporate wear.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey"
+    ],
+    "colorHexMap": {},
+    "colorImageMap": {},
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "8 pieces",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "assets/products/1790361535692_sketch_TECHNICALS-02.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [],
+    "image": "assets/white.png",
+    "mainImageSelection": {
+      "type": "pending",
+      "index": 0,
+      "url": null,
+      "name": null
+    }
   }
 ]
