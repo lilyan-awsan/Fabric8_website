@@ -107,54 +107,54 @@
   },
   "categories1stLayer": [
     {
-      "name": "Food & beverage",
-      "enabled": true
+      "enabled": true,
+      "name": "Food & beverage"
     },
     {
-      "name": "Hospitality",
-      "enabled": true
+      "enabled": true,
+      "name": "Hospitality"
     },
     {
-      "name": "Corporate",
-      "enabled": true
+      "enabled": true,
+      "name": "Corporate"
     },
     {
-      "name": "Healthcare",
-      "enabled": true
+      "enabled": true,
+      "name": "Healthcare"
     },
     {
-      "name": "Industrial",
-      "enabled": true
+      "enabled": true,
+      "name": "Industrial"
     },
     {
-      "name": "Education",
-      "enabled": false
+      "enabled": true,
+      "name": "Education"
     },
     {
-      "name": "Aviation",
-      "enabled": false
+      "enabled": false,
+      "name": "Aviation"
     }
   ],
   "categories2ndLayer": [
     {
-      "name": "HEAD WEAR",
-      "enabled": true
+      "enabled": true,
+      "name": "HEAD WEAR"
     },
     {
-      "name": "TOP WEAR",
-      "enabled": true
+      "enabled": true,
+      "name": "TOP WEAR"
     },
     {
-      "name": "BOTTOM WEAR",
-      "enabled": true
+      "enabled": true,
+      "name": "BOTTOM WEAR"
     },
     {
-      "name": "OUTER WEAR",
-      "enabled": true
+      "enabled": true,
+      "name": "OUTER WEAR"
     },
     {
-      "name": "ACCESSORIES",
-      "enabled": true
+      "enabled": true,
+      "name": "ACCESSORIES"
     }
   ]
 }
