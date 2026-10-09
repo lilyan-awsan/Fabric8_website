@@ -2647,9 +2647,9 @@
     ],
     "colorHexMap": {
       "American Blue": "#0910d7",
+      "Army Green": "#647f5c",
       "Burgundy": "#6b1d2f",
       "Charcoal": "#333333",
-      "Army Green": "#647f5c",
       "Light Blue": "#bedafe"
     },
     "colorImageMap": {
@@ -2676,36 +2676,36 @@
     ],
     "placements": [
       {
+        "h": 18,
         "name": "Left Chest",
-        "x": 65,
-        "y": 36,
+        "r": 0,
         "w": 18,
-        "h": 18,
-        "r": 0
+        "x": 66.7,
+        "y": 34.8
       },
       {
+        "h": 18,
         "name": "Right Chest",
-        "x": 35,
-        "y": 36,
+        "r": 0,
         "w": 18,
-        "h": 18,
-        "r": 0
+        "x": 26.7,
+        "y": 37.3
       },
       {
+        "h": 35.6,
         "name": "Full Back",
-        "x": 50,
-        "y": 45,
-        "w": 45,
-        "h": 45,
-        "r": 0
+        "r": 0,
+        "w": 20.6,
+        "x": 49.2,
+        "y": 49.2
       },
       {
-        "name": "Upper Sleeve",
-        "x": 84,
-        "y": 34,
-        "w": 13,
         "h": 13,
-        "r": 6
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 61.7,
+        "y": 28.2
       }
     ],
     "dtfPlacements": [
