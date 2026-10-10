@@ -122,11 +122,11 @@
       "name": "Hospitality"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "Corporate"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "Healthcare"
     },
     {
