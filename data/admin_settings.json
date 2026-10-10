@@ -134,11 +134,11 @@
       "name": "Industrial"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Education"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Aviation"
     }
   ],
