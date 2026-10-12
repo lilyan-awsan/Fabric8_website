@@ -2883,14 +2883,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Burgundy": "#6b1d2f",
       "Olive": "#556b2f"
     },
-    "colorImageMap": {
-      "Black": "assets/products/1791791974711_Black_partnership.webp",
-      "White": "assets/products/1791791975880_White_values1.webp",
-      "Navy": "assets/products/1791791976803_Navy_sectors-hero-banner.webp",
-      "kk": "assets/products/1791791977812_kk_fabric8-branding-hero.webp",
-      "Burgundy": "assets/products/1791791978783_Burgundy_fabric8-textile-logistics.webp",
-      "Grey": "assets/products/1791791984466_Grey_fabric8-silk-hero.webp"
-    },
+    "colorImageMap": {},
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180",
     "leadTime": "ss",
@@ -2957,19 +2950,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "dtf_only",
     "images": [
-      "assets/products/1791791974711_Black_partnership.webp",
-      "assets/products/1791791975880_White_values1.webp",
-      "assets/products/1791791976803_Navy_sectors-hero-banner.webp",
-      "assets/products/1791791977812_kk_fabric8-branding-hero.webp",
-      "assets/products/1791791978783_Burgundy_fabric8-textile-logistics.webp",
-      "assets/products/1791791980221_White_logo_noneedle_cropped.webp",
-      "assets/products/1791791981282_Burgundy_favicon2.webp",
-      "assets/products/1791791982377_Black_hero_bg.webp",
-      "assets/products/1791791983569_White_favicon.webp",
-      "assets/products/1791791984466_Grey_fabric8-silk-hero.webp",
-      "assets/products/1791791985422_kk_fabric8-service-people.webp",
-      "assets/products/1791791986340_Burgundy_fabric8-royal-atelier.webp"
+      "assets/products/1791792119311_Screenshot_2026-10-12_110031.webp",
+      "assets/products/1791792120208_Screenshot_2026-10-12_110035.webp",
+      "assets/products/1791792121051_Screenshot_2026-10-12_110040.webp",
+      "assets/products/1791792121732_Screenshot_2026-10-12_110046.webp",
+      "assets/products/1791792122744_Screenshot_2026-10-12_110050.webp",
+      "assets/products/1791792123724_Screenshot_2026-10-12_110056.webp",
+      "assets/products/1791792124452_Screenshot_2026-10-12_110102.webp",
+      "assets/products/1791792125436_Screenshot_2026-10-12_110106.webp",
+      "assets/products/1791792126374_Screenshot_2026-10-12_110110.webp",
+      "assets/products/1791792127190_Screenshot_2026-10-12_110114.webp"
     ],
-    "image": "assets/products/1791791974711_Black_partnership.webp"
+    "image": "assets/products/1791792119311_Screenshot_2026-10-12_110031.webp"
   }
 ];
