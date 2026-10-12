@@ -2876,12 +2876,14 @@
       "Grey",
       "kk",
       "Burgundy",
-      "Olive"
+      "Olive",
+      "Black Striped"
     ],
     "colorHexMap": {
-      "kk": "#31aebf",
       "Burgundy": "#6b1d2f",
-      "Olive": "#556b2f"
+      "Olive": "#556b2f",
+      "kk": "#31aebf",
+      "Black Striped": "repeating-linear-gradient(45deg, #111111, #111111 3px, #ffffff 3px, #ffffff 6px)"
     },
     "colorImageMap": {},
     "fabric": "Premium Poly-Cotton Blend",
@@ -2901,36 +2903,36 @@
     ],
     "placements": [
       {
+        "h": 18,
         "name": "Left Chest",
-        "x": 71.6,
-        "y": 31.7,
+        "r": 0,
         "w": 18,
-        "h": 18,
-        "r": 0
+        "x": 68.2,
+        "y": 44.3
       },
       {
+        "h": 18,
         "name": "Right Chest",
-        "x": 35,
-        "y": 36,
+        "r": 0,
         "w": 18,
-        "h": 18,
-        "r": 0
+        "x": 35,
+        "y": 36
       },
       {
-        "name": "Full Back",
-        "x": 50,
-        "y": 45,
-        "w": 45,
         "h": 45,
-        "r": 0
+        "name": "Full Back",
+        "r": 0,
+        "w": 45,
+        "x": 50,
+        "y": 45
       },
       {
-        "name": "Upper Sleeve",
-        "x": 84,
-        "y": 34,
-        "w": 13,
         "h": 13,
-        "r": 6
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 84,
+        "y": 34
       }
     ],
     "dtfPlacements": [
@@ -2950,8 +2952,8 @@
     ],
     "customizationCapability": "dtf_only",
     "images": [
-      "assets/products/1791792119311_Screenshot_2026-10-12_110031.webp",
       "assets/products/1791792120208_Screenshot_2026-10-12_110035.webp",
+      "assets/products/1791792119311_Screenshot_2026-10-12_110031.webp",
       "assets/products/1791792121051_Screenshot_2026-10-12_110040.webp",
       "assets/products/1791792121732_Screenshot_2026-10-12_110046.webp",
       "assets/products/1791792122744_Screenshot_2026-10-12_110050.webp",
@@ -2961,6 +2963,6 @@
       "assets/products/1791792126374_Screenshot_2026-10-12_110110.webp",
       "assets/products/1791792218638_Screenshot__18_.webp"
     ],
-    "image": "assets/products/1791792119311_Screenshot_2026-10-12_110031.webp"
+    "image": "assets/products/1791792120208_Screenshot_2026-10-12_110035.webp"
   }
 ]
