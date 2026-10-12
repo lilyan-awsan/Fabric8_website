@@ -3,7 +3,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-001",
     "sku": "F8-001",
     "name": "Premium Polo Shirt",
-    "category": "ACCESSORIES",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage",
     "short": "Premium corporate polo, clean and professional.",
@@ -65,10 +65,9 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Orange": "assets/products/1790358672817_Polo_Orange.webp",
       "Red": "assets/products/1790358675503_Polo_Red.webp",
       "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
-      "Light Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
+      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
       "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp",
-      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp"
+      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -204,7 +203,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "moq": "12",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
@@ -287,7 +286,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-005",
     "sku": "F8-005",
     "name": "Chef Beret",
-    "category": "Head Wear",
+    "category": "HEAD WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Modern, low-profile alternative to the toque.",
@@ -307,8 +306,8 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/Beret Hat Black.webp",
       "White": "assets/products/Beret Hat White Side.webp",
+      "Black": "assets/products/Beret Hat Black.webp",
       "Grey": "assets/products/1790358924541_Beret_Hat_Grey_1.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
@@ -318,7 +317,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790358926338_sketch_TECHNICALS-13.webp",
+    "sketch": "assets/products/1790805507199_sketch_TECHNICALS-13.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Front Center"
@@ -365,7 +364,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-006",
     "sku": "F8-006",
     "name": "Chef Bandana",
-    "category": "Accessories",
+    "category": "HEAD WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Practical head covering for active kitchen staff.",
@@ -442,7 +441,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-007",
     "sku": "F8-007",
     "name": "Lab Coats",
-    "category": "Outer Wear",
+    "category": "OUTER WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Healthcare",
     "short": "Crisp, professional coats for healthcare teams.",
@@ -660,7 +659,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-009",
     "sku": "F8-009",
     "name": "Workwear / Waiter Pants",
-    "category": "Bottom Wear",
+    "category": "BOTTOM WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Polished, comfortable pants for service staff.",
@@ -674,8 +673,8 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
-      "Beige",
       "Black",
+      "Beige",
       "Navy",
       "Charcoal"
     ],
@@ -771,15 +770,16 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-010",
     "sku": "F8-010",
     "name": "Caps",
-    "category": "TOP WEAR",
+    "category": "HEAD WEAR",
     "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage, Automotive",
     "short": "Adjustable branded cap for outdoor or retail teams.",
     "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
     "sizes": [
-      "One Size"
+      "one size"
     ],
     "colors": [
+      "Yellow",
       "Green",
       "White",
       "American Blue",
@@ -790,8 +790,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Kiwi",
       "Light Grey",
       "Navy",
-      "Red",
-      "Yellow"
+      "Red"
     ],
     "colorHexMap": {},
     "colorImageMap": {
@@ -852,6 +851,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap Yellow 2.webp",
       "assets/products/Cap Green.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap White.webp",
@@ -863,22 +863,15 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/Cap Charcoal.webp",
       "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Navy.webp",
-      "assets/products/Cap Yellow 2.webp",
       "assets/products/1790357941308_Cap_White_Back_1-1.webp"
     ],
-    "image": "assets/products/Cap Green.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Cap Green.webp",
-      "name": null
-    }
+    "image": "assets/products/Cap Yellow 2.webp"
   },
   {
     "id": "F8-011",
     "sku": "F8-011",
     "name": "Chef Jackets",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Signature double-breasted jacket for culinary professionals.",
@@ -893,14 +886,12 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colors": [
       "White",
-      "Black",
-      "Grey"
+      "Black"
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
-      "White": "assets/products/Chef jacket white.webp",
-      "Grey": "assets/products/Chef Jacket Grey 3.webp"
+      "White": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
+      "Black": "assets/products/1791036529233_chef_jacket_black_front_snaps.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -960,22 +951,18 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
-      "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
-      "assets/products/Chef jacket white.webp",
-      "assets/products/Chef Jacket Black.webp",
-      "assets/products/Chef Jacket White Side.webp",
-      "assets/products/Chef Jacket Grey 3.webp",
-      "assets/products/1790360610510_Chef_Jacket_Grey_1-1.webp",
       "assets/products/1790360611444_chef_jacket_white_1-4.webp",
       "assets/products/1790361492168_Chef_Jacket_White_Back_1-2.webp",
       "assets/products/1790361493146_Chef_Jacket_White_Side_1-1.webp",
-      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp"
+      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp",
+      "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
+      "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
     ],
-    "image": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
+    "image": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/1790360609707_Chef_Jacket_Black_1-1.webp",
+      "url": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
       "name": null
     }
   },
@@ -983,7 +970,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-012",
     "sku": "F8-012",
     "name": "Scrubs",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Healthcare",
     "short": "Comfortable, easy-care scrubs for clinical teams.",
@@ -997,10 +984,10 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Burgundy",
       "White",
       "Beige",
       "Black",
-      "Burgundy",
       "Charcoal",
       "Green",
       "Light Blue",
@@ -1010,15 +997,16 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
       "Navy": "assets/products/Scrub Navy Set.webp",
       "White": "assets/products/Scrub White Set.webp",
       "Black": "assets/products/Scrub Black Set.webp",
-      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
       "Charcoal": "assets/products/Scrub Charcoal Set.webp",
       "Green": "assets/products/Scrub Green Set.webp",
       "Light Blue": "assets/products/Scrub Light Blue Set.webp",
       "Olive Green": "assets/products/Scrub Olive Green  Set.webp",
-      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
+      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
+      "Beige": "assets/products/1790636863936_Scrub_Beige_Set.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1027,7 +1015,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790361703825_sketch_SCRUB_TECHNICAL-01.webp",
+    "sketch": "assets/products/1791036438947_sketch_TECHNICALS-21.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
@@ -1087,21 +1075,25 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Scrub Burgundy Set.webp",
       "assets/products/Scrub Navy Set.webp",
       "assets/products/Scrub White Set.webp",
       "assets/products/Scrub Black Set.webp",
-      "assets/products/Scrub Burgundy Set.webp",
       "assets/products/Scrub Charcoal Set.webp",
       "assets/products/Scrub Green Set.webp",
       "assets/products/Scrub Light Blue Set.webp",
       "assets/products/Scrub Olive Green  Set.webp",
-      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp"
+      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
+      "assets/products/1790636863936_Scrub_Beige_Set.webp",
+      "assets/products/1790636864944_Scrub_Beige_Side.webp",
+      "assets/products/1790636865792_Scrub_Beige_Trousers_Back.webp",
+      "assets/products/1790636867576_Scrub_Beige.webp"
     ],
-    "image": "assets/products/Scrub Navy Set.webp",
+    "image": "assets/products/Scrub Burgundy Set.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Scrub Navy Set.webp",
+      "url": "assets/products/Scrub Burgundy Set.webp",
       "name": null
     }
   },
@@ -1109,9 +1101,9 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-013",
     "sku": "F8-013",
     "name": "Chef Pants",
-    "category": "Bottom Wear",
+    "category": "BOTTOM WEAR",
     "gender": "Men / Women / Unisex",
-    "sectors": "Food and beverage, Hospitality",
+    "sectors": "Food and beverage, Hospitality, Food & beverage",
     "short": "Comfortable, durable pants built for the kitchen.",
     "long": "Loose-fit pants designed for comfort and safety in hot kitchen environments with durable stain-resistant fabric.",
     "sizes": [
@@ -1129,17 +1121,18 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colorHexMap": {},
     "colorImageMap": {
-      "Black": "assets/products/Chef Trousers Striped Black.webp",
+      "Black Striped": "assets/products/Chef Trousers Striped Black.webp",
+      "Black": "assets/products/Chef Trousers black.webp",
       "Grey": "assets/products/Chef Trousers Grey.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
     "leadTime": "14-21 Business Days",
-    "moq": "50 pieces",
+    "moq": "18 pieces",
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790361722109_sketch_TECHNICALS-09.webp",
+    "sketch": "assets/products/1791134573923_sketch_Chef_Pants.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Hip Pocket",
@@ -1215,7 +1208,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-014",
     "sku": "F8-014",
     "name": "Full Apron",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
     "short": "Classic full-coverage apron for kitchen and service staff.",
@@ -1229,17 +1222,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
-      "White",
-      "Black",
+      "Black Striped",
       "Grey",
-      "Black Striped"
+      "White",
+      "Black"
     ],
     "colorHexMap": {},
     "colorImageMap": {
       "Black Striped": "assets/products/Full Apron Striped Black.webp",
+      "Grey": "assets/products/Full Apron Grey.webp",
       "White": "assets/products/Full Apron White.webp",
-      "Black": "assets/products/Full Apron Black.webp",
-      "Grey": "assets/products/Full Apron Grey.webp"
+      "Black": "assets/products/Full Apron Black.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1248,7 +1241,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "maxQty": "",
     "availability": "",
     "care": "",
-    "sketch": "assets/products/1790361740483_sketch_TECHNICALS-15.webp",
+    "sketch": "assets/products/1791036418301_sketch_TECHNICALS-26.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Center Chest (Bib)",
@@ -1298,11 +1291,11 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "customizationCapability": "both",
     "images": [
       "assets/products/Full Apron Striped Black.webp",
+      "assets/products/Full Apron Grey.webp",
       "assets/products/Full Apron White.webp",
       "assets/products/Full Apron Black.webp",
       "assets/products/Full Apron White Side.webp",
-      "assets/products/Full Apron White Back.webp",
-      "assets/products/Full Apron Grey.webp"
+      "assets/products/Full Apron White Back.webp"
     ],
     "image": "assets/products/Full Apron Striped Black.webp",
     "mainImageSelection": {
@@ -1316,7 +1309,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-015",
     "sku": "F8-015",
     "name": "Full Apron With Pocket",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Industrial",
     "short": "Full-coverage apron with added on-the-job storage.",
@@ -1330,17 +1323,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
-      "White",
       "Grey",
-      "Black",
-      "Black Striped"
+      "Black Striped",
+      "White",
+      "Black"
     ],
     "colorHexMap": {},
     "colorImageMap": {
       "Grey": "assets/products/Full Apron W pocket Grey.webp",
+      "Black Striped": "assets/products/Full W pocket Striped Black.webp",
       "White": "assets/products/Full Apron W pocket White.webp",
-      "Black": "assets/products/Full W pocket Apron Black.webp",
-      "Black Striped": "assets/products/Full W pocket Striped Black.webp"
+      "Black": "assets/products/Full W pocket Apron Black.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1399,9 +1392,9 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "customizationCapability": "both",
     "images": [
       "assets/products/Full Apron W pocket Grey.webp",
+      "assets/products/Full W pocket Striped Black.webp",
       "assets/products/Full Apron W pocket White.webp",
-      "assets/products/Full W pocket Apron Black.webp",
-      "assets/products/Full W pocket Striped Black.webp"
+      "assets/products/Full W pocket Apron Black.webp"
     ],
     "image": "assets/products/Full Apron W pocket Grey.webp",
     "mainImageSelection": {
@@ -1415,7 +1408,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-016",
     "sku": "F8-016",
     "name": "Half Apron",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Lightweight waist apron for quick-service environments.",
@@ -1429,8 +1422,8 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
-      "White",
       "Black",
+      "White",
       "Grey"
     ],
     "colorHexMap": {},
@@ -1446,7 +1439,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790361763211_sketch_TECHNICALS-17.webp",
+    "sketch": "assets/products/1791036406008_sketch_TECHNICALS-27.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Bottom Left Corner",
@@ -1501,7 +1494,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-017",
     "sku": "F8-017",
     "name": "Half Apron With Pocket",
-    "category": "Accessories",
+    "category": "ACCESSORIES",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality",
     "short": "Practical waist apron with built-in storage.",
@@ -1515,17 +1508,17 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Grey",
       "White",
       "Black",
-      "Grey",
       "Black Striped"
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Grey": "assets/products/Half Apron W Pocket Grey.webp",
       "Black Striped": "assets/products/Half Apron W Pocket Striped Black.webp",
       "White": "assets/products/Half Apron W Pocket White.webp",
-      "Black": "assets/products/Half Apron W Pocket Black.webp",
-      "Grey": "assets/products/Half Apron W Pocket Grey.webp"
+      "Black": "assets/products/Half Apron W Pocket Black.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -1572,16 +1565,16 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Half Apron W Pocket Grey.webp",
       "assets/products/Half Apron W Pocket Striped Black.webp",
       "assets/products/Half Apron W Pocket White.webp",
-      "assets/products/Half Apron W Pocket Black.webp",
-      "assets/products/Half Apron W Pocket Grey.webp"
+      "assets/products/Half Apron W Pocket Black.webp"
     ],
-    "image": "assets/products/Half Apron W Pocket Striped Black.webp",
+    "image": "assets/products/Half Apron W Pocket Grey.webp",
     "mainImageSelection": {
       "type": "existing",
       "index": 0,
-      "url": "assets/products/Half Apron W Pocket Striped Black.webp",
+      "url": "assets/products/Half Apron W Pocket Grey.webp",
       "name": null
     }
   },
@@ -1589,7 +1582,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-018",
     "sku": "F8-018",
     "name": "T-shirt",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Everyday essential for casual team uniforms.",
@@ -1603,25 +1596,25 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Navy",
       "White",
       "American Blue",
       "Army Green",
       "Black",
       "Burgundy",
       "Charcoal",
-      "Light Blue",
-      "Navy"
+      "Light Blue"
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Navy": "assets/products/T-shirt Navy.webp",
       "Burgundy": "assets/products/T-shirt Burgundy.webp",
       "White": "assets/products/T-shirt White.webp",
       "American Blue": "assets/products/T-shirt American Blue.webp",
       "Army Green": "assets/products/T-shirt Army Green.webp",
       "Black": "assets/products/T-shirt Black.webp",
       "Charcoal": "assets/products/T-shirt Charcoal.webp",
-      "Light Blue": "assets/products/T-shirt Light Blue.webp",
-      "Navy": "assets/products/T-shirt Navy.webp"
+      "Light Blue": "assets/products/T-shirt Light Blue.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
@@ -2070,7 +2063,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-022",
     "sku": "F8-022",
     "name": "Shirts",
-    "category": "Top Wear",
+    "category": "TOP WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Versatile button-up for a polished corporate look.",
@@ -2084,10 +2077,10 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Light Blue",
       "White",
       "Black",
       "Grey",
-      "Light Blue",
       "Navy"
     ],
     "colorHexMap": {},
@@ -2300,7 +2293,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-024",
     "sku": "F8-024",
     "name": "Zip-up Hoodie",
-    "category": "Top Wear",
+    "category": "OUTER WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
     "short": "Easy-layer hoodie for year-round versatility.",
@@ -2314,11 +2307,11 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "2XL"
     ],
     "colors": [
+      "Navy",
       "White",
       "Black",
       "Charcoal",
-      "Light Grey",
-      "Navy"
+      "Light Grey"
     ],
     "colorHexMap": {},
     "colorImageMap": {
@@ -2415,7 +2408,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-025",
     "sku": "F8-025",
     "name": "Puffer Jacket",
-    "category": "Outer Wear",
+    "category": "OUTER WEAR",
     "gender": "Men / Women / Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
     "short": "Insulated outerwear for cold-weather work environments.",
@@ -2444,7 +2437,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "maxQty": "",
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "sketch": "",
+    "sketch": "assets/products/1791036388098_sketch_TECHNICALS-28.webp",
     "sketchDescription": "",
     "supportedPlacements": [
       "Left Chest",
@@ -2514,6 +2507,348 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "type": "existing",
       "index": 0,
       "url": "assets/products/Puff Jacket Black.webp",
+      "name": null
+    }
+  },
+  {
+    "id": "F8-002",
+    "sku": "F8-002",
+    "name": "Formal Pants",
+    "category": "BOTTOM WEAR",
+    "gender": "Men",
+    "sectors": "Corporate, Hospitality, Healthcare, Food & beverage",
+    "short": "Premium, high-end finish, comfortable pants for a sharp look.",
+    "long": "Premium, high-end finish, comfortable pants for a sharp look.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44",
+      "46",
+      "48",
+      "50",
+      "52"
+    ],
+    "colors": [
+      "Black"
+    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Black": "assets/products/1790803047818_Formal_trousers_Black_Front.webp"
+    },
+    "fabric": "Premium Poly-Viscos Blend",
+    "gsm": "180  GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "12",
+    "maxQty": "",
+    "availability": "Made to Order",
+    "care": "Machine wash cold. Do not Bleach. No Tumble Dry.",
+    "sketch": "assets/products/1791036377263_sketch_TECHNICALS-23.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [],
+    "customizationCapability": "none",
+    "images": [
+      "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+      "assets/products/1790803047025_Formal_trousers_Black_Back.webp",
+      "assets/products/1790803048750_Formal_trousers_Black_Side_2.webp",
+      "assets/products/1790803049605_Formal_trousers_Black_Side.webp"
+    ],
+    "image": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+      "name": null
+    }
+  },
+  {
+    "id": "F8-004",
+    "sku": "F8-004",
+    "name": "Long-sleeved T-Shirt",
+    "category": "TOP WEAR",
+    "gender": "Unisex",
+    "sectors": "Corporate, Hospitality, Food & beverage, Healthcare, Industrial",
+    "short": "Comfortable layer for casual or outdoor work settings.",
+    "long": "Comfortable layer for casual or outdoor work settings.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "White",
+      "Black",
+      "Navy",
+      "American Blue",
+      "Burgundy",
+      "Charcoal",
+      "Army Green",
+      "Light Blue"
+    ],
+    "colorHexMap": {
+      "American Blue": "#0910d7",
+      "Army Green": "#647f5c",
+      "Burgundy": "#6b1d2f",
+      "Charcoal": "#333333",
+      "Light Blue": "#bedafe"
+    },
+    "colorImageMap": {
+      "White": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
+      "Black": "assets/products/1790804040719_T-shirt_Long_sleeve_Black.webp",
+      "Burgundy": "assets/products/1790804041558_T-shirt_Long_sleeve_Burgundy_2.webp",
+      "Charcoal": "assets/products/1790804042435_T-shirt_Long_sleeve_Charcoal.webp",
+      "Navy": "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "12",
+    "maxQty": "",
+    "availability": "Made to Order",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "assets/products/1791036365303_sketch_TECHNICALS-24.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 66.7,
+        "y": 34.8
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 27.9,
+        "y": 30.9
+      },
+      {
+        "h": 35.6,
+        "name": "Full Back",
+        "r": 0,
+        "w": 20.6,
+        "x": 49.2,
+        "y": 49.2
+      },
+      {
+        "h": 13,
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 61.7,
+        "y": 28.2
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
+      "assets/products/1790804038398_American_Blue_Long_sleeve_American_Blue.webp",
+      "assets/products/1790804039571_Army_Green_Long_sleeve_Army_Green.webp",
+      "assets/products/1790804040719_T-shirt_Long_sleeve_Black.webp",
+      "assets/products/1790804041558_T-shirt_Long_sleeve_Burgundy_2.webp",
+      "assets/products/1790804042435_T-shirt_Long_sleeve_Charcoal.webp",
+      "assets/products/1790804043576_Light_Blue_Long_sleeve_Light_Blue.webp",
+      "assets/products/1790804044432_T-shirt_Long_sleeve_Navy.webp",
+      "assets/products/1790804045533_T-shirt_Long_sleeve_White_Back.webp",
+      "assets/products/1790804046425_T-shirt_Long_sleeve_White_Side.webp"
+    ],
+    "image": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790804047362_T-shirt_Long_sleeve_White.webp",
+      "name": null
+    }
+  },
+  {
+    "id": "F8-026",
+    "sku": "F8-026",
+    "name": "Crewneck Pullover",
+    "category": "TOP WEAR",
+    "gender": "Men / Women / Unisex",
+    "sectors": "Corporate, Hospitality, Food & beverage, Healthcare, Industrial",
+    "short": "Clean. Comfortable. Effortlessly cool, made for easy everyday wear.",
+    "long": "Effortless comfort, timeless style. Our Crewneck Pullovers are designed with a clean, versatile silhouette that makes everyday dressing easy. Perfect for layering or wearing solo. A workplace essential in cold weather, keeps your look polished, relaxed, and effortlessly on point.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey"
+    ],
+    "colorHexMap": {
+      "Grey": "#7f8c8d"
+    },
+    "colorImageMap": {
+      "Black": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+      "Grey": "assets/products/1790805166252_Crewneck_pullover_long-sleeve_Light_Grey_Front.webp",
+      "Navy": "assets/products/1790805167214_Crewneck_pullover_long-sleeve_Navy_Front.webp",
+      "White": "assets/products/1790805168084_Crewneck_pullover_long-White_Back.webp"
+    },
+    "fabric": "Premium 80% ring spun combed cotton and 20% recycled polyester",
+    "gsm": "280 GSM",
+    "leadTime": "14-21 Business Days",
+    "moq": "16",
+    "maxQty": "",
+    "availability": "Made to Order",
+    "care": "Machine wash cold, No Tumble Dry",
+    "sketch": "assets/products/1791036331768_sketch_TECHNICALS-25.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 65,
+        "y": 36
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 41.4,
+        "y": 34.2
+      },
+      {
+        "h": 45,
+        "name": "Full Back",
+        "r": 0,
+        "w": 45,
+        "x": 50,
+        "y": 45
+      },
+      {
+        "h": 13,
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 84,
+        "y": 34
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+      "assets/products/1790805166252_Crewneck_pullover_long-sleeve_Light_Grey_Front.webp",
+      "assets/products/1790805167214_Crewneck_pullover_long-sleeve_Navy_Front.webp",
+      "assets/products/1790805168084_Crewneck_pullover_long-White_Back.webp",
+      "assets/products/1790805168885_Crewneck_pullover_long-White_Front.webp",
+      "assets/products/1791036305320_Crewneck_pullover_long-White_Side.webp"
+    ],
+    "image": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+    "mainImageSelection": {
+      "type": "existing",
+      "index": 0,
+      "url": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
       "name": null
     }
   }
