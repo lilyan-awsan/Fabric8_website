@@ -2826,18 +2826,25 @@
       "Navy",
       "Grey",
       "Black Striped",
-      "Royal Blue"
+      "Royal Blue",
+      "Red",
+      "Burgundy"
     ],
     "colorHexMap": {
       "Black Striped": "repeating-linear-gradient(45deg, #111111, #111111 3px, #ffffff 3px, #ffffff 6px)",
-      "Royal Blue": "#2980b9"
+      "Royal Blue": "#2980b9",
+      "Red": "#c0392b",
+      "Burgundy": "#6b1d2f"
     },
     "colorImageMap": {
       "Black": "assets/products/1791809399713_11_Black_2026-10-12_110114.webp",
-      "Royal Blue": "assets/products/1791809389750_0_Screenshot_2026-10-12_110031.webp",
-      "White": "assets/products/1791809390853_1_White_2026-10-12_110114.webp",
-      "Navy": "assets/products/1791809391820_2_Navy_2026-10-12_110031.webp",
-      "Grey": "assets/products/1791809392670_3_Grey_2026-10-12_110035.webp"
+      "White": "assets/products/1791809389750_0_Screenshot_2026-10-12_110031.webp",
+      "Navy": "assets/products/1791809390853_1_White_2026-10-12_110114.webp",
+      "Grey": "assets/products/1791809391820_2_Navy_2026-10-12_110031.webp",
+      "Black Striped": "assets/products/1791809392670_3_Grey_2026-10-12_110035.webp",
+      "Royal Blue": "assets/products/1791809393496_4_Grey_2026-10-12_110040.webp",
+      "Red": "assets/products/1791809395308_6_Grey_2026-10-12_110050.webp",
+      "Burgundy": "assets/products/1791809396216_7_Royal_Blue_2026-10-12_110056.webp"
     },
     "fabric": "nn",
     "gsm": "ee",
@@ -2922,12 +2929,8 @@
       "assets/products/1791809391820_2_Navy_2026-10-12_110031.webp",
       "assets/products/1791809392670_3_Grey_2026-10-12_110035.webp",
       "assets/products/1791809393496_4_Grey_2026-10-12_110040.webp",
-      "assets/products/1791809394365_5_Royal_Blue_2026-10-12_110046.webp",
       "assets/products/1791809395308_6_Grey_2026-10-12_110050.webp",
-      "assets/products/1791809396216_7_Royal_Blue_2026-10-12_110056.webp",
-      "assets/products/1791809397070_8_Black_Striped_2026-10-12_110102.webp",
-      "assets/products/1791809397935_9_White_2026-10-12_110106.webp",
-      "assets/products/1791809398809_10_Black_Striped_2026-10-12_110110.webp"
+      "assets/products/1791809396216_7_Royal_Blue_2026-10-12_110056.webp"
     ],
     "image": "assets/products/1791809399713_11_Black_2026-10-12_110114.webp"
   }
