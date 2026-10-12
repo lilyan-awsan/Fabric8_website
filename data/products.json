@@ -2802,15 +2802,5 @@
       "Full Back",
       "Upper Sleeve"
     ]
-  },
-  {
-    "sku": "F8-TEST-LIVE-SUCCESS",
-    "name": "Test Live Product Verification",
-    "category": "HEAD WEAR",
-    "price": 120,
-    "colorImageMap": {},
-    "images": [],
-    "image": "assets/white.png",
-    "id": "F8-TEST-LIVE-SUCCESS"
   }
 ]
