@@ -99,7 +99,7 @@
         "name": "TikTok",
         "iconKey": "tiktok",
         "url": "https://hello",
-        "active": true,
+        "active": false,
         "shape": "square"
       }
     ],
