@@ -165,7 +165,7 @@
     },
     {
       "name": "Mdry wear",
-      "enabled": true
+      "enabled": false
     }
   ]
 }
