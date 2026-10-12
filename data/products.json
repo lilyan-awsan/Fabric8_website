@@ -2851,5 +2851,121 @@
       "url": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
       "name": null
     }
+  },
+  {
+    "id": "f8-077",
+    "sku": "f8-077",
+    "name": "mdry",
+    "category": "HEAD WEAR",
+    "gender": "Men",
+    "sectors": "Corporate, Hospitality, Healthcare",
+    "short": "hi",
+    "long": "helloo",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL",
+      "mdry4"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey",
+      "kk",
+      "Burgundy",
+      "Olive"
+    ],
+    "colorHexMap": {
+      "kk": "#31aebf",
+      "Burgundy": "#6b1d2f",
+      "Olive": "#556b2f"
+    },
+    "colorImageMap": {
+      "White": "assets/products/1791791748090_Cap_White_Side.webp",
+      "Olive": "assets/products/1791791752900_Olive_Army_Green.webp",
+      "Black": "assets/products/1791791753937_T-shirt_Black.webp",
+      "Burgundy": "assets/products/1791791754824_T-shirt_Burgundy.webp",
+      "Navy": "assets/products/1791791756025_T-shirt_Navy.webp"
+    },
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180",
+    "leadTime": "ss",
+    "moq": "24",
+    "maxQty": "72",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "assets/products/1791791756762_sketch_1790706428634_bg_0_Screenshot_2025-11-10_084205.webp",
+    "sketchDescription": "klklklklk",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 71.6,
+        "y": 31.7,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "dtf_only",
+    "images": [
+      "assets/products/1791791748090_Cap_White_Side.webp",
+      "assets/products/1791791749133_Chef_Bandana_White_Side.webp",
+      "assets/products/1791791750090_Lab_Coat_White_Side.webp",
+      "assets/products/1791791751084_Scrub_White_Female_Side.webp",
+      "assets/products/1791791751810_Scrub_White_Trousers_Side.webp",
+      "assets/products/1791791752900_Olive_Army_Green.webp",
+      "assets/products/1791791753937_T-shirt_Black.webp",
+      "assets/products/1791791754824_T-shirt_Burgundy.webp",
+      "assets/products/1791791756025_T-shirt_Navy.webp"
+    ],
+    "image": "assets/products/1791791748090_Cap_White_Side.webp"
   }
 ]
