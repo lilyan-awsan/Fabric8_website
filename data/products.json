@@ -1,151 +1,192 @@
 [
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
+    "availability": "Made to Order",
+    "care": "",
+    "category": "HEAD WEAR",
     "colorImageMap": {
-      "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "Army Green": "assets/products/1790358671142_Army_Green_Olive_Green.webp",
-      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
-      "Black": "assets/products/1790358660717_Polo_Black.webp",
-      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
-      "Brown": "assets/products/1790358662661_Polo_Brown.webp",
-      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
-      "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
-      "Dark Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
-      "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
-      "Green": "assets/products/1790358666198_Polo_Green.webp",
-      "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
-      "Light Blue": "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
-      "Light Grey": "assets/products/1790358669131_Light_Grey_Light_grey.webp",
-      "Navy": "assets/products/1790358670220_Polo_Navy.webp",
-      "Olive Green": "assets/products/1790358658500_Olive_Green_Army_Green.webp",
-      "Orange": "assets/products/1790358672817_Polo_Orange.webp",
-      "Pink": "assets/products/1790358673674_Polo_Pink.webp",
-      "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
-      "Red": "assets/products/1790358675503_Polo_Red.webp",
-      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp",
-      "White": "assets/products/Polo White Front.webp",
-      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp"
+      "American Blue": "assets/products/Cap American Blue.webp",
+      "Black": "assets/products/Cap Black.webp",
+      "Brown": "assets/products/Cap Brown.webp",
+      "Burgundy": "assets/products/Cap Burgundy.webp",
+      "Charcoal": "assets/products/Cap Charcoal.webp",
+      "Green": "assets/products/Cap Green.webp",
+      "Kiwi": "assets/products/Cap Kiwi 2.webp",
+      "Navy": "assets/products/Cap Navy.webp",
+      "Red": "assets/products/Cap Red.webp",
+      "White": "assets/products/Cap White.webp",
+      "Yellow": "assets/products/Cap Yellow 2.webp"
     },
     "colors": [
-      "Blue",
-      "Purple",
-      "Purple Blue",
-      "Pink",
-      "Beige",
+      "Yellow",
+      "Green",
       "White",
       "American Blue",
-      "Army Green",
       "Black",
       "Brown",
       "Burgundy",
       "Charcoal",
-      "Dark Green",
-      "Green",
       "Kiwi",
-      "Light Blue",
       "Light Grey",
-      "Light Yellow",
       "Navy",
-      "Olive Green",
-      "Orange",
-      "Red",
-      "Turquoise Blue",
-      "Deep Turquoise",
-      "Yellow"
+      "Red"
     ],
     "customizationCapability": "both",
     "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Front Center Panel",
+      "Side Panel"
     ],
     "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Front Center Panel",
+      "Side Panel"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-010",
+    "image": "assets/products/Cap Yellow 2.webp",
+    "images": [
+      "assets/products/Cap Yellow 2.webp",
+      "assets/products/Cap Green.webp",
+      "assets/products/Cap Red.webp",
+      "assets/products/Cap White.webp",
+      "assets/products/Cap American Blue.webp",
+      "assets/products/Cap White Side.webp",
+      "assets/products/Cap Black.webp",
+      "assets/products/Cap Brown.webp",
+      "assets/products/Cap Burgundy.webp",
+      "assets/products/Cap Charcoal.webp",
+      "assets/products/Cap Kiwi 2.webp",
+      "assets/products/Cap Navy.webp",
+      "assets/products/1790357941308_Cap_White_Back_1-1.webp"
+    ],
+    "leadTime": "",
+    "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
+    "maxQty": "",
+    "moq": "24",
+    "name": "Caps",
+    "placements": [
+      {
+        "h": 100,
+        "name": "Front Center Panel",
+        "r": 100,
+        "w": 100,
+        "x": 100,
+        "y": 100
+      },
+      {
+        "h": 100,
+        "name": "Side Panel",
+        "r": 100,
+        "w": 100,
+        "x": 100,
+        "y": 100
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage, Automotive",
+    "short": "Adjustable branded cap for outdoor or retail teams.",
+    "sizes": [
+      "one size"
+    ],
+    "sketch": "assets/products/1790361638552_sketch_TECHNICALS-04.webp",
+    "sketchDescription": "",
+    "sku": "F8-010",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Front Center Panel",
+      "Side Panel"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "BOTTOM WEAR",
+    "colorImageMap": {
+      "Beige": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
+      "Black": "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
+      "Charcoal": "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
+      "Navy": "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
+    },
+    "colors": [
+      "Beige",
+      "Black",
+      "Charcoal",
+      "Navy"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
+    ],
+    "embroideryPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-001",
-    "image": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+    "id": "F8-008",
+    "image": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
     "images": [
-      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
-      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
-      "assets/products/1790358673674_Polo_Pink.webp",
-      "assets/products/1790358659699_Polo_Beige.webp",
-      "assets/products/1790358663502_Polo_Burgundy.webp",
-      "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
-      "assets/products/Polo White Front.webp",
-      "assets/products/Polo White Side.webp",
-      "assets/products/Polo White Back.webp",
-      "assets/products/1790358658500_Olive_Green_Army_Green.webp",
-      "assets/products/1790358660717_Polo_Black.webp",
-      "assets/products/1790358662661_Polo_Brown.webp",
-      "assets/products/1790358664388_Polo_Charcoal.webp",
-      "assets/products/1790358666198_Polo_Green.webp",
-      "assets/products/1790358666999_Polo_Kiwi.webp",
-      "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
-      "assets/products/1790358669131_Light_Grey_Light_grey.webp",
-      "assets/products/1790358670220_Polo_Navy.webp",
-      "assets/products/1790358671142_Army_Green_Olive_Green.webp",
-      "assets/products/1790358672817_Polo_Orange.webp",
-      "assets/products/1790358675503_Polo_Red.webp",
-      "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
-      "assets/products/1790358677712_Polo_Yellow.webp",
-      "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
+      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
+      "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+      "assets/products/1790360459985_Cargo_Beige_trousers_Side_1-2.webp",
+      "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
+      "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
+      "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
     ],
     "leadTime": "14-21 Business Days",
-    "long": "A tailored, comfortable polo shirt made from durable cotton or cotton-blend fabric. Reinforced collar and cuffs hold their shape through repeated washing, making it ideal for daily corporate wear.",
+    "long": "Rugged pants with utility pockets and reinforced stitching for facilities, warehouse, or maintenance staff.",
     "mainImageSelection": {
       "index": 0,
       "type": "existing",
-      "url": "assets/products/1790606198521_1790358661712_Polo_blue.webp"
+      "url": "assets/products/1790360460895_Cargo_Beige_trousers.webp"
     },
     "maxQty": "",
     "moq": "8 pieces",
-    "name": "Premium Polo Shirt",
+    "name": "Cargo Pants",
     "placements": [
       {
-        "h": 5,
-        "name": "Left Chest",
+        "h": 15,
+        "name": "Left Hip Pocket",
         "r": 0,
-        "w": 5,
-        "x": 15,
-        "y": 10
+        "w": 15,
+        "x": 62,
+        "y": 35
       },
       {
-        "h": 18,
-        "name": "Right Chest",
+        "h": 15,
+        "name": "Right Hip Pocket",
         "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
+        "w": 15,
+        "x": 38,
+        "y": 35
       },
       {
-        "h": 42,
-        "name": "Center Back",
+        "h": 16,
+        "name": "Left Cargo Pocket / Leg",
         "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
+        "w": 16,
+        "x": 65,
+        "y": 55
       },
       {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
+        "h": 16,
+        "name": "Right Cargo Pocket / Leg",
+        "r": 0,
+        "w": 16,
+        "x": 35,
+        "y": 55
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage",
-    "short": "Premium corporate polo, clean and professional.",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Durable, functional pants for on-the-go teams.",
     "sizes": [
       "XS",
       "S",
@@ -154,18 +195,18 @@
       "XL",
       "2XL"
     ],
-    "sketch": "assets/products/1790361535692_sketch_TECHNICALS-02.webp",
+    "sketch": "assets/products/1790361604454_sketch_TECHNICALS-07.webp",
     "sketchDescription": "",
-    "sku": "F8-001",
+    "sku": "F8-008",
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
     "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
     ]
   },
   {
@@ -283,82 +324,6 @@
     "care": "Machine wash cold, do not bleach.",
     "category": "HEAD WEAR",
     "colorImageMap": {
-      "Black": "assets/products/Beret Hat Black.webp",
-      "Grey": "assets/products/1790358924541_Beret_Hat_Grey_1.webp",
-      "White": "assets/products/Beret Hat White Side.webp"
-    },
-    "colors": [
-      "White",
-      "Black",
-      "Grey"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "embroideryPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-005",
-    "image": "assets/products/Beret Hat White Side.webp",
-    "images": [
-      "assets/products/Beret Hat White Side.webp",
-      "assets/products/Beret Hat Black.webp",
-      "assets/products/Beret Hat White 1.png",
-      "assets/products/1790358924541_Beret_Hat_Grey_1.webp",
-      "assets/products/1790358925293_Beret_Hat_Grey_Side.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A soft, flat-topped kitchen cap offering a contemporary look for culinary teams.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Beret Hat White Side.webp"
-    },
-    "maxQty": "",
-    "moq": "10 pieces",
-    "name": "Chef Beret",
-    "placements": [
-      {
-        "h": 25,
-        "name": "Front Center",
-        "r": 0,
-        "w": 25,
-        "x": 50,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality",
-    "short": "Modern, low-profile alternative to the toque.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790805507199_sketch_TECHNICALS-13.webp",
-    "sketchDescription": "",
-    "sku": "F8-005",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Front Center"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "HEAD WEAR",
-    "colorImageMap": {
       "Black": "assets/products/Chef Bandana Black.webp",
       "Grey": "assets/products/Chef Bandana Grey.webp",
       "White": "assets/products/Chef Bandana White.webp"
@@ -432,85 +397,60 @@
   {
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
-    "category": "OUTER WEAR",
+    "category": "HEAD WEAR",
     "colorImageMap": {
-      "Grey": "assets/products/1790359031221_Lab_Coat_grey.webp",
-      "White": "assets/products/1790359032241_Lab_Coat_White.webp"
+      "Black": "assets/products/Beret Hat Black.webp",
+      "Grey": "assets/products/1790358924541_Beret_Hat_Grey_1.webp",
+      "White": "assets/products/Beret Hat White Side.webp"
     },
     "colors": [
       "White",
+      "Black",
       "Grey"
     ],
     "customizationCapability": "both",
     "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Front Center Panel",
+      "Side Panel"
     ],
     "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+      "Front Center Panel",
+      "Side Panel"
     ],
     "fabric": "Premium Poly-Cotton Blend",
     "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-007",
-    "image": "assets/products/1790359032241_Lab_Coat_White.webp",
+    "id": "F8-005",
+    "image": "assets/products/Beret Hat White Side.webp",
     "images": [
-      "assets/products/1790359032241_Lab_Coat_White.webp",
-      "assets/products/Lab Coat White Side.webp",
-      "assets/products/Lab Coat White Back.webp",
-      "assets/products/1790359031221_Lab_Coat_grey.webp"
+      "assets/products/Beret Hat White Side.webp",
+      "assets/products/Beret Hat Black.webp",
+      "assets/products/Beret Hat White 1.png",
+      "assets/products/1790358924541_Beret_Hat_Grey_1.webp",
+      "assets/products/1790358925293_Beret_Hat_Grey_Side.webp"
     ],
     "leadTime": "14-21 Business Days",
-    "long": "A knee-length lab coat designed for clinical and laboratory environments, with durable easy-care fabric and convenient pockets.",
+    "long": "A soft, flat-topped kitchen cap offering a contemporary look for culinary teams.",
     "mainImageSelection": {
       "index": 0,
       "type": "existing",
-      "url": "assets/products/1790359032241_Lab_Coat_White.webp"
+      "url": "assets/products/Beret Hat White Side.webp"
     },
     "maxQty": "",
-    "moq": "8 pieces",
-    "name": "Lab Coats",
+    "moq": "10 pieces",
+    "name": "Chef Beret",
     "placements": [
       {
-        "h": 18,
-        "name": "Left Chest",
+        "h": 25,
+        "name": "Front Center",
         "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
+        "w": 25,
         "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
         "y": 48
       }
     ],
-    "sectors": "Healthcare",
-    "short": "Crisp, professional coats for healthcare teams.",
+    "sectors": "Food and beverage, Hospitality",
+    "short": "Modern, low-profile alternative to the toque.",
     "sizes": [
       "XS",
       "S",
@@ -519,337 +459,15 @@
       "XL",
       "2XL"
     ],
-    "sketch": "assets/products/1790361574944_sketch_TECHNICALS-06.webp",
+    "sketch": "assets/products/1790805507199_sketch_TECHNICALS-13.webp",
     "sketchDescription": "",
-    "sku": "F8-007",
+    "sku": "F8-005",
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
     "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "BOTTOM WEAR",
-    "colorImageMap": {
-      "Beige": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
-      "Black": "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
-      "Charcoal": "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
-      "Navy": "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
-    },
-    "colors": [
-      "Beige",
-      "Black",
-      "Charcoal",
-      "Navy"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ],
-    "embroideryPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-008",
-    "image": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
-    "images": [
-      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
-      "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
-      "assets/products/1790360459985_Cargo_Beige_trousers_Side_1-2.webp",
-      "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
-      "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
-      "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "Rugged pants with utility pockets and reinforced stitching for facilities, warehouse, or maintenance staff.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/1790360460895_Cargo_Beige_trousers.webp"
-    },
-    "maxQty": "",
-    "moq": "8 pieces",
-    "name": "Cargo Pants",
-    "placements": [
-      {
-        "h": 15,
-        "name": "Left Hip Pocket",
-        "r": 0,
-        "w": 15,
-        "x": 62,
-        "y": 35
-      },
-      {
-        "h": 15,
-        "name": "Right Hip Pocket",
-        "r": 0,
-        "w": 15,
-        "x": 38,
-        "y": 35
-      },
-      {
-        "h": 16,
-        "name": "Left Cargo Pocket / Leg",
-        "r": 0,
-        "w": 16,
-        "x": 65,
-        "y": 55
-      },
-      {
-        "h": 16,
-        "name": "Right Cargo Pocket / Leg",
-        "r": 0,
-        "w": 16,
-        "x": 35,
-        "y": 55
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Durable, functional pants for on-the-go teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361604454_sketch_TECHNICALS-07.webp",
-    "sketchDescription": "",
-    "sku": "F8-008",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "BOTTOM WEAR",
-    "colorImageMap": {
-      "Beige": "assets/products/Trousers Beige.webp",
-      "Black": "assets/products/Trousers Black.webp",
-      "Charcoal": "assets/products/Trousers Charcoal.webp",
-      "Navy": "assets/products/Trousers Navy Front.webp"
-    },
-    "colors": [
-      "Black",
-      "Beige",
-      "Navy",
-      "Charcoal"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ],
-    "embroideryPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-009",
-    "image": "assets/products/Trousers Black.webp",
-    "images": [
-      "assets/products/Trousers Black.webp",
-      "assets/products/Trousers Beige.webp",
-      "assets/products/Trousers Navy Front.webp",
-      "assets/products/Trousers Black back.webp",
-      "assets/products/Trousers Charcoal.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A versatile pant designed for all-day wear in hospitality and service settings, with wrinkle-resistant fabric and comfortable movement.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Trousers Black.webp"
-    },
-    "maxQty": "",
-    "moq": "8 pieces",
-    "name": "Workwear / Waiter Pants",
-    "placements": [
-      {
-        "h": 15,
-        "name": "Left Hip Pocket",
-        "r": 0,
-        "w": 15,
-        "x": 62,
-        "y": 35
-      },
-      {
-        "h": 15,
-        "name": "Right Hip Pocket",
-        "r": 0,
-        "w": 15,
-        "x": 38,
-        "y": 35
-      },
-      {
-        "h": 16,
-        "name": "Left Cargo Pocket / Leg",
-        "r": 0,
-        "w": 16,
-        "x": 65,
-        "y": 55
-      },
-      {
-        "h": 16,
-        "name": "Right Cargo Pocket / Leg",
-        "r": 0,
-        "w": 16,
-        "x": 35,
-        "y": 55
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Polished, comfortable pants for service staff.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361623238_sketch_TECHNICALS-08.webp",
-    "sketchDescription": "",
-    "sku": "F8-009",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ]
-  },
-  {
-    "availability": "Made to Order",
-    "care": "",
-    "category": "HEAD WEAR",
-    "colorImageMap": {
-      "American Blue": "assets/products/Cap American Blue.webp",
-      "Black": "assets/products/Cap Black.webp",
-      "Brown": "assets/products/Cap Brown.webp",
-      "Burgundy": "assets/products/Cap Burgundy.webp",
-      "Charcoal": "assets/products/Cap Charcoal.webp",
-      "Green": "assets/products/Cap Green.webp",
-      "Kiwi": "assets/products/Cap Kiwi 2.webp",
-      "Navy": "assets/products/Cap Navy.webp",
-      "Red": "assets/products/Cap Red.webp",
-      "White": "assets/products/Cap White.webp",
-      "Yellow": "assets/products/Cap Yellow 2.webp"
-    },
-    "colors": [
-      "Yellow",
-      "Green",
-      "White",
-      "American Blue",
-      "Black",
-      "Brown",
-      "Burgundy",
-      "Charcoal",
-      "Kiwi",
-      "Light Grey",
-      "Navy",
-      "Red"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "embroideryPlacements": [
-      "Front Center Panel",
-      "Side Panel"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-010",
-    "image": "assets/products/Cap Yellow 2.webp",
-    "images": [
-      "assets/products/Cap Yellow 2.webp",
-      "assets/products/Cap Green.webp",
-      "assets/products/Cap Red.webp",
-      "assets/products/Cap White.webp",
-      "assets/products/Cap American Blue.webp",
-      "assets/products/Cap White Side.webp",
-      "assets/products/Cap Black.webp",
-      "assets/products/Cap Brown.webp",
-      "assets/products/Cap Burgundy.webp",
-      "assets/products/Cap Charcoal.webp",
-      "assets/products/Cap Kiwi 2.webp",
-      "assets/products/Cap Navy.webp",
-      "assets/products/1790357941308_Cap_White_Back_1-1.webp"
-    ],
-    "leadTime": "",
-    "long": "A structured cap that provides sun protection and a cohesive team look, easily customized with embroidery.",
-    "maxQty": "",
-    "moq": "24",
-    "name": "Caps",
-    "placements": [
-      {
-        "h": 100,
-        "name": "Front Center Panel",
-        "r": 100,
-        "w": 100,
-        "x": 100,
-        "y": 100
-      },
-      {
-        "h": 100,
-        "name": "Side Panel",
-        "r": 100,
-        "w": 100,
-        "x": 100,
-        "y": 100
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage, Automotive",
-    "short": "Adjustable branded cap for outdoor or retail teams.",
-    "sizes": [
-      "one size"
-    ],
-    "sketch": "assets/products/1790361638552_sketch_TECHNICALS-04.webp",
-    "sketchDescription": "",
-    "sku": "F8-010",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Front Center Panel",
-      "Side Panel"
+      "Front Center"
     ]
   },
   {
@@ -947,135 +565,6 @@
       "Left Chest",
       "Right Chest",
       "Upper Left Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "ACCESSORIES",
-    "colorImageMap": {
-      "Beige": "assets/products/1790636863936_Scrub_Beige_Set.webp",
-      "Black": "assets/products/Scrub Black Set.webp",
-      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
-      "Charcoal": "assets/products/Scrub Charcoal Set.webp",
-      "Green": "assets/products/Scrub Green Set.webp",
-      "Light Blue": "assets/products/Scrub Light Blue Set.webp",
-      "Navy": "assets/products/Scrub Navy Set.webp",
-      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
-      "Olive Green": "assets/products/Scrub Olive Green  Set.webp",
-      "White": "assets/products/Scrub White Set.webp"
-    },
-    "colors": [
-      "Burgundy",
-      "White",
-      "Beige",
-      "Black",
-      "Charcoal",
-      "Green",
-      "Light Blue",
-      "Navy",
-      "Ocean Blue",
-      "Olive Green"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-012",
-    "image": "assets/products/Scrub Burgundy Set.webp",
-    "images": [
-      "assets/products/Scrub Burgundy Set.webp",
-      "assets/products/Scrub Navy Set.webp",
-      "assets/products/Scrub White Set.webp",
-      "assets/products/Scrub Black Set.webp",
-      "assets/products/Scrub Charcoal Set.webp",
-      "assets/products/Scrub Green Set.webp",
-      "assets/products/Scrub Light Blue Set.webp",
-      "assets/products/Scrub Olive Green  Set.webp",
-      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
-      "assets/products/1790636863936_Scrub_Beige_Set.webp",
-      "assets/products/1790636864944_Scrub_Beige_Side.webp",
-      "assets/products/1790636865792_Scrub_Beige_Trousers_Back.webp",
-      "assets/products/1790636867576_Scrub_Beige.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A two-piece top-and-pant set made from soft, breathable, easy-care fabric suited to long clinical shifts.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Scrub Burgundy Set.webp"
-    },
-    "maxQty": "",
-    "moq": "8 pieces",
-    "name": "Scrubs",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Healthcare",
-    "short": "Comfortable, easy-care scrubs for clinical teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1791036438947_sketch_TECHNICALS-21.webp",
-    "sketchDescription": "",
-    "sku": "F8-012",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
     ]
   },
   {
@@ -1181,6 +670,462 @@
       "Right Hip Pocket",
       "Left Cargo Pocket / Leg",
       "Right Cargo Pocket / Leg"
+    ]
+  },
+  {
+    "availability": "Made to Order",
+    "care": "Machine wash cold, No Tumble Dry",
+    "category": "TOP WEAR",
+    "colorHexMap": {
+      "Grey": "#7f8c8d"
+    },
+    "colorImageMap": {
+      "Black": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+      "Grey": "assets/products/1790805166252_Crewneck_pullover_long-sleeve_Light_Grey_Front.webp",
+      "Navy": "assets/products/1790805167214_Crewneck_pullover_long-sleeve_Navy_Front.webp",
+      "White": "assets/products/1790805168084_Crewneck_pullover_long-White_Back.webp"
+    },
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium 80% ring spun combed cotton and 20% recycled polyester",
+    "gender": "Men / Women / Unisex",
+    "gsm": "280 GSM",
+    "id": "F8-026",
+    "image": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+    "images": [
+      "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+      "assets/products/1790805166252_Crewneck_pullover_long-sleeve_Light_Grey_Front.webp",
+      "assets/products/1790805167214_Crewneck_pullover_long-sleeve_Navy_Front.webp",
+      "assets/products/1790805168084_Crewneck_pullover_long-White_Back.webp",
+      "assets/products/1790805168885_Crewneck_pullover_long-White_Front.webp",
+      "assets/products/1791036305320_Crewneck_pullover_long-White_Side.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "Effortless comfort, timeless style. Our Crewneck Pullovers are designed with a clean, versatile silhouette that makes everyday dressing easy. Perfect for layering or wearing solo. A workplace essential in cold weather, keeps your look polished, relaxed, and effortlessly on point.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp"
+    },
+    "maxQty": "",
+    "moq": "16",
+    "name": "Crewneck Pullover",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 65,
+        "y": 36
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 41.4,
+        "y": 34.2
+      },
+      {
+        "h": 45,
+        "name": "Full Back",
+        "r": 0,
+        "w": 45,
+        "x": 50,
+        "y": 45
+      },
+      {
+        "h": 13,
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 84,
+        "y": 34
+      }
+    ],
+    "sectors": "Corporate, Hospitality, Food & beverage, Healthcare, Industrial",
+    "short": "Clean. Comfortable. Effortlessly cool, made for easy everyday wear.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1791036331768_sketch_TECHNICALS-25.webp",
+    "sketchDescription": "",
+    "sku": "F8-026",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "TOP WEAR",
+    "colorImageMap": {
+      "Black": "assets/products/Dri Fit Black Polo.webp",
+      "Blue": "assets/products/Dri Fit Blue Polo 2.webp",
+      "Green": "assets/products/Dri Fit Green Polo.webp",
+      "Grey": "assets/products/Dri Fit Grey Polo.webp",
+      "Light Blue": "assets/products/Dri Fit Light Blue Polo 1.webp",
+      "Red": "assets/products/Dri Fit polo Red 3.webp",
+      "White": "assets/products/Dri Fit Polo White.webp",
+      "Yellow": "assets/products/Dri Fit Polo Yellow 3.webp"
+    },
+    "colors": [
+      "White",
+      "Black",
+      "Blue",
+      "Green",
+      "Grey",
+      "Light Blue",
+      "Red",
+      "Yellow"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-021",
+    "image": "assets/products/Dri Fit Black Polo.webp",
+    "images": [
+      "assets/products/Dri Fit Black Polo.webp",
+      "assets/products/Dri Fit Polo White.webp",
+      "assets/products/Dri Fit Polo White Side.webp",
+      "assets/products/Dri Fit Polo White Back.webp",
+      "assets/products/Dri Fit Blue Polo 2.webp",
+      "assets/products/Dri Fit Grey Polo.webp",
+      "assets/products/Dri Fit Green Polo.webp",
+      "assets/products/Dri Fit Light Blue Polo 1.webp",
+      "assets/products/Dri Fit polo Red 3.webp",
+      "assets/products/Dri Fit Polo Yellow 3.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A professional polo silhouette with moisture-wicking performance fabric for active or outdoor staff.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Dri Fit Black Polo.webp"
+    },
+    "maxQty": "",
+    "moq": "24 pieces",
+    "name": "Dri-Fit Polo",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Performance polo for active, client-facing teams.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361888329_sketch_TECHNICALS-02.webp",
+    "sketchDescription": "",
+    "sku": "F8-021",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "TOP WEAR",
+    "colorImageMap": {
+      "Baby Blue": "assets/products/Dri Fit Tshirt Baby Blue.webp",
+      "Black": "assets/products/Dri Fit Tshirt Black 2.webp",
+      "Blue": "assets/products/Dri Fit Tshirt Blue 2.webp",
+      "Green": "assets/products/Dri Fit Tshirt Green 1.webp",
+      "Grey": "assets/products/Dri Fit Tshirt Grey 2.webp",
+      "Red": "assets/products/Dri Fit Tshirt Red.webp",
+      "White": "assets/products/Dri Fit Tshirt White.webp",
+      "Yellow": "assets/products/Dri Fit Tshirt Yellow.webp"
+    },
+    "colors": [
+      "White",
+      "Baby Blue",
+      "Black",
+      "Blue",
+      "Green",
+      "Grey",
+      "Red",
+      "Yellow"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-020",
+    "image": "assets/products/Dri Fit Tshirt Blue 2.webp",
+    "images": [
+      "assets/products/Dri Fit Tshirt Blue 2.webp",
+      "assets/products/Dri Fit Tshirt White.webp",
+      "assets/products/Dri Fit Tshirt Baby Blue.webp",
+      "assets/products/Dri Fit Tshirt White Side.webp",
+      "assets/products/Dri Fit Tshirt White Back.webp",
+      "assets/products/Dri Fit Tshirt Black 2.webp",
+      "assets/products/Dri Fit Tshirt Green 1.webp",
+      "assets/products/Dri Fit Tshirt Grey 2.webp",
+      "assets/products/Dri Fit Tshirt Red.webp",
+      "assets/products/Dri Fit Tshirt Yellow.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Dri Fit Tshirt Blue 2.webp"
+    },
+    "maxQty": "",
+    "moq": "24 pieces",
+    "name": "Dri-Fit T-shirt",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Moisture-wicking tee for active or outdoor roles.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361874831_sketch_TECHNICALS-03.webp",
+    "sketchDescription": "",
+    "sku": "F8-020",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "Made to Order",
+    "care": "Machine wash cold. Do not Bleach. No Tumble Dry.",
+    "category": "BOTTOM WEAR",
+    "colorImageMap": {
+      "Black": "assets/products/1790803047818_Formal_trousers_Black_Front.webp"
+    },
+    "colors": [
+      "Black"
+    ],
+    "customizationCapability": "none",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Viscos Blend",
+    "gender": "Men",
+    "gsm": "180  GSM",
+    "id": "F8-002",
+    "image": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+    "images": [
+      "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
+      "assets/products/1790803047025_Formal_trousers_Black_Back.webp",
+      "assets/products/1790803048750_Formal_trousers_Black_Side_2.webp",
+      "assets/products/1790803049605_Formal_trousers_Black_Side.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "Premium, high-end finish, comfortable pants for a sharp look.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/1790803047818_Formal_trousers_Black_Front.webp"
+    },
+    "maxQty": "",
+    "moq": "12",
+    "name": "Formal Pants",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 65,
+        "y": 36
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 35,
+        "y": 36
+      },
+      {
+        "h": 45,
+        "name": "Full Back",
+        "r": 0,
+        "w": 45,
+        "x": 50,
+        "y": 45
+      },
+      {
+        "h": 13,
+        "name": "Upper Sleeve",
+        "r": 6,
+        "w": 13,
+        "x": 84,
+        "y": 34
+      }
+    ],
+    "sectors": "Corporate, Hospitality, Healthcare, Food & beverage",
+    "short": "Premium, high-end finish, comfortable pants for a sharp look.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44",
+      "46",
+      "48",
+      "50",
+      "52"
+    ],
+    "sketch": "assets/products/1791036377263_sketch_TECHNICALS-23.webp",
+    "sketchDescription": "",
+    "sku": "F8-002",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
     ]
   },
   {
@@ -1553,592 +1498,6 @@
     "availability": "In Stock",
     "care": "Machine wash cold, do not bleach.",
     "category": "TOP WEAR",
-    "colorImageMap": {
-      "American Blue": "assets/products/T-shirt American Blue.webp",
-      "Army Green": "assets/products/T-shirt Army Green.webp",
-      "Black": "assets/products/T-shirt Black.webp",
-      "Burgundy": "assets/products/T-shirt Burgundy.webp",
-      "Charcoal": "assets/products/T-shirt Charcoal.webp",
-      "Light Blue": "assets/products/T-shirt Light Blue.webp",
-      "Navy": "assets/products/T-shirt Navy.webp",
-      "White": "assets/products/T-shirt White.webp"
-    },
-    "colors": [
-      "Navy",
-      "White",
-      "American Blue",
-      "Army Green",
-      "Black",
-      "Burgundy",
-      "Charcoal",
-      "Light Blue"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-018",
-    "image": "assets/products/T-shirt Navy.webp",
-    "images": [
-      "assets/products/T-shirt Navy.webp",
-      "assets/products/T-shirt Burgundy.webp",
-      "assets/products/T-shirt White.webp",
-      "assets/products/T-shirt American Blue.webp",
-      "assets/products/T-shirt White Side.webp",
-      "assets/products/T-shirt White Back.webp",
-      "assets/products/T-shirt Army Green.webp",
-      "assets/products/T-shirt Black.webp",
-      "assets/products/T-shirt Charcoal.webp",
-      "assets/products/T-shirt Light Blue.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A soft, breathable cotton tee ideal for casual work environments, events, or team apparel programs.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/T-shirt Navy.webp"
-    },
-    "maxQty": "",
-    "moq": "24 pieces",
-    "name": "T-shirt",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Everyday essential for casual team uniforms.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361790301_sketch_TECHNICALS-03.webp",
-    "sketchDescription": "",
-    "sku": "F8-018",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
-    "colorImageMap": {
-      "Black": "assets/products/Oversize Tshirt Black 1.webp",
-      "Grey": "assets/products/Oversize Tshirt Grey 1.webp",
-      "White": "assets/products/Oversize Tshirt White 1.webp"
-    },
-    "colors": [
-      "Grey",
-      "White",
-      "Black"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-019",
-    "image": "assets/products/Oversize Tshirt Grey 1.webp",
-    "images": [
-      "assets/products/Oversize Tshirt Grey 1.webp",
-      "assets/products/Oversize Tshirt Black 1.webp",
-      "assets/products/Oversize Tshirt White 1.webp",
-      "assets/products/Oversize Tshirt White Side.webp",
-      "assets/products/Oversize Tshirt White Back.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A loose, oversized tee that offers a contemporary silhouette for casual or streetwear-inspired uniform programs.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Oversize Tshirt Grey 1.webp"
-    },
-    "maxQty": "",
-    "moq": "12 pieces",
-    "name": "Oversized T-shirt",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Relaxed, modern fit for a trend-forward team look.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361816579_sketch_TECHNICALS-14.webp",
-    "sketchDescription": "",
-    "sku": "F8-019",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
-    "colorImageMap": {
-      "Baby Blue": "assets/products/Dri Fit Tshirt Baby Blue.webp",
-      "Black": "assets/products/Dri Fit Tshirt Black 2.webp",
-      "Blue": "assets/products/Dri Fit Tshirt Blue 2.webp",
-      "Green": "assets/products/Dri Fit Tshirt Green 1.webp",
-      "Grey": "assets/products/Dri Fit Tshirt Grey 2.webp",
-      "Red": "assets/products/Dri Fit Tshirt Red.webp",
-      "White": "assets/products/Dri Fit Tshirt White.webp",
-      "Yellow": "assets/products/Dri Fit Tshirt Yellow.webp"
-    },
-    "colors": [
-      "White",
-      "Baby Blue",
-      "Black",
-      "Blue",
-      "Green",
-      "Grey",
-      "Red",
-      "Yellow"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-020",
-    "image": "assets/products/Dri Fit Tshirt Blue 2.webp",
-    "images": [
-      "assets/products/Dri Fit Tshirt Blue 2.webp",
-      "assets/products/Dri Fit Tshirt White.webp",
-      "assets/products/Dri Fit Tshirt Baby Blue.webp",
-      "assets/products/Dri Fit Tshirt White Side.webp",
-      "assets/products/Dri Fit Tshirt White Back.webp",
-      "assets/products/Dri Fit Tshirt Black 2.webp",
-      "assets/products/Dri Fit Tshirt Green 1.webp",
-      "assets/products/Dri Fit Tshirt Grey 2.webp",
-      "assets/products/Dri Fit Tshirt Red.webp",
-      "assets/products/Dri Fit Tshirt Yellow.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "Engineered with quick-dry fabric technology to keep employees cool during physically demanding or outdoor work.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Dri Fit Tshirt Blue 2.webp"
-    },
-    "maxQty": "",
-    "moq": "24 pieces",
-    "name": "Dri-Fit T-shirt",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Moisture-wicking tee for active or outdoor roles.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361874831_sketch_TECHNICALS-03.webp",
-    "sketchDescription": "",
-    "sku": "F8-020",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
-    "colorImageMap": {
-      "Black": "assets/products/Dri Fit Black Polo.webp",
-      "Blue": "assets/products/Dri Fit Blue Polo 2.webp",
-      "Green": "assets/products/Dri Fit Green Polo.webp",
-      "Grey": "assets/products/Dri Fit Grey Polo.webp",
-      "Light Blue": "assets/products/Dri Fit Light Blue Polo 1.webp",
-      "Red": "assets/products/Dri Fit polo Red 3.webp",
-      "White": "assets/products/Dri Fit Polo White.webp",
-      "Yellow": "assets/products/Dri Fit Polo Yellow 3.webp"
-    },
-    "colors": [
-      "White",
-      "Black",
-      "Blue",
-      "Green",
-      "Grey",
-      "Light Blue",
-      "Red",
-      "Yellow"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-021",
-    "image": "assets/products/Dri Fit Black Polo.webp",
-    "images": [
-      "assets/products/Dri Fit Black Polo.webp",
-      "assets/products/Dri Fit Polo White.webp",
-      "assets/products/Dri Fit Polo White Side.webp",
-      "assets/products/Dri Fit Polo White Back.webp",
-      "assets/products/Dri Fit Blue Polo 2.webp",
-      "assets/products/Dri Fit Grey Polo.webp",
-      "assets/products/Dri Fit Green Polo.webp",
-      "assets/products/Dri Fit Light Blue Polo 1.webp",
-      "assets/products/Dri Fit polo Red 3.webp",
-      "assets/products/Dri Fit Polo Yellow 3.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A professional polo silhouette with moisture-wicking performance fabric for active or outdoor staff.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Dri Fit Black Polo.webp"
-    },
-    "maxQty": "",
-    "moq": "24 pieces",
-    "name": "Dri-Fit Polo",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Performance polo for active, client-facing teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361888329_sketch_TECHNICALS-02.webp",
-    "sketchDescription": "",
-    "sku": "F8-021",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
-    "colorImageMap": {
-      "Black": "assets/products/Shirt Black.webp",
-      "Grey": "assets/products/Shirt grey.webp",
-      "Light Blue": "assets/products/Shirt Light blue.webp",
-      "Navy": "assets/products/Shirt Navy.webp",
-      "White": "assets/products/Shirt White.webp"
-    },
-    "colors": [
-      "Light Blue",
-      "White",
-      "Black",
-      "Grey",
-      "Navy"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-022",
-    "image": "assets/products/Shirt Light blue.webp",
-    "images": [
-      "assets/products/Shirt Light blue.webp",
-      "assets/products/Shirt White.webp",
-      "assets/products/Shirt Black.webp",
-      "assets/products/Shirt White Side.webp",
-      "assets/products/Shirt White Back.webp",
-      "assets/products/Shirt grey.webp",
-      "assets/products/Shirt Navy.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A clean, professional button-up shirt suited for office, retail, or client-facing roles.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Shirt Light blue.webp"
-    },
-    "maxQty": "",
-    "moq": "8 pieces",
-    "name": "Shirts",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Versatile button-up for a polished corporate look.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361913145_sketch_TECHNICALS-01.webp",
-    "sketchDescription": "",
-    "sku": "F8-022",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "TOP WEAR",
     "colorHexMap": {
       "Black": "#111111"
     },
@@ -2254,18 +1613,12 @@
     "care": "Machine wash cold, do not bleach.",
     "category": "OUTER WEAR",
     "colorImageMap": {
-      "Black": "assets/products/Zip up Black -.webp",
-      "Charcoal": "assets/products/Zip Up Charcoal.webp",
-      "Light Grey": "assets/products/Zip up Light Grey-.webp",
-      "Navy": "assets/products/Zip up Navy-.webp",
-      "White": "assets/products/Zip up white-.webp"
+      "Grey": "assets/products/1790359031221_Lab_Coat_grey.webp",
+      "White": "assets/products/1790359032241_Lab_Coat_White.webp"
     },
     "colors": [
-      "Navy",
       "White",
-      "Black",
-      "Charcoal",
-      "Light Grey"
+      "Grey"
     ],
     "customizationCapability": "both",
     "dtfPlacements": [
@@ -2283,131 +1636,24 @@
     "fabric": "Premium Poly-Cotton Blend",
     "gender": "Men / Women / Unisex",
     "gsm": "180-220 GSM",
-    "id": "F8-024",
-    "image": "assets/products/Zip up Navy-.webp",
+    "id": "F8-007",
+    "image": "assets/products/1790359032241_Lab_Coat_White.webp",
     "images": [
-      "assets/products/Zip up Navy-.webp",
-      "assets/products/Zip up white-.webp",
-      "assets/products/Zip up Black -.webp",
-      "assets/products/Zip Up Charcoal.webp",
-      "assets/products/Zip up Light Grey-.webp",
-      "assets/products/1789768845404_Zip_up_white_Back.webp",
-      "assets/products/1789768846520_Zip_up_white_Side.webp"
+      "assets/products/1790359032241_Lab_Coat_White.webp",
+      "assets/products/Lab Coat White Side.webp",
+      "assets/products/Lab Coat White Back.webp",
+      "assets/products/1790359031221_Lab_Coat_grey.webp"
     ],
     "leadTime": "14-21 Business Days",
-    "long": "A full-zip hoodie with easy on/off wear over uniforms, durable fabric, and a relaxed fit.",
+    "long": "A knee-length lab coat designed for clinical and laboratory environments, with durable easy-care fabric and convenient pockets.",
     "mainImageSelection": {
       "index": 0,
       "type": "existing",
-      "url": "assets/products/Zip up Navy-.webp"
-    },
-    "maxQty": "",
-    "moq": "12 pieces",
-    "name": "Zip-up Hoodie",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 63,
-        "y": 44
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 37,
-        "y": 44
-      },
-      {
-        "h": 42,
-        "name": "Center Back",
-        "r": 0,
-        "w": 42,
-        "x": 50,
-        "y": 52
-      },
-      {
-        "h": 14,
-        "name": "Upper Sleeve",
-        "r": 8,
-        "w": 14,
-        "x": 76,
-        "y": 48
-      }
-    ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
-    "short": "Easy-layer hoodie for year-round versatility.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361972833_sketch_TECHNICALS-18.webp",
-    "sketchDescription": "",
-    "sku": "F8-024",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "category": "OUTER WEAR",
-    "colorImageMap": {
-      "Black": "assets/products/Puff Jacket Black.webp",
-      "Navy": "assets/products/Puff Jacket Navy.webp"
-    },
-    "colors": [
-      "Black",
-      "Navy"
-    ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-025",
-    "image": "assets/products/Puff Jacket Black.webp",
-    "images": [
-      "assets/products/Puff Jacket Black.webp",
-      "assets/products/Puff Jacket Black Side.webp",
-      "assets/products/Puff Jacket Black Back.webp",
-      "assets/products/Puff Jacket Navy.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A lightweight quilted jacket with water-resistant fabric and insulated construction for outdoor or cold conditions.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/Puff Jacket Black.webp"
+      "url": "assets/products/1790359032241_Lab_Coat_White.webp"
     },
     "maxQty": "",
     "moq": "8 pieces",
-    "name": "Puffer Jacket",
+    "name": "Lab Coats",
     "placements": [
       {
         "h": 18,
@@ -2442,8 +1688,8 @@
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Insulated outerwear for cold-weather work environments.",
+    "sectors": "Healthcare",
+    "short": "Crisp, professional coats for healthcare teams.",
     "sizes": [
       "XS",
       "S",
@@ -2452,9 +1698,9 @@
       "XL",
       "2XL"
     ],
-    "sketch": "assets/products/1791036388098_sketch_TECHNICALS-28.webp",
+    "sketch": "assets/products/1790361574944_sketch_TECHNICALS-06.webp",
     "sketchDescription": "",
-    "sku": "F8-025",
+    "sku": "F8-007",
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
@@ -2463,106 +1709,6 @@
       "Left Chest",
       "Right Chest",
       "Center Back",
-      "Upper Sleeve"
-    ]
-  },
-  {
-    "availability": "Made to Order",
-    "care": "Machine wash cold. Do not Bleach. No Tumble Dry.",
-    "category": "BOTTOM WEAR",
-    "colorImageMap": {
-      "Black": "assets/products/1790803047818_Formal_trousers_Black_Front.webp"
-    },
-    "colors": [
-      "Black"
-    ],
-    "customizationCapability": "none",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Viscos Blend",
-    "gender": "Men",
-    "gsm": "180  GSM",
-    "id": "F8-002",
-    "image": "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
-    "images": [
-      "assets/products/1790803047818_Formal_trousers_Black_Front.webp",
-      "assets/products/1790803047025_Formal_trousers_Black_Back.webp",
-      "assets/products/1790803048750_Formal_trousers_Black_Side_2.webp",
-      "assets/products/1790803049605_Formal_trousers_Black_Side.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "Premium, high-end finish, comfortable pants for a sharp look.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/1790803047818_Formal_trousers_Black_Front.webp"
-    },
-    "maxQty": "",
-    "moq": "12",
-    "name": "Formal Pants",
-    "placements": [
-      {
-        "h": 18,
-        "name": "Left Chest",
-        "r": 0,
-        "w": 18,
-        "x": 65,
-        "y": 36
-      },
-      {
-        "h": 18,
-        "name": "Right Chest",
-        "r": 0,
-        "w": 18,
-        "x": 35,
-        "y": 36
-      },
-      {
-        "h": 45,
-        "name": "Full Back",
-        "r": 0,
-        "w": 45,
-        "x": 50,
-        "y": 45
-      },
-      {
-        "h": 13,
-        "name": "Upper Sleeve",
-        "r": 6,
-        "w": 13,
-        "x": 84,
-        "y": 34
-      }
-    ],
-    "sectors": "Corporate, Hospitality, Healthcare, Food & beverage",
-    "short": "Premium, high-end finish, comfortable pants for a sharp look.",
-    "sizes": [
-      "38",
-      "40",
-      "42",
-      "44",
-      "46",
-      "48",
-      "50",
-      "52"
-    ],
-    "sketch": "assets/products/1791036377263_sketch_TECHNICALS-23.webp",
-    "sketchDescription": "",
-    "sku": "F8-002",
-    "supportedPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Full Back",
       "Upper Sleeve"
     ]
   },
@@ -2692,23 +1838,18 @@
     ]
   },
   {
-    "availability": "Made to Order",
-    "care": "Machine wash cold, No Tumble Dry",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
     "category": "TOP WEAR",
-    "colorHexMap": {
-      "Grey": "#7f8c8d"
-    },
     "colorImageMap": {
-      "Black": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
-      "Grey": "assets/products/1790805166252_Crewneck_pullover_long-sleeve_Light_Grey_Front.webp",
-      "Navy": "assets/products/1790805167214_Crewneck_pullover_long-sleeve_Navy_Front.webp",
-      "White": "assets/products/1790805168084_Crewneck_pullover_long-White_Back.webp"
+      "Black": "assets/products/Oversize Tshirt Black 1.webp",
+      "Grey": "assets/products/Oversize Tshirt Grey 1.webp",
+      "White": "assets/products/Oversize Tshirt White 1.webp"
     },
     "colors": [
-      "Black",
+      "Grey",
       "White",
-      "Navy",
-      "Grey"
+      "Black"
     ],
     "customizationCapability": "both",
     "dtfPlacements": [
@@ -2723,75 +1864,75 @@
       "Center Back",
       "Upper Sleeve"
     ],
-    "fabric": "Premium 80% ring spun combed cotton and 20% recycled polyester",
+    "fabric": "Premium Poly-Cotton Blend",
     "gender": "Men / Women / Unisex",
-    "gsm": "280 GSM",
-    "id": "F8-026",
-    "image": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
+    "gsm": "180-220 GSM",
+    "id": "F8-019",
+    "image": "assets/products/Oversize Tshirt Grey 1.webp",
     "images": [
-      "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp",
-      "assets/products/1790805166252_Crewneck_pullover_long-sleeve_Light_Grey_Front.webp",
-      "assets/products/1790805167214_Crewneck_pullover_long-sleeve_Navy_Front.webp",
-      "assets/products/1790805168084_Crewneck_pullover_long-White_Back.webp",
-      "assets/products/1790805168885_Crewneck_pullover_long-White_Front.webp",
-      "assets/products/1791036305320_Crewneck_pullover_long-White_Side.webp"
+      "assets/products/Oversize Tshirt Grey 1.webp",
+      "assets/products/Oversize Tshirt Black 1.webp",
+      "assets/products/Oversize Tshirt White 1.webp",
+      "assets/products/Oversize Tshirt White Side.webp",
+      "assets/products/Oversize Tshirt White Back.webp"
     ],
     "leadTime": "14-21 Business Days",
-    "long": "Effortless comfort, timeless style. Our Crewneck Pullovers are designed with a clean, versatile silhouette that makes everyday dressing easy. Perfect for layering or wearing solo. A workplace essential in cold weather, keeps your look polished, relaxed, and effortlessly on point.",
+    "long": "A loose, oversized tee that offers a contemporary silhouette for casual or streetwear-inspired uniform programs.",
     "mainImageSelection": {
       "index": 0,
       "type": "existing",
-      "url": "assets/products/1790805165163_Crewneck_pullover_long-sleeve_Black_Front.webp"
+      "url": "assets/products/Oversize Tshirt Grey 1.webp"
     },
     "maxQty": "",
-    "moq": "16",
-    "name": "Crewneck Pullover",
+    "moq": "12 pieces",
+    "name": "Oversized T-shirt",
     "placements": [
       {
         "h": 18,
         "name": "Left Chest",
         "r": 0,
         "w": 18,
-        "x": 65,
-        "y": 36
+        "x": 63,
+        "y": 44
       },
       {
         "h": 18,
         "name": "Right Chest",
         "r": 0,
         "w": 18,
-        "x": 41.4,
-        "y": 34.2
+        "x": 37,
+        "y": 44
       },
       {
-        "h": 45,
-        "name": "Full Back",
+        "h": 42,
+        "name": "Center Back",
         "r": 0,
-        "w": 45,
+        "w": 42,
         "x": 50,
-        "y": 45
+        "y": 52
       },
       {
-        "h": 13,
+        "h": 14,
         "name": "Upper Sleeve",
-        "r": 6,
-        "w": 13,
-        "x": 84,
-        "y": 34
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
       }
     ],
-    "sectors": "Corporate, Hospitality, Food & beverage, Healthcare, Industrial",
-    "short": "Clean. Comfortable. Effortlessly cool, made for easy everyday wear.",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Relaxed, modern fit for a trend-forward team look.",
     "sizes": [
+      "XS",
       "S",
       "M",
       "L",
       "XL",
       "2XL"
     ],
-    "sketch": "assets/products/1791036331768_sketch_TECHNICALS-25.webp",
+    "sketch": "assets/products/1790361816579_sketch_TECHNICALS-14.webp",
     "sketchDescription": "",
-    "sku": "F8-026",
+    "sku": "F8-019",
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
@@ -2799,8 +1940,962 @@
     "supportedPlacements": [
       "Left Chest",
       "Right Chest",
-      "Full Back",
+      "Center Back",
       "Upper Sleeve"
     ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "TOP WEAR",
+    "colorImageMap": {
+      "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
+      "Army Green": "assets/products/1790358671142_Army_Green_Olive_Green.webp",
+      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
+      "Black": "assets/products/1790358660717_Polo_Black.webp",
+      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+      "Brown": "assets/products/1790358662661_Polo_Brown.webp",
+      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
+      "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
+      "Dark Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
+      "Green": "assets/products/1790358666198_Polo_Green.webp",
+      "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
+      "Light Blue": "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
+      "Light Grey": "assets/products/1790358669131_Light_Grey_Light_grey.webp",
+      "Navy": "assets/products/1790358670220_Polo_Navy.webp",
+      "Olive Green": "assets/products/1790358658500_Olive_Green_Army_Green.webp",
+      "Orange": "assets/products/1790358672817_Polo_Orange.webp",
+      "Pink": "assets/products/1790358673674_Polo_Pink.webp",
+      "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "Red": "assets/products/1790358675503_Polo_Red.webp",
+      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp",
+      "White": "assets/products/Polo White Front.webp",
+      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp"
+    },
+    "colors": [
+      "Blue",
+      "Purple",
+      "Purple Blue",
+      "Pink",
+      "Beige",
+      "White",
+      "American Blue",
+      "Army Green",
+      "Black",
+      "Brown",
+      "Burgundy",
+      "Charcoal",
+      "Dark Green",
+      "Green",
+      "Kiwi",
+      "Light Blue",
+      "Light Grey",
+      "Light Yellow",
+      "Navy",
+      "Olive Green",
+      "Orange",
+      "Red",
+      "Turquoise Blue",
+      "Deep Turquoise",
+      "Yellow"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-001",
+    "image": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+    "images": [
+      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "assets/products/1790358673674_Polo_Pink.webp",
+      "assets/products/1790358659699_Polo_Beige.webp",
+      "assets/products/1790358663502_Polo_Burgundy.webp",
+      "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "assets/products/Polo White Front.webp",
+      "assets/products/Polo White Side.webp",
+      "assets/products/Polo White Back.webp",
+      "assets/products/1790358658500_Olive_Green_Army_Green.webp",
+      "assets/products/1790358660717_Polo_Black.webp",
+      "assets/products/1790358662661_Polo_Brown.webp",
+      "assets/products/1790358664388_Polo_Charcoal.webp",
+      "assets/products/1790358666198_Polo_Green.webp",
+      "assets/products/1790358666999_Polo_Kiwi.webp",
+      "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
+      "assets/products/1790358669131_Light_Grey_Light_grey.webp",
+      "assets/products/1790358670220_Polo_Navy.webp",
+      "assets/products/1790358671142_Army_Green_Olive_Green.webp",
+      "assets/products/1790358672817_Polo_Orange.webp",
+      "assets/products/1790358675503_Polo_Red.webp",
+      "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
+      "assets/products/1790358677712_Polo_Yellow.webp",
+      "assets/products/1790358678682_American_Blue_American_Blue.webp",
+      "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A tailored, comfortable polo shirt made from durable cotton or cotton-blend fabric. Reinforced collar and cuffs hold their shape through repeated washing, making it ideal for daily corporate wear.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/1790606198521_1790358661712_Polo_blue.webp"
+    },
+    "maxQty": "",
+    "moq": "8 pieces",
+    "name": "Premium Polo Shirt",
+    "placements": [
+      {
+        "h": 5,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 5,
+        "x": 15,
+        "y": 10
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage",
+    "short": "Premium corporate polo, clean and professional.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361535692_sketch_TECHNICALS-02.webp",
+    "sketchDescription": "",
+    "sku": "F8-001",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "OUTER WEAR",
+    "colorImageMap": {
+      "Black": "assets/products/Puff Jacket Black.webp",
+      "Navy": "assets/products/Puff Jacket Navy.webp"
+    },
+    "colors": [
+      "Black",
+      "Navy"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-025",
+    "image": "assets/products/Puff Jacket Black.webp",
+    "images": [
+      "assets/products/Puff Jacket Black.webp",
+      "assets/products/Puff Jacket Black Side.webp",
+      "assets/products/Puff Jacket Black Back.webp",
+      "assets/products/Puff Jacket Navy.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A lightweight quilted jacket with water-resistant fabric and insulated construction for outdoor or cold conditions.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Puff Jacket Black.webp"
+    },
+    "maxQty": "",
+    "moq": "8 pieces",
+    "name": "Puffer Jacket",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Insulated outerwear for cold-weather work environments.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1791036388098_sketch_TECHNICALS-28.webp",
+    "sketchDescription": "",
+    "sku": "F8-025",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "ACCESSORIES",
+    "colorImageMap": {
+      "Beige": "assets/products/1790636863936_Scrub_Beige_Set.webp",
+      "Black": "assets/products/Scrub Black Set.webp",
+      "Burgundy": "assets/products/Scrub Burgundy Set.webp",
+      "Charcoal": "assets/products/Scrub Charcoal Set.webp",
+      "Green": "assets/products/Scrub Green Set.webp",
+      "Light Blue": "assets/products/Scrub Light Blue Set.webp",
+      "Navy": "assets/products/Scrub Navy Set.webp",
+      "Ocean Blue": "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
+      "Olive Green": "assets/products/Scrub Olive Green  Set.webp",
+      "White": "assets/products/Scrub White Set.webp"
+    },
+    "colors": [
+      "Burgundy",
+      "White",
+      "Beige",
+      "Black",
+      "Charcoal",
+      "Green",
+      "Light Blue",
+      "Navy",
+      "Ocean Blue",
+      "Olive Green"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-012",
+    "image": "assets/products/Scrub Burgundy Set.webp",
+    "images": [
+      "assets/products/Scrub Burgundy Set.webp",
+      "assets/products/Scrub Navy Set.webp",
+      "assets/products/Scrub White Set.webp",
+      "assets/products/Scrub Black Set.webp",
+      "assets/products/Scrub Charcoal Set.webp",
+      "assets/products/Scrub Green Set.webp",
+      "assets/products/Scrub Light Blue Set.webp",
+      "assets/products/Scrub Olive Green  Set.webp",
+      "assets/products/1789664588386_Ocean_Blue_Ocean_Blue_set.webp",
+      "assets/products/1790636863936_Scrub_Beige_Set.webp",
+      "assets/products/1790636864944_Scrub_Beige_Side.webp",
+      "assets/products/1790636865792_Scrub_Beige_Trousers_Back.webp",
+      "assets/products/1790636867576_Scrub_Beige.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A two-piece top-and-pant set made from soft, breathable, easy-care fabric suited to long clinical shifts.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Scrub Burgundy Set.webp"
+    },
+    "maxQty": "",
+    "moq": "8 pieces",
+    "name": "Scrubs",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Healthcare",
+    "short": "Comfortable, easy-care scrubs for clinical teams.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1791036438947_sketch_TECHNICALS-21.webp",
+    "sketchDescription": "",
+    "sku": "F8-012",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "TOP WEAR",
+    "colorImageMap": {
+      "Black": "assets/products/Shirt Black.webp",
+      "Grey": "assets/products/Shirt grey.webp",
+      "Light Blue": "assets/products/Shirt Light blue.webp",
+      "Navy": "assets/products/Shirt Navy.webp",
+      "White": "assets/products/Shirt White.webp"
+    },
+    "colors": [
+      "Light Blue",
+      "White",
+      "Black",
+      "Grey",
+      "Navy"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-022",
+    "image": "assets/products/Shirt Light blue.webp",
+    "images": [
+      "assets/products/Shirt Light blue.webp",
+      "assets/products/Shirt White.webp",
+      "assets/products/Shirt Black.webp",
+      "assets/products/Shirt White Side.webp",
+      "assets/products/Shirt White Back.webp",
+      "assets/products/Shirt grey.webp",
+      "assets/products/Shirt Navy.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A clean, professional button-up shirt suited for office, retail, or client-facing roles.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Shirt Light blue.webp"
+    },
+    "maxQty": "",
+    "moq": "8 pieces",
+    "name": "Shirts",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Versatile button-up for a polished corporate look.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361913145_sketch_TECHNICALS-01.webp",
+    "sketchDescription": "",
+    "sku": "F8-022",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "TOP WEAR",
+    "colorImageMap": {
+      "American Blue": "assets/products/T-shirt American Blue.webp",
+      "Army Green": "assets/products/T-shirt Army Green.webp",
+      "Black": "assets/products/T-shirt Black.webp",
+      "Burgundy": "assets/products/T-shirt Burgundy.webp",
+      "Charcoal": "assets/products/T-shirt Charcoal.webp",
+      "Light Blue": "assets/products/T-shirt Light Blue.webp",
+      "Navy": "assets/products/T-shirt Navy.webp",
+      "White": "assets/products/T-shirt White.webp"
+    },
+    "colors": [
+      "Navy",
+      "White",
+      "American Blue",
+      "Army Green",
+      "Black",
+      "Burgundy",
+      "Charcoal",
+      "Light Blue"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-018",
+    "image": "assets/products/T-shirt Navy.webp",
+    "images": [
+      "assets/products/T-shirt Navy.webp",
+      "assets/products/T-shirt Burgundy.webp",
+      "assets/products/T-shirt White.webp",
+      "assets/products/T-shirt American Blue.webp",
+      "assets/products/T-shirt White Side.webp",
+      "assets/products/T-shirt White Back.webp",
+      "assets/products/T-shirt Army Green.webp",
+      "assets/products/T-shirt Black.webp",
+      "assets/products/T-shirt Charcoal.webp",
+      "assets/products/T-shirt Light Blue.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A soft, breathable cotton tee ideal for casual work environments, events, or team apparel programs.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/T-shirt Navy.webp"
+    },
+    "maxQty": "",
+    "moq": "24 pieces",
+    "name": "T-shirt",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Everyday essential for casual team uniforms.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361790301_sketch_TECHNICALS-03.webp",
+    "sketchDescription": "",
+    "sku": "F8-018",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "BOTTOM WEAR",
+    "colorImageMap": {
+      "Beige": "assets/products/Trousers Beige.webp",
+      "Black": "assets/products/Trousers Black.webp",
+      "Charcoal": "assets/products/Trousers Charcoal.webp",
+      "Navy": "assets/products/Trousers Navy Front.webp"
+    },
+    "colors": [
+      "Black",
+      "Beige",
+      "Navy",
+      "Charcoal"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
+    ],
+    "embroideryPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-009",
+    "image": "assets/products/Trousers Black.webp",
+    "images": [
+      "assets/products/Trousers Black.webp",
+      "assets/products/Trousers Beige.webp",
+      "assets/products/Trousers Navy Front.webp",
+      "assets/products/Trousers Black back.webp",
+      "assets/products/Trousers Charcoal.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A versatile pant designed for all-day wear in hospitality and service settings, with wrinkle-resistant fabric and comfortable movement.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Trousers Black.webp"
+    },
+    "maxQty": "",
+    "moq": "8 pieces",
+    "name": "Workwear / Waiter Pants",
+    "placements": [
+      {
+        "h": 15,
+        "name": "Left Hip Pocket",
+        "r": 0,
+        "w": 15,
+        "x": 62,
+        "y": 35
+      },
+      {
+        "h": 15,
+        "name": "Right Hip Pocket",
+        "r": 0,
+        "w": 15,
+        "x": 38,
+        "y": 35
+      },
+      {
+        "h": 16,
+        "name": "Left Cargo Pocket / Leg",
+        "r": 0,
+        "w": 16,
+        "x": 65,
+        "y": 55
+      },
+      {
+        "h": 16,
+        "name": "Right Cargo Pocket / Leg",
+        "r": 0,
+        "w": 16,
+        "x": 35,
+        "y": 55
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Polished, comfortable pants for service staff.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361623238_sketch_TECHNICALS-08.webp",
+    "sketchDescription": "",
+    "sku": "F8-009",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
+    ]
+  },
+  {
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "category": "OUTER WEAR",
+    "colorImageMap": {
+      "Black": "assets/products/Zip up Black -.webp",
+      "Charcoal": "assets/products/Zip Up Charcoal.webp",
+      "Light Grey": "assets/products/Zip up Light Grey-.webp",
+      "Navy": "assets/products/Zip up Navy-.webp",
+      "White": "assets/products/Zip up white-.webp"
+    },
+    "colors": [
+      "Navy",
+      "White",
+      "Black",
+      "Charcoal",
+      "Light Grey"
+    ],
+    "customizationCapability": "both",
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-024",
+    "image": "assets/products/Zip up Navy-.webp",
+    "images": [
+      "assets/products/Zip up Navy-.webp",
+      "assets/products/Zip up white-.webp",
+      "assets/products/Zip up Black -.webp",
+      "assets/products/Zip Up Charcoal.webp",
+      "assets/products/Zip up Light Grey-.webp",
+      "assets/products/1789768845404_Zip_up_white_Back.webp",
+      "assets/products/1789768846520_Zip_up_white_Side.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A full-zip hoodie with easy on/off wear over uniforms, durable fabric, and a relaxed fit.",
+    "mainImageSelection": {
+      "index": 0,
+      "type": "existing",
+      "url": "assets/products/Zip up Navy-.webp"
+    },
+    "maxQty": "",
+    "moq": "12 pieces",
+    "name": "Zip-up Hoodie",
+    "placements": [
+      {
+        "h": 18,
+        "name": "Left Chest",
+        "r": 0,
+        "w": 18,
+        "x": 63,
+        "y": 44
+      },
+      {
+        "h": 18,
+        "name": "Right Chest",
+        "r": 0,
+        "w": 18,
+        "x": 37,
+        "y": 44
+      },
+      {
+        "h": 42,
+        "name": "Center Back",
+        "r": 0,
+        "w": 42,
+        "x": 50,
+        "y": 52
+      },
+      {
+        "h": 14,
+        "name": "Upper Sleeve",
+        "r": 8,
+        "w": 14,
+        "x": 76,
+        "y": 48
+      }
+    ],
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Food & beverage, Aviation",
+    "short": "Easy-layer hoodie for year-round versatility.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "sketch": "assets/products/1790361972833_sketch_TECHNICALS-18.webp",
+    "sketchDescription": "",
+    "sku": "F8-024",
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ]
+  },
+  {
+    "id": "F8-999",
+    "sku": "F8-999",
+    "name": "Test Automated Cap",
+    "category": "HEAD WEAR",
+    "gender": "Unisex",
+    "sectors": "Corporate, Hospitality",
+    "short": "High quality test cap",
+    "long": "Detailed description for test cap with premium stitching.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey"
+    ],
+    "colorHexMap": {},
+    "colorImageMap": {
+      "White": "assets/white.png"
+    },
+    "fabric": "",
+    "gsm": "",
+    "leadTime": "",
+    "moq": "",
+    "maxQty": "",
+    "availability": "",
+    "care": "",
+    "sketch": "",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [],
+    "image": "assets/white.png"
   }
 ]
