@@ -222,7 +222,16 @@
     "cmsSectorEduTitle": "Education",
     "cmsSectorEduDesc": "Schools, academic institutions, campus programs, and event staff.",
     "cmsSectorEduBackTitle": "Education",
-    "cmsSectorEduBackDesc": "Schools and academic institutions come to us for uniforms and staff apparel that build a sense of identity and pride. From student uniforms to staff polos and spirit wear, we offer custom embroidery and printing, so every piece reflects your school’s colors, crest, and community spirit."
+    "cmsSectorEduBackDesc": "Schools and academic institutions come to us for uniforms and staff apparel that build a sense of identity and pride. From student uniforms to staff polos and spirit wear, we offer custom embroidery and printing, so every piece reflects your school’s colors, crest, and community spirit.",
+    "cmsShopHeroTag": "Product Catalog",
+    "cmsShopHeroTitle": "THE GARMENT MATRIX (UPDATED TEST)",
+    "cmsShopHeroSub": "Select items, preview branding, and request one quotation.",
+    "cmsShopFilterHeading": "Filters <span class=\"toggle-icon\" style=\"display: none; font-size: 20px;\">+</span>",
+    "cmsShopSearchLabel": "Search Keywords",
+    "cmsShopSearchSub": "Search by name, category, sector, details, or description.",
+    "cmsShopSectorLabel": "Sector",
+    "cmsShopCategoryLabel": "Category",
+    "cmsShopSortLabel": "Sort By"
   },
   "categories1stLayer": [
     {
