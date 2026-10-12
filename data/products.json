@@ -779,6 +779,7 @@
       "one size"
     ],
     "colors": [
+      "Yellow",
       "Green",
       "White",
       "American Blue",
@@ -789,8 +790,7 @@
       "Kiwi",
       "Light Grey",
       "Navy",
-      "Red",
-      "Yellow"
+      "Red"
     ],
     "colorHexMap": {},
     "colorImageMap": {
@@ -851,6 +851,7 @@
     ],
     "customizationCapability": "both",
     "images": [
+      "assets/products/Cap Yellow 2.webp",
       "assets/products/Cap Green.webp",
       "assets/products/Cap Red.webp",
       "assets/products/Cap White.webp",
@@ -862,16 +863,9 @@
       "assets/products/Cap Charcoal.webp",
       "assets/products/Cap Kiwi 2.webp",
       "assets/products/Cap Navy.webp",
-      "assets/products/Cap Yellow 2.webp",
       "assets/products/1790357941308_Cap_White_Back_1-1.webp"
     ],
-    "image": "assets/products/Cap Green.webp",
-    "mainImageSelection": {
-      "type": "existing",
-      "index": 0,
-      "url": "assets/products/Cap Green.webp",
-      "name": null
-    }
+    "image": "assets/products/Cap Yellow 2.webp"
   },
   {
     "id": "F8-011",
