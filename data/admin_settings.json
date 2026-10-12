@@ -162,10 +162,6 @@
     {
       "enabled": true,
       "name": "ACCESSORIES"
-    },
-    {
-      "name": "Mdry wear",
-      "enabled": false
     }
   ]
 }
