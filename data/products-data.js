@@ -2959,7 +2959,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "assets/products/1791792124452_Screenshot_2026-10-12_110102.webp",
       "assets/products/1791792125436_Screenshot_2026-10-12_110106.webp",
       "assets/products/1791792126374_Screenshot_2026-10-12_110110.webp",
-      "assets/products/1791792127190_Screenshot_2026-10-12_110114.webp"
+      "assets/products/1791792218638_Screenshot__18_.webp"
     ],
     "image": "assets/products/1791792119311_Screenshot_2026-10-12_110031.webp"
   }
