@@ -87,7 +87,7 @@
         "url": ""
       },
       {
-        "active": false,
+        "active": true,
         "iconKey": "whatsapp",
         "id": "whatsapp",
         "name": "WhatsApp",
