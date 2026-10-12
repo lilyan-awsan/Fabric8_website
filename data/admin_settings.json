@@ -93,14 +93,6 @@
         "name": "WhatsApp",
         "shape": "square",
         "url": "https://wa.me/962796788240"
-      },
-      {
-        "id": "social_1791796532528",
-        "name": "TikTok",
-        "iconKey": "tiktok",
-        "url": "https://hello",
-        "active": false,
-        "shape": "square"
       }
     ],
     "socialInstagram": "https://www.instagram.com/thefabric8",
