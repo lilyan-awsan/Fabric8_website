@@ -2884,11 +2884,12 @@
       "Olive": "#556b2f"
     },
     "colorImageMap": {
-      "White": "assets/products/1791791748090_Cap_White_Side.webp",
-      "Olive": "assets/products/1791791752900_Olive_Army_Green.webp",
-      "Black": "assets/products/1791791753937_T-shirt_Black.webp",
-      "Burgundy": "assets/products/1791791754824_T-shirt_Burgundy.webp",
-      "Navy": "assets/products/1791791756025_T-shirt_Navy.webp"
+      "Black": "assets/products/1791791974711_Black_partnership.webp",
+      "White": "assets/products/1791791975880_White_values1.webp",
+      "Navy": "assets/products/1791791976803_Navy_sectors-hero-banner.webp",
+      "kk": "assets/products/1791791977812_kk_fabric8-branding-hero.webp",
+      "Burgundy": "assets/products/1791791978783_Burgundy_fabric8-textile-logistics.webp",
+      "Grey": "assets/products/1791791984466_Grey_fabric8-silk-hero.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180",
@@ -2956,16 +2957,19 @@
     ],
     "customizationCapability": "dtf_only",
     "images": [
-      "assets/products/1791791748090_Cap_White_Side.webp",
-      "assets/products/1791791749133_Chef_Bandana_White_Side.webp",
-      "assets/products/1791791750090_Lab_Coat_White_Side.webp",
-      "assets/products/1791791751084_Scrub_White_Female_Side.webp",
-      "assets/products/1791791751810_Scrub_White_Trousers_Side.webp",
-      "assets/products/1791791752900_Olive_Army_Green.webp",
-      "assets/products/1791791753937_T-shirt_Black.webp",
-      "assets/products/1791791754824_T-shirt_Burgundy.webp",
-      "assets/products/1791791756025_T-shirt_Navy.webp"
+      "assets/products/1791791974711_Black_partnership.webp",
+      "assets/products/1791791975880_White_values1.webp",
+      "assets/products/1791791976803_Navy_sectors-hero-banner.webp",
+      "assets/products/1791791977812_kk_fabric8-branding-hero.webp",
+      "assets/products/1791791978783_Burgundy_fabric8-textile-logistics.webp",
+      "assets/products/1791791980221_White_logo_noneedle_cropped.webp",
+      "assets/products/1791791981282_Burgundy_favicon2.webp",
+      "assets/products/1791791982377_Black_hero_bg.webp",
+      "assets/products/1791791983569_White_favicon.webp",
+      "assets/products/1791791984466_Grey_fabric8-silk-hero.webp",
+      "assets/products/1791791985422_kk_fabric8-service-people.webp",
+      "assets/products/1791791986340_Burgundy_fabric8-royal-atelier.webp"
     ],
-    "image": "assets/products/1791791748090_Cap_White_Side.webp"
+    "image": "assets/products/1791791974711_Black_partnership.webp"
   }
 ]
