@@ -770,7 +770,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     "id": "F8-010",
     "sku": "F8-010",
     "name": "Caps",
-    "category": "HEAD WEAR",
+    "category": "Mdry wear",
     "gender": "Unisex",
     "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage, Automotive",
     "short": "Adjustable branded cap for outdoor or retail teams.",
@@ -794,6 +794,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
     ],
     "colorHexMap": {},
     "colorImageMap": {
+      "Yellow": "assets/products/Cap Yellow 2.webp",
       "Green": "assets/products/Cap Green.webp",
       "Red": "assets/products/Cap Red.webp",
       "White": "assets/products/Cap White.webp",
@@ -803,8 +804,7 @@ window.FABRIC8_DEFAULT_PRODUCTS = [
       "Burgundy": "assets/products/Cap Burgundy.webp",
       "Charcoal": "assets/products/Cap Charcoal.webp",
       "Kiwi": "assets/products/Cap Kiwi 2.webp",
-      "Navy": "assets/products/Cap Navy.webp",
-      "Yellow": "assets/products/Cap Yellow 2.webp"
+      "Navy": "assets/products/Cap Navy.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
