@@ -100,65 +100,58 @@
     ]
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-008",
+    "sku": "F8-008",
+    "name": "Cargo Pants",
     "category": "BOTTOM WEAR",
-    "colorImageMap": {
-      "Beige": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
-      "Black": "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
-      "Charcoal": "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
-      "Navy": "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
-    },
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
+    "short": "Durable, functional pants for on-the-go teams.",
+    "long": "Rugged pants with utility pockets and reinforced stitching for facilities, warehouse, or maintenance staff.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "Beige",
       "Black",
       "Charcoal",
       "Navy"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ],
-    "embroideryPlacements": [
-      "Left Hip Pocket",
-      "Right Hip Pocket",
-      "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-008",
-    "image": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
-    "images": [
-      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
-      "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
-      "assets/products/1790360459985_Cargo_Beige_trousers_Side_1-2.webp",
-      "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
-      "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
-      "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "Rugged pants with utility pockets and reinforced stitching for facilities, warehouse, or maintenance staff.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/1790360460895_Cargo_Beige_trousers.webp"
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Beige": "assets/products/1790360460895_Cargo_Beige_trousers.webp",
+      "Black": "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
+      "Charcoal": "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
+      "Navy": "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
     },
-    "maxQty": "",
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
     "moq": "8 pieces",
-    "name": "Cargo Pants",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "assets/products/1790361604454_sketch_TECHNICALS-07.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
+    ],
     "placements": [
       {
         "h": 15,
         "name": "Left Hip Pocket",
         "r": 0,
         "w": 15,
-        "x": 62,
-        "y": 35
+        "x": 63.5,
+        "y": 45
       },
       {
         "h": 15,
@@ -185,29 +178,32 @@
         "y": 55
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation",
-    "short": "Durable, functional pants for on-the-go teams.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361604454_sketch_TECHNICALS-07.webp",
-    "sketchDescription": "",
-    "sku": "F8-008",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Left Hip Pocket",
       "Right Hip Pocket",
       "Left Cargo Pocket / Leg",
       "Right Cargo Pocket / Leg"
-    ]
+    ],
+    "embroideryPlacements": [
+      "Left Hip Pocket",
+      "Right Hip Pocket",
+      "Left Cargo Pocket / Leg",
+      "Right Cargo Pocket / Leg"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/1790360460895_Cargo_Beige_trousers.webp",
+      "assets/products/1790360458649_Cargo_Beige_trousers_Back_1-1.webp",
+      "assets/products/1790360459985_Cargo_Beige_trousers_Side_1-2.webp",
+      "assets/products/1790360461773_Cargo_Black_trousers_with_black.webp",
+      "assets/products/1790360462764_Cargo_Charcoal_trousers_with_grey_in_the_back.webp",
+      "assets/products/1790360463571_Cargo_Navy_trousers_with_navy_back.webp"
+    ],
+    "image": "assets/products/1790360460895_Cargo_Beige_trousers.webp"
   },
   {
     "availability": "In Stock",
