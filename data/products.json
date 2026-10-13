@@ -142,7 +142,8 @@
       "Left Hip Pocket",
       "Right Hip Pocket",
       "Left Cargo Pocket / Leg",
-      "Right Cargo Pocket / Leg"
+      "Right Cargo Pocket / Leg",
+      "left"
     ],
     "placements": [
       {
@@ -176,6 +177,14 @@
         "w": 16,
         "x": 35,
         "y": 55
+      },
+      {
+        "name": "left",
+        "x": 60.3,
+        "y": 80.8,
+        "w": 10.6,
+        "h": 9.4,
+        "r": 0
       }
     ],
     "dtfPlacements": [
