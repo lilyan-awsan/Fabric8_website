@@ -231,7 +231,8 @@
     "cmsShopSearchSub": "Search by name, category, sector, details, or description.",
     "cmsShopSectorLabel": "Sector",
     "cmsShopCategoryLabel": "Category",
-    "cmsShopSortLabel": "Sort By"
+    "cmsShopSortLabel": "Sort By",
+    "test": "123"
   },
   "categories1stLayer": [
     {
