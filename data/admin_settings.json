@@ -252,7 +252,7 @@
       "name": "Food & beverage"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Industrial"
     },
     {
