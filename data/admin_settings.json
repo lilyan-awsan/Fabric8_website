@@ -248,11 +248,11 @@
       "name": "Healthcare"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "Food & beverage"
     },
     {
-      "enabled": false,
+      "enabled": true,
       "name": "Industrial"
     },
     {
