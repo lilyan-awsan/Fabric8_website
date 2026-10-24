@@ -248,7 +248,7 @@
       "name": "Healthcare"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Food & beverage"
     },
     {
