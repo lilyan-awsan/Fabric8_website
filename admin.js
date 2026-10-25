@@ -2823,10 +2823,16 @@ if (iframe && navBtns.length > 0) {
             outline-offset: 2px !important;
             box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25) !important; 
           }
-          .editable-image { outline: 2px dashed rgba(47, 135, 61, 0.5); cursor: pointer; transition: outline 0.2s; position: relative; }
-          .editable-image:hover { outline: 3px solid var(--green, #2f873d); opacity: 0.95; }
-          .editor-img-wrapper { position: relative; display: inline-block; transition: all 0.2s ease; }
-          .editor-img-wrapper:hover .editor-img-badge { transform: scale(1.03); border-color: #38bdf8 !important; box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+          .editable-image { 
+            outline: 2px dashed rgba(46, 204, 113, 0.6) !important; 
+            outline-offset: 2px !important;
+            cursor: pointer !important; 
+            transition: outline 0.2s ease, filter 0.2s ease !important; 
+          }
+          .editable-image:hover { 
+            outline: 2.5px solid #2ecc71 !important; 
+            filter: brightness(1.05) !important;
+          }
 
           /* Flip Card Editor Controls: Disable erratic hover-flipping in admin editor so cards stay rock-solid */
           .flip-card .flip-inner,
@@ -3121,109 +3127,29 @@ if (iframe && navBtns.length > 0) {
         });
       }
       
-      // Helper: Determine recommended dimensions for each image based on location & page
-      function getRecommendedDimensionsForImg(img) {
-        const id = img.id || '';
-        const src = (img.getAttribute('src') || '').toLowerCase();
-        const page = currentVisualPage || '';
-
-        // 1. Services page images specifically (Consultation, Branding, Production)
-        if (id === 'cmsServicesConsultImg' || id === 'cmsServicesBrandImg' || id === 'cmsServicesProdImg' || page === 'services.html') {
-          return { dims: '1200 × 900 px', ratio: '4:3', note: 'Landscape 4:3' };
-        }
-        // 2. Sector card logos/icons
-        if (id.startsWith('cmsSector') || src.includes('sector')) {
-          return { dims: '200 × 200 px', ratio: '1:1', note: 'Square Icon' };
-        }
-        // 3. About page values icons
-        if (id.startsWith('cmsValue') || src.includes('icon_')) {
-          return { dims: '280 × 280 px', ratio: '1:1', note: 'Square Icon' };
-        }
-        // 4. Product preview cards (Home page / Catalog)
-        if (img.closest('.product-card') || src.includes('product')) {
-          return { dims: '1000 × 1000 px', ratio: '1:1', note: 'Square 1:1' };
-        }
-        // 5. Hero / Full-width backgrounds (if an img tag is used)
-        if (img.closest('.page-hero, .hero')) {
-          return { dims: '1920 × 800 px', ratio: '16:9', note: 'Wide Banner' };
-        }
-        // 6. Natural / Rendered Aspect Ratio Calculation
-        const w = img.naturalWidth || img.offsetWidth || 800;
-        const h = img.naturalHeight || img.offsetHeight || 600;
-        const aspect = w / (h || 1);
-        if (Math.abs(aspect - (4/3)) < 0.2) {
-          return { dims: '1200 × 900 px', ratio: '4:3', note: 'Landscape 4:3' };
-        } else if (Math.abs(aspect - 1) < 0.15) {
-          return { dims: '800 × 800 px', ratio: '1:1', note: 'Square 1:1' };
-        } else if (Math.abs(aspect - (3/4)) < 0.2) {
-          return { dims: '600 × 800 px', ratio: '3:4', note: 'Portrait 3:4' };
-        } else if (aspect > 1.6) {
-          return { dims: '1920 × 800 px', ratio: '16:9', note: 'Wide Banner' };
-        } else {
-          return { dims: `${Math.round(w)} × ${Math.round(h)} px`, ratio: `${aspect.toFixed(1)}:1`, note: 'Standard' };
-        }
-      }
-
-      // Helper: Wrap editable image with recommended dimension badge
-      function wrapEditableImage(docRef, img) {
-        if (img.closest('.editor-img-wrapper') || img.hasAttribute('data-img-editor-handled')) return;
-        if (img.closest('.logo-wrapper, .footer-social-links, .square-social-btn, .editor-flip-btn, .editor-card-badge')) return;
-
-        // Skip tiny decorative icons under 45px
-        const renderedW = img.offsetWidth || img.naturalWidth || 100;
-        const renderedH = img.offsetHeight || img.naturalHeight || 100;
-        if (renderedW > 0 && renderedW < 45 && renderedH > 0 && renderedH < 45) return;
-
-        img.setAttribute('data-img-editor-handled', 'true');
-        const spec = getRecommendedDimensionsForImg(img);
-
-        const parent = img.parentNode;
-        if (!parent) return;
-
-        const wrapper = docRef.createElement('div');
-        wrapper.className = 'editor-img-wrapper';
-
-        // Inherit display and layout from image so layout never shifts
-        const isBlock = img.style.width === '100%' || (img.getAttribute('width') || '').includes('%');
-        wrapper.style.cssText = `position: relative; display: ${isBlock ? 'block' : 'inline-block'}; width: ${isBlock ? '100%' : 'fit-content'}; max-width: 100%; box-sizing: border-box; vertical-align: middle;`;
-        if (img.style.aspectRatio) wrapper.style.aspectRatio = img.style.aspectRatio;
-        if (img.style.borderRadius) wrapper.style.borderRadius = img.style.borderRadius;
-
-        // Floating dimension badge
-        const badge = docRef.createElement('div');
-        badge.className = 'editor-img-badge';
-        badge.innerHTML = `📷 Click to change <span style="opacity:0.35;">|</span> 📐 <strong style="color:#38bdf8;">${spec.dims}</strong> <span style="font-size:9.5px; opacity:0.8; text-transform:uppercase;">(${spec.note})</span>`;
-        badge.style.cssText = 'position: absolute; top: 12px; left: 12px; z-index: 9999; background: rgba(15, 23, 42, 0.92); color: #ffffff; border: 1.5px solid #22c55e; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.35); pointer-events: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; backdrop-filter: blur(4px); line-height: 1.4;';
-
-        parent.insertBefore(wrapper, img);
-        wrapper.appendChild(badge);
-        wrapper.appendChild(img);
-
-        img.classList.add('editable-image');
-        img.style.cursor = 'pointer';
-
-        wrapper.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const fileInput = document.createElement('input');
-          fileInput.type = 'file';
-          fileInput.accept = 'image/*';
-          fileInput.onchange = async (event) => {
-            const file = event.target.files && event.target.files[0];
-            if (file) {
-              const optimized = await compressImageAuto(file, 'general');
-              img.src = optimized.base64;
-              img.setAttribute('data-new-upload', optimized.name);
-              badge.innerHTML = `✅ Changed <span style="opacity:0.35;">|</span> 📐 <strong style="color:#38bdf8;">${spec.dims}</strong>`;
-            }
-          };
-          fileInput.click();
-        });
-      }
-
-      // Make images editable & attach dimension badges
+      // Make images editable with clean sidebar interaction
       const images = doc.querySelectorAll('img');
-      images.forEach(img => wrapEditableImage(doc, img));
+      images.forEach(img => {
+        if (!img.classList.contains('editable-image')) {
+          img.classList.add('editable-image');
+          img.setAttribute('title', 'Click to view size & change image from sidebar');
+          img.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // Highlight selected image in preview
+            doc.querySelectorAll('.editable-image').forEach(i => {
+              i.style.outline = '2px dashed rgba(46, 204, 113, 0.6)';
+              i.style.outlineOffset = '2px';
+            });
+            img.style.outline = '3px solid #22c55e';
+            img.style.outlineOffset = '3px';
+
+            if (typeof selectImageForEditing === 'function') {
+              selectImageForEditing(img, doc);
+            }
+          });
+        }
+      });
       
       // Make CSS background images editable (hero banners)
       const heroes = doc.querySelectorAll('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide');
@@ -3252,13 +3178,13 @@ if (iframe && navBtns.length > 0) {
             }
           };
 
-          // Inject floating "Change Photo" button directly into the hero with dimension badge
+          // Inject floating "Change Photo" button directly into the hero
           if (!hero.querySelector('.editor-change-bg-btn')) {
             const btn = doc.createElement('button');
             btn.className = 'editor-change-bg-btn';
             btn.type = 'button';
             btn.setAttribute('contenteditable', 'false');
-            btn.innerHTML = '📷 Change Hero Photo <span style="font-size: 10px; font-weight: 700; background: rgba(0,0,0,0.5); padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); color: #4ade80; margin-left: 6px;">📐 1920 × 800 px</span>';
+            btn.innerHTML = '📷 Change Hero Photo';
             btn.style.cssText = 'position: absolute; top: 15px; right: 20px; z-index: 999999; background: #111; color: #fff; border: 2px solid #2ecc71; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.6); display: flex; align-items: center; gap: 8px; font-family: inherit; letter-spacing: 0.5px;';
             btn.onmouseover = () => { btn.style.background = '#2ecc71'; btn.style.color = '#fff'; btn.style.transform = 'scale(1.05)'; };
             btn.onmouseout = () => { btn.style.background = '#111'; btn.style.color = '#fff'; btn.style.transform = 'scale(1)'; };
@@ -3292,6 +3218,9 @@ if (iframe && navBtns.length > 0) {
       if (!targetBtn) return;
       targetBtn.classList.add('active');
       currentVisualPage = targetBtn.getAttribute('data-page');
+      if (typeof updateEditorSizeGuidesForPage === 'function') {
+        updateEditorSizeGuidesForPage(currentVisualPage);
+      }
 
       const footerPanel = document.getElementById('footerEditorPanel');
       const heroBtnContainer = document.getElementById('editorChangeHeroBtn')?.parentElement;
@@ -3316,7 +3245,12 @@ if (iframe && navBtns.length > 0) {
     });
   });
 
-  iframe.addEventListener('load', initIframeEditing);
+  iframe.addEventListener('load', () => {
+    initIframeEditing();
+    if (typeof updateEditorSizeGuidesForPage === 'function') {
+      updateEditorSizeGuidesForPage(currentVisualPage);
+    }
+  });
   // Also try immediate initialization for fast loading
   setTimeout(initIframeEditing, 300);
   setTimeout(initIframeEditing, 1000);
@@ -3402,21 +3336,7 @@ if (saveVisualEditorBtn) {
           card.setAttribute('onclick', "this.classList.toggle('flipped')");
         }
       });
-      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"], .editor-flip-btn, .editor-flip-all-bar, .editor-card-badge, .editor-change-bg-btn').forEach(el => el.remove());
-
-      // Unwrap all editable image wrappers and strip badges cleanly
-      cleanDoc.querySelectorAll('.editor-img-wrapper').forEach(wrapper => {
-        const badge = wrapper.querySelector('.editor-img-badge');
-        if (badge) badge.remove();
-        const img = wrapper.querySelector('img');
-        if (img) {
-          img.removeAttribute('data-img-editor-handled');
-          img.classList.remove('editable-image');
-          wrapper.parentNode.insertBefore(img, wrapper);
-        }
-        wrapper.remove();
-      });
-      cleanDoc.querySelectorAll('.editor-img-badge').forEach(el => el.remove());
+      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"], .editor-flip-btn, .editor-flip-all-bar, .editor-card-badge').forEach(el => el.remove());
 
       // Restore clean native country-selector before saving HTML
       cleanDoc.querySelectorAll('.editor-country-wrapper').forEach(wrapper => {
@@ -3946,6 +3866,182 @@ if (editorChangeHeroBtn) {
         fileInput.remove();
       };
       fileInput.click();
+    }
+  });
+}
+
+// ==========================================
+// Image Sizes Guide & Selected Image Manager
+// ==========================================
+
+let currentlySelectedEditorImg = null;
+
+function updateEditorSizeGuidesForPage(page) {
+  const activeSizeEl = document.getElementById('editorActiveSizeText');
+  const heroBtn = document.getElementById('editorChangeHeroBtn');
+  const heroContainer = document.getElementById('editorQuickHeroContainer');
+  const selectedPanel = document.getElementById('editorSelectedImagePanel');
+  if (selectedPanel) selectedPanel.style.display = 'none';
+
+  // Clear guide item highlights
+  ['guideItemServices', 'guideItemHero', 'guideItemSectors', 'guideItemProducts', 'guideItemLogos'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.background = 'transparent';
+      el.style.border = 'none';
+      el.style.borderRadius = '4px';
+      el.style.padding = '2px 4px';
+    }
+  });
+
+  const highlightGuide = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.style.background = '#e2e8f0';
+      el.style.borderRadius = '4px';
+      el.style.padding = '2px 4px';
+    }
+  };
+
+  if (!activeSizeEl) return;
+
+  switch (page) {
+    case 'index.html':
+      activeSizeEl.textContent = 'Hero Size: 1920 × 800 px';
+      highlightGuide('guideItemHero');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'services.html':
+      activeSizeEl.textContent = 'Services: 1200 × 900 px (4:3)';
+      highlightGuide('guideItemServices');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'sectors.html':
+      activeSizeEl.textContent = 'Sectors: 200 × 200 px (1:1)';
+      highlightGuide('guideItemSectors');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'method.html':
+      activeSizeEl.textContent = 'Method Steps: 1200 × 800 px';
+      highlightGuide('guideItemHero');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'about.html':
+      activeSizeEl.textContent = 'Story Photo: 1200 × 800 px';
+      highlightGuide('guideItemHero');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'shop.html':
+      activeSizeEl.textContent = 'Products: 1000 × 1000 px';
+      highlightGuide('guideItemProducts');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'contact.html':
+      activeSizeEl.textContent = 'Contact Hero: 1920 × 800 px';
+      highlightGuide('guideItemHero');
+      if (heroContainer) heroContainer.style.display = 'flex';
+      if (heroBtn) heroBtn.textContent = '📷 Change Hero Photo';
+      break;
+    case 'footer':
+      activeSizeEl.textContent = 'Brand Logos: 400 × 150 px';
+      highlightGuide('guideItemLogos');
+      if (heroContainer) heroContainer.style.display = 'none';
+      break;
+    default:
+      activeSizeEl.textContent = 'Hero Size: 1920 × 800 px';
+      highlightGuide('guideItemHero');
+  }
+}
+
+function selectImageForEditing(img, doc) {
+  currentlySelectedEditorImg = img;
+  const panel = document.getElementById('editorSelectedImagePanel');
+  const sizeBadge = document.getElementById('editorSelectedImgSizeBadge');
+
+  if (!panel || !sizeBadge) return;
+
+  // Detect image context and best recommended size
+  let typeLabel = 'Image';
+  let sizeText = '';
+  const src = (img.getAttribute('src') || '').toLowerCase();
+  const alt = (img.getAttribute('alt') || '').toLowerCase();
+  const parentClasses = (img.closest('[class]')?.className || '').toLowerCase();
+
+  if (parentClasses.includes('sector') || alt.includes('sector') || src.includes('sector') || currentVisualPage === 'sectors.html') {
+    typeLabel = 'Sector Icon / Image';
+    sizeText = '📐 Sectors: 200 × 200 px (1:1)';
+  } else if (parentClasses.includes('service') || alt.includes('service') || src.includes('service') || currentVisualPage === 'services.html') {
+    typeLabel = 'Service Card Photo';
+    sizeText = '📐 Services: 1200 × 900 px (4:3)';
+  } else if (parentClasses.includes('method') || alt.includes('method') || src.includes('method') || currentVisualPage === 'method.html') {
+    typeLabel = 'Method Illustration';
+    sizeText = '📐 Method: 1200 × 800 px';
+  } else if (parentClasses.includes('brand') || parentClasses.includes('marquee') || alt.includes('logo') || src.includes('logo')) {
+    typeLabel = 'Brand Logo';
+    sizeText = '📐 Brand Logos: 400 × 150 px';
+  } else if (parentClasses.includes('hero') || alt.includes('hero') || src.includes('hero')) {
+    typeLabel = 'Hero Banner';
+    sizeText = '📐 Hero Banner: 1920 × 800 px';
+  } else if (parentClasses.includes('product') || alt.includes('product') || src.includes('product')) {
+    typeLabel = 'Product Photo';
+    sizeText = '📐 Products: 1000 × 1000 px';
+  } else {
+    const w = img.naturalWidth || img.width || 1200;
+    const h = img.naturalHeight || img.height || 800;
+    typeLabel = 'Selected Photo';
+    sizeText = `📐 Size: ${w} × ${h} px`;
+  }
+
+  sizeBadge.textContent = sizeText;
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Wire up Selected Image Actions in Sidebar
+const changeSelectedImgBtn = document.getElementById('editorChangeSelectedImgBtn');
+const selectedImgFileInput = document.getElementById('editorSelectedImgFileInput');
+const deselectImgBtn = document.getElementById('editorDeselectImgBtn');
+
+if (changeSelectedImgBtn && selectedImgFileInput) {
+  changeSelectedImgBtn.addEventListener('click', () => {
+    selectedImgFileInput.click();
+  });
+
+  selectedImgFileInput.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file && currentlySelectedEditorImg) {
+      changeSelectedImgBtn.textContent = '⏳ Processing...';
+      changeSelectedImgBtn.disabled = true;
+      try {
+        const optimized = await compressImageAuto(file, 'general');
+        currentlySelectedEditorImg.src = optimized.base64;
+        currentlySelectedEditorImg.setAttribute('data-new-upload', optimized.name);
+        alert('✅ Image updated! Click "Publish Page Changes" to save to the live site.');
+      } catch (err) {
+        console.error('Image upload error:', err);
+        alert('Could not update image: ' + err.message);
+      } finally {
+        changeSelectedImgBtn.textContent = '📷 Choose New Image';
+        changeSelectedImgBtn.disabled = false;
+        selectedImgFileInput.value = '';
+      }
+    }
+  });
+}
+
+if (deselectImgBtn) {
+  deselectImgBtn.addEventListener('click', () => {
+    const panel = document.getElementById('editorSelectedImagePanel');
+    if (panel) panel.style.display = 'none';
+    if (currentlySelectedEditorImg) {
+      currentlySelectedEditorImg.style.outline = '';
+      currentlySelectedEditorImg = null;
     }
   });
 }
