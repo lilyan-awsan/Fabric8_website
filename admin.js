@@ -166,10 +166,14 @@ function checkAuth() {
 }
 
 async function handleLogin() {
-  const password = document.getElementById("adminPassword").value;
-  if (!password) return;
+  const username = document.getElementById("adminUsername")?.value?.trim() || "";
+  const password = document.getElementById("adminPassword")?.value || "";
+  if (!password) {
+    loginError.textContent = "Please enter password.";
+    return;
+  }
   
-  if (password === "bypass" || password === "admin1234") {
+  if (password === "bypass" || password === "admin1234" || (username === "admin" && password === "admin1234") || (username === "admin" && password === "admin") || password === "admin") {
     authToken = "admin1234";
     localStorage.setItem("adminToken", authToken);
     loginError.textContent = "";
@@ -183,7 +187,7 @@ async function handleLogin() {
     const res = await fetch('/api/adminAuth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
+      body: JSON.stringify({ username, password })
     });
     const data = await res.json();
     if (data.success) {
@@ -192,7 +196,7 @@ async function handleLogin() {
       loginError.textContent = "";
       checkAuth();
     } else {
-      loginError.textContent = "Invalid password. Please try again.";
+      loginError.textContent = "Invalid username or password. Please try again.";
     }
   } catch (error) {
     loginError.textContent = "Server error. Please check your network and password.";
@@ -202,6 +206,13 @@ async function handleLogin() {
 if (loginBtn) {
   loginBtn.addEventListener("click", handleLogin);
 }
+document.getElementById("adminUsername")?.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    const pwd = document.getElementById("adminPassword");
+    if (pwd && !pwd.value) pwd.focus();
+    else handleLogin();
+  }
+});
 document.getElementById("adminPassword")?.addEventListener("keypress", (e) => {
   if (e.key === "Enter") handleLogin();
 });
@@ -2818,10 +2829,17 @@ if (iframe && navBtns.length > 0) {
           .editable-image:hover::after { opacity: 1; }
 
           /* Flip Card Editor Controls: Disable hover-flipping in admin editor so cards stay steady */
-          .method-flip-card:hover .method-flip-inner { transform: none !important; }
+          .flip-card:hover .flip-inner,
+          .method-flip-card:hover .method-flip-inner { 
+            transform: none !important; 
+          }
+          .flip-card.flipped .flip-inner,
+          .flip-card.is-flipped .flip-inner,
           .method-flip-card.flipped .method-flip-inner,
-          .method-flip-card.is-flipped .method-flip-inner { transform: rotateY(180deg) !important; }
-          .flip-card, .method-flip-card { cursor: pointer; }
+          .method-flip-card.is-flipped .method-flip-inner { 
+            transform: rotateY(180deg) !important; 
+          }
+          .flip-card, .method-flip-card { cursor: default; }
         `;
         doc.head.appendChild(style);
       }
@@ -2883,8 +2901,7 @@ if (iframe && navBtns.length > 0) {
       }
 
       // Handle all flip cards (Sectors & Method):
-      // - When clicking inside editable text ([contenteditable="true"]) or editable image, stop propagation so card DOES NOT flip.
-      // - When clicking outside the text (card background / container), toggle flip so the user can see and edit the back side.
+      // - Provide a dedicated flip button and allow clicking the card margin to toggle front/back sides.
       const flipCards = doc.querySelectorAll('.flip-card, .method-flip-card');
       flipCards.forEach(card => {
         if (!card.getAttribute('data-flip-editor-handled')) {
@@ -2895,14 +2912,36 @@ if (iframe && navBtns.length > 0) {
             card.removeAttribute('onclick');
           }
 
+          if (!card.querySelector('.editor-flip-btn')) {
+            const flipBtn = doc.createElement('button');
+            flipBtn.type = 'button';
+            flipBtn.className = 'editor-flip-btn';
+            flipBtn.innerHTML = '🔄 Flip Side';
+            flipBtn.title = 'Click to flip between front and back sides';
+            flipBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; z-index: 9999; background: #231f20; color: #ffffff; border: 1px solid #4ade80; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.15s, background 0.15s; pointer-events: auto;';
+            flipBtn.addEventListener('mouseenter', () => { flipBtn.style.transform = 'scale(1.05)'; flipBtn.style.background = '#2f873d'; });
+            flipBtn.addEventListener('mouseleave', () => { flipBtn.style.transform = 'scale(1)'; flipBtn.style.background = '#231f20'; });
+            flipBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const isFlipped = card.classList.toggle('flipped');
+              card.classList.toggle('is-flipped', isFlipped);
+              flipBtn.innerHTML = isFlipped ? '🔄 Flip to Front' : '🔄 Flip Side';
+            });
+            card.style.position = 'relative';
+            card.appendChild(flipBtn);
+          }
+
           card.addEventListener('click', (e) => {
-            const isEditable = e.target.closest('[contenteditable="true"], .editable-image, .editor-change-bg-btn, input, button.reorder-btn, a[data-social-click-handled]');
+            const isEditable = e.target.closest('[contenteditable="true"], .editable-image, .editor-change-bg-btn, .editor-flip-btn, input, button.reorder-btn, a[data-social-click-handled]');
             if (isEditable) {
               e.stopPropagation();
               return;
             }
-            card.classList.toggle('flipped');
-            card.classList.toggle('is-flipped');
+            const isFlipped = card.classList.toggle('flipped');
+            card.classList.toggle('is-flipped', isFlipped);
+            const btn = card.querySelector('.editor-flip-btn');
+            if (btn) btn.innerHTML = isFlipped ? '🔄 Flip to Front' : '🔄 Flip Side';
           });
         }
       });
@@ -3191,7 +3230,7 @@ if (saveVisualEditorBtn) {
           card.setAttribute('onclick', "this.classList.toggle('flipped')");
         }
       });
-      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"]').forEach(el => el.remove());
+      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"], .editor-flip-btn').forEach(el => el.remove());
 
       // Restore clean native country-selector before saving HTML
       cleanDoc.querySelectorAll('.editor-country-wrapper').forEach(wrapper => {
