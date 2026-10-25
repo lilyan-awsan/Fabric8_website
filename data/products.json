@@ -2807,5 +2807,132 @@
       "Center Back",
       "Upper Sleeve"
     ]
+  },
+  {
+    "id": "ttt",
+    "sku": "ttt",
+    "name": "yyy",
+    "category": "HEAD WEAR",
+    "gender": "Unisex",
+    "sectors": "Corporate, Hospitality",
+    "short": "yyyyyyyy",
+    "long": "yyyyyyy",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL",
+      "4rr"
+    ],
+    "colors": [
+      "Black",
+      "White",
+      "Navy",
+      "Grey",
+      "Black Striped",
+      "Burgundy",
+      "Khaki"
+    ],
+    "colorHexMap": {
+      "Black Striped": "repeating-linear-gradient(45deg, #111111, #111111 3px, #ffffff 3px, #ffffff 6px)",
+      "Burgundy": "#6b1d2f",
+      "Khaki": "#c3b091"
+    },
+    "colorImageMap": {
+      "Black": "assets/products/1792918252515_1_Black_Mixed_Wallpapers_Pack_148_HD_akoam__18_.webp",
+      "Navy": "assets/products/1792918253596_2_Navy_Mixed_Wallpapers_Pack_148_HD_akoam__26_.webp",
+      "Grey": "assets/products/1792918254608_3_Grey_Mixed_Wallpapers_Pack_148_HD_akoam__29_.webp",
+      "Burgundy": "assets/products/1792918256198_4_Burgundy_Mixed_Wallpapers_Pack_148_HD_akoam__40_.webp",
+      "Khaki": "assets/products/1792918257197_5_Khaki_Mixed_Wallpapers_Pack_148_HD_akoam__42_.webp",
+      "White": "assets/products/1792918259432_7_White_Mixed_Wallpapers_Pack_148_HD_akoam__133_.webp"
+    },
+    "fabric": "555555",
+    "gsm": "5555555555555",
+    "leadTime": "555555",
+    "moq": "5",
+    "maxQty": "55",
+    "availability": "5",
+    "care": "555555",
+    "sketch": "assets/products/1792918261417_sketch_600_Mixed_Wallpapers_Pack_148_HD_akoam__18_.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Full Back",
+      "Upper Sleeve",
+      "upper"
+    ],
+    "placements": [
+      {
+        "name": "Left Chest",
+        "x": 65,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Right Chest",
+        "x": 35,
+        "y": 36,
+        "w": 18,
+        "h": 18,
+        "r": 0
+      },
+      {
+        "name": "Full Back",
+        "x": 50,
+        "y": 45,
+        "w": 45,
+        "h": 45,
+        "r": 0
+      },
+      {
+        "name": "Upper Sleeve",
+        "x": 84,
+        "y": 34,
+        "w": 13,
+        "h": 13,
+        "r": 6
+      },
+      {
+        "name": "upper",
+        "x": 50,
+        "y": 50,
+        "w": 20,
+        "h": 20,
+        "r": 0
+      }
+    ],
+    "dtfPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve",
+      "upper"
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery"
+    ],
+    "customizationCapability": "embroidery_only",
+    "images": [
+      "assets/products/1792918252515_1_Black_Mixed_Wallpapers_Pack_148_HD_akoam__18_.webp",
+      "assets/products/1792918251080_0_Black_Mixed_Wallpapers_Pack_148_HD_akoam__17_.webp",
+      "assets/products/1792918253596_2_Navy_Mixed_Wallpapers_Pack_148_HD_akoam__26_.webp",
+      "assets/products/1792918254608_3_Grey_Mixed_Wallpapers_Pack_148_HD_akoam__29_.webp",
+      "assets/products/1792918256198_4_Burgundy_Mixed_Wallpapers_Pack_148_HD_akoam__40_.webp",
+      "assets/products/1792918257197_5_Khaki_Mixed_Wallpapers_Pack_148_HD_akoam__42_.webp",
+      "assets/products/1792918258290_6_Grey_Mixed_Wallpapers_Pack_148_HD_akoam__49_.webp",
+      "assets/products/1792918259432_7_White_Mixed_Wallpapers_Pack_148_HD_akoam__133_.webp",
+      "assets/products/1792918260424_8_600_Mixed_Wallpapers_Pack_148_HD_akoam__137_.webp"
+    ],
+    "image": "assets/products/1792918252515_1_Black_Mixed_Wallpapers_Pack_148_HD_akoam__18_.webp"
   }
 ]
