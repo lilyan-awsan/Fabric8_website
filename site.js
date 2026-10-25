@@ -2635,6 +2635,50 @@ function normalizeForMatch(str) {
     .replace(/\s+/g, " ");
 }
 
+function productHasPhotoForColor(product, color) {
+  if (!product || !color) return false;
+
+  // 1. Check if explicitly in colorImageMap
+  if (product.colorImageMap && typeof product.colorImageMap === "object") {
+    for (const [col, colUrl] of Object.entries(product.colorImageMap)) {
+      if (col && col.toLowerCase() === color.toLowerCase() && colUrl && typeof colUrl === "string" && colUrl.trim().length > 0) {
+        return true;
+      }
+    }
+  }
+
+  // 2. Check if any photo in product.images directly matches this color
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    const colNorm = normalizeForMatch(color);
+    const colTokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
+    if (colTokens.length > 0) {
+      const match = product.images.some(img => {
+        if (!img) return false;
+        const imgNorm = normalizeForMatch(img);
+        return colTokens.every(t => new RegExp('(^|[^a-z0-9])' + t + '([^a-z0-9]|$)', 'i').test(imgNorm));
+      });
+      if (match) return true;
+    }
+  }
+
+  return false;
+}
+
+function getAvailableProductColors(product) {
+  if (!product || !Array.isArray(product.colors) || product.colors.length === 0) return [];
+  
+  // Filter colors to only those that have an assigned photo
+  const colorsWithPhotos = product.colors.filter(col => productHasPhotoForColor(product, col));
+  
+  // If at least one color has an assigned photo, show only those colors!
+  if (colorsWithPhotos.length > 0) {
+    return colorsWithPhotos;
+  }
+  
+  // Safe fallback if product has generic non-color-coded photos
+  return product.colors;
+}
+
 function getImagesForColor(product, targetColor) {
   if (!product.images || !product.images.length) return [product.image || 'White Polo Shirt.png'];
   if (!product.colors || !product.colors.length) return [...product.images];
@@ -2755,9 +2799,10 @@ function getImagesForColor(product, targetColor) {
         return reg.test(imgNorm);
       });
     });
+    // If color has no matching images, do NOT assign all product images to this color!
     matchedImgs = fallback.length > 0 
       ? fallback 
-      : (Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : [product.image || "assets/white.png"]);
+      : [product.image || (Array.isArray(product.images) && product.images[0]) || "assets/white.png"];
   }
 
   matchedImgs.sort((a, b) => {
@@ -2826,10 +2871,12 @@ function initProductPage(sku) {
   
   selectedProductSku = sku;
   
+  const availableColors = getAvailableProductColors(p);
+
   // Resolve activeCatalogColor: prioritize color associated with the Main Photo (p.image) unless user passed ?color=...
   const urlParams = new URLSearchParams(window.location.search);
   const queryColor = urlParams.get('color');
-  if (queryColor && p.colors && p.colors.includes(queryColor)) {
+  if (queryColor && availableColors.includes(queryColor)) {
     activeCatalogColor = queryColor;
   } else {
     let bestInitColor = null;
@@ -2837,15 +2884,17 @@ function initProductPage(sku) {
       const cleanMain = (p.image || "").split('?')[0].toLowerCase();
       for (const [col, colUrl] of Object.entries(p.colorImageMap)) {
         if (colUrl === p.image || (colUrl && colUrl.split('?')[0].toLowerCase() === cleanMain)) {
-          bestInitColor = col;
-          break;
+          if (availableColors.includes(col)) {
+            bestInitColor = col;
+            break;
+          }
         }
       }
     }
-    if (!bestInitColor && p.colors && p.colors.length > 0) {
+    if (!bestInitColor && availableColors.length > 0) {
       let maxLen = 0;
       const imgNorm = normalizeForMatch(p.image || "");
-      p.colors.forEach(col => {
+      availableColors.forEach(col => {
         const colNorm = normalizeForMatch(col);
         const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
         if (tokens.length > 0 && tokens.every(t => imgNorm.includes(t)) && col.length > maxLen) {
@@ -2854,10 +2903,10 @@ function initProductPage(sku) {
         }
       });
     }
-    if (!bestInitColor && p.colors && p.colors.length > 0) {
-      bestInitColor = p.colors[0];
+    if (!bestInitColor && availableColors.length > 0) {
+      bestInitColor = availableColors[0];
     }
-    activeCatalogColor = bestInitColor || (p.colors && p.colors[0]) || "";
+    activeCatalogColor = bestInitColor || availableColors[0] || (p.colors && p.colors[0]) || "";
   }
   
   window.currentLoadedProduct = p;
@@ -2937,8 +2986,8 @@ function initProductPage(sku) {
   };
 
   const colorFilter = document.getElementById("productColorFilter");
-  if (colorFilter && p.colors) {
-    colorFilter.innerHTML = p.colors.map(c => colorButton(c, p)).join("");
+  if (colorFilter && availableColors.length > 0) {
+    colorFilter.innerHTML = availableColors.map(c => colorButton(c, p)).join("");
     let activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
     if (!activeBtn && colorFilter.querySelector('.color-dot')) {
       activeBtn = colorFilter.querySelector('.color-dot');
@@ -4133,7 +4182,8 @@ window.openEditBasicDetails = function() {
   }
   const colorFilter = document.getElementById("editBasicColorFilter");
   if (colorFilter && product) {
-    colorFilter.innerHTML = product.colors.map(c => colorButton(c)).join("");
+    const editColors = getAvailableProductColors(product);
+    colorFilter.innerHTML = editColors.map(c => colorButton(c, product)).join("");
     const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(item.color)}"]`);
     if (activeBtn) activeBtn.classList.add("active");
   }
