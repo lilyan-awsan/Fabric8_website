@@ -2828,10 +2828,14 @@ if (iframe && navBtns.length > 0) {
           .editable-image::after { content: "✏️ Click to change image"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: black; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; pointer-events: none; opacity: 0; }
           .editable-image:hover::after { opacity: 1; }
 
-          /* Flip Card Editor Controls: Disable hover-flipping in admin editor so cards stay steady */
-          .flip-card:hover .flip-inner,
-          .method-flip-card:hover .method-flip-inner { 
-            transform: none !important; 
+          /* Flip Card Editor Controls: Disable erratic hover-flipping in admin editor so cards stay rock-solid */
+          .flip-card .flip-inner,
+          .method-flip-card .method-flip-inner { 
+            transition: transform 0.35s cubic-bezier(0.2, 1, 0.3, 1) !important; 
+          }
+          .flip-card:not(.flipped):not(.is-flipped):hover .flip-inner,
+          .method-flip-card:not(.flipped):not(.is-flipped):hover .method-flip-inner { 
+            transform: rotateY(0deg) !important; 
           }
           .flip-card.flipped .flip-inner,
           .flip-card.is-flipped .flip-inner,
@@ -2839,7 +2843,39 @@ if (iframe && navBtns.length > 0) {
           .method-flip-card.is-flipped .method-flip-inner { 
             transform: rotateY(180deg) !important; 
           }
-          .flip-card, .method-flip-card { cursor: default; }
+
+          /* Ensure proper stacking, visibility, and pointer-events so editing text works directly */
+          .flip-card:not(.flipped):not(.is-flipped) .flip-front,
+          .method-flip-card:not(.flipped):not(.is-flipped) .method-flip-front {
+            pointer-events: auto !important;
+            visibility: visible !important;
+            z-index: 3 !important;
+          }
+          .flip-card:not(.flipped):not(.is-flipped) .flip-back,
+          .method-flip-card:not(.flipped):not(.is-flipped) .method-flip-back {
+            pointer-events: none !important;
+            visibility: hidden !important;
+            z-index: 1 !important;
+          }
+
+          .flip-card.flipped .flip-back,
+          .flip-card.is-flipped .flip-back,
+          .method-flip-card.flipped .method-flip-back,
+          .method-flip-card.is-flipped .method-flip-back {
+            pointer-events: auto !important;
+            visibility: visible !important;
+            z-index: 10 !important;
+          }
+          .flip-card.flipped .flip-front,
+          .flip-card.is-flipped .flip-front,
+          .method-flip-card.flipped .method-flip-front,
+          .method-flip-card.is-flipped .method-flip-front {
+            pointer-events: none !important;
+            visibility: hidden !important;
+            z-index: 1 !important;
+          }
+
+          .flip-card, .method-flip-card { cursor: default; position: relative !important; }
         `;
         doc.head.appendChild(style);
       }
@@ -2892,7 +2928,7 @@ if (iframe && navBtns.length > 0) {
       if (!doc.body.getAttribute('data-click-intercepted')) {
         doc.body.setAttribute('data-click-intercepted', 'true');
         doc.addEventListener('click', (e) => {
-          if (e.target.closest('.editor-change-bg-btn, .editor-country-wrapper, .editor-country-trigger, .editor-country-menu')) return;
+          if (e.target.closest('.editor-change-bg-btn, .editor-country-wrapper, .editor-country-trigger, .editor-country-menu, .editor-flip-btn, .editor-flip-all-btn')) return;
           const link = e.target.closest('a, button');
           if (link) {
             e.preventDefault();
@@ -2900,8 +2936,50 @@ if (iframe && navBtns.length > 0) {
         }, true);
       }
 
-      // Handle all flip cards (Sectors & Method):
-      // - Provide a dedicated flip button and allow clicking the card margin to toggle front/back sides.
+      // Add "Flip All Cards" toolbar above Sector cards if present
+      const sectorCardsContainer = doc.querySelector('.sector-cards');
+      if (sectorCardsContainer && !doc.querySelector('.editor-flip-all-bar')) {
+        const flipAllBar = doc.createElement('div');
+        flipAllBar.className = 'editor-flip-all-bar';
+        flipAllBar.style.cssText = 'width: 100%; max-width: 1240px; margin: 0 auto 20px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 0 24px; box-sizing: border-box;';
+        
+        const flipAllBtn = doc.createElement('button');
+        flipAllBtn.type = 'button';
+        flipAllBtn.className = 'editor-flip-all-btn';
+        flipAllBtn.innerHTML = '🔄 Flip All Cards to Back (قلب كل البطاقات للخلف)';
+        flipAllBtn.style.cssText = 'background: #0f172a; color: #38bdf8; border: 2px solid #38bdf8; border-radius: 8px; font-size: 13px; font-weight: 800; padding: 8px 18px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s;';
+        flipAllBtn.addEventListener('mouseenter', () => { flipAllBtn.style.background = '#38bdf8'; flipAllBtn.style.color = '#0f172a'; });
+        flipAllBtn.addEventListener('mouseleave', () => { flipAllBtn.style.background = '#0f172a'; flipAllBtn.style.color = '#38bdf8'; });
+        
+        let allFlipped = false;
+        flipAllBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          allFlipped = !allFlipped;
+          flipAllBtn.innerHTML = allFlipped ? '🔄 Flip All Cards to Front (إرجاع كل البطاقات للأمام)' : '🔄 Flip All Cards to Back (قلب كل البطاقات للخلف)';
+          doc.querySelectorAll('.sector-cards .flip-card').forEach(c => {
+            c.classList.toggle('flipped', allFlipped);
+            c.classList.toggle('is-flipped', allFlipped);
+            const b = c.querySelector('.editor-flip-btn');
+            if (b) {
+              b.innerHTML = allFlipped ? '🔄 Flip to Front' : '🔄 Flip to Back';
+              b.style.borderColor = allFlipped ? '#38bdf8' : '#22c55e';
+            }
+            const badge = c.querySelector('.editor-card-badge');
+            if (badge) {
+              badge.innerHTML = allFlipped ? '⚙️ Back Side' : '👁️ Front Side';
+              badge.style.color = allFlipped ? '#38bdf8' : '#4ade80';
+            }
+          });
+        });
+        
+        flipAllBar.appendChild(flipAllBtn);
+        sectorCardsContainer.parentNode.insertBefore(flipAllBar, sectorCardsContainer);
+      }
+
+      // Handle all individual flip cards (Sectors & Method):
+      // - Dedicated Flip Button with side indicator badge and automatic focus
+      // - Prevents card from snapping back on hover or accidental background clicks
       const flipCards = doc.querySelectorAll('.flip-card, .method-flip-card');
       flipCards.forEach(card => {
         if (!card.getAttribute('data-flip-editor-handled')) {
@@ -2912,37 +2990,50 @@ if (iframe && navBtns.length > 0) {
             card.removeAttribute('onclick');
           }
 
+          // Side indicator badge (top-left)
+          if (!card.querySelector('.editor-card-badge')) {
+            const badge = doc.createElement('div');
+            badge.className = 'editor-card-badge';
+            badge.innerHTML = '👁️ Front Side';
+            badge.style.cssText = 'position: absolute; top: 12px; left: 12px; z-index: 99999; background: rgba(15, 23, 42, 0.85); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); border-radius: 999px; font-size: 10px; font-weight: 800; padding: 4px 10px; pointer-events: none; letter-spacing: 0.04em;';
+            card.appendChild(badge);
+          }
+
+          // Flip Button (top-right)
           if (!card.querySelector('.editor-flip-btn')) {
             const flipBtn = doc.createElement('button');
             flipBtn.type = 'button';
             flipBtn.className = 'editor-flip-btn';
-            flipBtn.innerHTML = '🔄 Flip Side';
-            flipBtn.title = 'Click to flip between front and back sides';
-            flipBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; z-index: 9999; background: #231f20; color: #ffffff; border: 1px solid #4ade80; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 10px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.25); transition: transform 0.15s, background 0.15s; pointer-events: auto;';
-            flipBtn.addEventListener('mouseenter', () => { flipBtn.style.transform = 'scale(1.05)'; flipBtn.style.background = '#2f873d'; });
-            flipBtn.addEventListener('mouseleave', () => { flipBtn.style.transform = 'scale(1)'; flipBtn.style.background = '#231f20'; });
+            flipBtn.innerHTML = '🔄 Flip to Back';
+            flipBtn.title = 'Click to flip between front and back sides to edit';
+            flipBtn.style.cssText = 'position: absolute; top: 12px; right: 12px; z-index: 99999; background: #0f172a; color: #ffffff; border: 2px solid #22c55e; border-radius: 999px; font-size: 11px; font-weight: 800; padding: 6px 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.3); transition: transform 0.15s, background 0.15s; pointer-events: auto; display: flex; align-items: center; gap: 5px;';
+            flipBtn.addEventListener('mouseenter', () => { flipBtn.style.transform = 'scale(1.05)'; flipBtn.style.background = '#1e293b'; });
+            flipBtn.addEventListener('mouseleave', () => { flipBtn.style.transform = 'scale(1)'; flipBtn.style.background = '#0f172a'; });
             flipBtn.addEventListener('click', (e) => {
               e.preventDefault();
               e.stopPropagation();
               const isFlipped = card.classList.toggle('flipped');
               card.classList.toggle('is-flipped', isFlipped);
-              flipBtn.innerHTML = isFlipped ? '🔄 Flip to Front' : '🔄 Flip Side';
+              flipBtn.innerHTML = isFlipped ? '🔄 Flip to Front' : '🔄 Flip to Back';
+              flipBtn.style.borderColor = isFlipped ? '#38bdf8' : '#22c55e';
+              
+              const badge = card.querySelector('.editor-card-badge');
+              if (badge) {
+                badge.innerHTML = isFlipped ? '⚙️ Back Side' : '👁️ Front Side';
+                badge.style.color = isFlipped ? '#38bdf8' : '#4ade80';
+              }
+
+              // Automatically focus the editable element on the newly active side
+              setTimeout(() => {
+                const activeSide = isFlipped ? card.querySelector('.flip-back, .method-flip-back') : card.querySelector('.flip-front, .method-flip-front');
+                if (activeSide) {
+                  const editable = activeSide.querySelector('[contenteditable="true"]');
+                  if (editable) editable.focus();
+                }
+              }, 100);
             });
-            card.style.position = 'relative';
             card.appendChild(flipBtn);
           }
-
-          card.addEventListener('click', (e) => {
-            const isEditable = e.target.closest('[contenteditable="true"], .editable-image, .editor-change-bg-btn, .editor-flip-btn, input, button.reorder-btn, a[data-social-click-handled]');
-            if (isEditable) {
-              e.stopPropagation();
-              return;
-            }
-            const isFlipped = card.classList.toggle('flipped');
-            card.classList.toggle('is-flipped', isFlipped);
-            const btn = card.querySelector('.editor-flip-btn');
-            if (btn) btn.innerHTML = isFlipped ? '🔄 Flip to Front' : '🔄 Flip Side';
-          });
         }
       });
 
@@ -3230,7 +3321,7 @@ if (saveVisualEditorBtn) {
           card.setAttribute('onclick', "this.classList.toggle('flipped')");
         }
       });
-      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"], .editor-flip-btn').forEach(el => el.remove());
+      cleanDoc.querySelectorAll('div[title="Add Brand Logo"], div[title="Delete Logo"], .editor-flip-btn, .editor-flip-all-bar, .editor-card-badge').forEach(el => el.remove());
 
       // Restore clean native country-selector before saving HTML
       cleanDoc.querySelectorAll('.editor-country-wrapper').forEach(wrapper => {
