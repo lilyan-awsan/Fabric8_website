@@ -2839,14 +2839,20 @@ if (iframe && navBtns.length > 0) {
           .method-flip-card .method-flip-inner { 
             transition: transform 0.35s cubic-bezier(0.2, 1, 0.3, 1) !important; 
           }
+          .flip-card:not(.flipped):not(.is-flipped) .flip-inner,
           .flip-card:not(.flipped):not(.is-flipped):hover .flip-inner,
+          .method-flip-card:not(.flipped):not(.is-flipped) .method-flip-inner,
           .method-flip-card:not(.flipped):not(.is-flipped):hover .method-flip-inner { 
             transform: rotateY(0deg) !important; 
           }
           .flip-card.flipped .flip-inner,
+          .flip-card.flipped:hover .flip-inner,
           .flip-card.is-flipped .flip-inner,
+          .flip-card.is-flipped:hover .flip-inner,
           .method-flip-card.flipped .method-flip-inner,
-          .method-flip-card.is-flipped .method-flip-inner { 
+          .method-flip-card.flipped:hover .method-flip-inner,
+          .method-flip-card.is-flipped .method-flip-inner,
+          .method-flip-card.is-flipped:hover .method-flip-inner { 
             transform: rotateY(180deg) !important; 
           }
 
@@ -2995,6 +3001,22 @@ if (iframe && navBtns.length > 0) {
             card.setAttribute('data-orig-onclick', card.getAttribute('onclick'));
             card.removeAttribute('onclick');
           }
+          card.onclick = null;
+
+          // Prevent any click inside card faces from bubbling up and flipping the card
+          card.querySelectorAll('.flip-front, .flip-back, .method-flip-front, .method-flip-back, .flip-inner, .method-flip-inner').forEach(face => {
+            face.addEventListener('click', (e) => {
+              if (!e.target.closest('.editor-flip-btn, .editor-flip-all-btn')) {
+                e.stopPropagation();
+              }
+            });
+          });
+
+          card.addEventListener('click', (e) => {
+            if (!e.target.closest('.editor-flip-btn, .editor-flip-all-btn')) {
+              e.stopPropagation();
+            }
+          });
 
           // Side indicator badge (top-left)
           if (!card.querySelector('.editor-card-badge')) {

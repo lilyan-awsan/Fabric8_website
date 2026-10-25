@@ -193,17 +193,19 @@
   </footer>
 
   <!-- Firebase SDK -->
-  <script src="site.js?v=82"></script>
+  <script src="site.js?v=90"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll(".sector-cards .flip-card").forEach(function(card) {
-        card.removeAttribute("onclick");
-        card.addEventListener("click", function(e) {
-          if (e.target.closest("a, button")) return;
-          card.classList.toggle("is-flipped");
-          card.classList.toggle("flipped");
+      if (window.self === window.top) {
+        document.querySelectorAll(".sector-cards .flip-card").forEach(function(card) {
+          card.removeAttribute("onclick");
+          card.addEventListener("click", function(e) {
+            if (e.target.closest("a, button")) return;
+            card.classList.toggle("is-flipped");
+            card.classList.toggle("flipped");
+          });
         });
-      });
+      }
     });
   </script>
 
