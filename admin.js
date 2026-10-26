@@ -1,5 +1,5 @@
 // Toast Notification System for Admin
-window.showToast = function(message, type = 'success', duration = 6000) {
+window.showToast = function (message, type = 'success', duration = 6000) {
   let container = document.querySelector('.toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -31,14 +31,14 @@ window.showToast = function(message, type = 'success', duration = 6000) {
   }
 };
 
-window.resolveAssetUrl = function(url, defaultFallback = '') {
+window.resolveAssetUrl = function (url, defaultFallback = '') {
   if (!url) return defaultFallback;
   let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
   if (!clean) return defaultFallback;
   if (clean.startsWith('data:')) return clean;
 
   while (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com') ||
-         clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http')) {
+    clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http')) {
     clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
   }
 
@@ -59,7 +59,7 @@ window.resolveAssetUrl = function(url, defaultFallback = '') {
   return clean;
 };
 
-window.handleImgError = function(img, fallbackSrc = '') {
+window.handleImgError = function (img, fallbackSrc = '') {
   if (!img) return;
 
   const rawSrc = (img.getAttribute('src') || img.src || '').trim();
@@ -114,7 +114,7 @@ window.handleImgError = function(img, fallbackSrc = '') {
 };
 
 if (typeof window !== 'undefined' && window.addEventListener) {
-  window.addEventListener('error', function(e) {
+  window.addEventListener('error', function (e) {
     if (e && e.target && e.target.tagName === 'IMG') {
       window.handleImgError(e.target);
     }
@@ -172,7 +172,7 @@ async function handleLogin() {
     loginError.textContent = "Please enter password.";
     return;
   }
-  
+
   if (password === "bypass" || password === "admin1234" || (username === "admin" && password === "admin1234") || (username === "admin" && password === "admin") || password === "admin") {
     authToken = "admin1234";
     localStorage.setItem("adminToken", authToken);
@@ -180,9 +180,9 @@ async function handleLogin() {
     checkAuth();
     return;
   }
-  
+
   loginError.textContent = "Verifying...";
-  
+
   try {
     const res = await fetch('/api/adminAuth', {
       method: 'POST',
@@ -252,7 +252,7 @@ async function fetchProducts() {
         renderTable();
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // 2. Fetch directly from Firebase Realtime Database
   try {
@@ -268,7 +268,7 @@ async function fetchProducts() {
       if (list.length > 0) {
         productsList = list;
         productsList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
+        try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) { }
         renderTable();
         return;
       }
@@ -283,7 +283,7 @@ async function fetchProducts() {
     if (res.ok) {
       productsList = await res.json();
       productsList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-      try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) {}
+      try { localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); } catch (e) { }
       renderTable();
     }
   } catch (error) {
@@ -296,13 +296,13 @@ async function fetchProducts() {
 
 function renderTable() {
   productTableBody.innerHTML = "";
-  
+
   // Dynamically update category select options
   const coreCats = ["Top Wear", "Bottom Wear", "Accessories", "Head Wear", "Outer Wear"];
   const allCats = [...new Set([...coreCats, ...productsList.map(p => p.category)])].filter(Boolean).sort();
   const catSelect = document.getElementById("category");
-  catSelect.innerHTML = allCats.map(c => `<option value="${c}">${c}</option>`).join('') + 
-                        `<option value="ADD_NEW" style="font-weight: bold; color: var(--accent);">+ Add New Category...</option>`;
+  catSelect.innerHTML = allCats.map(c => `<option value="${c}">${c}</option>`).join('') +
+    `<option value="ADD_NEW" style="font-weight: bold; color: var(--accent);">+ Add New Category...</option>`;
 
   const searchTerm = document.getElementById("searchBox")?.value.toLowerCase() || "";
   const categoryFilter = document.getElementById("categoryFilter")?.value || "All";
@@ -321,7 +321,7 @@ function renderTable() {
   filteredProducts.forEach(p => {
     const imgSrc = p.image ? (p.image.startsWith('http') ? p.image : p.image) : 'https://via.placeholder.com/60?text=No+Image';
     const rawFallback = (p.image && !p.image.startsWith('http')) ? `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${p.image}` : 'https://via.placeholder.com/60?text=No+Image';
-    
+
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><input type="checkbox" class="row-checkbox" value="${p.sku}"></td>
@@ -342,7 +342,7 @@ function renderTable() {
   document.querySelectorAll(".edit-btn").forEach(btn => {
     btn.addEventListener("click", (e) => openModal(e.currentTarget.dataset.id));
   });
-  
+
   document.querySelectorAll(".duplicate-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const sku = e.currentTarget.dataset.id;
@@ -364,7 +364,7 @@ function renderTable() {
           document.getElementById("availability").value = productToDuplicate.availability || "";
           document.getElementById("care").value = productToDuplicate.care || "";
           document.getElementById("sketch").value = productToDuplicate.sketch || "";
-          
+
           // Note: We don't copy the image automatically to avoid collision, or we can just leave it empty.
         }, 100);
       }
@@ -373,7 +373,7 @@ function renderTable() {
 
   document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.addEventListener("click", async (e) => {
-      if(confirm("Are you sure you want to delete this product?")) {
+      if (confirm("Are you sure you want to delete this product?")) {
         await syncWithGithub("delete", { id: e.currentTarget.dataset.id, sku: e.currentTarget.dataset.id });
       }
     });
@@ -446,12 +446,12 @@ const COMPRESSION_PRESETS = {
 function compressImage(file, maxWidth = 1920, maxHeight = 1200, quality = 0.88) {
   return new Promise((resolve) => {
     if (!file) return resolve({ base64: '', name: '' });
-    
+
     // Skip compression for SVGs
     if (file.type === 'image/svg+xml') {
       const reader = new FileReader();
-      reader.onload = (e) => resolve({ 
-        base64: e.target.result, 
+      reader.onload = (e) => resolve({
+        base64: e.target.result,
         name: file.name,
         originalSize: file.size,
         compressedSize: file.size,
@@ -520,7 +520,7 @@ function compressImage(file, maxWidth = 1920, maxHeight = 1200, quality = 0.88) 
         let base64 = '';
         try {
           base64 = finalCanvas.toDataURL('image/webp', quality);
-        } catch (err) {}
+        } catch (err) { }
 
         // Fallback for environments lacking WebP canvas export
         if (!base64 || base64.length < 50 || base64.startsWith('data:image/png')) {
@@ -533,10 +533,10 @@ function compressImage(file, maxWidth = 1920, maxHeight = 1200, quality = 0.88) 
         const finalName = `${baseName}.${ext}`;
 
         const approxBytes = Math.round((base64.length - (base64.indexOf(',') + 1)) * 0.75);
-        console.log(`[Smart Compressor] 📷 "${file.name}" (${(file.size/1024).toFixed(1)} KB) ➔ "${finalName}" (${(approxBytes/1024).toFixed(1)} KB, ${targetW}x${targetH})`);
+        console.log(`[Smart Compressor] 📷 "${file.name}" (${(file.size / 1024).toFixed(1)} KB) ➔ "${finalName}" (${(approxBytes / 1024).toFixed(1)} KB, ${targetW}x${targetH})`);
 
-        resolve({ 
-          base64, 
+        resolve({
+          base64,
           name: finalName,
           originalSize: file.size,
           compressedSize: approxBytes,
@@ -574,27 +574,27 @@ async function syncWithGithub(action, product) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    
+
     const data = await res.json();
     if (data.success) {
       if (data.products) {
         productsList = data.products;
-        try { 
-          localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList)); 
+        try {
+          localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList));
           localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
           const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
           fetch(`${FIREBASE_DB}/products.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productsList)
-          }).catch(() => {});
-        } catch (e) {}
+          }).catch(() => { });
+        } catch (e) { }
       }
       if (action === "save_settings" && product) {
-        try { 
+        try {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(product));
           localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch (e) {}
+        } catch (e) { }
       }
       renderTable();
       updateSyncBadge("✅ Synced Live & Saved", true, false);
@@ -672,7 +672,7 @@ function renderProdBrandingPlacements() {
   }
 }
 
-window.removeProdPlacement = function(type, idx) {
+window.removeProdPlacement = function (type, idx) {
   if (type === 'dtf') {
     activeDtfPlacements.splice(idx, 1);
   } else {
@@ -735,12 +735,12 @@ function renderColorsTags() {
   renderImagePreviews();
 }
 
-window.removeSizeTag = function(index) {
+window.removeSizeTag = function (index) {
   activeSizes.splice(index, 1);
   renderSizesTags();
 };
 
-window.removeColorTag = function(index) {
+window.removeColorTag = function (index) {
   const removed = activeColors[index];
   if (removed && activeColorHexMap) delete activeColorHexMap[removed];
   activeColors.splice(index, 1);
@@ -763,7 +763,7 @@ function renderPlacementsTable() {
   `).join("");
 }
 
-window.updatePlacementField = function(idx, field, val) {
+window.updatePlacementField = function (idx, field, val) {
   if (field === 'name') {
     activeProductPlacements[idx][field] = val;
   } else {
@@ -771,7 +771,7 @@ window.updatePlacementField = function(idx, field, val) {
   }
 };
 
-window.removePlacementRow = function(idx) {
+window.removePlacementRow = function (idx) {
   activeProductPlacements.splice(idx, 1);
   renderPlacementsTable();
 };
@@ -904,7 +904,7 @@ function updateCategoryDropdowns() {
   }
 }
 
-window.toggleSectorSelection = function(sectorName) {
+window.toggleSectorSelection = function (sectorName) {
   const idx = activeSectors.findIndex(s => s.toLowerCase() === sectorName.toLowerCase());
   if (idx >= 0) {
     activeSectors.splice(idx, 1);
@@ -924,9 +924,9 @@ document.getElementById("sketchUpload")?.addEventListener("change", async (e) =>
     pendingSketchFile = { base64: optimized.base64, name: optimized.name };
     if (input) input.value = `[Ready: ${optimized.name}]`;
     if (window.showToast) window.showToast(`📐 Technical sketch "${optimized.name}" optimized!`, 'info', 2000);
-  } catch(err) {
+  } catch (err) {
     const reader = new FileReader();
-    reader.onload = function(evt) {
+    reader.onload = function (evt) {
       pendingSketchFile = { base64: evt.target.result, name: file.name };
       if (input) input.value = `[Pending Upload: ${file.name}]`;
     };
@@ -954,19 +954,19 @@ function openModal(docId = null) {
       document.getElementById("sku").value = p.sku || "";
       document.getElementById("name").value = p.name || "";
       document.getElementById("category").value = p.category || "Top Wear";
-      
+
       const pGender = p.gender || "Men / Women / Unisex";
       document.querySelectorAll("#genderGroup input[type='checkbox']").forEach(cb => {
         cb.checked = pGender.includes(cb.value);
       });
       updateMultiSelectText('genderGroup', 'genderText', 'Select Gender');
-      
+
       activeSectors = p.sectors ? p.sectors.split(",").map(s => s.trim()).filter(Boolean) : [];
       renderSectorButtons();
 
       document.getElementById("short").value = p.short || "";
       document.getElementById("long").value = p.long || "";
-      
+
       activeSizes = p.sizes && p.sizes.length > 0 ? [...p.sizes] : ["S", "M", "L", "XL"];
       activeColors = p.colors && p.colors.length > 0 ? [...p.colors] : ["Black", "White", "Navy"];
       renderSizesTags();
@@ -981,7 +981,7 @@ function openModal(docId = null) {
       document.getElementById("care").value = p.care || "";
       document.getElementById("sketch").value = p.sketch || "";
       document.getElementById("sketchDescription").value = p.sketchDescription || "";
-      
+
       // Implement Garment Placement Matrix Auto-Fill / Customizer Sync
       const pCat = (p.category || "").toLowerCase();
       const pName = (p.name || "").toLowerCase();
@@ -1079,7 +1079,7 @@ function openModal(docId = null) {
     ];
     renderPlacementsTable();
   }
-  
+
   productModal.style.display = "flex";
 }
 
@@ -1106,7 +1106,7 @@ document.querySelectorAll('input[name="customizationCapability"]').forEach(r => 
 
 productForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  
+
   const submitBtn = document.getElementById("saveProductBtn");
   submitBtn.textContent = "Saving Product...";
   submitBtn.disabled = true;
@@ -1114,10 +1114,10 @@ productForm.addEventListener("submit", async (e) => {
   const docId = document.getElementById("docId").value || document.getElementById("sku").value;
   const custCap = document.querySelector('input[name="customizationCapability"]:checked')?.value || "both";
   const supportedFinishes = custCap === "dtf_only" ? ["Direct To Fabric (DTF) Printing"] :
-                            custCap === "embroidery_only" ? ["Embroidery"] :
-                            custCap === "none" ? [] : ["Embroidery", "Direct To Fabric (DTF) Printing"];
-  
-  const orderedExistingImages = (function() {
+    custCap === "embroidery_only" ? ["Embroidery"] :
+      custCap === "none" ? [] : ["Embroidery", "Direct To Fabric (DTF) Printing"];
+
+  const orderedExistingImages = (function () {
     let ordered = [...existingImages];
     if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
       if (selectedMainPhoto.index > 0 && selectedMainPhoto.index < ordered.length) {
@@ -1137,7 +1137,7 @@ productForm.addEventListener("submit", async (e) => {
     chosenMainImage = orderedExistingImages[0] || "";
   }
 
-  const calculatedColorImageMap = (function() {
+  const calculatedColorImageMap = (function () {
     const map = {};
     existingImages.forEach((imgUrl, idx) => {
       const assigned = existingImageColorMap[idx];
@@ -1167,7 +1167,7 @@ productForm.addEventListener("submit", async (e) => {
     short: document.getElementById("short").value,
     long: document.getElementById("long").value,
     sizes: activeSizes,
-    colors: (function() {
+    colors: (function () {
       let cols = [...activeColors];
       let mainCol = "";
       if (selectedMainPhoto.type === 'existing' && existingImages[selectedMainPhoto.index]) {
@@ -1215,8 +1215,8 @@ productForm.addEventListener("submit", async (e) => {
   if (pendingImages.length === 0 && !pendingSketchFile) {
     const targetSku = (productData.sku || '').trim().toLowerCase();
     const targetName = (productData.name || '').trim().toLowerCase();
-    const existingIndex = productsList.findIndex(p => 
-      (p.sku && p.sku.trim().toLowerCase() === targetSku) || 
+    const existingIndex = productsList.findIndex(p =>
+      (p.sku && p.sku.trim().toLowerCase() === targetSku) ||
       (p.id && p.id === productData.id) ||
       (p.name && targetName && p.name.trim().toLowerCase() === targetName)
     );
@@ -1235,7 +1235,7 @@ productForm.addEventListener("submit", async (e) => {
     try {
       localStorage.setItem("fabric8_products_cache", JSON.stringify(productsList));
       localStorage.setItem("fabric8_products_cache_time", Date.now().toString());
-    } catch (e) {}
+    } catch (e) { }
 
     // Direct ~100ms Firebase Realtime Database update
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -1273,12 +1273,12 @@ productForm.addEventListener("submit", async (e) => {
 // --- Image Preview (Base64) with Color Swatch Association & Main Photo Selection ---
 function renderImagePreviews() {
   imagePreviewContainer.innerHTML = "";
-  
+
   if (existingImages.length === 0 && pendingImages.length === 0) {
     imagePreviewContainer.style.display = "none";
     return;
   }
-  
+
   imagePreviewContainer.style.display = "flex";
 
   // Sanitize selectedMainPhoto bounds
@@ -1295,9 +1295,9 @@ function renderImagePreviews() {
       selectedMainPhoto.index = 0;
     }
   }
-  
+
   const colorOptions = activeColors && activeColors.length > 0 ? activeColors : ["Default"];
-  
+
   existingImages.forEach((imgUrl, index) => {
     if (!existingImageColorMap[index]) {
       const match = activeColors.find(c => imgUrl.toLowerCase().includes(c.toLowerCase()));
@@ -1356,7 +1356,7 @@ function renderImagePreviews() {
     `;
     imagePreviewContainer.appendChild(div);
   });
-  
+
   pendingImages.forEach((img, index) => {
     if (!pendingImageColorMap[index]) {
       const match = activeColors.find(c => img.name && img.name.toLowerCase().includes(c.toLowerCase()));
@@ -1417,12 +1417,12 @@ function renderImagePreviews() {
   });
 }
 
-window.setMainProductPhoto = function(type, index) {
+window.setMainProductPhoto = function (type, index) {
   selectedMainPhoto = { type, index };
   renderImagePreviews();
 };
 
-window.updateImageColorMatch = function(type, index, colorName) {
+window.updateImageColorMatch = function (type, index, colorName) {
   if (type === 'existing') {
     existingImageColorMap[index] = colorName;
     renderImagePreviews();
@@ -1438,7 +1438,7 @@ window.updateImageColorMatch = function(type, index, colorName) {
   }
 };
 
-window.removeExistingImage = function(index) {
+window.removeExistingImage = function (index) {
   existingImages.splice(index, 1);
   const newMap = {};
   existingImages.forEach((_, i) => {
@@ -1463,7 +1463,7 @@ window.removeExistingImage = function(index) {
   renderImagePreviews();
 };
 
-window.removePendingImage = function(index) {
+window.removePendingImage = function (index) {
   pendingImages.splice(index, 1);
   const newMap = {};
   pendingImages.forEach((_, i) => {
@@ -1494,15 +1494,15 @@ imageUpload.addEventListener("change", async (e) => {
   if (!files || files.length === 0) return;
 
   uploadStatus.textContent = "Optimizing and processing images...";
-  
+
   const readPromises = Array.from(files).map(file => compressImageAuto(file, 'product'));
-  
+
   const results = await Promise.all(readPromises);
   pendingImages = [...pendingImages, ...results];
   if (existingImages.length === 0 && selectedMainPhoto.type === 'existing') {
     selectedMainPhoto = { type: 'pending', index: 0 };
   }
-  
+
   renderImagePreviews();
   uploadStatus.textContent = "Images optimized & ready to be uploaded upon saving!";
   imageUpload.value = ""; // reset input
@@ -1601,8 +1601,8 @@ document.getElementById("categoryFilter")?.addEventListener("change", renderTabl
 
 document.getElementById("bulkDeleteBtn")?.addEventListener("click", async () => {
   const selectedSkus = Array.from(document.querySelectorAll(".row-checkbox:checked")).map(cb => cb.value);
-  if(selectedSkus.length === 0) return;
-  if(confirm(`Are you sure you want to delete ${selectedSkus.length} product(s)?`)) {
+  if (selectedSkus.length === 0) return;
+  if (confirm(`Are you sure you want to delete ${selectedSkus.length} product(s)?`)) {
     const btn = document.getElementById("bulkDeleteBtn");
     const originalText = btn.textContent;
     btn.textContent = "Deleting...";
@@ -1678,7 +1678,7 @@ async function loadBrandLogos() {
         return;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const res = await fetch('data/admin_settings.json?t=' + Date.now());
@@ -1691,7 +1691,7 @@ async function loadBrandLogos() {
         return;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // 2. Parse live logos directly from index.html marquee
   try {
@@ -1725,7 +1725,7 @@ async function loadBrandLogos() {
         }
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // 3. Fallback to localStorage cache
   try {
@@ -1736,7 +1736,7 @@ async function loadBrandLogos() {
         brandLogosList = parsed;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   renderBrandLogosGrid();
 }
@@ -1761,19 +1761,19 @@ function updateIframeMarquee() {
     }).join('\n');
 
     marquee.innerHTML = `<!-- Set 1 -->\n${logoItemsHtml}\n            \n<!-- Set 2 for seamless loop -->\n${logoItemsHtml}`;
-  } catch(e) {}
+  } catch (e) { }
 }
 
 function renderBrandLogosGrid() {
   if (!brandLogosGrid) return;
-  
+
   brandLogosGrid.innerHTML = `
     <div id="addNewBrandCardBtn" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 160px; height: 120px; border: 2px dashed #2ecc71; border-radius: 12px; background: #f0fff4; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.background='#e1f9e8'; this.style.borderColor='#27ae60'" onmouseout="this.style.background='#f0fff4'; this.style.borderColor='#2ecc71'">
       <div style="width: 44px; height: 44px; border-radius: 50%; background: #2ecc71; color: white; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; margin-bottom: 8px; box-shadow: 0 3px 8px rgba(46,204,113,0.35);">&plus;</div>
       <span style="font-size: 12px; font-weight: 800; color: #27ae60;">Add Logo</span>
     </div>
   `;
-  
+
   const newAddBtn = document.getElementById("addNewBrandCardBtn");
   if (newAddBtn) {
     newAddBtn.addEventListener("click", () => {
@@ -1792,9 +1792,9 @@ function renderBrandLogosGrid() {
     card.title = "Click to edit or change this logo";
     card.onmouseover = () => { card.style.borderColor = '#2ecc71'; card.style.boxShadow = '0 6px 16px rgba(46,204,113,0.2)'; };
     card.onmouseout = () => { card.style.borderColor = 'var(--line)'; card.style.boxShadow = '0 4px 12px rgba(0,0,0,0.04)'; };
-    
-    const cardSrc = (brand.backupSrc && brand.backupSrc.startsWith('data:image')) 
-      ? brand.backupSrc 
+
+    const cardSrc = (brand.backupSrc && brand.backupSrc.startsWith('data:image'))
+      ? brand.backupSrc
       : window.resolveAssetUrl(brand.src);
 
     card.innerHTML = `
@@ -1818,7 +1818,7 @@ function renderBrandLogosGrid() {
       if (brandLogoPreviewBox) brandLogoPreviewBox.style.display = "block";
       if (addBrandModal) addBrandModal.style.display = "flex";
     });
-    
+
     brandLogosGrid.appendChild(card);
   });
 
@@ -1829,7 +1829,7 @@ function renderBrandLogosGrid() {
       const targetBrand = brandLogosList[index];
       if (confirm(`Are you sure you want to delete "${targetBrand?.name || 'this logo'}" from the client logo marquee?`)) {
         brandLogosList.splice(index, 1);
-        try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
+        try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch (err) { }
         renderBrandLogosGrid();
         updateIframeMarquee();
         if (window.showToast) window.showToast(`Deleted ${targetBrand?.name || 'Logo'}. Click 'Publish Brand Changes' to save live!`, 'warning');
@@ -1900,7 +1900,7 @@ if (brandForm) {
         existing.fileName = currentUploadedBrandFileName;
       }
       currentUploadedBrandFileName = '';
-      try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
+      try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch (err) { }
       renderBrandLogosGrid();
       updateIframeMarquee();
       addBrandModal.style.display = 'none';
@@ -1917,7 +1917,7 @@ if (brandForm) {
       fileName: currentUploadedBrandFileName || (name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.webp')
     });
     currentUploadedBrandFileName = '';
-    try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(err){}
+    try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch (err) { }
     renderBrandLogosGrid();
     updateIframeMarquee();
     addBrandModal.style.display = 'none';
@@ -2163,7 +2163,7 @@ function attachTaxonomyDragHandlers(container, type) {
   });
 }
 
-window.moveTaxonomyItem = function(type, idx, direction) {
+window.moveTaxonomyItem = function (type, idx, direction) {
   const list = (type === 'sector') ? currentSectors : currentCategories;
   const newIdx = idx + direction;
   if (newIdx < 0 || newIdx >= list.length) return;
@@ -2178,7 +2178,7 @@ window.moveTaxonomyItem = function(type, idx, direction) {
   if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
 };
 
-window.updateTaxonomyName = function(type, idx, newName) {
+window.updateTaxonomyName = function (type, idx, newName) {
   const list = (type === 'sector') ? currentSectors : currentCategories;
   const clean = (newName || "").trim();
   if (!clean) {
@@ -2193,7 +2193,7 @@ window.updateTaxonomyName = function(type, idx, newName) {
   if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
 };
 
-window.toggleTaxonomyEnabled = function(type, idx) {
+window.toggleTaxonomyEnabled = function (type, idx) {
   const list = (type === 'sector') ? currentSectors : currentCategories;
   list[idx].enabled = list[idx].enabled === false ? true : false;
   renderTaxonomyLists();
@@ -2202,7 +2202,7 @@ window.toggleTaxonomyEnabled = function(type, idx) {
   if (taxonomyStatusBadge) taxonomyStatusBadge.style.display = 'none';
 };
 
-window.deleteTaxonomyItem = function(type, idx) {
+window.deleteTaxonomyItem = function (type, idx) {
   const list = (type === 'sector') ? currentSectors : currentCategories;
   const item = list[idx];
   if (!confirm(`Are you sure you want to delete the ${type} "${item.name}"?`)) return;
@@ -2215,7 +2215,7 @@ window.deleteTaxonomyItem = function(type, idx) {
   if (window.showToast) window.showToast(`Deleted "${item.name}". Click 'Publish Filter Changes' to save!`, 'warning', 3000);
 };
 
-window.addNewSectorFromInput = function() {
+window.addNewSectorFromInput = function () {
   if (!newSectorInput) return;
   const name = newSectorInput.value.trim();
   if (!name) {
@@ -2236,7 +2236,7 @@ window.addNewSectorFromInput = function() {
   if (window.showToast) window.showToast(`Added Sector "${name}"! Click 'Publish Filter Changes' to deploy.`, 'success');
 };
 
-window.addNewCategoryFromInput = function() {
+window.addNewCategoryFromInput = function () {
   if (!newCategoryInput) return;
   const name = newCategoryInput.value.trim();
   if (!name) {
@@ -2301,7 +2301,7 @@ if (saveTaxonomyBtn) {
       try {
         localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch(e) {}
+      } catch (e) { }
 
       // 3. Save to Firebase Realtime Database with granular PATCH (prevents wiping unrelated settings)
       try {
@@ -2314,7 +2314,7 @@ if (saveTaxonomyBtn) {
             categories2ndLayer: currentCategories
           })
         });
-      } catch(fbErr) {
+      } catch (fbErr) {
         console.warn("Firebase sync notice:", fbErr);
       }
 
@@ -2354,7 +2354,7 @@ if (saveTaxonomyBtn) {
           commitMessage: 'Update Sectors and Categories filter order and visibility'
         })
       }).catch(ghErr => console.warn("GitHub API background notice:", ghErr));
-    } catch(err) {
+    } catch (err) {
       console.error("Failed to save taxonomy:", err);
       alert("Error publishing filter changes: " + (err.message || err));
       saveTaxonomyBtn.innerHTML = originalText;
@@ -2377,13 +2377,13 @@ if (saveBrandsBtn) {
           const ext = (b.fileName || 'logo.webp').split('.').pop() || 'webp';
           const cleanName = (b.name || 'brand').toLowerCase().replace(/[^a-z0-9]+/g, '_').slice(0, 30);
           const newPath = `assets/site_images/${Date.now()}_${idx}_${cleanName}.${ext}`;
-          
+
           siteImages.push({
             name: `${cleanName}.${ext}`,
             base64: b.src,
             newPath: newPath
           });
-          
+
           return {
             ...b,
             src: newPath,
@@ -2404,7 +2404,7 @@ if (saveBrandsBtn) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updatedLogosList)
         });
-      } catch(fbErr) {
+      } catch (fbErr) {
         console.warn("Firebase brand logos notice:", fbErr);
       }
 
@@ -2413,7 +2413,7 @@ if (saveBrandsBtn) {
       try {
         localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch(e) {}
+      } catch (e) { }
       renderBrandLogosGrid();
       updateIframeMarquee();
 
@@ -2436,7 +2436,7 @@ if (saveBrandsBtn) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ghPayload)
       }).catch(err => console.warn("GitHub background sync notice:", err));
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       alert("Error publishing brand changes: " + err.message);
       saveBrandsBtn.textContent = 'Publish Brand Changes';
@@ -2454,7 +2454,7 @@ async function loadSiteSettings() {
     if (cached) {
       currentSiteSettings = JSON.parse(cached);
     }
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -2466,14 +2466,14 @@ async function loadSiteSettings() {
         try {
           localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
           localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-        } catch (e) {}
+        } catch (e) { }
         if (typeof updateCategoryDropdowns === 'function') updateCategoryDropdowns();
         if (typeof renderSectorButtons === 'function') renderSectorButtons();
         if (typeof initAdminCountries === 'function') initAdminCountries();
         return;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const res = await fetch('data/admin_settings.json?t=' + Date.now());
@@ -2482,9 +2482,9 @@ async function loadSiteSettings() {
       try {
         localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch (e) {}
+      } catch (e) { }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   if (typeof updateCategoryDropdowns === 'function') updateCategoryDropdowns();
   if (typeof renderSectorButtons === 'function') renderSectorButtons();
@@ -2517,7 +2517,7 @@ async function autoPersistCountries() {
   try {
     localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
     localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-  } catch(e) {}
+  } catch (e) { }
 
   // 2. Save directly to Firebase Realtime Database with targeted path
   try {
@@ -2527,7 +2527,7 @@ async function autoPersistCountries() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(currentCountriesList)
     });
-  } catch(fbErr) {
+  } catch (fbErr) {
     console.warn("Firebase sync error:", fbErr);
   }
 
@@ -2542,7 +2542,7 @@ async function autoPersistCountries() {
         commitMessage: 'Update Header Countries & Regions dropdown list'
       })
     });
-  } catch(ghErr) {
+  } catch (ghErr) {
     console.warn("GitHub API error:", ghErr);
   }
 
@@ -2560,7 +2560,7 @@ async function autoPersistCountries() {
         currentLabel.textContent = currentCountriesList[0].name;
       }
     }
-  } catch(e) {}
+  } catch (e) { }
 }
 
 function injectEditorCountryManager(doc) {
@@ -2662,8 +2662,8 @@ function injectEditorCountryManager(doc) {
             e.stopPropagation();
             const targetName = c.name;
             const targetCode = c.code || c.name;
-            const foundIdx = currentCountriesList.findIndex(item => 
-              (item.code && item.code === targetCode) || 
+            const foundIdx = currentCountriesList.findIndex(item =>
+              (item.code && item.code === targetCode) ||
               (item.name && item.name.toLowerCase() === targetName.toLowerCase())
             );
             if (foundIdx !== -1) {
@@ -2795,12 +2795,12 @@ function extractTextWithLineBreaks(el) {
 if (iframe && navBtns.length > 0) {
   const initIframeEditing = () => {
     if (iframeOverlay) iframeOverlay.style.display = 'none';
-    
+
     // Inject Visual Editor Script into iframe
     try {
       const doc = iframe.contentDocument || iframe.contentWindow.document;
       if (!doc || !doc.body) return;
-      
+
       // Inject CSS if not present
       if (!doc.getElementById('visual-editor-style')) {
         const style = doc.createElement('style');
@@ -2888,6 +2888,19 @@ if (iframe && navBtns.length > 0) {
           }
 
           .flip-card, .method-flip-card { cursor: default; position: relative !important; }
+          .sector-cards {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: stretch !important;
+            gap: 28px !important;
+          }
+          .sector-cards .flip-card {
+            flex: 0 1 calc((100% - 28px * 2) / 3) !important;
+            width: calc((100% - 28px * 2) / 3) !important;
+            min-width: 300px !important;
+            max-width: 380px !important;
+          }
         `;
         doc.head.appendChild(style);
       }
@@ -2896,7 +2909,7 @@ if (iframe && navBtns.length > 0) {
       const iframeMarquee = doc.querySelector('.marquee-content');
       if (iframeMarquee && !iframeMarquee.getAttribute('data-controls-injected')) {
         iframeMarquee.setAttribute('data-controls-injected', 'true');
-        
+
         // Add Green (+) Add Button to the left of logos marquee in iframe
         const greenAddBtn = doc.createElement('div');
         greenAddBtn.style.cssText = 'width: 50px; height: 50px; border-radius: 50%; background: #2ecc71; color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(46,204,113,0.4); flex-shrink: 0; margin-right: 20px; transition: transform 0.2s;';
@@ -2928,14 +2941,14 @@ if (iframe && navBtns.length > 0) {
               box.remove();
               // Also sync brandLogosList
               brandLogosList = brandLogosList.filter(b => !logoAlt || !b.name.toLowerCase().includes(logoAlt.toLowerCase()));
-              try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch(e){}
+              try { localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList)); } catch (e) { }
               renderBrandLogosGrid();
             }
           });
           box.appendChild(redDeleteBtn);
         });
       }
-      
+
       // Intercept all link clicks in capture phase to prevent accidental iframe navigation
       if (!doc.body.getAttribute('data-click-intercepted')) {
         doc.body.setAttribute('data-click-intercepted', 'true');
@@ -2954,21 +2967,21 @@ if (iframe && navBtns.length > 0) {
         const flipAllBar = doc.createElement('div');
         flipAllBar.className = 'editor-flip-all-bar';
         flipAllBar.style.cssText = 'width: 100%; max-width: 1240px; margin: 0 auto 20px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 0 24px; box-sizing: border-box;';
-        
+
         const flipAllBtn = doc.createElement('button');
         flipAllBtn.type = 'button';
         flipAllBtn.className = 'editor-flip-all-btn';
-        flipAllBtn.innerHTML = '🔄 Flip All Cards to Back (قلب كل البطاقات للخلف)';
+        flipAllBtn.innerHTML = '🔄 Flip All Cards to Back ';
         flipAllBtn.style.cssText = 'background: #0f172a; color: #38bdf8; border: 2px solid #38bdf8; border-radius: 8px; font-size: 13px; font-weight: 800; padding: 8px 18px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s;';
         flipAllBtn.addEventListener('mouseenter', () => { flipAllBtn.style.background = '#38bdf8'; flipAllBtn.style.color = '#0f172a'; });
         flipAllBtn.addEventListener('mouseleave', () => { flipAllBtn.style.background = '#0f172a'; flipAllBtn.style.color = '#38bdf8'; });
-        
+
         let allFlipped = false;
         flipAllBtn.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
           allFlipped = !allFlipped;
-          flipAllBtn.innerHTML = allFlipped ? '🔄 Flip All Cards to Front (إرجاع كل البطاقات للأمام)' : '🔄 Flip All Cards to Back (قلب كل البطاقات للخلف)';
+          flipAllBtn.innerHTML = allFlipped ? '🔄 Flip All Cards to Front ' : '🔄 Flip All Cards to Back ';
           doc.querySelectorAll('.sector-cards .flip-card').forEach(c => {
             c.classList.toggle('flipped', allFlipped);
             c.classList.toggle('is-flipped', allFlipped);
@@ -2984,7 +2997,7 @@ if (iframe && navBtns.length > 0) {
             }
           });
         });
-        
+
         flipAllBar.appendChild(flipAllBtn);
         sectorCardsContainer.parentNode.insertBefore(flipAllBar, sectorCardsContainer);
       }
@@ -2996,7 +3009,7 @@ if (iframe && navBtns.length > 0) {
       flipCards.forEach(card => {
         if (!card.getAttribute('data-flip-editor-handled')) {
           card.setAttribute('data-flip-editor-handled', 'true');
-          
+
           if (card.hasAttribute('onclick')) {
             card.setAttribute('data-orig-onclick', card.getAttribute('onclick'));
             card.removeAttribute('onclick');
@@ -3044,7 +3057,7 @@ if (iframe && navBtns.length > 0) {
               card.classList.toggle('is-flipped', isFlipped);
               flipBtn.innerHTML = isFlipped ? '🔄 Flip to Front' : '🔄 Flip to Back';
               flipBtn.style.borderColor = isFlipped ? '#38bdf8' : '#22c55e';
-              
+
               const badge = card.querySelector('.editor-card-badge');
               if (badge) {
                 badge.innerHTML = isFlipped ? '⚙️ Back Side' : '👁️ Front Side';
@@ -3148,7 +3161,7 @@ if (iframe && navBtns.length > 0) {
           }
         });
       }
-      
+
       // Make images editable with clean sidebar interaction
       const images = doc.querySelectorAll('img');
       images.forEach(img => {
@@ -3172,7 +3185,7 @@ if (iframe && navBtns.length > 0) {
           });
         }
       });
-      
+
       // Make CSS background images editable (hero banners)
       const heroes = doc.querySelectorAll('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide');
       heroes.forEach(hero => {
@@ -3221,14 +3234,14 @@ if (iframe && navBtns.length > 0) {
           hero.title = "Click 'Change Hero Photo' or double-click to change";
         }
       });
-      
+
       // Update iframe marquee with brand logos
       updateIframeMarquee();
 
       // Inject Header Country & Region Selector Manager directly into header preview
       injectEditorCountryManager(doc);
 
-    } catch(err) {
+    } catch (err) {
       console.warn("Could not inject editor script into iframe:", err);
     }
   };
@@ -3284,9 +3297,9 @@ if (saveVisualEditorBtn) {
     try {
       saveVisualEditorBtn.textContent = 'Extracting HTML & Uploading...';
       saveVisualEditorBtn.disabled = true;
-      
+
       const doc = iframe.contentDocument || iframe.contentWindow.document;
-      
+
       // Safety check: ensure iframe is actually showing currentVisualPage
       try {
         const actualPage = (iframe.contentWindow.location.pathname.split('/').pop() || '').split('?')[0];
@@ -3296,8 +3309,8 @@ if (saveVisualEditorBtn) {
           saveVisualEditorBtn.disabled = false;
           return;
         }
-      } catch(e) {}
-      
+      } catch (e) { }
+
       // Deep clone document to strip editor attributes without affecting live preview
       // Load current admin settings first so image and logo updates have access
 
@@ -3307,17 +3320,17 @@ if (saveVisualEditorBtn) {
       try {
         const cached = localStorage.getItem("fabric8_admin_settings_cache");
         if (cached) currentSettings = JSON.parse(cached);
-      } catch(e) {}
+      } catch (e) { }
 
       if (!currentSettings.siteContent) {
         try {
           const resSetting = await fetch('data/admin_settings.json?t=' + Date.now());
           if (resSetting.ok) currentSettings = await resSetting.json();
-        } catch(e) {}
+        } catch (e) { }
       }
       if (!currentSettings.siteContent) currentSettings.siteContent = {};
       const cleanDoc = doc.documentElement.cloneNode(true);
-      
+
       // Cleanup injected styles and classes
       const injectedStyles = cleanDoc.querySelectorAll('style');
       if (injectedStyles.length > 0) {
@@ -3326,14 +3339,14 @@ if (saveVisualEditorBtn) {
           lastStyle.remove();
         }
       }
-      
+
       // Cleanup all visual editor attributes
       const editables = cleanDoc.querySelectorAll('[contenteditable]');
       editables.forEach(el => el.removeAttribute('contenteditable'));
-      
+
       const editableImages = cleanDoc.querySelectorAll('.editable-image');
       editableImages.forEach(el => el.classList.remove('editable-image'));
-      
+
       cleanDoc.querySelectorAll('[data-editable-bg]').forEach(el => { el.removeAttribute('data-editable-bg'); el.removeAttribute('title'); });
       cleanDoc.querySelectorAll('[data-editor-click-handled]').forEach(el => el.removeAttribute('data-editor-click-handled'));
       cleanDoc.querySelectorAll('[data-controls-injected]').forEach(el => el.removeAttribute('data-controls-injected'));
@@ -3386,25 +3399,25 @@ if (saveVisualEditorBtn) {
 
       // Extract newly uploaded images and backgrounds
       const newSiteImages = [];
-      
+
       const imgTags = cleanDoc.querySelectorAll('img[data-new-upload]');
       imgTags.forEach((img, idx) => {
         const origName = img.getAttribute('data-new-upload') || 'image.png';
         const ext = origName.split('.').pop() || 'png';
         const cleanName = origName.replace(/[^a-zA-Z0-9.-]/g, '_');
         const newPath = `assets/site_images/${Date.now()}_${idx}_${cleanName}`;
-        
+
         newSiteImages.push({
           name: cleanName,
           base64: img.src,
           newPath: newPath
         });
-        
+
         img.setAttribute('data-new-base64', img.src);
         img.src = newPath;
         img.removeAttribute('data-new-upload');
       });
-      
+
       // Remove floating editor buttons before saving HTML
       cleanDoc.querySelectorAll('.editor-change-bg-btn').forEach(el => el.remove());
 
@@ -3423,7 +3436,7 @@ if (saveVisualEditorBtn) {
             newPath: newPath
           });
         }
-        
+
         bg.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${newPath}")`;
         bg.style.backgroundPosition = 'center center';
         bg.style.backgroundSize = 'cover';
@@ -3517,7 +3530,7 @@ if (saveVisualEditorBtn) {
           currentSettings.siteContent.contactGlobalText = cleanGlobal;
           globalEl.innerHTML = cleanGlobal.replace(/\n/g, '<br>');
           globalEl.id = 'cmsContactGlobalText';
-          
+
           const usaMatch = cleanGlobal.match(/USA:\s*([+0-9\s-]+)/i);
           if (usaMatch) currentSettings.siteContent.contactUSA = usaMatch[1].trim();
           const jordanMatch = cleanGlobal.match(/Jordan:\s*([+0-9\s-]+)/i);
@@ -3546,10 +3559,10 @@ if (saveVisualEditorBtn) {
       }
 
       // 3. Direct Email
-      const emailEl = cleanDoc.querySelector('#cmsContactEmailText') || 
-                      cleanDoc.querySelector('#cmsContactEmailTitle')?.parentElement?.querySelector('a') || 
-                      cleanDoc.querySelector('#cmsContactEmailTitle')?.nextElementSibling?.querySelector('a') ||
-                      cleanDoc.querySelector('a[href^="mailto:"]');
+      const emailEl = cleanDoc.querySelector('#cmsContactEmailText') ||
+        cleanDoc.querySelector('#cmsContactEmailTitle')?.parentElement?.querySelector('a') ||
+        cleanDoc.querySelector('#cmsContactEmailTitle')?.nextElementSibling?.querySelector('a') ||
+        cleanDoc.querySelector('a[href^="mailto:"]');
       if (emailEl && emailEl.textContent) {
         let textVal = emailEl.textContent.trim();
         if (textVal) {
@@ -3602,7 +3615,7 @@ if (saveVisualEditorBtn) {
         const showcase = cleanDoc.querySelector('.service-showcase');
         if (showcase) {
           currentSettings.siteContent.servicesContentHtml = showcase.innerHTML.trim();
-          
+
           const imgC = showcase.querySelector('#cmsServicesConsultImg');
           if (imgC) {
             if (imgC.getAttribute('src')) currentSettings.siteContent.servicesConsultImg = imgC.getAttribute('src');
@@ -3611,7 +3624,7 @@ if (saveVisualEditorBtn) {
               imgC.removeAttribute('data-new-base64');
             }
           }
-          
+
           const imgB = showcase.querySelector('#cmsServicesBrandImg');
           if (imgB) {
             if (imgB.getAttribute('src')) currentSettings.siteContent.servicesBrandImg = imgB.getAttribute('src');
@@ -3620,7 +3633,7 @@ if (saveVisualEditorBtn) {
               imgB.removeAttribute('data-new-base64');
             }
           }
-          
+
           const imgP = showcase.querySelector('#cmsServicesProdImg');
           if (imgP) {
             if (imgP.getAttribute('src')) currentSettings.siteContent.servicesProdImg = imgP.getAttribute('src');
@@ -3629,7 +3642,7 @@ if (saveVisualEditorBtn) {
               imgP.removeAttribute('data-new-base64');
             }
           }
-          
+
           settingsUpdated = true;
         }
       } else if (currentVisualPage === 'method.html') {
@@ -3659,7 +3672,7 @@ if (saveVisualEditorBtn) {
       currentSettings.siteContent.footerContactHtml = `${hqFormatted}<br><br>${globalFormatted}<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a>`;
 
       // Update footer Contact block inside cleanDoc if present
-      const contactH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+      const contactH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 =>
         h4.textContent.trim().toLowerCase().includes('contact')
       );
       if (contactH4 && contactH4.nextElementSibling && contactH4.nextElementSibling.tagName === 'P') {
@@ -3678,7 +3691,7 @@ if (saveVisualEditorBtn) {
       }
 
       // 2. Footer Overview Links block
-      const overviewH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+      const overviewH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 =>
         h4.textContent.trim().toLowerCase().includes('overview')
       );
       if (overviewH4 && overviewH4.nextElementSibling) {
@@ -3691,7 +3704,7 @@ if (saveVisualEditorBtn) {
       }
 
       // 3. Footer Legal Links block
-      const legalH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 => 
+      const legalH4 = Array.from(cleanDoc.querySelectorAll('footer h4')).find(h4 =>
         h4.textContent.trim().toLowerCase().includes('legal')
       );
       if (legalH4 && legalH4.nextElementSibling) {
@@ -3755,7 +3768,7 @@ if (saveVisualEditorBtn) {
       try {
         localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSettings));
         localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-      } catch(e) {}
+      } catch (e) { }
 
       updateSyncBadge("⚡ Live in Database (Syncing Git...)", true, false);
       if (window.showToast) showToast("⚡ Changes saved to live database! Syncing Git backup in background...", "info", 3000);
@@ -3778,7 +3791,7 @@ if (saveVisualEditorBtn) {
         })
       });
       clearTimeout(timeoutId);
-      
+
       const data = await res.json();
       if (data.success) {
         localStorage.setItem("fabric8_brand_logos_cache", JSON.stringify(brandLogosList));
@@ -3790,13 +3803,13 @@ if (saveVisualEditorBtn) {
         showToast("✅ Success! Changes published live to GitHub & Firebase.", "success", 8000);
         alert("✅ Success! Your changes were saved and published live to GitHub & Firebase.");
         setTimeout(() => { if (statusEl) statusEl.style.display = 'none'; }, 6000);
-        
+
         // Refresh preview iframe cleanly without redirect loops, bypassing any browser cache
         setTimeout(() => {
           if (iframe) {
             try {
               iframe.src = currentVisualPage + (currentVisualPage.includes('?') ? '&' : '?') + 't=' + Date.now();
-            } catch(e) {
+            } catch (e) {
               iframe.src = currentVisualPage;
             }
           }
@@ -3806,7 +3819,7 @@ if (saveVisualEditorBtn) {
         showToast("Error saving layout: " + (data.message || "Unknown error"), "error");
         alert("❌ Error saving layout: " + (data.message || "Unknown error"));
       }
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       const errMsg = err.name === 'AbortError' ? "Request timed out. Please try saving again." : (err.message || "Failed to communicate with server");
       showToast("Failed to save layout: " + errMsg, "error");
@@ -3828,9 +3841,9 @@ async function applyHeroImageFile(file) {
       return;
     }
     const hero = doc.querySelector('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide') ||
-                 doc.getElementById('cmsHomeHeroBg') ||
-                 doc.getElementById('cmsAboutHeroBg') ||
-                 doc.getElementById('cmsSectorsHeroBg');
+      doc.getElementById('cmsHomeHeroBg') ||
+      doc.getElementById('cmsAboutHeroBg') ||
+      doc.getElementById('cmsSectorsHeroBg');
     if (!hero) {
       alert("No hero banner was found on the currently previewed page.");
       return;
@@ -3851,7 +3864,7 @@ async function applyHeroImageFile(file) {
     if (window.showToast) {
       window.showToast(`Selected "${finalName}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
     }
-  } catch(err) {
+  } catch (err) {
     console.warn("Could not apply hero image:", err);
     alert("Please wait for the page to finish loading in the editor before changing photo.");
   }
@@ -4097,7 +4110,7 @@ function getAdminSocialIconSvg(icon) {
 
 function loadFooterSettingsIntoAdmin() {
   const sc = currentSiteSettings.siteContent || {};
-  
+
   const hqInput = document.getElementById('adminFooterHQ');
   if (hqInput) hqInput.value = sc.contactHQ || '';
 
@@ -4318,7 +4331,7 @@ if (newSocialCustomFile) {
         const optimized = await compressImageAuto(file, 'icon');
         newSocialCustomBase64 = optimized.base64;
         updateNewSocialModalPreview();
-      } catch(err) {
+      } catch (err) {
         const reader = new FileReader();
         reader.onload = (ev) => {
           newSocialCustomBase64 = ev.target.result;
@@ -4422,7 +4435,7 @@ async function saveFooterSettings() {
     try {
       localStorage.setItem("fabric8_admin_settings_cache", JSON.stringify(currentSiteSettings));
       localStorage.setItem("fabric8_admin_settings_cache_time", Date.now().toString());
-    } catch(e) {}
+    } catch (e) { }
 
     try {
       const DB_URL = "https://fabric8-50559-default-rtdb.firebaseio.com";
@@ -4442,7 +4455,7 @@ async function saveFooterSettings() {
           body: JSON.stringify(currentSiteSettings.siteContent)
         });
       }
-    } catch(fbErr) {
+    } catch (fbErr) {
       console.warn("Firebase RTDB notice:", fbErr);
     }
 
@@ -4470,7 +4483,7 @@ async function saveFooterSettings() {
         commitMessage: 'Update global footer content and square social icons'
       })
     }).catch(ghErr => console.warn("GitHub API background notice:", ghErr));
-  } catch(err) {
+  } catch (err) {
     console.error("Save footer error:", err);
     alert("Could not publish footer settings. Please check connection and try again.");
     if (topBtn) { topBtn.textContent = origTopText; topBtn.disabled = false; }
