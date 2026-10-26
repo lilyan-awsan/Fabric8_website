@@ -240,11 +240,11 @@
       "name": "Food & beverage"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Hospitality"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Corporate"
     },
     {
