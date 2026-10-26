@@ -237,6 +237,10 @@
   "categories1stLayer": [
     {
       "enabled": true,
+      "name": "Food & beverage"
+    },
+    {
+      "enabled": true,
       "name": "Hospitality"
     },
     {
@@ -248,11 +252,7 @@
       "name": "Healthcare"
     },
     {
-      "enabled": true,
-      "name": "Food & beverage"
-    },
-    {
-      "enabled": true,
+      "enabled": false,
       "name": "Industrial"
     },
     {
