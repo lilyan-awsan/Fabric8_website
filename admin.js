@@ -1985,8 +1985,8 @@ async function initTaxonomyManager() {
       { name: "Corporate", enabled: true },
       { name: "Healthcare", enabled: true },
       { name: "Industrial", enabled: true },
-      { name: "Education", enabled: false },
-      { name: "Aviation", enabled: false }
+      { name: "Education", enabled: true },
+      { name: "Aviation", enabled: true }
     ];
   }
 
