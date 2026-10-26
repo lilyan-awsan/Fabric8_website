@@ -684,6 +684,73 @@ function applySiteSettings() {
       }
     }
   });
+
+  // Synchronize sector visibility across Home, Sectors Page, and Shop
+  syncSectorsVisibility();
+}
+
+function syncSectorsVisibility() {
+  if (typeof siteSettings === 'undefined' || !siteSettings) return;
+  const sectorsConfig = Array.isArray(siteSettings.categories1stLayer) ? siteSettings.categories1stLayer : [];
+  if (sectorsConfig.length === 0) return;
+
+  function norm(str) {
+    return (str || "").toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
+  }
+
+  // Check if a sector name or slug is enabled
+  function isSectorEnabled(identifier) {
+    if (!identifier) return true;
+    const target = norm(identifier);
+    const match = sectorsConfig.find(s => {
+      const sNorm = norm(s.name);
+      return sNorm === target || sNorm.includes(target) || target.includes(sNorm);
+    });
+    return match ? (match.enabled !== false) : true;
+  }
+
+  // 1. Sync Sectors Page (.sector-cards .flip-card)
+  const sectorCards = document.querySelectorAll('.sector-cards .flip-card');
+  if (sectorCards.length > 0) {
+    sectorCards.forEach(card => {
+      const h2 = card.querySelector('.flip-front h2');
+      const inquireBtn = card.querySelector('.flip-back .inquire-btn');
+      let name = h2 ? h2.textContent.trim() : '';
+      if (!name && inquireBtn) {
+        const href = inquireBtn.getAttribute('href') || '';
+        const m = href.match(/sector=([^&]+)/);
+        if (m) name = m[1];
+      }
+      if (name) {
+        const visible = isSectorEnabled(name);
+        card.style.display = visible ? '' : 'none';
+      }
+    });
+  }
+
+  // 2. Sync Homepage Capability Belt (#capabilityBeltRow .capability-icon-btn)
+  const beltButtons = document.querySelectorAll('#capabilityBeltRow .capability-icon-btn');
+  if (beltButtons.length > 0) {
+    let firstVisibleBtn = null;
+    let activeIsHidden = false;
+
+    beltButtons.forEach(btn => {
+      const secKey = btn.getAttribute('data-sector') || '';
+      const visible = isSectorEnabled(secKey);
+      btn.style.display = visible ? '' : 'none';
+      if (visible && !firstVisibleBtn) firstVisibleBtn = btn;
+      if (!visible && btn.classList.contains('active')) {
+        activeIsHidden = true;
+        btn.classList.remove('active');
+        btn.style.border = '1px solid var(--line)';
+      }
+    });
+
+    // If the active sector was hidden, activate the first visible one
+    if (activeIsHidden && firstVisibleBtn) {
+      firstVisibleBtn.click();
+    }
+  }
 }
 
 const cart = JSON.parse(localStorage.getItem("fabric8QuoteCart") || "[]");
@@ -4679,6 +4746,8 @@ function initCapabilityBelt() {
       }, 150);
     });
   });
+
+  syncSectorsVisibility();
 }
 
 // Generic Contact Form Handlers

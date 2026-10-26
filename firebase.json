@@ -128,6 +128,14 @@
         "destination": "/product-customizer.html"
       },
       {
+        "source": "/branding-studio",
+        "destination": "/branding-studio.html"
+      },
+      {
+        "source": "/branding-studio.html",
+        "destination": "/branding-studio.html"
+      },
+      {
         "source": "/product",
         "destination": "/product.html"
       },
