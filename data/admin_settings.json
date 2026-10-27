@@ -92,14 +92,6 @@
         "name": "WhatsApp",
         "shape": "square",
         "url": "https://wa.me/962796788240"
-      },
-      {
-        "id": "social_1793092813932",
-        "name": "X",
-        "iconKey": "x",
-        "url": "https://kk",
-        "active": false,
-        "shape": "square"
       }
     ],
     "socialInstagram": "https://www.instagram.com/thefabric8",
