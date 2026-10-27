@@ -103,12 +103,43 @@
     "contactHQTitle": "Corporate Headquarters",
     "contactGlobalTitle": "Global Contact",
     "contactEmailTitle": "Direct Email",
-    "aboutTitle": "Our Story, Behind the Craft",
-    "aboutSub": "B2B uniform solutions for clients who demand brand, purpose, performance, and reliability.",
-    "aboutMission": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.",
-    "aboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.",
+    "aboutTitle": "Our Story, Behind the Craftزز",
+    "aboutSub": "B2B uniform solutions for clients who demand brand, purpose, performance, and reliabilityزز.",
+    "aboutMission": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.زز",
+    "aboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.زز",
     "sectorsTitle": "Uniform concepts for every business environment.",
-    "sectorsSub": "Explore Our Sector Capabilities"
+    "sectorsSub": "Explore Our Sector Capabilities",
+    "cmsAboutProfileLink": "DOWNLOAD COMPANY PROFILE",
+    "cmsAboutProfileLink_href": "assets/docs/Fabric8_Company_Profile.pdf",
+    "cmsAboutHeroBg": "<div>\n        <p>About Fabric8</p>\n        <h1 id=\"cmsAboutTitle\">Our Story, Behind the&nbsp;Craftزز</h1><span id=\"cmsAboutSub\">B2B uniform solutions for clients who demand brand, purpose, performance, and reliabilityزز.</span>\n      </div>",
+    "cmsAboutTitle": "Our Story, Behind the Craftزز",
+    "cmsAboutSub": "B2B uniform solutions for clients who demand brand, purpose, performance, and reliabilityزز.",
+    "cmsAboutMissionTitle": "Our Mission",
+    "cmsAboutMission": "We aspire to be the most trusted uniform partner in the region; one that listens, advises, executes, and stands behind every garment we deliver. We bridge the knowledge gap between buyers and their business needs, so every client receives a uniform solution that works as hard as the people wearing it.زز",
+    "cmsAboutVisionTitle": "Our Vision",
+    "cmsAboutVision": "To become the regional benchmark for high-volume, high-quality uniform supply recognized for creative solutions, operational scale, and an unwavering commitment to client success over the long term.زز",
+    "cmsAboutValuesTitle": "Core Valueزز",
+    "cmsValuePartnershipTitle": "PARTNERSHIPزز",
+    "cmsValuePartnershipImg": "assets/icon_partnership.png",
+    "cmsValuePartnershipDesc": "Every client's engagement is a shared investment in their success.زز",
+    "cmsValuePrecisionTitle": "PRECISIONزز",
+    "cmsValuePrecisionImg": "assets/icon_precision.png",
+    "cmsValuePrecisionDesc": "Details matter. Fabric composition to thread color nothing left to chance.",
+    "cmsValueTransparencyTitle": "TRANSPARENCYزز",
+    "cmsValueTransparencyImg": "assets/icon_transparency.png",
+    "cmsValueTransparencyDesc": "Honest advice, accurate timelines, and no hidden costs.",
+    "cmsValueReliabilityTitle": "RELIABILITY",
+    "cmsValueReliabilityImg": "assets/icon_reliability.png",
+    "cmsValueReliabilityDesc": "We deliver what we commit to, on time, every time.",
+    "cmsValueQualityTitle": "QUALITY",
+    "cmsValueQualityImg": "assets/icon_quality.png",
+    "cmsValueQualityDesc": "Every garment meets agreed specifications and passes QC before shipment.",
+    "cmsValueSustainabilityTitle": "SUSTAINABILITY",
+    "cmsValueSustainabilityImg": "assets/icon_sustainability.png",
+    "cmsValueSustainabilityDesc": "Responsible sourcing, and continuous improvement.",
+    "cmsAboutSustainTitle": "Sustainability & compliance زز",
+    "cmsAboutSustainDesc": "Fabric-8 is\n            committed to responsible sourcing and operational integrity. We work with manufacturers who maintain\n            compliance with applicable labor standards, occupational health and safety requirements, and environmental\n            regulations. Our quality control process includes pre-shipment inspection and documentation review to ensure\n            every delivery meets agreed specifications. We are committed to continuous improvement in our environmental\n            footprint and encourage clients to consider sustainable fabric options where applicable.زز",
+    "cmsAboutSustainImg": "assets/fabric8-restaurant-uniforms.webp"
   },
   "categories1stLayer": [
     {
@@ -160,6 +191,20 @@
     {
       "enabled": true,
       "name": "ACCESSORIES"
+    }
+  ],
+  "countries": [
+    {
+      "code": "US",
+      "name": "USA"
+    },
+    {
+      "code": "JO",
+      "name": "Jordan"
+    },
+    {
+      "code": "INT",
+      "name": "International"
     }
   ]
 }
