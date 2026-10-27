@@ -3896,6 +3896,80 @@ if (iframe && navBtns.length > 0) {
     });
   });
 
+  // Function to apply selected hero image file to currently previewed page
+  async function applyHeroImageFile(file) {
+    if (!file) return;
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if (!doc) {
+        alert("Please wait for the page to finish loading in the editor before changing photo.");
+        return;
+      }
+      const hero = doc.querySelector('.page-hero, .shop-hero, .about-hero, .services-hero, .sectors-hero, .method-hero, .contact-hero, .fashion-slide') ||
+                   doc.getElementById('cmsHomeHeroBg') ||
+                   doc.getElementById('cmsAboutHeroBg') ||
+                   doc.getElementById('cmsSectorsHeroBg');
+      if (!hero) {
+        alert("No hero banner was found on the currently previewed page.");
+        return;
+      }
+      if (window.showToast) {
+        window.showToast("Optimizing hero image for instant loading...", "info", 1500);
+      }
+      const optimized = await compressImageAuto(file, 'hero');
+      const base64 = optimized.base64;
+      const finalName = optimized.name;
+
+      hero.style.backgroundImage = `linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.34)), url("${base64}")`;
+      hero.style.backgroundPosition = 'center center';
+      hero.style.backgroundSize = 'cover';
+      hero.style.backgroundRepeat = 'no-repeat';
+      hero.setAttribute('data-new-bg-upload', finalName);
+      hero.setAttribute('data-new-bg-base64', base64);
+      if (window.showToast) {
+        window.showToast(`Selected "${finalName}" for hero background! Click 'Publish Page Changes' to save live.`, 'success');
+      }
+    } catch(err) {
+      console.warn("Could not apply hero image:", err);
+      alert("Please wait for the page to finish loading in the editor before changing photo.");
+    }
+  }
+
+  // Dedicated hidden file input listener in admin dashboard
+  const editorHeroFileInput = document.getElementById('editorHeroFileInput');
+  if (editorHeroFileInput) {
+    editorHeroFileInput.addEventListener('change', (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (file) {
+        applyHeroImageFile(file);
+      }
+      editorHeroFileInput.value = '';
+    });
+  }
+
+  // Sidebar button to change hero photo of currently previewed page
+  const editorChangeHeroBtn = document.getElementById('editorChangeHeroBtn');
+  if (editorChangeHeroBtn) {
+    editorChangeHeroBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (editorHeroFileInput) {
+        editorHeroFileInput.click();
+      } else {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        document.body.appendChild(fileInput);
+        fileInput.onchange = (event) => {
+          const file = event.target.files && event.target.files[0];
+          if (file) applyHeroImageFile(file);
+          fileInput.remove();
+        };
+        fileInput.click();
+      }
+    });
+  }
+
   iframe.addEventListener('load', initIframeEditing);
   // Also try immediate initialization for fast loading
   setTimeout(initIframeEditing, 300);
