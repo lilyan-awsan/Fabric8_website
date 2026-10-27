@@ -215,7 +215,16 @@
     "cmsMethodStep8Title": "After-Sales",
     "cmsMethodStep8Desc": "Guidance, reorders, support, and lifecycle planning continue after delivery.",
     "cmsMethodStep8BackTitle": "After-Sales",
-    "cmsMethodStep8BackDesc": "Our relationship does not end at delivery. We handle guidance, problem solving, re-orders, and ongoing support for the lifecycle of your uniform planning."
+    "cmsMethodStep8BackDesc": "Our relationship does not end at delivery. We handle guidance, problem solving, re-orders, and ongoing support for the lifecycle of your uniform planning.",
+    "cmsShopHeroTag": "Product Catalog",
+    "cmsShopHeroTitle": "The Garment Matrix, Made to Order,,",
+    "cmsShopHeroSub": "Select items, preview branding, and request one quotation,,.",
+    "cmsShopFilterHeading": "Filters <span class=\"toggle-icon\" style=\"display: none; font-size: 20px;\">+</span>",
+    "cmsShopSearchLabel": "Search Keywords",
+    "cmsShopSearchSub": "Search by name, category, sector, details, or description.",
+    "cmsShopSectorLabel": "Sector",
+    "cmsShopCategoryLabel": "Category",
+    "cmsShopSortLabel": "Sort By"
   },
   "categories1stLayer": [
     {
