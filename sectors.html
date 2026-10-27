@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fabric8-50559-default-rtdb.firebaseio.com" crossorigin="">
   <link rel="preload" href="assets/fonts/heading.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="assets/fonts/body.woff2" as="font" type="font/woff2" crossorigin="">
-  <link rel="stylesheet" href="site.css?v=85">
+  <link rel="stylesheet" href="site.css?v=75">
+  <script src="data/settings-data.js"></script>
 </head>
 
 <body class="page-ready">
@@ -17,8 +18,8 @@
   </div>
   <header class="header">
       <a class="logo-wrapper" href="index.html" title="Fabric 8 Home">
-        <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo No Needle" class="logo-icon-default" title="Click to view size &amp; change image from sidebar">
-        <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);" title="Click to view size &amp; change image from sidebar">
+        <img src="assets/fabric8_logo_noneedle_cropped.png" alt="Fabric8 Logo No Needle" class="logo-icon-default">
+        <img src="assets/fabric8_logo_white.png" alt="Fabric8 Logo With Needle" class="logo-icon-hover" style="filter: invert(1);">
       </a>
     <nav>
       <a href="services.html">Services</a>
@@ -32,7 +33,7 @@
 <option value="JO">Jordan</option>
 <option value="INT">International</option></select>
       <div class="search-box" style="position: relative;">
-        <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 0; font-size: 13px; font-weight: 300; border: none; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; outline: none; color: var(--ink);" data-search-wired="true">
+        <input type="search" placeholder="Search..." style="min-height: 36px; width: 140px; padding: 4px 0; font-size: 13px; font-weight: 300; border: none; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; outline: none; color: var(--ink);">
       </div>
       <a class="quote-link" href="checkout.html" aria-label="View Cart">
         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
@@ -53,112 +54,112 @@
     <section style="width: 100%; padding: 60px 0; background: #ffffff;">
       <div class="sector-cards"><!-- 1. Food & Beverage -->
       <!-- 1. Food & Beverage -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="food" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/food-beverage.webp" alt="Food &amp; Beverage" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #3e8e42; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Food &amp; Beverage</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Restaurants, cafés, catering, quick service, and culinary teams.</p>
+            <img id="cmsSectorFoodImg" src="assets/sector-logos/food-beverage.webp" alt="Food &amp; Beverage" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorFoodTitle" style="color: #3e8e42; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Food &amp; Beverage</h2>
+            <p id="cmsSectorFoodDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Restaurants, cafés, catering, quick service, and culinary teams.</p>
           </div>
           <div class="flip-back" style="background: #3e8e42; color: #ffffff;">
-            <h3 style="color: #ffffff;">Food &amp; Beverage</h3>
-            <p style="color: #ffffff; font-weight: 500;">We outfit restaurants, cafés, and catering teams with uniforms built to handle the heat of a working kitchen and the pace of a busy floor. From chef coats and aprons to front-of-house polos, every piece can be custom embroidered or printed with your logo, giving your brand a consistent, professional presence from the kitchen to the table.</p>
+            <h3 id="cmsSectorFoodBackTitle" style="color: #ffffff;">Food &amp; Beverage</h3>
+            <p id="cmsSectorFoodBackDesc" style="color: #ffffff; font-weight: 500;">We outfit restaurants, cafés, and catering teams with uniforms built to handle the heat of a working kitchen and the pace of a busy floor. From chef coats and aprons to front-of-house polos, every piece can be custom embroidered or printed with your logo, giving your brand a consistent, professional presence from the kitchen to the table.</p>
             <a href="contact.html?sector=food_beverage" class="inquire-btn" style="background: #ffffff; color: #231f20 !important;">Inquire Now →</a>
           </div>
         </div>
       </article>
 
       <!-- 2. Hospitality -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="hospitality" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/hospitality.webp" alt="Hospitality" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #e195a0; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Hospitality</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Hotels, resorts, dining outlets, front-of-house, and guest-facing teams.ز</p>
+            <img id="cmsSectorHospImg" src="assets/sector-logos/hospitality.webp" alt="Hospitality" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorHospTitle" style="color: #e195a0; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Hospitality</h2>
+            <p id="cmsSectorHospDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Hotels, resorts, dining outlets, front-of-house, and guest-facing teams.</p>
           </div>
           <div class="flip-back" style="background: #e195a0; color: #ffffff;">
-            <h3 style="color: #ffffff;">Hospitality</h3>
-            <p style="color: #ffffff; font-weight: 500;">Hotels, resorts, and dining &amp; culinary outlets trust us to deliver uniforms that reflect their brand’s level of service. We supply everything from housekeeping and guest services attire to elegant dining staff wear, all customizable with embroidered logos and monograms that elevate guest experience and staff pride.</p>
+            <h3 id="cmsSectorHospBackTitle" style="color: #ffffff;">Hospitality</h3>
+            <p id="cmsSectorHospBackDesc" style="color: #ffffff; font-weight: 500;">Hotels, resorts, and dining &amp; culinary outlets trust us to deliver uniforms that reflect their brand’s level of service. We supply everything from housekeeping and guest services attire to elegant dining staff wear, all customizable with embroidered logos and monograms that elevate guest experience and staff pride.</p>
             <a href="contact.html?sector=hospitality" class="inquire-btn" style="background: #ffffff; color: #231f20 !important;">Inquire Now →</a>
           </div>
         </div>
       </article>
 
       <!-- 3. Corporate -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="corporate" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/corporate.webp" alt="Corporate" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #bb3726; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Corporate</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Office, retail, sales, and customer-facing corporate teams.</p>
+            <img id="cmsSectorCorpImg" src="assets/sector-logos/corporate.webp" alt="Corporate" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorCorpTitle" style="color: #bb3726; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Corporate</h2>
+            <p id="cmsSectorCorpDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Office, retail, sales, and customer-facing corporate teams.</p>
           </div>
           <div class="flip-back" style="background: #bb3726; color: #ffffff;">
-            <h3 style="color: #ffffff;">Corporate</h3>
-            <p style="color: #ffffff; font-weight: 500;">For office, retail, and customer-facing teams, we provide polished, professional apparel that reinforces brand identity at every touchpoint. Polos, button-downs, jackets, and more — printed or embroidered with your company logo — help your team look sharp and unified, whether they’re behind a desk or in front of customers.</p>
+            <h3 id="cmsSectorCorpBackTitle" style="color: #ffffff;">Corporate</h3>
+            <p id="cmsSectorCorpBackDesc" style="color: #ffffff; font-weight: 500;">For office, retail, and customer-facing teams, we provide polished, professional apparel that reinforces brand identity at every touchpoint. Polos, button-downs, jackets, and more — printed or embroidered with your company logo — help your team look sharp and unified, whether they’re behind a desk or in front of customers.</p>
             <a href="contact.html?sector=corporate" class="inquire-btn" style="background: #ffffff; color: #231f20 !important;">Inquire Now →</a>
           </div>
         </div>
       </article>
 
       <!-- 4. Industrial -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="industrial" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/industrial.webp" alt="Industrial" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #231f20; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Industrial</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Manufacturing, construction, logistics, warehouse, and field workforces.</p>
+            <img id="cmsSectorIndImg" src="assets/sector-logos/industrial.webp" alt="Industrial" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorIndTitle" style="color: #231f20; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Industrial</h2>
+            <p id="cmsSectorIndDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Manufacturing, construction, logistics, warehouse, and field workforces.</p>
           </div>
           <div class="flip-back" style="background: #231f20; color: #ffffff;">
-            <h3 style="color: #ffffff;">Industrial</h3>
-            <p style="color: #ffffff; font-weight: 500;">Manufacturing, construction, and logistics workforces need uniforms that are as tough as the job itself. We provide durable, safety-conscious workwear — from cargos to high-visibility gear — with custom embroidery and printing that keeps your crew identifiable and your brand visible on every job site.</p>
+            <h3 id="cmsSectorIndBackTitle" style="color: #ffffff;">Industrial</h3>
+            <p id="cmsSectorIndBackDesc" style="color: #ffffff; font-weight: 500;">Manufacturing, construction, and logistics workforces need uniforms that are as tough as the job itself. We provide durable, safety-conscious workwear — from cargos to high-visibility gear — with custom embroidery and printing that keeps your crew identifiable and your brand visible on every job site.</p>
             <a href="contact.html?sector=industrial" class="inquire-btn" style="background: #ffffff; color: #231f20 !important;">Inquire Now →</a>
           </div>
         </div>
       </article>
 
       <!-- 5. Healthcare -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="healthcare" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/healthcare.webp" alt="Healthcare" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #73afdd; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Healthcare</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Hospitals, clinics, laboratories, and medical practice staff.</p>
+            <img id="cmsSectorHealthImg" src="assets/sector-logos/healthcare.webp" alt="Healthcare" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorHealthTitle" style="color: #73afdd; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Healthcare</h2>
+            <p id="cmsSectorHealthDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Hospitals, clinics, laboratories, and medical practice staff.</p>
           </div>
           <div class="flip-back" style="background: #73afdd; color: #ffffff;">
-            <h3 style="color: #ffffff;">Healthcare</h3>
-            <p style="color: #ffffff; font-weight: 500;">Hospitals, clinics, and medical facilities rely on us for scrubs, lab coats, and medical uniforms that combine comfort, durability, and a clean, professional appearance. Custom embroidery makes it easy to distinguish departments, roles, and staff — supporting both function and brand consistency in patient-facing environments.</p>
+            <h3 id="cmsSectorHealthBackTitle" style="color: #ffffff;">Healthcare</h3>
+            <p id="cmsSectorHealthBackDesc" style="color: #ffffff; font-weight: 500;">Hospitals, clinics, and medical facilities rely on us for scrubs, lab coats, and medical uniforms that combine comfort, durability, and a clean, professional appearance. Custom embroidery makes it easy to distinguish departments, roles, and staff — supporting both function and brand consistency in patient-facing environments.</p>
             <a href="contact.html?sector=healthcare" class="inquire-btn" style="background: #ffffff; color: #231f20 !important;">Inquire Now →</a>
           </div>
         </div>
       </article>
 
       <!-- 6. Aviation -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="aviation" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/aviation.webp" alt="Aviation" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #491124; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Aviation</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Airlines, ground handling, flight crew, and travel operational services.</p>
+            <img id="cmsSectorAviaImg" src="assets/sector-logos/aviation.webp" alt="Aviation" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorAviaTitle" style="color: #491124; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Aviation</h2>
+            <p id="cmsSectorAviaDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Airlines, ground handling, flight crew, and travel operational services.</p>
           </div>
           <div class="flip-back" style="background: #491124; color: #ffffff;">
-            <h3 style="color: #ffffff;">Aviation</h3>
-            <p style="color: #ffffff; font-weight: 500;">Airlines and ground-handling services need uniforms that project precision, safety, and professionalism. We supply flight crew and ground staff apparel with crisp tailoring and embroidered detailing, helping your team represent your airline’s standards at every gate and on every flight.</p>
+            <h3 id="cmsSectorAviaBackTitle" style="color: #ffffff;">Aviation</h3>
+            <p id="cmsSectorAviaBackDesc" style="color: #ffffff; font-weight: 500;">Airlines and ground-handling services need uniforms that project precision, safety, and professionalism. We supply flight crew and ground staff apparel with crisp tailoring and embroidered detailing, helping your team represent your airline’s standards at every gate and on every flight.</p>
             <a href="contact.html?sector=aviation" class="inquire-btn" style="background: #ffffff; color: #231f20 !important;">Inquire Now →</a>
           </div>
         </div>
       </article>
 
       <!-- 7. Education -->
-      <article class="flip-card" onclick="this.classList.toggle('flipped')">
+      <article class="flip-card" data-sector="education" onclick="this.classList.toggle('flipped')">
         <div class="flip-inner">
           <div class="flip-front">
-            <img src="assets/sector-logos/education.webp" alt="Education" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="" title="Click to view size &amp; change image from sidebar">
-            <h2 style="color: #8b9605; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Education</h2>
-            <p style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Schools, academic institutions, campus programs, and event staff.</p>
+            <img id="cmsSectorEduImg" src="assets/sector-logos/education.webp" alt="Education" width="82" height="82" loading="lazy" decoding="async" style="width: 82px; height: 82px; object-fit: contain; margin-bottom: 20px;" class="">
+            <h2 id="cmsSectorEduTitle" style="color: #8b9605; font-size: 28px; font-weight: 800; margin: 0 0 12px 0; letter-spacing: 0.03em;">Education</h2>
+            <p id="cmsSectorEduDesc" style="font-size: 15.5px; color: #64748b; margin: 0; text-align: center; line-height: 1.6; max-width: 760px; padding: 0 10px;">Schools, academic institutions, campus programs, and event staff.</p>
           </div>
           <div class="flip-back" style="background: #ccdc29; color: #231f20;">
-            <h3 style="color: #231f20;">Education</h3>
-            <p style="color: #231f20; font-weight: 600;">Schools and academic institutions come to us for uniforms and staff apparel that build a sense of identity and pride. From student uniforms to staff polos and spirit wear, we offer custom embroidery and printing, so every piece reflects your school’s colors, crest, and community spirit.</p>
+            <h3 id="cmsSectorEduBackTitle" style="color: #231f20;">Education</h3>
+            <p id="cmsSectorEduBackDesc" style="color: #231f20; font-weight: 600;">Schools and academic institutions come to us for uniforms and staff apparel that build a sense of identity and pride. From student uniforms to staff polos and spirit wear, we offer custom embroidery and printing, so every piece reflects your school’s colors, crest, and community spirit.</p>
             <a href="contact.html?sector=education" class="inquire-btn" style="background: #231f20; color: #ffffff !important;">Inquire Now →</a>
           </div>
         </div>
@@ -181,7 +182,7 @@
         <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
           Contact Details</h4>
         <p>6290 Jimmy Carter Blvd Suite 202<br>Norcross, GA 30071<br>United States<br><br>USA: +1 (770) 710-2286<br>Jordan: +962 79 67 88 240<br><a href="contact.html" style="color: var(--yellow, #ffd700); text-decoration: none; font-weight: bold;">Contact Us</a></p>
-        <div id="cmsSocialLinks" class="footer-social-links" style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center;"><a href="https://www.linkedin.com/company/thefabric8" target="_blank" rel="noopener noreferrer" title="Click to edit social media link" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: rgb(34, 34, 34); border: 1px solid rgb(58, 58, 58); border-radius: 6px; align-items: center; justify-content: center; color: rgb(255, 255, 255); text-decoration: none; transition: 0.2s; margin-right: 8px; margin-bottom: 6px; box-sizing: border-box; cursor: pointer;" onmouseover="this.style.background='#2f873d';this.style.borderColor='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.borderColor='#3a3a3a';this.style.transform='none';"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a><a href="https://www.instagram.com/thefabric8" target="_blank" rel="noopener noreferrer" title="Click to edit social media link" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: rgb(34, 34, 34); border: 1px solid rgb(58, 58, 58); border-radius: 6px; align-items: center; justify-content: center; color: rgb(255, 255, 255); text-decoration: none; transition: 0.2s; margin-right: 8px; margin-bottom: 6px; box-sizing: border-box; cursor: pointer;" onmouseover="this.style.background='#2f873d';this.style.borderColor='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.borderColor='#3a3a3a';this.style.transform='none';"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a></div>
+        <div id="cmsSocialLinks" class="footer-social-links" style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; align-items: center;"><a href="https://www.linkedin.com/company/thefabric8" target="_blank" rel="noopener noreferrer" title="Social Media" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: rgb(34, 34, 34); border: 1px solid rgb(58, 58, 58); border-radius: 6px; align-items: center; justify-content: center; color: rgb(255, 255, 255); text-decoration: none; transition: 0.2s; margin-right: 8px; margin-bottom: 6px; box-sizing: border-box; cursor: pointer;" onmouseover="this.style.background='#2f873d';this.style.borderColor='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.borderColor='#3a3a3a';this.style.transform='none';"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a><a href="https://www.instagram.com/thefabric8" target="_blank" rel="noopener noreferrer" title="Social Media" class="square-social-btn" style="display: inline-flex; width: 34px; height: 34px; background: rgb(34, 34, 34); border: 1px solid rgb(58, 58, 58); border-radius: 6px; align-items: center; justify-content: center; color: rgb(255, 255, 255); text-decoration: none; transition: 0.2s; margin-right: 8px; margin-bottom: 6px; box-sizing: border-box; cursor: pointer;" onmouseover="this.style.background='#2f873d';this.style.borderColor='#2f873d';this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#222222';this.style.borderColor='#3a3a3a';this.style.transform='none';"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg></a></div>
       </div>
       <div>
         <h4 style="color: #fff; margin-bottom: 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">
@@ -193,22 +194,18 @@
   </footer>
 
   <!-- Firebase SDK -->
-  <script src="site.js?v=90"></script>
+  <script src="site.js?v=85"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      if (window.self === window.top) {
-        document.querySelectorAll(".sector-cards .flip-card").forEach(function(card) {
-          card.removeAttribute("onclick");
-          card.addEventListener("click", function(e) {
-            if (e.target.closest("a, button")) return;
-            card.classList.toggle("is-flipped");
-            card.classList.toggle("flipped");
-          });
+      document.querySelectorAll(".sector-cards .flip-card").forEach(function(card) {
+        card.removeAttribute("onclick");
+        card.addEventListener("click", function(e) {
+          if (e.target.closest("a, button")) return;
+          card.classList.toggle("is-flipped");
+          card.classList.toggle("flipped");
         });
-      }
+      });
     });
   </script>
-
-
 </body>
 </html>

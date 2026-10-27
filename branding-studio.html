@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fabric8 | Discovery Branding Studio</title>
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=5" />
-  <link rel="stylesheet" href="site.css?v=70" />
+  <link rel="stylesheet" href="site.css?v=75" />
   <style>
     :root {
       --bg-canvas: #f7f5ef;
@@ -638,20 +638,14 @@
 
       <!-- 2. Choose Size & Quantity -->
       <div class="form-section">
-        <label class="section-label" for="sizeSelector">2. Choose Size &amp; Quantity (MOQ 50 Pcs)</label>
+        <label class="section-label" for="sizeSelector" id="sizeSectionLabel">2. Choose Size &amp; Quantity (MOQ 50 Pcs)</label>
         <div style="display: grid; grid-template-columns: 1fr 120px; gap: 12px;">
           <select id="sizeSelector" class="customizer-select">
-            <option value="Standard Spec (Assorted M/L/XL)">Standard Spec (Assorted M/L/XL)</option>
-            <option value="Small (S)">Small (S)</option>
-            <option value="Medium (M)">Medium (M)</option>
-            <option value="Large (L)">Large (L)</option>
-            <option value="Extra Large (XL)">Extra Large (XL)</option>
-            <option value="Double Extra Large (2XL)">Double Extra Large (2XL)</option>
-            <option value="Custom Size Roster">Custom Size Roster (Specify in Quote)</option>
+            <option value="Select Size">Select Size</option>
           </select>
           <input type="number" id="qtyInput" class="customizer-input" value="50" min="50" placeholder="Qty" title="Minimum Order Quantity is 50 pieces" style="text-align: center; font-weight: 900;" />
         </div>
-        <p style="font-size: 11.5px; color: var(--muted); margin: 6px 0 0;">
+        <p id="moqNoticeText" style="font-size: 11.5px; color: var(--muted); margin: 6px 0 0;">
           🔒 Minimum Order Quantity is strictly enforced at 50 pieces per custom run.
         </p>
       </div>
@@ -821,7 +815,7 @@
     </div>
   </footer>
 
-  <script src="site.js?v=80"></script>
+  <script src="site.js?v=85"></script>
   <script src="branding-studio.js?v=51"></script>
 </body>
 </html>

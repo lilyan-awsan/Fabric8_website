@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,6 +7,7 @@
 
   <link rel="icon" type="image/png" href="assets/favicon2.png?v=3" />
   <link rel="stylesheet" href="admin.css">
+  <script src="shared-utils.js"></script>
 </head>
 <body>
   <!-- Login Screen -->
@@ -42,7 +43,8 @@
         <span id="syncSpinner" style="display: inline-block; animation: spin 1s linear infinite;">⏳</span>
         <span id="syncStatusText">Syncing...</span>
       </div>
-      <div class="admin-controls">
+      <div class="admin-controls" style="display: flex; align-items: center; gap: 15px;">
+        <span id="adminUserBadge" style="font-size: 13px; font-weight: 600; background: rgba(47, 135, 61, 0.1); color: var(--green); padding: 5px 12px; border-radius: 20px;">Admin</span>
         <button id="logoutBtn" class="btn-icon">Logout</button>
       </div>
     </header>
@@ -70,6 +72,12 @@
             <option value="Bottom Wear">Bottom Wear</option>
             <option value="Outerwear">Outerwear</option>
             <option value="Accessories">Accessories</option>
+          </select>
+          <select id="productSortFilter" class="filter-select" title="Sort Products">
+            <option value="default">Sort: Default (Name A-Z)</option>
+            <option value="sku-asc">Sort: SKU (A &rarr; Z)</option>
+            <option value="sku-desc">Sort: SKU (Z &rarr; A)</option>
+            <option value="name-desc">Sort: Name (Z &rarr; A)</option>
           </select>
           <button id="bulkDeleteBtn" class="quote-link" style="background: #e74c3c; color: #fff; border-color: #e74c3c; display: none;">Delete Selected</button>
           <button id="addProductBtn" class="quote-link">+ Add Product</button>
@@ -128,11 +136,10 @@
                 <span id="sectorsCountBadge" class="reorder-badge active">0 Sectors</span>
               </div>
 
-              <!-- Add Sector Input Form -->
-              <form id="addSectorForm" onsubmit="event.preventDefault(); window.addNewSectorFromInput();" style="display: flex; gap: 8px; margin-bottom: 16px;">
-                <input type="text" id="newSectorInput" placeholder="New sector name (e.g., Aviation)..." style="flex: 1; padding: 10px 12px; font-size: 13px; border: 1px solid var(--line); border-radius: 6px; background: #fff;">
-                <button type="submit" class="button outline" style="padding: 10px 16px; font-size: 13px; font-weight: 700; background: #2f873d; color: #fff; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">+ Add Sector</button>
-              </form>
+              <!-- Informational note for standard sectors management -->
+              <div style="background: #eef7ef; border: 1px solid #c2e5c6; border-radius: 6px; padding: 10px 14px; margin-bottom: 16px; font-size: 12px; color: #1e5e29; display: flex; align-items: center; justify-content: space-between;">
+                <span>💡 Toggle <b>Visible / Hidden</b> below to instantly show or hide any sector across Homepage, Shop & Sectors page.</span>
+              </div>
 
               <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
                 <span>Drag (⋮⋮) or arrows (▲/▼) to reorder</span>
@@ -224,11 +231,11 @@
 
         <div style="display: flex; gap: 20px; width: 100%; min-height: 750px; height: calc(100vh - 280px);">
           <!-- Sidebar -->
-          <div style="width: 260px; min-width: 260px; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 18px 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); flex-shrink: 0; max-height: 100%; overflow-y: auto;">
-            <h3 style="margin: 0; font-size: 15px; border-bottom: 1px solid var(--line); padding-bottom: 10px;">Visual Editor</h3>
-            <p style="font-size: 11.5px; color: var(--muted); margin: 0;">Select a page to edit visually. Click any text or image in the preview.</p>
+          <div style="width: 240px; min-width: 240px; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); flex-shrink: 0;">
+            <h3 style="margin: 0; font-size: 16px; border-bottom: 1px solid var(--line); padding-bottom: 12px;">Visual Editor</h3>
+            <p style="font-size: 12px; color: var(--muted); margin: 0;">Select a page to edit visually. Click any text or image in the preview.</p>
             
-            <div id="visualEditorNav" style="display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+            <div id="visualEditorNav" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
               <button class="editor-nav-btn active" data-page="index.html">Home Page</button>
               <button class="editor-nav-btn" data-page="about.html">About Us</button>
               <button class="editor-nav-btn" data-page="services.html">Services</button>
@@ -236,69 +243,32 @@
               <button class="editor-nav-btn" data-page="sectors.html">Sectors</button>
               <button class="editor-nav-btn" data-page="shop.html">Shop & Filters</button>
               <button class="editor-nav-btn" data-page="contact.html">Contact</button>
-              <button class="editor-nav-btn" data-page="footer" id="editorNavFooterBtn" style="border-top: 1px solid var(--line); margin-top: 2px; padding-top: 6px;">⚙️ Footer</button>
-            </div>
-
-            <!-- Active Size Badge -->
-            <div id="editorActiveSizeBadge" style="background: #0f172a; color: #22c55e; border: 1px solid #1e293b; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 800; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-top: 4px;">
-              <span>📐</span> <span id="editorActiveSizeText">Hero Size: 1920 × 800 px</span>
-            </div>
-
-            <!-- Selected Image Action Panel (Appears when clicking an image in the iframe) -->
-            <div id="editorSelectedImagePanel" style="display: none; background: #f0fdf4; border: 1.5px solid #22c55e; border-radius: 8px; padding: 10px 12px; margin-top: 2px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 11px; font-weight: 800; color: #166534; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
-                  <span>🖼️</span> Selected Image
-                </span>
-                <button type="button" id="editorDeselectImgBtn" title="Close" style="background: none; border: none; font-size: 16px; cursor: pointer; color: #666; line-height: 1; padding: 0 4px;">&times;</button>
-              </div>
-              <div id="editorSelectedImgSizeBadge" style="background: #0f172a; color: #38bdf8; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; text-align: center; margin-bottom: 8px;">
-                📐 Recommended: 1200 × 900 px
-              </div>
-              <input type="file" id="editorSelectedImgFileInput" accept="image/*" style="display: none;">
-              <button type="button" id="editorChangeSelectedImgBtn" class="button" style="width: 100%; font-size: 11.5px; font-weight: 700; padding: 7px; background: #22c55e; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                📷 Choose New Image
-              </button>
+              <button class="editor-nav-btn" data-page="footer" id="editorNavFooterBtn" style="border-top: 1px solid var(--line); margin-top: 4px; padding-top: 8px;">⚙️ Footer</button>
             </div>
             
             <!-- Quick Hero Photo Button -->
-            <div id="editorQuickHeroContainer" style="margin-top: 2px; padding-top: 6px; border-top: 1px dashed var(--line); display: flex; flex-direction: column; gap: 6px;">
+            <div id="editorQuickHeroContainer" style="margin-top: 6px; padding-top: 10px; border-top: 1px dashed var(--line); display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Hero Banner</span>
+                <span class="img-guide-wrapper" title="Recommended image size">
+                  <span class="img-guide-pill">📐 1920 × 800 px</span>
+                  <span class="img-guide-tooltip">Hero Dimensions: 1920 × 800 px (or 16:9 widescreen)<br>Keep subjects centered for responsive desktop & mobile</span>
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Services &amp; Cards</span>
+                <span class="img-guide-wrapper" title="Recommended content cards size">
+                  <span class="img-guide-pill">📐 800 × 600 px (4:3)</span>
+                  <span class="img-guide-tooltip">Services &amp; Content Cards: 800 × 600 px (4:3 aspect ratio)<br>Ideal for Services atelier, embroidery &amp; facility photos</span>
+                </span>
+              </div>
               <input type="file" id="editorHeroFileInput" accept="image/*" style="display: none;">
-              <button id="editorChangeHeroBtn" type="button" class="button" style="width: 100%; font-size: 12px; font-weight: 800; padding: 9px; background: #0f172a; color: #ffffff; border: 2px solid #22c55e; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); text-transform: uppercase;">
+              <button id="editorChangeHeroBtn" type="button" class="button" style="width: 100%; font-size: 12px; font-weight: 800; padding: 10px; background: #0f172a; color: #ffffff; border: 2px solid #22c55e; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); text-transform: uppercase;">
                 📷 Change Hero Photo
               </button>
             </div>
 
-            <!-- Image Sizes Guide Card -->
-            <div id="editorImageSizesGuide" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px; font-family: inherit; margin-top: 4px;">
-              <div style="font-weight: 800; font-size: 12px; color: #0f172a; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                <span>📐</span> Image Sizes Guide:
-              </div>
-              <ul style="list-style: none; padding: 0; margin: 0; font-size: 11px; display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                <li id="guideItemServices" style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                  <span>• Services:</span>
-                  <strong style="color: #0284c7;">1200 × 900 px (4:3)</strong>
-                </li>
-                <li id="guideItemHero" style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                  <span>• Hero Banners:</span>
-                  <strong style="color: #10b981;">1920 × 800 px</strong>
-                </li>
-                <li id="guideItemSectors" style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                  <span>• Sectors:</span>
-                  <strong style="color: #d97706;">200 × 200 px (1:1)</strong>
-                </li>
-                <li id="guideItemProducts" style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                  <span>• Products:</span>
-                  <strong style="color: #3b82f6;">1000 × 1000 px</strong>
-                </li>
-                <li id="guideItemLogos" style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                  <span>• Brand Logos:</span>
-                  <strong style="color: #8b5cf6;">400 × 150 px</strong>
-                </li>
-              </ul>
-            </div>
-
-            <div style="margin-top: auto; padding-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px;">
               <span id="visualEditorStatus" style="font-size: 11px; color: var(--green); display: none; font-weight: bold; text-align: center;">Changes Published!</span>
               <button id="saveVisualEditorBtn" class="button primary" style="width: 100%; font-size: 13px; padding: 10px;">Publish Page Changes</button>
             </div>
@@ -474,6 +444,7 @@
               <span style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Quick Presets:</span>
               <button type="button" class="admin-color-preset" data-name="Black" data-hex="#111111" style="width: 22px; height: 22px; border-radius: 50%; background: #111111; border: 1px solid #999; cursor: pointer;" title="Black"></button>
               <button type="button" class="admin-color-preset" data-name="White" data-hex="#ffffff" style="width: 22px; height: 22px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; cursor: pointer;" title="White"></button>
+              <button type="button" class="admin-color-preset" data-name="Black Striped" data-hex="repeating-linear-gradient(45deg, #111111, #111111 3px, #ffffff 3px, #ffffff 6px)" style="width: 22px; height: 22px; border-radius: 50%; background: repeating-linear-gradient(45deg, #111111, #111111 3px, #ffffff 3px, #ffffff 6px); border: 1px solid #999; cursor: pointer;" title="Black Striped"></button>
               <button type="button" class="admin-color-preset" data-name="Navy" data-hex="#1b263b" style="width: 22px; height: 22px; border-radius: 50%; background: #1b263b; border: 1px solid #999; cursor: pointer;" title="Navy"></button>
               <button type="button" class="admin-color-preset" data-name="Grey" data-hex="#7f8c8d" style="width: 22px; height: 22px; border-radius: 50%; background: #7f8c8d; border: 1px solid #999; cursor: pointer;" title="Grey"></button>
               <button type="button" class="admin-color-preset" data-name="Charcoal" data-hex="#333333" style="width: 22px; height: 22px; border-radius: 50%; background: #333333; border: 1px solid #999; cursor: pointer;" title="Charcoal"></button>
@@ -567,31 +538,80 @@
           </div>
           <div class="input-group full-width">
             <label style="margin-bottom: 8px; display: block;">Configured Placements & Anchor Bounds (x, y, width, height, rotation)</label>
-            <p style="font-size: 12px; color: var(--muted); margin-top: 0; margin-bottom: 10px;">Define accurate placement zones and anchor scale percentages for real-time canvas positioning.</p>
-            <div id="placementsTableContainer" style="background: #f9f8f5; border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 8px; overflow-x: auto;">
-              <table style="width: 100%; text-align: left; font-size: 13px; border-collapse: collapse; min-width: 500px;">
-                <thead>
-                  <tr style="border-bottom: 1px solid var(--line); color: var(--ink);">
-                    <th style="padding: 6px;">Zone Name</th>
-                    <th style="padding: 6px; width: 70px;">X (%)</th>
-                    <th style="padding: 6px; width: 70px;">Y (%)</th>
-                    <th style="padding: 6px; width: 70px;">W (%)</th>
-                    <th style="padding: 6px; width: 70px;">H (%)</th>
-                    <th style="padding: 6px; width: 70px;">Rot (°)</th>
-                    <th style="padding: 6px; width: 50px;">Action</th>
-                  </tr>
-                </thead>
-                <tbody id="placementsTableBody">
-                  <!-- Dynamically populated -->
-                </tbody>
-              </table>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button type="button" id="addPlacementRowBtn" class="button outline" style="padding: 6px 16px; font-size: 13px; font-weight: 600;">+ Add Placement Zone</button>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 0; margin-bottom: 12px;">Define accurate placement zones and anchor scale percentages for real-time canvas positioning. Click on the product preview below to position the selected zone visually, or drag the zone handles.</p>
+            
+            <!-- Interactive Visual Mini-Picker -->
+            <div id="visualPickerSection" style="display: grid; grid-template-columns: 320px 1fr; gap: 20px; background: #fdfcf9; border: 1.5px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; align-items: start;">
+              <!-- Left: Canvas / Image Visual Area -->
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--ink);">Interactive Preview</span>
+                  <span id="visualPickerActiveLabel" style="font-size: 11px; font-weight: 700; color: var(--green); background: #eaf5eb; padding: 2px 8px; border-radius: 10px;">Select Zone Below</span>
+                </div>
+                <div id="visualPickerCanvasContainer" style="position: relative; width: 100%; aspect-ratio: 1/1; max-width: 320px; background: #f4f3ee; border: 2px dashed #d5d3cb; border-radius: 10px; overflow: hidden; cursor: crosshair; user-select: none; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 6px rgba(0,0,0,0.04);">
+                  <img id="visualPickerGarmentImg" src="assets/fabric8_logo_noneedle_cropped.png" alt="Garment Preview" style="width: 100%; height: 100%; object-fit: contain; pointer-events: none; padding: 12px; box-sizing: border-box; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.06));">
+                  <!-- Active Zone Draggable / Resizable Box -->
+                  <div id="visualZoneBox" style="display: none; position: absolute; border: 2px solid #2f873d; background: rgba(47, 135, 61, 0.22); border-radius: 4px; cursor: move; box-sizing: border-box; touch-action: none; transition: box-shadow 0.15s ease;">
+                    <span id="visualZoneTag" style="position: absolute; top: -20px; left: 0; background: #2f873d; color: #fff; font-size: 10px; font-weight: bold; padding: 1px 6px; border-radius: 3px; white-space: nowrap; pointer-events: none;">Zone</span>
+                    <!-- Resize Handle Bottom-Right -->
+                    <div id="visualZoneResizeHandle" style="position: absolute; width: 10px; height: 10px; right: -5px; bottom: -5px; background: #fff; border: 2px solid #2f873d; border-radius: 50%; cursor: se-resize;"></div>
+                  </div>
+                </div>
+                <p style="margin: 8px 0 0 0; font-size: 11px; color: var(--muted); text-align: center; line-height: 1.4;">
+                  💡 <strong>Tip:</strong> Click anywhere on the garment to position the selected zone, or drag the green box & corner handle to resize.
+                </p>
+              </div>
+
+              <!-- Right: Presets & Placement Zones Table -->
+              <div>
+                <!-- Preset Quick Actions -->
+                <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line);">
+                  <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px;">Quick Presets (Click to Add / Fill):</span>
+                  <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button type="button" class="button outline" onclick="window.applyPlacementPreset('Left Chest')" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;">Left Chest</button>
+                    <button type="button" class="button outline" onclick="window.applyPlacementPreset('Right Chest')" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;">Right Chest</button>
+                    <button type="button" class="button outline" onclick="window.applyPlacementPreset('Center Chest')" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;">Center Chest</button>
+                    <button type="button" class="button outline" onclick="window.applyPlacementPreset('Full Back')" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;">Full Back</button>
+                    <button type="button" class="button outline" onclick="window.applyPlacementPreset('Upper Sleeve')" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;">Upper Sleeve</button>
+                    <button type="button" class="button outline" onclick="window.applyPlacementPreset('Cap Front Center')" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;">Cap Front Center</button>
+                  </div>
+                </div>
+
+                <!-- Table Container -->
+                <div id="placementsTableContainer" style="background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; overflow-x: auto; max-height: 240px; overflow-y: auto;">
+                  <table style="width: 100%; text-align: left; font-size: 12px; border-collapse: collapse; min-width: 480px;">
+                    <thead>
+                      <tr style="border-bottom: 1px solid var(--line); color: var(--ink);">
+                        <th style="padding: 6px;">Select &amp; Name</th>
+                        <th style="padding: 6px; width: 60px; text-align: center;">X (%)</th>
+                        <th style="padding: 6px; width: 60px; text-align: center;">Y (%)</th>
+                        <th style="padding: 6px; width: 60px; text-align: center;">W (%)</th>
+                        <th style="padding: 6px; width: 60px; text-align: center;">H (%)</th>
+                        <th style="padding: 6px; width: 60px; text-align: center;">Rot (°)</th>
+                        <th style="padding: 6px; width: 40px; text-align: center;">Del</th>
+                      </tr>
+                    </thead>
+                    <tbody id="placementsTableBody">
+                      <!-- Dynamically populated -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <button type="button" id="addPlacementRowBtn" class="button outline" style="padding: 6px 14px; font-size: 12px; font-weight: 600;">+ Add New Zone</button>
+                  <span style="font-size: 11px; color: var(--muted);">Click any row above to activate it on the preview.</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="input-group full-width">
-            <label style="display: flex; align-items: center; justify-content: space-between;"><span>Technical Sketch Image (URL or File Upload)</span><span style="background: #0f172a; color: #10b981; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">📐 800 × 800 px (1:1)</span></label>
+            <label style="display: flex; align-items: center; justify-content: space-between;">
+              <span>Technical Sketch Image (URL or File Upload)</span>
+              <span class="img-guide-wrapper" title="Recommended image size">
+                <span class="img-guide-pill">📐 800 × 800 px</span>
+                <span class="img-guide-tooltip">Optimal Size: 800 × 800 px (1:1 Square)<br>Format: Transparent PNG or Clean White BG</span>
+              </span>
+            </label>
             <div style="display: flex; gap: 8px; margin-bottom: 8px;">
               <input type="text" id="sketch" placeholder="e.g. assets/sketch.png or upload below..." style="flex: 1;">
               <input type="file" id="sketchUpload" accept="image/png, image/jpeg, image/webp" style="padding: 6px; font-size: 12px; max-width: 260px;">
@@ -600,7 +620,13 @@
             <textarea id="sketchDescription" rows="2" placeholder="e.g. Ergonomic paneling with reinforced safety stitch along seam contours."></textarea>
           </div>
           <div class="input-group full-width image-upload-group">
-            <label style="margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;"><span>Product Images & Color Sample Association</span><span style="background: #0f172a; color: #3b82f6; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">📐 1000 × 1000 px (1:1)</span></label>
+            <label style="margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Product Images & Color Sample Association</span>
+              <span class="img-guide-wrapper" title="Recommended image size">
+                <span class="img-guide-pill">📐 800 × 800 px (1:1 Ratio)</span>
+                <span class="img-guide-tooltip">Recommended: 800 × 800 px (Square 1:1)<br>High-resolution garment on clean/transparent background</span>
+              </span>
+            </label>
             <p style="font-size: 12px; color: var(--muted); margin-top: 0; margin-bottom: 10px;">Choose the <strong>Main Photo</strong> (displayed first in the shop catalog and product page) and select the matching color swatch for each photo.</p>
             <div id="imagePreviewContainer" class="image-preview-grid" style="display:flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px;">
               <!-- Thumbnails + Color Selectors injected here -->
@@ -632,7 +658,13 @@
           <input type="text" id="brandNameInput" placeholder="e.g. Blaze & Pull or District Rooftop" required style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 6px;">
         </div>
         <div class="input-group" style="margin-bottom: 16px;">
-          <label style="font-weight: 700; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 13px;"><span>Upload Logo File</span><span style="background: #0f172a; color: #8b5cf6; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;">📐 400 × 150 px</span></label>
+          <label style="font-weight: 700; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 13px;">
+            <span>Upload Logo File</span>
+            <span class="img-guide-wrapper" title="Recommended image size">
+              <span class="img-guide-pill">📐 230 × 85 px</span>
+              <span class="img-guide-tooltip">Optimal Logo Size: 230 × 85 px<br>Aspect Ratio: Horizontal / Transparent PNG or SVG</span>
+            </span>
+          </label>
           <input type="file" id="brandLogoFileInput" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="padding: 6px; font-size: 13px; width: 100%;">
         </div>
         <div class="input-group" style="margin-bottom: 20px;">
@@ -683,7 +715,13 @@
         </div>
 
         <div id="newSocialCustomUploadGroup" class="input-group" style="margin-bottom: 16px; display: none;">
-          <label style="font-weight: 700; display: block; margin-bottom: 6px; font-size: 13px;">Upload Square Icon / Logo (PNG, SVG)</label>
+          <label style="font-weight: 700; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; font-size: 13px;">
+            <span>Upload Square Icon / Logo (PNG, SVG)</span>
+            <span class="img-guide-wrapper" title="Recommended image size">
+              <span class="img-guide-pill">📐 64 × 64 px</span>
+              <span class="img-guide-tooltip">Optimal Size: 64 × 64 px (Square 1:1)<br>Format: Transparent SVG or PNG</span>
+            </span>
+          </label>
           <input type="file" id="newSocialCustomFile" accept="image/png, image/svg+xml, image/jpeg, image/webp" style="width: 100%; padding: 6px; font-size: 13px; box-sizing: border-box;">
         </div>
 
@@ -712,7 +750,7 @@
   </div>
 
   <!-- Firebase SDK via CDN -->
-  <script type="module" src="admin.js?v=58"></script>
+  <script type="module" src="admin.js?v=57"></script>
 </body>
 </html>
 

@@ -22,8 +22,9 @@
       sku: "F8-PROTO-POLO",
       name: "Corporate Dri-Fit Polo",
       color: "White",
-      size: "Standard Spec (Assorted M/L/XL)",
-      qty: 50,
+      size: "M",
+      sizes: ["XS", "S", "M", "L", "XL", "2XL"],
+      qty: 24,
       image: "assets/products/Polo White Front.jpg",
       placements: [
         { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
@@ -75,6 +76,49 @@
     drawCanvas();
   });
 
+  function updateSizeOptions(availableSizes, selectedSize) {
+    const sizeSel = document.getElementById("sizeSelector");
+    if (!sizeSel) return;
+
+    let sizesToRender = [];
+    if (Array.isArray(availableSizes) && availableSizes.length > 0) {
+      sizesToRender = [...availableSizes];
+    } else if (state.product.sizes && Array.isArray(state.product.sizes) && state.product.sizes.length > 0) {
+      sizesToRender = [...state.product.sizes];
+    } else {
+      sizesToRender = ["Standard Spec (Assorted M/L/XL)", "XS", "S", "M", "L", "XL", "2XL"];
+    }
+
+    sizeSel.innerHTML = "";
+    sizesToRender.forEach(sz => {
+      const opt = document.createElement("option");
+      opt.value = sz;
+      opt.textContent = sz;
+      sizeSel.appendChild(opt);
+    });
+
+    // Optionally append custom size roster option for corporate orders if more than 1 size
+    if (sizesToRender.length > 1 && !sizesToRender.some(s => s.toLowerCase().includes("custom"))) {
+      const customOpt = document.createElement("option");
+      customOpt.value = "Custom Size Roster (Specify in Quote)";
+      customOpt.textContent = "Custom Size Roster (Specify in Quote)";
+      sizeSel.appendChild(customOpt);
+    }
+
+    const targetSize = selectedSize || state.product.size;
+    const match = Array.from(sizeSel.options).find(o => o.value.toLowerCase() === (targetSize || "").toLowerCase());
+    if (match) {
+      sizeSel.value = match.value;
+      state.product.size = match.value;
+    } else {
+      sizeSel.selectedIndex = 0;
+      state.product.size = sizeSel.value;
+    }
+
+    const sizeBadge = document.getElementById("headerProdSize");
+    if (sizeBadge) sizeBadge.textContent = `Size: ${state.product.size}`;
+  }
+
   function syncStudioUIWithState() {
     const btnLogo = document.getElementById("tabLogoBtn");
     const btnText = document.getElementById("tabTextBtn");
@@ -118,17 +162,7 @@
       });
     }
 
-    const sizeSel = document.getElementById("sizeSelector");
-    if (sizeSel && state.product.size) {
-      const optExists = Array.from(sizeSel.options).some(o => o.value === state.product.size);
-      if (!optExists) {
-        const opt = document.createElement("option");
-        opt.value = state.product.size;
-        opt.textContent = state.product.size;
-        sizeSel.insertBefore(opt, sizeSel.firstChild);
-      }
-      sizeSel.value = state.product.size;
-    }
+    updateSizeOptions(state.product.sizes, state.product.size);
 
     const qtyInp = document.getElementById("qtyInput");
     if (qtyInp && state.product.qty) qtyInp.value = state.product.qty;
@@ -243,11 +277,19 @@
             if (item.placements && item.placements.length > 0) {
               state.product.placements = item.placements;
               state.selectedPlacement = item.placements[0];
+              state.artwork.x = state.selectedPlacement.x;
+              state.artwork.y = state.selectedPlacement.y;
+              state.artwork.rotation = state.selectedPlacement.r || 0;
+              state.text.x = state.selectedPlacement.x;
+              state.text.y = state.selectedPlacement.y;
             }
-            const nameEl = document.getElementById("headerProdName");
-            const imgEl = document.getElementById("headerProdImg");
-            const skuEl = document.getElementById("headerProdSku");
-            const colorEl = document.getElementById("headerProdColor");
+            if (item.sizes && Array.isArray(item.sizes) && item.sizes.length > 0) {
+              state.product.sizes = [...item.sizes];
+              if (!size) {
+                state.product.size = item.sizes[0];
+              }
+              updateSizeOptions(state.product.sizes, state.product.size);
+            }
             if (nameEl) nameEl.textContent = state.product.name;
             if (imgEl && state.product.image) imgEl.src = state.product.image;
             if (skuEl) skuEl.textContent = `SKU: ${state.product.sku}`;
@@ -325,17 +367,104 @@
     if (qtyEl && state.product.qty) qtyEl.textContent = `Qty: ${state.product.qty} Pcs`;
   }
 
+  const PROTOTYPE_DEFS = {
+    polo: {
+      sku: "F8-PROTO-POLO",
+      name: "Corporate Dri-Fit Polo",
+      color: "White",
+      moq: 24,
+      sizes: ["XS", "S", "M", "L", "XL", "2XL"],
+      image: "assets/products/Polo White Front.webp?v=5",
+      placements: [
+        { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
+        { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+      ],
+      finishes: ["Thread Embroidery", "Direct To Fabric (DTF) Printing"]
+    },
+    hoodie: {
+      sku: "F8-PROTO-HOOD",
+      name: "Heavyweight Industrial Hoodie",
+      color: "White",
+      moq: 12,
+      sizes: ["XS", "S", "M", "L", "XL", "2XL"],
+      image: "assets/products/Hoodie White Front.webp?v=5",
+      placements: [
+        { name: "Left Chest", x: 63, y: 42, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 37, y: 42, w: 18, h: 18, r: 0 },
+        { name: "Center Front", x: 50, y: 46, w: 26, h: 26, r: 0 },
+        { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 },
+        { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+      ],
+      finishes: ["Thread Embroidery", "Direct To Fabric (DTF) Printing"]
+    },
+    chef: {
+      sku: "F8-PROTO-CHEF",
+      name: "Executive Chef Coat",
+      color: "White",
+      moq: 8,
+      sizes: ["XS", "S", "M", "L", "XL", "2XL"],
+      image: "assets/products/Chef jacket white.webp?v=5",
+      placements: [
+        { name: "Left Chest Pocket", x: 64, y: 46, w: 16, h: 16, r: 0 },
+        { name: "Right Collar / Collar Tip", x: 44, y: 36, w: 12, h: 12, r: 0 },
+        { name: "Left Chest", x: 64, y: 44, w: 16, h: 16, r: 0 },
+        { name: "Right Chest", x: 36, y: 44, w: 16, h: 16, r: 0 },
+        { name: "Upper Left Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+      ],
+      finishes: ["Thread Embroidery", "Direct To Fabric (DTF) Printing"]
+    },
+    scrub: {
+      sku: "F8-PROTO-MED",
+      name: "Clinical Healthcare Scrub Set",
+      color: "Navy Blue",
+      moq: 8,
+      sizes: ["XS", "S", "M", "L", "XL", "2XL"],
+      image: "assets/products/Scrub Navy.webp?v=5",
+      placements: [
+        { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+        { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 },
+        { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+      ],
+      finishes: ["Thread Embroidery", "Direct To Fabric (DTF) Printing"]
+    },
+    cap: {
+      sku: "F8-PROTO-CAP",
+      name: "Structured Corporate Cap",
+      color: "Black",
+      moq: 24,
+      sizes: ["one size"],
+      image: "assets/products/Cap Black.webp?v=5",
+      placements: [
+        { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
+        { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
+      ],
+      finishes: ["Thread Embroidery", "Direct To Fabric (DTF) Printing"]
+    }
+  };
+
   function applyGarment(btn) {
     if (!btn) return;
     const garmentBtns = document.querySelectorAll(".garment-btn");
     garmentBtns.forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    const protoType = btn.dataset.proto;
-    state.product.sku = btn.dataset.sku || state.product.sku;
-    state.product.name = btn.dataset.name || state.product.name;
-    state.product.color = btn.dataset.color || state.product.color;
-    state.product.image = btn.dataset.img || state.product.image;
+    const protoType = btn.dataset.proto || "polo";
+    const protoDef = PROTOTYPE_DEFS[protoType] || PROTOTYPE_DEFS.polo;
+
+    state.product.sku = btn.dataset.sku || protoDef.sku || state.product.sku;
+    state.product.name = btn.dataset.name || protoDef.name || state.product.name;
+    state.product.color = btn.dataset.color || protoDef.color || state.product.color;
+    state.product.image = btn.dataset.img || protoDef.image || state.product.image;
+
+    const moqVal = parseInt(protoDef.moq) || 50;
+    state.product.moq = moqVal;
+    state.product.qty = moqVal;
+    state.product.sizes = protoDef.sizes ? [...protoDef.sizes] : ["XS", "S", "M", "L", "XL", "2XL"];
+    state.product.size = state.product.sizes[0];
+    updateSizeOptions(state.product.sizes, state.product.size);
 
     // Update top header badges
     const nameEl = document.getElementById("headerProdName");
@@ -350,7 +479,7 @@
     if (skuEl) skuEl.textContent = `SKU: ${state.product.sku}`;
     if (colorEl) colorEl.textContent = `Color: ${state.product.color}`;
     if (sizeEl && state.product.size) sizeEl.textContent = `Size: ${state.product.size}`;
-    if (qtyEl && state.product.qty) qtyEl.textContent = `Qty: ${state.product.qty} Pcs`;
+    if (qtyEl) qtyEl.textContent = `Qty: ${moqVal} Pcs (MOQ)`;
 
     if (state.artwork.sampleImg) {
       if (protoType === "cap" || protoType === "scrub") {
@@ -360,26 +489,13 @@
       }
     }
 
-    // Recalibrate placement zones based on garment category
-    if (protoType === "cap") {
-      state.product.placements = [
-        { name: "Front Center Panel", x: 55, y: 58, w: 22, h: 22, r: 3 },
-        { name: "Side Panel", x: 33, y: 56, w: 16, h: 16, r: -12 }
-      ];
-    } else if (protoType === "chef") {
-      state.product.placements = [
-        { name: "Left Chest Pocket", x: 64, y: 46, w: 16, h: 16, r: 0 },
-        { name: "Right Collar / Collar Tip", x: 44, y: 36, w: 12, h: 12, r: 0 },
-        { name: "Full Back", x: 50, y: 52, w: 42, h: 42, r: 0 }
-      ];
-    } else {
-      state.product.placements = [
-        { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
-        { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
-        { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
-        { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
-      ];
-    }
+    // 1. Recalibrate placement zones dynamically based on garment prototype
+    state.product.placements = protoDef.placements ? [...protoDef.placements] : [
+      { name: "Left Chest", x: 63, y: 44, w: 18, h: 18, r: 0 },
+      { name: "Right Chest", x: 37, y: 44, w: 18, h: 18, r: 0 },
+      { name: "Full Back / Center Front", x: 50, y: 52, w: 42, h: 42, r: 0 },
+      { name: "Upper Sleeve", x: 76, y: 48, w: 14, h: 14, r: 8 }
+    ];
 
     state.selectedPlacement = state.product.placements[0];
     state.artwork.x = state.selectedPlacement.x;
@@ -387,6 +503,50 @@
     state.artwork.rotation = state.selectedPlacement.r || 0;
     state.text.x = state.selectedPlacement.x;
     state.text.y = state.selectedPlacement.y;
+
+    // 2. Dynamically update Section 2: MOQ, Quantity limits, and helper text
+    const sizeLabel = document.getElementById("sizeSectionLabel") || document.querySelector('label[for="sizeSelector"]');
+    if (sizeLabel) sizeLabel.innerHTML = `2. Choose Size &amp; Quantity (MOQ ${moqVal} Pcs)`;
+    
+    const qtyInp = document.getElementById("qtyInput");
+    if (qtyInp) {
+      qtyInp.min = moqVal;
+      qtyInp.value = moqVal;
+      qtyInp.title = `Minimum Order Quantity is ${moqVal} pieces`;
+    }
+
+    const moqNotice = document.getElementById("moqNoticeText");
+    if (moqNotice) {
+      moqNotice.textContent = `🔒 Minimum Order Quantity is strictly enforced at ${moqVal} pieces per custom run.`;
+    }
+
+    // 3. Dynamically update Section 3: Finish Techniques supported by this prototype
+    const allowedFinishes = protoDef.finishes || ["Thread Embroidery", "Direct To Fabric (DTF) Printing"];
+    const finishBtns = document.querySelectorAll("#finishToggleGrid .toggle-btn");
+    let hasActiveFinish = false;
+    finishBtns.forEach(fBtn => {
+      const fName = fBtn.dataset.finish || fBtn.textContent.trim();
+      const isAllowed = allowedFinishes.some(af => fName.toLowerCase().includes(af.toLowerCase()) || af.toLowerCase().includes(fName.toLowerCase()));
+      if (isAllowed) {
+        fBtn.style.display = "block";
+        if (state.currentFinish && fName.toLowerCase() === state.currentFinish.toLowerCase()) {
+          fBtn.classList.add("active");
+          hasActiveFinish = true;
+        }
+      } else {
+        fBtn.style.display = "none";
+        fBtn.classList.remove("active");
+      }
+    });
+
+    if (!hasActiveFinish && finishBtns.length > 0) {
+      const firstVisible = Array.from(finishBtns).find(b => b.style.display !== "none");
+      if (firstVisible) {
+        finishBtns.forEach(b => b.classList.remove("active"));
+        firstVisible.classList.add("active");
+        state.currentFinish = firstVisible.dataset.finish || firstVisible.textContent.trim();
+      }
+    }
 
     renderPlacementOptions();
     loadBaseImage();
@@ -535,9 +695,9 @@
 
   function drawLogo() {
     const ctx = state.canvas.ctx;
-    const img = state.artwork.imageObj;
-    if (!img) {
-      drawPlacementGuide(true);
+    const img = state.artwork.imageObj || state.artwork.sampleImg;
+    if (!img || !img.complete) {
+      drawPlacementGuide(false);
       return;
     }
 
@@ -545,12 +705,12 @@
     const yPx = (state.artwork.y / 100) * 800;
     const boxW = ((state.selectedPlacement ? state.selectedPlacement.w : 20) / 100) * 800 * 0.9;
     const aspect = img.naturalWidth / img.naturalHeight || 1;
-    let drawW = boxW * state.artwork.scale;
+    let drawW = boxW * (state.artwork.scale || 1);
     let drawH = drawW / aspect;
 
     ctx.save();
     ctx.translate(xPx, yPx);
-    ctx.rotate((state.artwork.rotation * Math.PI) / 180);
+    ctx.rotate(((state.artwork.rotation || (state.selectedPlacement?.r || 0)) * Math.PI) / 180);
     ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
     ctx.restore();
   }
@@ -607,17 +767,10 @@
     ctx.translate(xPx, yPx);
     ctx.rotate(((state.selectedPlacement.r || 0) * Math.PI) / 180);
 
-    if (withSampleLogo && state.artwork.sampleImg && state.artwork.sampleImg.complete) {
-      const sImg = state.artwork.sampleImg;
-      const aspect = sImg.naturalWidth / sImg.naturalHeight || 1;
-      let sW = wPx * 0.8 * (state.artwork.scale || 1);
-      let sH = sW / aspect;
-      if (sH > hPx * 0.7 * (state.artwork.scale || 1)) {
-        sH = hPx * 0.7 * (state.artwork.scale || 1);
-        sW = sH * aspect;
-      }
-      ctx.drawImage(sImg, -sW / 2, -sH / 2, sW, sH);
-    }
+    ctx.strokeStyle = "rgba(47, 135, 61, 0.4)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
 
     ctx.restore();
   }
@@ -891,16 +1044,45 @@
 
     if (btnReview && modal) {
       btnReview.addEventListener("click", () => {
-        // MOQ check
-        const qVal = parseInt(document.getElementById("qtyInput")?.value || state.product.qty);
-        if (qVal < 50) {
-          alert("Minimum Order Quantity is 50 pcs. Please enter a quantity of at least 50.");
+        // Real MOQ check (dynamically matched to the current product's MOQ)
+        const moqVal = parseInt(String(state.product.moq || 50).replace(/[^0-9]/g, '')) || 50;
+        const maxLimit = parseInt(state.product.maxQty || state.product.max || 0);
+        const qVal = parseInt(document.getElementById("qtyInput")?.value || state.product.qty || moqVal) || moqVal;
+
+        if (qVal < moqVal) {
+          const toastMsg = `Minimum Order Quantity is ${moqVal} pcs. Please enter a quantity of at least ${moqVal}.`;
+          if (typeof window.showToast === "function") {
+            window.showToast(toastMsg, "warning", 5000);
+          } else {
+            alert(toastMsg);
+          }
+          const qtyInp = document.getElementById("qtyInput");
+          if (qtyInp) {
+            qtyInp.value = moqVal;
+            qtyInp.focus();
+          }
           return;
         }
+
+        if (maxLimit > 0 && qVal > maxLimit) {
+          const maxMsg = `Maximum Order Quantity for this product is ${maxLimit} pcs. You have selected ${qVal} pieces. Please adjust your quantity to continue.`;
+          if (typeof window.showToast === "function") {
+            window.showToast(maxMsg, "warning", 5000);
+          } else {
+            alert(maxMsg);
+          }
+          return;
+        }
+
         state.product.qty = qVal;
 
         if (state.currentMode === "logo" && !state.artwork.imageObj) {
-          alert("Please upload an artwork logo file first or switch to Text Embroidery.");
+          const uploadMsg = "Please upload an artwork logo file first or switch to Text Embroidery.";
+          if (typeof window.showToast === "function") {
+            window.showToast(uploadMsg, "warning", 5000);
+          } else {
+            alert(uploadMsg);
+          }
           return;
         }
 

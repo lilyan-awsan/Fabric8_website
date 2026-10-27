@@ -599,41 +599,64 @@ input, select, textarea, button { font: inherit; }
 .card-grid a,
 .sector-cards a { font-size: 12px; font-weight: 900; text-transform: uppercase; color: var(--green); }
 
-/* Interactive 3D Sector Hover Card System (Flexible Centered Layout) */
+/* Flexible Dynamic 3D Sector Card System (Fluid auto-fill, seamlessly shifts cards when any sector is hidden) */
 .sector-cards {
   max-width: 1240px;
   margin: 40px auto 60px;
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: center !important;
-  align-items: stretch !important;
-  gap: 28px !important;
+  gap: 30px;
   padding: 0 24px;
   width: 100%;
   box-sizing: border-box;
 }
 
-.flip-card {
-  background: transparent !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  flex: 0 1 calc((100% - 28px * 2) / 3) !important;
-  width: calc((100% - 28px * 2) / 3) !important;
-  min-width: 300px !important;
-  max-width: 380px !important;
-  min-height: 380px;
+.sector-cards .flip-card {
+  background-color: transparent;
+  flex: 0 1 calc((100% - 60px) / 3);
+  width: calc((100% - 60px) / 3);
+  min-width: 320px;
+  max-width: 380px;
+  min-height: 410px;
   perspective: 2000px;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sector-cards .flip-card:nth-child(7),
+.sector-cards .flip-card:last-child {
+  grid-column: auto;
+}
+
+@media (max-width: 1080px) {
+  .sector-cards .flip-card {
+    flex: 0 1 calc((100% - 30px) / 2);
+    width: calc((100% - 30px) / 2);
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 680px) {
+  .sector-cards {
+    gap: 22px;
+    padding: 0 16px;
+  }
+  .sector-cards .flip-card {
+    flex: 0 1 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 }
 
 .flip-card .flip-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 380px;
+  min-height: 410px;
   text-align: center;
   transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
   transform-style: preserve-3d;
@@ -642,10 +665,20 @@ input, select, textarea, button { font: inherit; }
   background: #ffffff;
 }
 
-.flip-card:hover .flip-inner,
+.flip-card.is-flipped .flip-inner,
 .flip-card.flipped .flip-inner {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) !important;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .flip-card:hover .flip-inner {
+    transform: rotateY(180deg);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+  }
+  .flip-card:hover .flip-front {
+    border-color: transparent;
+  }
 }
 
 .flip-front, .flip-back {
@@ -654,11 +687,11 @@ input, select, textarea, button { font: inherit; }
   left: 0;
   width: 100%;
   height: 100%;
-  min-height: 380px;
+  min-height: 410px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   border-radius: 18px;
-  padding: 30px 22px;
+  padding: 32px 28px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -674,48 +707,35 @@ input, select, textarea, button { font: inherit; }
   transition: border-color 0.3s ease;
 }
 
-.flip-front h2 {
-  font-size: clamp(20px, 1.6vw, 24px) !important;
-  text-align: center;
-  word-wrap: break-word;
-}
-
-.flip-front p {
-  font-size: 14px !important;
-  line-height: 1.55 !important;
-}
-
-.flip-card:hover .flip-front {
-  border-color: transparent;
-}
-
 .flip-back {
   transform: rotateY(180deg);
   color: #ffffff;
-  padding: 30px 22px;
+  padding: 30px 24px;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.15);
+  justify-content: space-between;
 }
 
 .flip-back h3 {
   font-family: 'Acumin Variable Concept', sans-serif;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin: 0 0 12px 0;
+  letter-spacing: 0.05em;
+  margin: 0 0 10px 0;
   color: #ffffff;
 }
 
 .flip-back p {
-  font-size: 13.5px;
-  line-height: 1.6;
-  margin: 0 0 18px 0;
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0 auto 16px auto;
   color: rgba(255, 255, 255, 0.95);
   font-weight: 400;
   font-family: 'Century Gothic', system-ui, sans-serif;
-  max-width: 100%;
+  max-width: 860px;
   text-align: center;
+  overflow-y: auto;
 }
 
 .flip-back .inquire-btn {
@@ -723,15 +743,16 @@ input, select, textarea, button { font: inherit; }
   background: #ffffff;
   color: var(--ink, #231f20) !important;
   font-weight: 900;
-  font-size: 12.5px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 10px 26px;
+  padding: 11px 28px;
   border-radius: 8px;
   text-decoration: none;
   transition: all 0.25s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   align-self: center;
+  flex-shrink: 0;
 }
 
 .flip-back .inquire-btn:hover {
@@ -740,36 +761,23 @@ input, select, textarea, button { font: inherit; }
   transform: translateY(-2px);
 }
 
-@media (max-width: 1080px) {
-  .sector-cards {
-    gap: 24px !important;
-    padding: 0 20px;
-  }
-  .flip-card {
-    flex: 0 1 calc((100% - 24px) / 2) !important;
-    width: calc((100% - 24px) / 2) !important;
-    max-width: 440px !important;
-    min-width: 280px !important;
-  }
-}
-
-@media (max-width: 680px) {
-  .sector-cards {
-    gap: 20px !important;
-    padding: 0 16px;
-  }
-  .flip-card {
-    flex: 0 1 100% !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    min-height: 360px;
+@media (max-width: 768px) {
+  .sector-cards .flip-card {
+    min-height: 430px;
   }
   .flip-card .flip-inner,
   .flip-front,
   .flip-back {
-    min-height: 360px;
+    min-height: 430px;
     padding: 24px 18px;
+  }
+  .flip-back h3 {
+    font-size: 22px;
+  }
+  .flip-back p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
   }
 }
 
@@ -1057,7 +1065,7 @@ input.error, select.error, textarea.error {
 .cart-item { padding: 12px; border: 1px solid var(--line); margin-bottom: 10px; background: #faf9f4; }
 .cart-item button { border: 0; background: transparent; color: #a33; font-weight: 900; cursor: pointer; }
 
-.card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.card-grid, .sector-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
 /* Method List: 2 columns with alternating borders */
 .method-list {
@@ -1196,7 +1204,7 @@ input.error, select.error, textarea.error {
 @media (max-width: 980px) {
   .header { grid-template-columns: 1fr; padding: 16px 20px; position: relative; }
   .header nav { flex-wrap: wrap; justify-content: start; gap: 14px; }
-  .editorial-grid, .products, .card-grid, .method-list { grid-template-columns: repeat(2, 1fr); }
+  .editorial-grid, .products, .card-grid, .sector-cards, .method-list { grid-template-columns: repeat(2, 1fr); }
   .filters, .studio, .quote-wrap, .about-copy, .product-configurator { grid-template-columns: 1fr; }
   .service-feature,
   .service-feature.reverse { grid-template-columns: 1fr; }
@@ -1204,7 +1212,7 @@ input.error, select.error, textarea.error {
 }
 @media (max-width: 560px) {
   .landing-copy h1, .fashion-copy h1, .page-hero h1 { font-size: 46px; }
-  .editorial-grid, .products, .card-grid, .method-list { grid-template-columns: 1fr; }
+  .editorial-grid, .products, .card-grid, .sector-cards, .method-list { grid-template-columns: 1fr; }
   .landing-actions { display: grid; }
   .landing-product { display: none; }
 }
@@ -2369,3 +2377,84 @@ body {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* ==========================================================================
+   Capability Belt Flexible Responsive Alignment
+   ========================================================================== */
+#capabilityBeltRow {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 20px !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 10px 10px 24px !important;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  #capabilityBeltRow {
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 16px !important;
+  }
+}
+
+/* ==========================================================================
+   Empty Cart Notification / Card Styling in Checkout
+   ========================================================================== */
+.empty-cart-card {
+  background: #fdfbf7;
+  border: 2px dashed #e2d9cd;
+  border-radius: 12px;
+  padding: 36px 24px;
+  text-align: center;
+  margin: 10px 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.empty-cart-card .empty-cart-icon {
+  font-size: 42px;
+  line-height: 1;
+}
+.empty-cart-card h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.empty-cart-card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 380px;
+  line-height: 1.5;
+}
+.empty-cart-card .browse-shop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  margin-top: 6px;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+}
+.empty-cart-card .browse-shop-btn:hover {
+  opacity: 0.88;
+}
+

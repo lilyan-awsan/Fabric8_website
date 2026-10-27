@@ -709,3 +709,88 @@ html, body {
   color: #dc2626;
 }
 
+/* Image Size Guidelines & Dimension Helpers */
+.img-guide-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  cursor: help;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.img-guide-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #edf7ee;
+  color: #216d2e;
+  border: 1px solid #b7e2bb;
+  border-radius: 9999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+
+.img-guide-wrapper:hover .img-guide-pill {
+  background: #2f873d;
+  color: #ffffff;
+  border-color: #2f873d;
+  box-shadow: 0 2px 6px rgba(47, 135, 61, 0.25);
+}
+
+.img-guide-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #111827;
+  color: #f9fafb;
+  font-size: 11.5px;
+  line-height: 1.5;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 7px;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  pointer-events: none;
+  z-index: 1000;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-guide-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #111827 transparent transparent transparent;
+}
+
+.img-guide-wrapper:hover .img-guide-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.uploaded-dim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+

@@ -1,38 +1,42 @@
 // Toast Notification System for Store & Studio
-window.showToast = function(message, type = 'success', duration = 6000) {
-  let container = document.querySelector('.toast-container');
-  if (!container) {
-    container = document.createElement('div');
-    container.className = 'toast-container';
-    document.body.appendChild(container);
-  }
-  const toast = document.createElement('div');
-  toast.className = `toast-notice ${type === 'error' ? 'toast-error' : type === 'warning' ? 'toast-warning' : ''}`;
-  const msgEl = document.createElement('span');
-  msgEl.style.whiteSpace = 'pre-line';
-  msgEl.textContent = message;
-  const closeBtn = document.createElement('button');
-  closeBtn.className = 'toast-close-btn';
-  closeBtn.innerHTML = '&times;';
-  closeBtn.onclick = () => {
-    toast.style.opacity = '0';
-    setTimeout(() => toast.remove(), 300);
+if (typeof window.showToast !== 'function') {
+  window.showToast = function (message, type = 'success', duration = 6000) {
+    let container = document.querySelector('.toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'toast-container';
+      document.body.appendChild(container);
+    }
+    const toast = document.createElement('div');
+    toast.className = `toast-notice ${type === 'error' ? 'toast-error' : type === 'warning' ? 'toast-warning' : ''}`;
+    const msgEl = document.createElement('span');
+    msgEl.style.whiteSpace = 'pre-line';
+    msgEl.textContent = message;
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'toast-close-btn';
+    closeBtn.innerHTML = '&times;';
+    closeBtn.onclick = () => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    };
+    toast.appendChild(msgEl);
+    toast.appendChild(closeBtn);
+    container.appendChild(toast);
+    if (duration > 0) {
+      setTimeout(() => {
+        if (toast && toast.parentElement) {
+          toast.style.opacity = '0';
+          setTimeout(() => toast.remove(), 300);
+        }
+      }, duration);
+    }
   };
-  toast.appendChild(msgEl);
-  toast.appendChild(closeBtn);
-  container.appendChild(toast);
-  if (duration > 0) {
-    setTimeout(() => {
-      if (toast && toast.parentElement) {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
-      }
-    }, duration);
-  }
-};
+}
 
-let products = [];
-let siteSettings = {};
+let products = (typeof window !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS)) ? [...window.FABRIC8_DEFAULT_PRODUCTS] : [];
+let siteSettings = (typeof window !== 'undefined' && window.FABRIC8_DEFAULT_SETTINGS && typeof window.FABRIC8_DEFAULT_SETTINGS === 'object')
+  ? JSON.parse(JSON.stringify(window.FABRIC8_DEFAULT_SETTINGS))
+  : {};
 const colorMatchCache = new Map();
 
 let activeCatalogColor = "all";
@@ -96,8 +100,8 @@ const colorMap = {
   Yellow: "#ffd700",
   "Light Yellow": "#fffacd",
   Purple: "#800080",
-  "Black Striped": "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
-  Striped: "linear-gradient(45deg,#111 0 20%,#fff 20% 40%,#111 40% 60%,#fff 60% 80%,#111 80%)",
+  "Black Striped": "repeating-linear-gradient(45deg,#111 0 3px,#fff 3px 6px)",
+  Striped: "repeating-linear-gradient(45deg,#111 0 3px,#fff 3px 6px)",
   "Custom Colors": "linear-gradient(135deg,#2f873d,#75aee0,#e79aa3,#d3d116)"
 };
 
@@ -106,119 +110,183 @@ let activeCategoryFilter = "All";
 let activeSearchTerm = "";
 let activeSortTerm = "featured";
 
-window.resolveAssetUrl = function(url, defaultFallback = '') {
-  if (!url) return defaultFallback;
-  let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
-  if (!clean) return defaultFallback;
-  if (clean.startsWith('data:')) return clean;
+if (typeof window.resolveAssetUrl !== 'function' || true) {
+  window.resolveAssetUrl = function (url, defaultFallback = '') {
+    if (!url) return defaultFallback;
+    let clean = String(url).trim().replace(/^["'&quot;]+|["'&quot;]+$/g, '').replace(/&quot;/g, '');
+    if (!clean) return defaultFallback;
+    if (clean.startsWith('data:')) return clean;
 
-  while (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com') ||
-         clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http')) {
-    clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
-  }
+    while (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/https://raw.githubusercontent.com') ||
+      clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/http')) {
+      clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//g, '');
+    }
 
-  if (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+    if (clean.includes('raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/')) {
+      return clean;
+    }
+
+    if (clean.startsWith('http://') || clean.startsWith('https://')) {
+      return clean;
+    }
+
+    clean = clean.replace(/^\/+/, '');
+
+    // Check client-side instant caches for zero-delay image display on upload
+    if (typeof window !== 'undefined') {
+      let decoded = clean;
+      try { decoded = decodeURIComponent(clean); } catch(e) {}
+      if (window._uploadedImageCache) {
+        if (window._uploadedImageCache[clean]) return window._uploadedImageCache[clean];
+        if (window._uploadedImageCache[decoded]) return window._uploadedImageCache[decoded];
+      }
+      try {
+        const fallbackKey = decoded.replace(/[^a-zA-Z0-9]/g, '_');
+        const sess = sessionStorage.getItem("f8_img_" + fallbackKey);
+        if (sess && sess.startsWith("data:")) return sess;
+      } catch(e) {}
+    }
+
     return clean;
-  }
+  };
+}
 
-  if (clean.startsWith('http://') || clean.startsWith('https://')) {
-    return clean;
-  }
+if (typeof window.handleImgError !== 'function' || true) {
+  window.handleImgError = function (img, fallbackSrc = '') {
+    if (!img) return;
 
-  clean = clean.replace(/^\/+/, '');
+    const rawSrc = (img.getAttribute('src') || img.src || '').trim();
+    // Never hide on empty src, data urls, or matching page URL
+    if (!rawSrc || rawSrc.startsWith('data:') || rawSrc === window.location.href) {
+      return;
+    }
 
-  // Dynamic uploads (with timestamp or admin upload pattern) exist on GitHub and must resolve directly to GitHub Raw
-  // to avoid 404 and broken image flicker on the live hosting domain
-  if (clean.startsWith('assets/products/17') || clean.startsWith('assets/site_images/17') || clean.includes('/1790') || clean.startsWith('assets/products/sketch_')) {
-    return `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
-  }
-
-  return clean;
-};
-
-window.handleImgError = function(img, fallbackSrc = '') {
-  if (!img) return;
-
-  const rawSrc = (img.getAttribute('src') || img.src || '').trim();
-  // Never hide on empty src, data urls, or matching page URL
-  if (!rawSrc || rawSrc.startsWith('data:') || rawSrc === window.location.href) {
-    return;
-  }
-
-  // 1. If image has a high-res base64 backupSrc, immediately fallback to it
-  if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc) {
-    img.src = img.dataset.backupSrc;
-    img.style.visibility = 'visible';
-    img.style.opacity = '1';
-    return;
-  }
-
-  const retryCount = parseInt(img.dataset.retryCount || '0', 10);
-  if (retryCount >= 3) {
-    if (fallbackSrc && img.src !== fallbackSrc) {
-      img.src = fallbackSrc;
+    // 1. If image has a backupSrc, immediately fallback to it
+    if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc && !img.src.endsWith(img.dataset.backupSrc)) {
+      img.src = img.dataset.backupSrc;
       img.style.visibility = 'visible';
       img.style.opacity = '1';
+      return;
     }
-    return;
-  }
-  img.dataset.retryCount = (retryCount + 1).toString();
 
-  if (!img.dataset.originalClean) {
-    let clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
-    clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
-    while (clean.includes('raw.githubusercontent.com')) {
-      clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+    const svgPlaceholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Crect width="100%25" height="100%25" fill="%23f4f4f4"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23999" font-family="sans-serif" font-size="11"%3EImage%3C/text%3E%3C/svg%3E';
+
+    const retryCount = parseInt(img.dataset.retryCount || '0', 10);
+    if (retryCount >= 4) {
+      if (img.dataset.backupSrc && img.src !== img.dataset.backupSrc && !img.src.endsWith(img.dataset.backupSrc)) {
+        img.src = img.dataset.backupSrc;
+      } else if (fallbackSrc && img.src !== fallbackSrc && !img.src.endsWith(fallbackSrc)) {
+        img.src = fallbackSrc;
+      } else {
+        img.src = svgPlaceholder;
+      }
+      img.style.visibility = 'visible';
+      img.style.opacity = '1';
+      return;
     }
-    clean = clean.replace(/^\/+/, '');
-    img.dataset.originalClean = clean;
-  }
-  const clean = img.dataset.originalClean;
+    img.dataset.retryCount = (retryCount + 1).toString();
 
-  img.style.visibility = 'visible';
-  img.style.opacity = '1';
+    if (!img.dataset.originalClean) {
+      let clean = rawSrc.replace(/^https?:\/\/[^\/]+\//, '');
+      clean = clean.replace(/^(?:raw\.githubusercontent\.com\/)?(?:lilyan-awsan\/Fabric8_website\/main\/)+/, '');
+      while (clean.includes('raw.githubusercontent.com')) {
+        clean = clean.replace(/https?:\/\/raw\.githubusercontent\.com\/lilyan-awsan\/Fabric8_website\/main\//, '');
+      }
+      clean = clean.replace(/^\/+/, '');
+      img.dataset.originalClean = clean;
+    }
+    let clean = img.dataset.originalClean;
+    if (!clean.startsWith('assets/') && !clean.startsWith('site_images/')) {
+      if (/\.(png|webp|jpg|jpeg|svg)$/i.test(clean)) {
+        clean = 'assets/products/' + clean;
+      }
+    }
 
-  if (!clean || (!clean.startsWith('assets/') && !clean.startsWith('site_images/'))) {
+    let decodedClean = clean;
+    try { decodedClean = decodeURIComponent(clean); } catch(e) {}
+    const fallbackKey = decodedClean.replace(/[^a-zA-Z0-9]/g, '_');
+
+    img.style.visibility = 'visible';
+    img.style.opacity = '1';
+
+    // 0. Check in-memory uploaded cache or sessionStorage first (0ms recovery)
+    if (typeof window !== 'undefined') {
+      if (window._uploadedImageCache && (window._uploadedImageCache[clean] || window._uploadedImageCache[decodedClean])) {
+        const b64 = window._uploadedImageCache[clean] || window._uploadedImageCache[decodedClean];
+        img.dataset.backupSrc = b64;
+        img.src = b64;
+        return;
+      }
+      try {
+        const sess = sessionStorage.getItem("f8_img_" + fallbackKey);
+        if (sess && sess.startsWith("data:")) {
+          img.dataset.backupSrc = sess;
+          img.src = sess;
+          return;
+        }
+      } catch(e) {}
+    }
+
+    if (!clean || (!clean.startsWith('assets/') && !clean.startsWith('site_images/'))) {
+      if (fallbackSrc && img.src !== fallbackSrc) {
+        img.src = fallbackSrc;
+      }
+      return;
+    }
+
+    const liveUrl = `https://thefabric8.com/${encodeURI(decodedClean)}`;
+    const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${encodeURI(decodedClean)}`;
+
+    if (retryCount === 0) {
+      // Step 1: Attempt to fetch instant base64 fallback from Firebase RTDB
+      fetch(`https://fabric8-50559-default-rtdb.firebaseio.com/image_fallbacks/${fallbackKey}.json`)
+        .then(r => r.json())
+        .then(b64 => {
+          if (b64 && typeof b64 === 'string' && b64.startsWith('data:')) {
+            img.dataset.backupSrc = b64;
+            img.src = b64;
+            try { sessionStorage.setItem("f8_img_" + fallbackKey, b64); } catch(e){}
+          } else {
+            // Step 2: Try Firebase Function API Proxy directly
+            img.src = `/api/${encodeURI(decodedClean)}`;
+          }
+        }).catch(() => {
+          img.src = `/api/${encodeURI(decodedClean)}`;
+        });
+      return;
+    } else if (retryCount === 1) {
+      // Step 3: Try GitHub Raw directly
+      if (img.src !== ghUrl) {
+        img.src = ghUrl;
+      } else if (/Set\.webp/i.test(decodedClean)) {
+        const swapped = /Set\.webp/.test(decodedClean) ? decodedClean.replace('Set.webp', 'set.webp') : decodedClean.replace('set.webp', 'Set.webp');
+        img.src = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${encodeURI(swapped)}`;
+      } else if (decodedClean.endsWith('.png')) {
+        img.src = ghUrl.replace(/\.png$/i, '.webp');
+      } else if (decodedClean.endsWith('.webp')) {
+        img.src = ghUrl.replace(/\.webp$/i, '.png');
+      } else if (fallbackSrc) {
+        img.src = fallbackSrc;
+      }
+      return;
+    } else if (retryCount === 2) {
+      // Step 4: Try live site origin URL
+      if (img.src !== liveUrl && !img.src.includes('thefabric8.com')) {
+        img.src = liveUrl;
+        return;
+      } else if (fallbackSrc) {
+        img.src = fallbackSrc;
+        return;
+      }
+    }
+
     if (fallbackSrc && img.src !== fallbackSrc) {
       img.src = fallbackSrc;
+    } else {
+      img.src = svgPlaceholder;
     }
-    return;
-  }
-
-  const isLocal = typeof window !== 'undefined' && (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const liveUrl = `https://thefabric8.com/${clean}`;
-  const ghUrl = `https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/${clean}`;
-
-  if (retryCount === 0) {
-    // Attempt to fetch instant base64 fallback from Firebase RTDB
-    const fallbackKey = clean.replace(/[^a-zA-Z0-9]/g, '_');
-    fetch(`https://fabric8-50559-default-rtdb.firebaseio.com/image_fallbacks/${fallbackKey}.json`)
-      .then(r => r.json())
-      .then(b64 => {
-        if (b64 && typeof b64 === 'string' && b64.startsWith('data:')) {
-          img.dataset.backupSrc = b64;
-          img.src = b64;
-        } else {
-          // If no fallback, try ghUrl since it bypasses Firebase Hosting 2 min delay
-          img.src = isLocal ? ghUrl : ghUrl;
-        }
-      }).catch(() => {
-        img.src = isLocal ? ghUrl : ghUrl;
-      });
-  } else if (retryCount === 1) {
-    if (img.src !== liveUrl && !img.src.includes('thefabric8.com')) {
-      img.src = liveUrl;
-    } else if (clean.endsWith('.png') && !rawSrc.includes('.webp')) {
-      img.src = ghUrl.replace(/\.png$/i, '.webp');
-    } else if (clean.endsWith('.webp') && !rawSrc.includes('.png')) {
-      img.src = ghUrl.replace(/\.webp$/i, '.png');
-    } else if (fallbackSrc) {
-      img.src = fallbackSrc;
-    }
-  } else if (fallbackSrc && img.src !== fallbackSrc) {
-    img.src = fallbackSrc;
-  }
-};
+  };
+}
 
 function populateCountrySelectors(countries) {
   const selectors = document.querySelectorAll('.country-selector');
@@ -227,10 +295,10 @@ function populateCountrySelectors(countries) {
   const list = (countries && Array.isArray(countries) && countries.length > 0)
     ? countries
     : [
-        { code: 'US', name: 'USA' },
-        { code: 'JO', name: 'Jordan' },
-        { code: 'INT', name: 'International' }
-      ];
+      { code: 'US', name: 'USA' },
+      { code: 'JO', name: 'Jordan' },
+      { code: 'INT', name: 'International' }
+    ];
 
   const saved = localStorage.getItem('fabric8_selected_country') || list[0].code;
 
@@ -244,7 +312,7 @@ function populateCountrySelectors(countries) {
 
     if (!sel.dataset.countryWired) {
       sel.dataset.countryWired = 'true';
-      sel.addEventListener('change', function() {
+      sel.addEventListener('change', function () {
         localStorage.setItem('fabric8_selected_country', this.value);
         selectors.forEach(s => { if (s !== this) s.value = this.value; });
         const shipCountry = document.getElementById('shipCountry');
@@ -260,6 +328,62 @@ function populateCountrySelectors(countries) {
       });
     }
   });
+}
+
+// Default Sector Specifications dictionary for capability belt
+const defaultSectorSpecs = {
+  food: {
+    title: "🍽️ Food & Beverage Uniform Engineering",
+    desc: "Engineered to endure kitchen heat, grease splashes, and intense industrial washing cycles while delivering exceptional front-of-house elegance. Featuring advanced thermal breathability, stain-release coatings, and ergonomic seam articulation for executive chefs and dining room professionals.",
+    link: "sectors.html#food",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Stain-Release Thermal Cotton", h2: "✦ MOQ: 50 Pieces Custom-Tailored", h3: "✦ Custom Emblem & Text Embroidery"
+  },
+  hospitality: {
+    title: "🏨 Hospitality & Luxury Hotel Couture",
+    desc: "Impeccable uniform choreography tailored for concierge desks, executive reception teams, and house management. Our hospitality garments merge fine suit tailoring with durable daily stretch fibers to uphold five-star brand authority.",
+    link: "sectors.html#hospitality",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Wrinkle-Resistant Luxury Wool Stretch", h2: "✦ Tailored Cut & Ergonomic Fit", h3: "✦ Gold & Silver Thread Cresting"
+  },
+  corporate: {
+    title: "💼 Corporate Workplace Fashion & Apparel",
+    desc: "Modernizing professional business wear with sleek, tailored silhouettes designed for corporate headquarters, banks, and enterprise enterprises. Combining sophisticated executive styling with everyday all-day mobility.",
+    link: "sectors.html#corporate",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Premium Executive Suiting & Polos", h2: "✦ Bespoke Color Palette Synchronization", h3: "✦ High-Definition Subtle Branding"
+  },
+  healthcare: {
+    title: "⚕️ Healthcare, Medical & Clinical Uniforms",
+    desc: "High-performance antimicrobial scrubs and physician coats built for intensive medical laboratory and hospital environments. Crafted with soft, fluids-repellent stretch textiles that withstand stringent autoclave sanitization.",
+    link: "sectors.html#healthcare",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Antimicrobial 4-Way Stretch Fiber", h2: "✦ Fluid-Resistant Protective Barriers", h3: "✦ Ergonomic Utility Tool Pocketing"
+  },
+  industrial: {
+    title: "🏭 Industrial & Safety Workwear Solutions",
+    desc: "Heavy-duty flame-resistant and high-visibility industrial garments structured for factories, engineering sites, and logistical operations. Reinforced with ripstop weaving and industrial bar-tack stitching at high-stress junctions.",
+    link: "sectors.html#industrial",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Certified Flame-Resistant & Ripstop", h2: "✦ Industrial Wash & Abrasion Resistance", h3: "✦ Reinforced Safety Utility Construction"
+  },
+  education: {
+    title: "🎓 Educational & Academic Institution Attire",
+    desc: "Cohesive collegiate blazer collections, faculty apparel, and administrative uniform wardrobes designed for private schools and universities. Built for long-term comfort, seasonal climate resilience, and distinguished academic heritage.",
+    link: "sectors.html#education",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Durable Anti-Pilling Fabrics", h2: "✦ Institutional Emblem Weaving", h3: "✦ Complete Size Customization & Trim"
+  },
+  aviation: {
+    title: "✈️ Aviation, Flight Crew & Ground Operations",
+    desc: "Precision-engineered flight attendant tunics, pilot trench suiting, and terminal logistical wear designed for global airlines. Offering high wrinkle-resilience and cabin-climate thermal adaptation for long-haul duty.",
+    link: "sectors.html#aviation",
+    linkText: "View Full Sector Specifications →",
+    h1: "✦ Cabin-Tested Thermal Regulation", h2: "✦ Flawless Post-Flight Wrinkle Resistance", h3: "✦ Integrated Epaulette & Wing Mounting"
+  }
+};
+if (typeof window !== 'undefined') {
+  window.defaultSectorSpecs = defaultSectorSpecs;
 }
 
 function applySiteSettings() {
@@ -292,7 +416,7 @@ function applySiteSettings() {
       footer.innerHTML = siteSettings.footerLegal;
     });
   }
-  
+
   const resolveAssetUrl = window.resolveAssetUrl;
   const applyHeroBg = (el, url) => {
     if (!el || !url) return;
@@ -303,6 +427,35 @@ function applySiteSettings() {
   };
 
   const sc = siteSettings.siteContent || {};
+
+  // --- Universal Dynamic CMS Hydration Engine ---
+  // Automatically hydrates ANY DOM element whose id matches any key in siteSettings.siteContent
+  if (sc && typeof sc === 'object') {
+    Object.entries(sc).forEach(([key, val]) => {
+      if (val === null || val === undefined || val === '') return;
+      let el = document.getElementById(key);
+      if (!el && !key.startsWith('cms')) {
+        const capitalized = key.charAt(0).toUpperCase() + key.slice(1);
+        el = document.getElementById(`cms${capitalized}`) || document.getElementById(`cms_${key}`);
+      }
+      if (!el) return;
+
+      if (el.tagName === 'IMG') {
+        if (!el.dataset.backupSrc) el.dataset.backupSrc = el.getAttribute('src') || el.src;
+        el.src = resolveAssetUrl(val);
+      } else if (el.tagName === 'A') {
+        if (sc[key + '_href']) el.href = sc[key + '_href'];
+        el.textContent = val;
+      } else {
+        if (typeof val === 'string' && (val.includes('<br>') || val.includes('<span') || val.includes('<b') || val.includes('<strong') || val.includes('<p>'))) {
+          el.innerHTML = val;
+        } else {
+          el.textContent = val;
+        }
+      }
+    });
+  }
+
   // 1. Homepage Engine
   if (sc.homeHeroTag) {
     const heroTag = document.getElementById('cmsHomeHeroTag');
@@ -336,6 +489,44 @@ function applySiteSettings() {
     if (promoEl) promoEl.src = resolveAssetUrl(sc.promoImage);
   }
 
+  // 1.1. Capability Belt CMS Engine
+  if (sc.capBeltTitle) {
+    const el = document.getElementById('cmsCapBeltTitle');
+    if (el) el.textContent = sc.capBeltTitle;
+  }
+  if (sc.capBeltSub) {
+    const el = document.getElementById('cmsCapBeltSub');
+    if (el) el.textContent = sc.capBeltSub;
+  }
+  if (sc.sectorBtnLabels && typeof sc.sectorBtnLabels === 'object') {
+    Object.entries(sc.sectorBtnLabels).forEach(([sec, label]) => {
+      const btn = document.querySelector(`.capability-icon-btn[data-sector="${sec}"]`);
+      if (btn) {
+        const spans = btn.querySelectorAll('span');
+        if (spans.length >= 2) spans[spans.length - 1].textContent = label;
+      }
+    });
+  }
+  const activeSecBtn = document.querySelector('.capability-icon-btn.active') || document.querySelector('.capability-icon-btn');
+  const curBeltSec = activeSecBtn ? (activeSecBtn.getAttribute('data-sector') || 'food') : 'food';
+  const customSecSpecs = (sc.sectorSpecs && sc.sectorSpecs[curBeltSec]) ? sc.sectorSpecs[curBeltSec] : {};
+  const activeBeltSpec = Object.assign({}, defaultSectorSpecs[curBeltSec] || defaultSectorSpecs.food, customSecSpecs);
+  const capTitleEl = document.getElementById('capTitle');
+  const capDescEl = document.getElementById('capDesc');
+  const capLinkEl = document.getElementById('capLink');
+  const capH1El = document.getElementById('capHighlight1');
+  const capH2El = document.getElementById('capHighlight2');
+  const capH3El = document.getElementById('capHighlight3');
+  if (capTitleEl && activeBeltSpec.title) capTitleEl.textContent = activeBeltSpec.title;
+  if (capDescEl && activeBeltSpec.desc) capDescEl.textContent = activeBeltSpec.desc;
+  if (capLinkEl) {
+    if (activeBeltSpec.link) capLinkEl.href = activeBeltSpec.link;
+    if (activeBeltSpec.linkText) capLinkEl.textContent = activeBeltSpec.linkText;
+  }
+  if (capH1El && activeBeltSpec.h1) capH1El.textContent = activeBeltSpec.h1;
+  if (capH2El && activeBeltSpec.h2) capH2El.textContent = activeBeltSpec.h2;
+  if (capH3El && activeBeltSpec.h3) capH3El.textContent = activeBeltSpec.h3;
+
   // 2. Services Page Engine
   if (sc.servicesTitle) {
     const el = document.getElementById('cmsServicesTitle');
@@ -345,30 +536,78 @@ function applySiteSettings() {
     const el = document.getElementById('cmsServicesSub');
     if (el) el.textContent = sc.servicesSub;
   }
-  if (sc.servicesContentHtml) {
-    const el = document.querySelector('.service-showcase');
-    if (el) el.innerHTML = sc.servicesContentHtml;
-  }
   if (sc.servicesConsultImg) {
     const el = document.getElementById('cmsServicesConsultImg');
     if (el) {
-      if (sc.servicesConsultImgBase64 && sc.servicesConsultImgBase64.startsWith('data:image')) el.src = sc.servicesConsultImgBase64;
-      else el.src = resolveAssetUrl(sc.servicesConsultImg);
+      if (!el.dataset.backupSrc) el.dataset.backupSrc = el.getAttribute('src') || el.src;
+      el.src = resolveAssetUrl(sc.servicesConsultImg);
     }
   }
   if (sc.servicesBrandImg) {
     const el = document.getElementById('cmsServicesBrandImg');
     if (el) {
-      if (sc.servicesBrandImgBase64 && sc.servicesBrandImgBase64.startsWith('data:image')) el.src = sc.servicesBrandImgBase64;
-      else el.src = resolveAssetUrl(sc.servicesBrandImg);
+      if (!el.dataset.backupSrc) el.dataset.backupSrc = el.getAttribute('src') || el.src;
+      el.src = resolveAssetUrl(sc.servicesBrandImg);
     }
   }
   if (sc.servicesProdImg) {
     const el = document.getElementById('cmsServicesProdImg');
     if (el) {
-      if (sc.servicesProdImgBase64 && sc.servicesProdImgBase64.startsWith('data:image')) el.src = sc.servicesProdImgBase64;
-      else el.src = resolveAssetUrl(sc.servicesProdImg);
+      if (!el.dataset.backupSrc) el.dataset.backupSrc = el.getAttribute('src') || el.src;
+      el.src = resolveAssetUrl(sc.servicesProdImg);
     }
+  }
+  if (sc.servicesConsultTag) {
+    const el = document.getElementById('cmsServicesConsultTag');
+    if (el) el.textContent = sc.servicesConsultTag;
+  }
+  if (sc.servicesConsultTitle) {
+    const el = document.getElementById('cmsServicesConsultTitle');
+    if (el) el.textContent = sc.servicesConsultTitle;
+  }
+  if (sc.servicesConsultDesc) {
+    const el = document.getElementById('cmsServicesConsultDesc');
+    if (el) el.textContent = sc.servicesConsultDesc;
+  }
+  if (sc.servicesConsultBtn) {
+    const el = document.getElementById('cmsServicesConsultBtn');
+    if (el) el.textContent = sc.servicesConsultBtn;
+  }
+  if (sc.servicesBrandTag) {
+    const el = document.getElementById('cmsServicesBrandTag');
+    if (el) el.textContent = sc.servicesBrandTag;
+  }
+  if (sc.servicesBrandTitle) {
+    const el = document.getElementById('cmsServicesBrandTitle');
+    if (el) {
+      const a = el.querySelector('a');
+      if (a) a.textContent = sc.servicesBrandTitle;
+      else el.textContent = sc.servicesBrandTitle;
+    }
+  }
+  if (sc.servicesBrandDesc) {
+    const el = document.getElementById('cmsServicesBrandDesc');
+    if (el) el.textContent = sc.servicesBrandDesc;
+  }
+  if (sc.servicesBrandBtn) {
+    const el = document.getElementById('cmsServicesBrandBtn');
+    if (el) el.textContent = sc.servicesBrandBtn;
+  }
+  if (sc.servicesProdTag) {
+    const el = document.getElementById('cmsServicesProdTag');
+    if (el) el.textContent = sc.servicesProdTag;
+  }
+  if (sc.servicesProdTitle) {
+    const el = document.getElementById('cmsServicesProdTitle');
+    if (el) el.textContent = sc.servicesProdTitle;
+  }
+  if (sc.servicesProdDesc) {
+    const el = document.getElementById('cmsServicesProdDesc');
+    if (el) el.textContent = sc.servicesProdDesc;
+  }
+  if (sc.servicesProdBtn) {
+    const el = document.getElementById('cmsServicesProdBtn');
+    if (el) el.textContent = sc.servicesProdBtn;
   }
 
   // 3. Method Page Engine
@@ -388,10 +627,6 @@ function applySiteSettings() {
     const el = document.getElementById('cmsAboutProfileLink');
     if (el) el.href = sc.companyProfileUrl;
   }
-  if (sc.methodCardsHtml) {
-    const el = document.querySelector('.method-grid-layout');
-    if (el) el.innerHTML = sc.methodCardsHtml;
-  }
 
   // 4. Sectors Showcase Engine
   if (sc.sectorsTitle) {
@@ -407,10 +642,6 @@ function applySiteSettings() {
     if (el) {
       el.style.background = `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('${resolveAssetUrl(sc.sectorsHeroImg)}') center / cover`;
     }
-  }
-  if (sc.sectorsCardsHtml) {
-    const el = document.querySelector('.sector-cards');
-    if (el) el.innerHTML = sc.sectorsCardsHtml;
   }
 
   // 5. About Us & Core Values Engine
@@ -500,9 +731,9 @@ function applySiteSettings() {
     }
   }
   if (sc.contactEmail) {
-    const el = document.getElementById('cmsContactEmailText') || 
-               document.getElementById('cmsContactEmailTitle')?.parentElement?.querySelector('a') || 
-               document.getElementById('cmsContactEmailTitle')?.nextElementSibling?.querySelector('a');
+    const el = document.getElementById('cmsContactEmailText') ||
+      document.getElementById('cmsContactEmailTitle')?.parentElement?.querySelector('a') ||
+      document.getElementById('cmsContactEmailTitle')?.nextElementSibling?.querySelector('a');
     if (el) {
       el.textContent = sc.contactEmail;
       el.href = `mailto:${sc.contactEmail}`;
@@ -638,8 +869,8 @@ function applySiteSettings() {
     const marqueeEl = document.querySelector('.marquee-content');
     if (marqueeEl) {
       const logosHtml = siteSettings.brandLogos.map(b => {
-        const resolvedSrc = (b.backupSrc && b.backupSrc.startsWith('data:image')) 
-          ? b.backupSrc 
+        const resolvedSrc = (b.backupSrc && b.backupSrc.startsWith('data:image'))
+          ? b.backupSrc
           : resolveAssetUrl(b.src);
         return `
             <div style="height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;">
@@ -661,6 +892,7 @@ function applySiteSettings() {
     else if (path.includes('contact')) pageSpecificImg = sc.contactHeroImgBase64 || sc.contactHeroImg;
     else if (path.includes('services')) pageSpecificImg = sc.servicesHeroImgBase64 || sc.servicesHeroImg;
     else if (path.includes('method')) pageSpecificImg = sc.methodHeroImgBase64 || sc.methodHeroImg;
+    else if (path.includes('shop')) pageSpecificImg = sc.shopHeroImgBase64 || sc.shopHeroImg;
 
     if (pageSpecificImg) {
       const resolved = resolveAssetUrl(pageSpecificImg);
@@ -685,71 +917,90 @@ function applySiteSettings() {
     }
   });
 
-  // Synchronize sector visibility across Home, Sectors Page, and Shop
-  syncSectorsVisibility();
+  // 11. Cross-Site Sector Visibility Engine (Syncs Homepage, Shop, and Sectors Page)
+  applySectorVisibility();
 }
 
-function syncSectorsVisibility() {
-  if (typeof siteSettings === 'undefined' || !siteSettings) return;
-  const sectorsConfig = Array.isArray(siteSettings.categories1stLayer) ? siteSettings.categories1stLayer : [];
-  if (sectorsConfig.length === 0) return;
+function applySectorVisibility() {
+  const sectorsConfig = (siteSettings.categories1stLayer && Array.isArray(siteSettings.categories1stLayer))
+    ? siteSettings.categories1stLayer
+    : null;
+  if (!sectorsConfig || sectorsConfig.length === 0) return;
 
-  function norm(str) {
-    return (str || "").toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
+  const prehideEl = document.getElementById('fabric8-sector-prehide');
+  if (prehideEl) {
+    try { prehideEl.remove(); } catch (e) {}
   }
 
-  // Check if a sector name or slug is enabled
-  function isSectorEnabled(identifier) {
-    if (!identifier) return true;
-    const target = norm(identifier);
-    const match = sectorsConfig.find(s => {
-      const sNorm = norm(s.name);
-      return sNorm === target || sNorm.includes(target) || target.includes(sNorm);
+  const hiddenSectorNames = sectorsConfig
+    .filter(s => s.enabled === false)
+    .map(s => (s.name || '').toLowerCase().trim());
+
+  // Helper matching function
+  const isSectorHidden = (text) => {
+    if (!text) return false;
+    const clean = text.toLowerCase().trim();
+    return hiddenSectorNames.some(hidden => {
+      if (clean === hidden) return true;
+      if (clean.includes(hidden) || hidden.includes(clean)) return true;
+      // Normalized matching (e.g. food & bev vs food & beverage)
+      const normClean = clean.replace(/[^a-z0-9]/g, '');
+      const normHidden = hidden.replace(/[^a-z0-9]/g, '');
+      return normClean.startsWith(normHidden) || normHidden.startsWith(normClean);
     });
-    return match ? (match.enabled !== false) : true;
-  }
+  };
 
-  // 1. Sync Sectors Page (.sector-cards .flip-card)
-  const sectorCards = document.querySelectorAll('.sector-cards .flip-card');
-  if (sectorCards.length > 0) {
-    sectorCards.forEach(card => {
-      const h2 = card.querySelector('.flip-front h2');
-      const inquireBtn = card.querySelector('.flip-back .inquire-btn');
-      let name = h2 ? h2.textContent.trim() : '';
-      if (!name && inquireBtn) {
-        const href = inquireBtn.getAttribute('href') || '';
-        const m = href.match(/sector=([^&]+)/);
-        if (m) name = m[1];
-      }
-      if (name) {
-        const visible = isSectorEnabled(name);
-        card.style.display = visible ? '' : 'none';
-      }
-    });
-  }
-
-  // 2. Sync Homepage Capability Belt (#capabilityBeltRow .capability-icon-btn)
-  const beltButtons = document.querySelectorAll('#capabilityBeltRow .capability-icon-btn');
-  if (beltButtons.length > 0) {
+  // A. Sync Homepage Capability Belt Buttons
+  const beltRow = document.getElementById('capabilityBeltRow');
+  if (beltRow) {
+    const buttons = beltRow.querySelectorAll('.capability-icon-btn');
     let firstVisibleBtn = null;
-    let activeIsHidden = false;
-
-    beltButtons.forEach(btn => {
+    buttons.forEach(btn => {
       const secKey = btn.getAttribute('data-sector') || '';
-      const visible = isSectorEnabled(secKey);
-      btn.style.display = visible ? '' : 'none';
-      if (visible && !firstVisibleBtn) firstVisibleBtn = btn;
-      if (!visible && btn.classList.contains('active')) {
-        activeIsHidden = true;
+      const secLabel = btn.querySelector('span:last-child')?.textContent || secKey;
+      if (isSectorHidden(secLabel) || isSectorHidden(secKey)) {
+        btn.style.display = 'none';
         btn.classList.remove('active');
-        btn.style.border = '1px solid var(--line)';
+      } else {
+        btn.style.display = 'flex';
+        if (!firstVisibleBtn) firstVisibleBtn = btn;
       }
     });
 
-    // If the active sector was hidden, activate the first visible one
-    if (activeIsHidden && firstVisibleBtn) {
+    // If currently active button was hidden, activate the first visible sector
+    const currentActive = beltRow.querySelector('.capability-icon-btn.active');
+    if ((!currentActive || currentActive.style.display === 'none') && firstVisibleBtn) {
       firstVisibleBtn.click();
     }
+  }
+
+  // B. Sync Sectors Page Flip Cards (sectors.html)
+  const sectorCardsContainer = document.querySelector('.sector-cards');
+  if (sectorCardsContainer) {
+    const cards = sectorCardsContainer.querySelectorAll('.flip-card');
+    cards.forEach(card => {
+      const title = card.querySelector('h2, h3')?.textContent || '';
+      // Also match by element ID to support custom renamed titles (e.g. Food & Hospitality)
+      let secIdKey = '';
+      if (card.querySelector('#cmsSectorFoodTitle, #cmsSectorFoodImg')) secIdKey = 'food';
+      else if (card.querySelector('#cmsSectorHospTitle, #cmsSectorHospImg')) secIdKey = 'hospitality';
+      else if (card.querySelector('#cmsSectorCorpTitle, #cmsSectorCorpImg')) secIdKey = 'corporate';
+      else if (card.querySelector('#cmsSectorIndTitle, #cmsSectorIndImg')) secIdKey = 'industrial';
+      else if (card.querySelector('#cmsSectorHealthTitle, #cmsSectorHealthImg')) secIdKey = 'healthcare';
+      else if (card.querySelector('#cmsSectorAviaTitle, #cmsSectorAviaImg')) secIdKey = 'aviation';
+      else if (card.querySelector('#cmsSectorEduTitle, #cmsSectorEduImg')) secIdKey = 'education';
+
+      if (isSectorHidden(title) || (secIdKey && isSectorHidden(secIdKey))) {
+        card.style.display = 'none';
+      } else {
+        card.style.display = '';
+      }
+    });
+  }
+
+  // C. Sync Shop Sidebar Filters (shop.html)
+  if (typeof renderFilters === 'function') {
+    renderFilters();
   }
 }
 
@@ -805,10 +1056,10 @@ function loadCart() {
               }
             }
           }
-          
-          const existingItem = deduplicated.find(d => 
-            d.sku === item.sku && 
-            (d.color || "").trim().toLowerCase() === (item.color || "").trim().toLowerCase() && 
+
+          const existingItem = deduplicated.find(d =>
+            d.sku === item.sku &&
+            (d.color || "").trim().toLowerCase() === (item.color || "").trim().toLowerCase() &&
             (d.branding || "Blank") === (item.branding || "Blank")
           );
           if (existingItem) {
@@ -837,8 +1088,11 @@ async function loadProducts(forceSync = false) {
     if (cachedSettings) {
       siteSettings = JSON.parse(cachedSettings);
       applySiteSettings();
+    } else if (typeof window !== 'undefined' && window.FABRIC8_DEFAULT_SETTINGS) {
+      siteSettings = JSON.parse(JSON.stringify(window.FABRIC8_DEFAULT_SETTINGS));
+      applySiteSettings();
     }
-  } catch (e) {}
+  } catch (e) { }
 
   try {
     const cachedProducts = localStorage.getItem("fabric8_products_cache");
@@ -851,7 +1105,7 @@ async function loadProducts(forceSync = false) {
         siteInitialized = true;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // 2. If localStorage has no products, instantly initialize from embedded data (0ms delay)
   if (!siteInitialized && typeof window !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS) && window.FABRIC8_DEFAULT_PRODUCTS.length > 0) {
@@ -881,7 +1135,7 @@ async function loadProducts(forceSync = false) {
   const FIREBASE_DB = "https://fabric8-50559-default-rtdb.firebaseio.com";
   const freshTime = Date.now();
   let firebaseSuccess = false;
-  
+
   try {
     const [settingsData, productsData] = await Promise.all([
       fetch(`${FIREBASE_DB}/admin_settings.json?t=${freshTime}`).then(r => r.ok ? r.json() : null).catch(() => null),
@@ -896,7 +1150,7 @@ async function loadProducts(forceSync = false) {
         try {
           localStorage.setItem("fabric8_admin_settings_cache", newSettingsStr);
           localStorage.setItem("fabric8_admin_settings_cache_time", freshTime.toString());
-        } catch (e) {}
+        } catch (e) { }
         applySiteSettings();
       }
     }
@@ -907,18 +1161,18 @@ async function loadProducts(forceSync = false) {
       rawList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
       const oldStr = JSON.stringify(products || []);
       const newStr = JSON.stringify(rawList);
-      
+
       if (oldStr !== newStr || !siteInitialized) {
         products = rawList;
         colorMatchCache.clear();
         try {
           localStorage.setItem("fabric8_products_cache", newStr);
           localStorage.setItem("fabric8_products_cache_time", freshTime.toString());
-        } catch (e) {}
-        
+        } catch (e) { }
+
         const grid = document.getElementById("productGrid");
         if (grid) delete grid.dataset.renderedKey;
-        
+
         initSite();
         siteInitialized = true;
       }
@@ -933,7 +1187,7 @@ async function loadProducts(forceSync = false) {
       const freshTime = Date.now();
       const rawUrl = 'https://raw.githubusercontent.com/lilyan-awsan/Fabric8_website/main/data/products.json?t=' + freshTime;
       const localUrl = 'data/products.json?t=' + freshTime;
-      
+
       let fallbackRes;
       const host = window.location.hostname;
       if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168')) {
@@ -948,24 +1202,24 @@ async function loadProducts(forceSync = false) {
           fallbackList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
           const oldStr = JSON.stringify(products || []);
           const newStr = JSON.stringify(fallbackList);
-          
+
           if (oldStr !== newStr || !siteInitialized) {
             products = fallbackList;
             colorMatchCache.clear();
             try {
               localStorage.setItem("fabric8_products_cache", newStr);
               localStorage.setItem("fabric8_products_cache_time", freshTime.toString());
-            } catch (e) {}
-            
+            } catch (e) { }
+
             const grid = document.getElementById("productGrid");
             if (grid) delete grid.dataset.renderedKey;
-            
+
             initSite();
             siteInitialized = true;
           }
         }
       }
-    } catch(e) {}
+    } catch (e) { }
   }
 }
 // loadProducts is executed safely after all declarations at the bottom of the script
@@ -978,7 +1232,7 @@ window.addEventListener('storage', (e) => {
         siteSettings = JSON.parse(e.newValue);
         applySiteSettings();
       }
-    } catch (err) {}
+    } catch (err) { }
   }
   if (e.key === 'fabric8_products_cache') {
     try {
@@ -994,7 +1248,7 @@ window.addEventListener('storage', (e) => {
           if (sku && typeof initProductPage === 'function') initProductPage(sku);
         }
       }
-    } catch (err) {}
+    } catch (err) { }
   }
 });
 
@@ -1051,6 +1305,10 @@ function renderProducts() {
   const grid = document.getElementById("productGrid");
   if (!grid) return;
 
+  if ((!products || products.length === 0) && typeof window !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS) && window.FABRIC8_DEFAULT_PRODUCTS.length > 0) {
+    products = [...window.FABRIC8_DEFAULT_PRODUCTS];
+  }
+
   activeSearchTerm = document.getElementById("productSearch")?.value.toLowerCase() || "";
   activeSortTerm = document.getElementById("sortFilter")?.value || "featured";
 
@@ -1075,15 +1333,29 @@ function renderProducts() {
   }
 
   if (activeSearchTerm) {
-    filtered = filtered.filter(p => 
-      (p.name && p.name.toLowerCase().includes(activeSearchTerm)) || 
-      (p.sku && p.sku.toLowerCase().includes(activeSearchTerm)) ||
-      (p.description && p.description.toLowerCase().includes(activeSearchTerm)) ||
-      (p.short && p.short.toLowerCase().includes(activeSearchTerm)) ||
-      (p.long && p.long.toLowerCase().includes(activeSearchTerm)) ||
-      (p.category && p.category.toLowerCase().includes(activeSearchTerm)) ||
-      (p.sectors && p.sectors.toLowerCase().includes(activeSearchTerm))
-    );
+    const term = activeSearchTerm.trim();
+    // For short queries (<= 3 chars, e.g. "pa"), match as word prefix/boundary or SKU/Name prefix to prevent false positives (like "apparel")
+    if (term.length <= 3) {
+      const wordRegex = new RegExp(`\\b${term}`, "i");
+      filtered = filtered.filter(p =>
+        (p.name && (p.name.toLowerCase().startsWith(term) || wordRegex.test(p.name))) ||
+        (p.sku && p.sku.toLowerCase().includes(term)) ||
+        (p.category && (p.category.toLowerCase().startsWith(term) || wordRegex.test(p.category))) ||
+        (p.short && wordRegex.test(p.short)) ||
+        (p.sectors && wordRegex.test(p.sectors)) ||
+        (p.description && wordRegex.test(p.description))
+      );
+    } else {
+      filtered = filtered.filter(p =>
+        (p.name && p.name.toLowerCase().includes(term)) ||
+        (p.sku && p.sku.toLowerCase().includes(term)) ||
+        (p.description && p.description.toLowerCase().includes(term)) ||
+        (p.short && p.short.toLowerCase().includes(term)) ||
+        (p.long && p.long.toLowerCase().includes(term)) ||
+        (p.category && p.category.toLowerCase().includes(term)) ||
+        (p.sectors && p.sectors.toLowerCase().includes(term))
+      );
+    }
   }
 
   if (activeSortTerm === "A-Z") {
@@ -1099,7 +1371,8 @@ function renderProducts() {
   }
 
   const renderKey = `${activeSectorFilter}|${activeCategoryFilter}|${activeSearchTerm}|${activeSortTerm}|${filtered.length}|${filtered.map(p => `${p.sku}:${p.image || ''}`).join(',')}`;
-  if (grid.dataset.renderedKey === renderKey) {
+  // Only skip if the key matches AND the grid is not empty or in skeleton loading state
+  if (grid.dataset.renderedKey === renderKey && grid.children.length > 0 && !grid.innerHTML.includes("skeletonShimmer")) {
     return;
   }
   grid.dataset.renderedKey = renderKey;
@@ -1111,7 +1384,7 @@ function renderProducts() {
     }
     const mainImg = cardImages[0] || p.image || 'White Polo Shirt.png';
     const imgSrc = window.resolveAssetUrl ? window.resolveAssetUrl(mainImg) : mainImg;
-    
+
     let imagesHtml = '';
     if (cardImages.length > 1) {
       imagesHtml = cardImages.map((img, idx) => {
@@ -1146,7 +1419,7 @@ function renderProducts() {
 window.slideshowTimers = {};
 window.slideshowIndices = {};
 
-window.startSlideshow = function(sku, maxIdx) {
+window.startSlideshow = function (sku, maxIdx) {
   // Preload only the immediate next image on hover
   const nextEl = document.getElementById(`img-${sku}-1`);
   if (nextEl && nextEl.dataset.src && !nextEl.src) {
@@ -1160,7 +1433,7 @@ window.startSlideshow = function(sku, maxIdx) {
   }, 1200);
 };
 
-window.stopSlideshow = function(sku, maxIdx) {
+window.stopSlideshow = function (sku, maxIdx) {
   if (window.slideshowTimers[sku]) {
     clearInterval(window.slideshowTimers[sku]);
     window.slideshowTimers[sku] = null;
@@ -1172,7 +1445,7 @@ window.stopSlideshow = function(sku, maxIdx) {
   }
 };
 
-window.nextImage = function(sku, maxIdx) {
+window.nextImage = function (sku, maxIdx) {
   let curr = window.slideshowIndices[sku] || 0;
   let next = curr + 1;
   if (next >= maxIdx) next = 0;
@@ -1198,7 +1471,7 @@ window.nextImage = function(sku, maxIdx) {
 function openProductModal(sku) {
   const selected = products.find(p => p.sku === sku);
   if (!selected) return;
-  
+
   selectedProductSku = sku;
   if (!selected.colors.includes(activeCatalogColor)) activeCatalogColor = selected.colors[0];
 
@@ -1214,7 +1487,7 @@ function openProductModal(sku) {
     modalImgEl.src = imgSrc;
     modalImgEl.onerror = () => window.handleImgError(modalImgEl);
   }
-  
+
   const thumbnailsContainer = $("#modalThumbnails");
   if (thumbnailsContainer) {
     if (modalImages.length > 1) {
@@ -1232,7 +1505,7 @@ function openProductModal(sku) {
   $("#modalProductCategory").textContent = selected.category;
   $("#modalProductSku").textContent = `SKU: ${selected.sku}`;
   $("#modalProductDesc").textContent = selected.long || selected.short;
-  
+
   $("#modalProductFabric").textContent = selected.fabric || "N/A";
   $("#modalProductGsm").textContent = selected.gsm || "N/A";
   const moqVal = selected.moq ? selected.moq.replace(/[^0-9]/g, '') || "50" : "50";
@@ -1287,7 +1560,7 @@ document.addEventListener("click", (e) => {
 function colorStyle(color, product) {
   if (!color || typeof color !== "string") return "#d8d2c5";
   const norm = color.trim().toLowerCase();
-  
+
   // 1. Check product-specific custom hex mapping (case-insensitive)
   const hexMap = product?.colorHexMap || window.currentLoadedProduct?.colorHexMap;
   if (hexMap && typeof hexMap === "object") {
@@ -1304,6 +1577,7 @@ function colorStyle(color, product) {
   }
 
   // 3. Normalized compound heuristic for compound/unregistered color names
+  if (norm.includes("striped") || norm.includes("stripe") || norm.includes("stipped")) return "repeating-linear-gradient(45deg,#111 0 3px,#fff 3px 6px)";
   if (norm.includes("light green") || norm.includes("lime") || norm.includes("mint") || norm.includes("sage")) return "#7bc676";
   if (norm.includes("dark green") || norm.includes("forest green") || norm.includes("hunter green")) return "#1e4d2b";
   if (norm.includes("olive green") || norm.includes("army green") || norm.includes("olive")) return "#556b2f";
@@ -1342,52 +1616,83 @@ function renderCart() {
   document.querySelectorAll("#cartCount, .cart-count").forEach(el => {
     el.textContent = totalCount;
   });
-  
-  const items = $("#cartItems");
-  if (!items) return;
-  if (!cart.length) {
-    items.innerHTML = "<p style='color: var(--muted); padding: 12px 0;'>No products selected yet.</p>";
-    return;
-  }
-  items.innerHTML = cart.map((item, index) => {
-    const thumbImg = item.customizedImage || item.image;
-    const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
-    const itemMoq = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
-    const currentQty = parseInt(item.quantity || item.qty || itemMoq) || itemMoq;
-    
-    return `
-    <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 14px; border: 1px solid var(--line); margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-      ${thumbImg ? `<div style="flex-shrink: 0; width: 85px; height: 85px; background: #ffffff; border-radius: 8px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px;"><img src="${thumbImg}" alt="${item.name}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; background: #ffffff;" /></div>` : ''}
-      <div class="cart-item-info" style="flex: 1;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
-          <h4 style="margin: 0; font-size: 15px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-            <span>${item.name}</span>
-            <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Customizer"}</span>
-          </h4>
-        </div>
-        
-        <p style="margin: 0 0 6px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">
-          Size: <strong>${item.size || "N/A"}</strong> | Color: <strong>${item.color || "Standard"}</strong> | <span>${item.branding || "Blank"}</span>
-        </p>
 
-        <p style="margin: 0 0 10px 0; font-size: 13px; color: var(--ink); display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Quantity:</span>
-          <strong style="font-size: 14px; font-weight: 900; color: var(--green, #2f873d); background: #f0fff4; padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(46,204,113,0.3); display: inline-block;">${currentQty} Pcs</strong>
-        </p>
-        
-        <div style="display: flex; gap: 12px; align-items: center; padding-top: 2px;">
-          <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 5px;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
-          </button>
-          <span style="color: var(--line, #ccc);">|</span>
-          <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
+  const items = $("#cartItems");
+  const clearCartBtn = $("#clearCart");
+  const quoteForm = $("#quoteForm");
+  const submitBtn = quoteForm ? quoteForm.querySelector('button[type="submit"]') : null;
+
+  if (items) {
+    if (!cart.length) {
+      items.innerHTML = `
+        <div class="empty-cart-card">
+          <div class="empty-cart-icon">🛒</div>
+          <h4>Your Cart is Empty</h4>
+          <p>You don't have any products in your quote cart yet. Browse our catalog and select garments to request a quote.</p>
+          <a href="shop.html" class="browse-shop-btn">
+            <span>Explore Catalog & Shop</span>
+            <span style="font-size: 16px;">→</span>
+          </a>
+        </div>
+      `;
+      if (clearCartBtn) clearCartBtn.style.display = "none";
+      if (submitBtn) {
+        submitBtn.setAttribute("data-empty-cart", "true");
+        submitBtn.style.opacity = "0.6";
+        submitBtn.style.cursor = "not-allowed";
+        submitBtn.title = "Please add items to your cart before submitting";
+      }
+      return;
+    } else {
+      if (clearCartBtn) clearCartBtn.style.display = "block";
+      if (submitBtn) {
+        submitBtn.removeAttribute("data-empty-cart");
+        submitBtn.style.opacity = "1";
+        submitBtn.style.cursor = "pointer";
+        submitBtn.removeAttribute("title");
+      }
+    }
+
+    items.innerHTML = cart.map((item, index) => {
+      const thumbImg = item.customizedImage || item.image;
+      const pDef = (Array.isArray(products) && products.find(p => p.sku === item.sku)) || item;
+      const itemMoq = parseInt(String(pDef.moq || 50).replace(/[^0-9]/g, '')) || 50;
+      const currentQty = parseInt(item.quantity || item.qty || itemMoq) || itemMoq;
+
+      return `
+      <div class="cart-item" style="display: flex; gap: 16px; align-items: center; position: relative; border-radius: 8px; background: #fff; padding: 14px; border: 1px solid var(--line); margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+        ${thumbImg ? `<div style="flex-shrink: 0; width: 85px; height: 85px; background: #ffffff; border-radius: 8px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px;"><img src="${thumbImg}" alt="${item.name}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; background: #ffffff;" /></div>` : ''}
+        <div class="cart-item-info" style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+            <h4 style="margin: 0; font-size: 15px; color: var(--ink); display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <span>${item.name}</span>
+              <span style="font-size: 10px; background: #eef5ee; color: #2f7d38; padding: 2px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; border: 1px solid rgba(47,125,56,0.2);">Via ${item.originStudio || "Product Customizer"}</span>
+            </h4>
+          </div>
+          
+          <p style="margin: 0 0 6px 0; color: var(--muted); line-height: 1.4; font-size: 13px;">
+            Size: <strong>${item.size || "N/A"}</strong> | Color: <strong>${item.color || "Standard"}</strong> | <span>${item.branding || "Blank"}</span>
+          </p>
+
+          <p style="margin: 0 0 10px 0; font-size: 13px; color: var(--ink); display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Quantity:</span>
+            <strong style="font-size: 14px; font-weight: 900; color: var(--green, #2f873d); background: #f0fff4; padding: 3px 10px; border-radius: 6px; border: 1px solid rgba(46,204,113,0.3); display: inline-block;">${currentQty} Pcs</strong>
+          </p>
+          
+          <div style="display: flex; gap: 12px; align-items: center; padding-top: 2px;">
+            <button type="button" data-edit="${index}" style="color: var(--green, #2f873d); font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-flex; align-items: center; gap: 5px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Edit Selection
+            </button>
+            <span style="color: var(--line, #ccc);">|</span>
+            <button type="button" data-remove="${index}" style="color: #b7342b; font-weight: 800; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; font-size: 13px;">Remove</button>
+          </div>
         </div>
       </div>
-    </div>
-  `}).join("");
+    `}).join("");
+  }
 }
 
-window.adjustCartItemQty = function(index, delta) {
+window.adjustCartItemQty = function (index, delta) {
   loadCart();
   const item = cart[index];
   if (!item) return;
@@ -1430,7 +1735,7 @@ window.adjustCartItemQty = function(index, delta) {
   }
 };
 
-window.updateCartItemQty = function(index, val) {
+window.updateCartItemQty = function (index, val) {
   loadCart();
   const item = cart[index];
   if (!item) return;
@@ -1462,10 +1767,10 @@ window.updateCartItemQty = function(index, val) {
   }
 };
 
-window.distributeTotalToBreakdown = function(totalQty) {
+window.distributeTotalToBreakdown = function (totalQty) {
   const breakdownInputs = Array.from(document.querySelectorAll(".edit-size-breakdown-input"));
   if (!breakdownInputs.length) return;
-  
+
   if (breakdownInputs.length === 1) {
     breakdownInputs[0].value = totalQty;
   } else {
@@ -1476,10 +1781,10 @@ window.distributeTotalToBreakdown = function(totalQty) {
       currentSum += v;
       if (v > 0) activeInputs.push(inp);
     });
-    
+
     const targets = activeInputs.length > 0 ? activeInputs : breakdownInputs;
     const baseSum = currentSum > 0 ? currentSum : targets.length;
-    
+
     let allocated = 0;
     targets.forEach((inp, i) => {
       if (i === targets.length - 1) {
@@ -1513,7 +1818,7 @@ window.distributeTotalToBreakdown = function(totalQty) {
   });
 };
 
-window.stepEditModalQty = function(delta) {
+window.stepEditModalQty = function (delta) {
   const qtyInput = document.getElementById("editItemQty");
   if (!qtyInput) return;
   const min = parseInt(qtyInput.min || "1");
@@ -1531,7 +1836,7 @@ window.stepEditModalQty = function(delta) {
   window.distributeTotalToBreakdown(val);
 };
 
-window.syncBreakdownToTotal = function() {
+window.syncBreakdownToTotal = function () {
   const breakdownInputs = document.querySelectorAll(".edit-size-breakdown-input");
   let total = 0;
   breakdownInputs.forEach(inp => {
@@ -1560,7 +1865,7 @@ window.syncBreakdownToTotal = function() {
   }
 };
 
-window.openEditCartModal = function(idx) {
+window.openEditCartModal = function (idx) {
   editingCartIndex = idx;
   loadCart();
   const item = cart[idx];
@@ -1635,20 +1940,20 @@ window.openEditCartModal = function(idx) {
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 6px; background: #faf9f6; padding: 10px; border-radius: 10px; border: 1px solid var(--line);">
             ${availableSizes.map(s => {
-              let q = 0;
-              if (item.sizesBreakdown && typeof item.sizesBreakdown === "object" && item.sizesBreakdown[s] !== undefined) {
-                q = item.sizesBreakdown[s];
-              } else if (item.size === s || (item.size && item.size.startsWith(s + " ")) || (item.size && item.size.startsWith(s + "("))) {
-                q = currentQty;
-              }
-              const isSelected = q > 0;
-              return `
+    let q = 0;
+    if (item.sizesBreakdown && typeof item.sizesBreakdown === "object" && item.sizesBreakdown[s] !== undefined) {
+      q = item.sizesBreakdown[s];
+    } else if (item.size === s || (item.size && item.size.startsWith(s + " ")) || (item.size && item.size.startsWith(s + "("))) {
+      q = currentQty;
+    }
+    const isSelected = q > 0;
+    return `
                 <div class="size-square-card" style="box-sizing: border-box !important; display: flex; flex-direction: column; align-items: center; gap: 4px; background: ${isSelected ? '#ffffff' : '#fafafa'}; padding: 8px 4px; border-radius: 8px; border: ${isSelected ? '1.5px solid var(--ink)' : '1px solid var(--line)'}; box-shadow: ${isSelected ? '0 2px 6px rgba(0,0,0,0.08)' : 'none'}; transition: all 0.2s ease;">
                   <span style="font-size: 13px; font-weight: 900; color: var(--ink); text-transform: uppercase;">${s}</span>
                   <input type="number" min="0" ${maxLimit ? `max="${maxLimit}"` : ''} class="edit-size-breakdown-input" data-size="${s}" value="${q}" oninput="window.syncBreakdownToTotal()" style="box-sizing: border-box !important; min-height: 0 !important; height: 36px !important; padding: 4px 6px !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; text-align: center; border: 1px solid var(--line); border-radius: 6px; font-weight: 800; font-size: 14px; font-family: inherit; background: #fff;" />
                 </div>
               `;
-            }).join("")}
+  }).join("")}
           </div>
         </div>
 
@@ -1694,12 +1999,12 @@ window.openEditCartModal = function(idx) {
   }
 };
 
-window.closeEditCartModal = function() {
+window.closeEditCartModal = function () {
   const modal = document.getElementById("editCartModal");
   if (modal) modal.style.display = "none";
 };
 
-window.selectEditColor = function(color) {
+window.selectEditColor = function (color) {
   const input = document.getElementById("editItemColor");
   const label = document.getElementById("editColorLabel");
   const container = document.getElementById("editColorFilter");
@@ -1713,7 +2018,7 @@ window.selectEditColor = function(color) {
   }
 };
 
-window.saveEditCartItem = function(e, idx) {
+window.saveEditCartItem = function (e, idx) {
   if (e && e.preventDefault) e.preventDefault();
   loadCart();
   const targetIdx = parseInt(idx !== undefined && idx !== null ? idx : editingCartIndex);
@@ -1820,7 +2125,7 @@ window.saveEditCartItem = function(e, idx) {
 };
 
 
-window.redirectToReCustomize = function(idx) {
+window.redirectToReCustomize = function (idx) {
   loadCart();
   const item = cart[idx];
   if (!item) return;
@@ -1917,7 +2222,7 @@ function addToCart(sku) {
   }
   saveCart();
   renderCart();
-  
+
   const modal = $("#productModal");
   if (modal) modal.style.display = "none";
   setTimeout(() => {
@@ -1938,8 +2243,8 @@ function setupStudio() {
     studioSwatches.innerHTML = studioColors.map((c) => colorButton(c)).join("");
     studioSwatches.querySelector('[data-color="White"]').classList.add("active");
   }
-  $("#placementSelect").addEventListener("change", (event) => { 
-    $("#logoPreview").className = `logo-preview ${event.target.value}`; 
+  $("#placementSelect").addEventListener("change", (event) => {
+    $("#logoPreview").className = `logo-preview ${event.target.value}`;
     if (event.target.value !== "custom") {
       $("#logoPreview").style.left = "";
       $("#logoPreview").style.top = "";
@@ -1952,8 +2257,8 @@ function setupStudio() {
     let val = parseFloat(event.target.value);
     const maxScale = siteSettings.logoMaxScale || 15;
     if (val > maxScale) {
-       val = maxScale;
-       event.target.value = maxScale;
+      val = maxScale;
+      event.target.value = maxScale;
     }
     $("#logoPreview").style.setProperty("--logo-size", `${val}%`);
   });
@@ -1983,18 +2288,18 @@ function setupStudio() {
       showToast("Please upload your logo file before adding this item to the quote cart.", "warning");
       return;
     }
-    
+
     if (!$("#logoDisclaimer")?.checked) {
       showToast("You must agree to the legal disclaimer before adding a branded mockup.", "warning");
       return;
     }
-    
+
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
     if (!selectedProduct) {
       showToast("Please select a product from the catalog first.", "warning");
       return;
     }
-    
+
     const quantity = parseInt($("#modalProductQuantity")?.value || 50);
     const selectedSize = $("#modalSizeSelect")?.value || "Standard";
     let placementText = $("#placementSelect").selectedOptions[0].textContent;
@@ -2021,8 +2326,8 @@ function setupStudio() {
         branding: brandingString,
         customizationType: "upload_logo",
         embroideryData: null,
-        logoData: { 
-          left: parseFloat($("#logoPreview").style.left).toFixed(1), 
+        logoData: {
+          left: parseFloat($("#logoPreview").style.left).toFixed(1),
           top: parseFloat($("#logoPreview").style.top).toFixed(1),
           size: parseFloat($("#logoPreview").style.getPropertyValue("--logo-size") || 13).toFixed(1)
         }
@@ -2030,7 +2335,7 @@ function setupStudio() {
     }
     saveCart();
     renderCart();
-    
+
     const productModal = document.getElementById("productModal");
     if (productModal) productModal.style.display = "none";
     const productSidebar = document.getElementById("productSidebar");
@@ -2054,16 +2359,16 @@ document.addEventListener("click", (event) => {
   const colorDot = event.target.closest(".color-dot");
   const addSelected = event.target.closest("#modalAddBranding");
   const addBlank = event.target.closest("#modalAddBlank");
-  
+
   if (add) addToCart(add.dataset.add);
   if (addBlank) addToCart(selectedProductSku);
 
 
-  
+
   if (addSelected) {
     const selectedProduct = products.find((p) => p.sku === selectedProductSku);
     if (!selectedProduct) return;
-    
+
     const quantity = parseInt($("#modalProductQuantity")?.value || 50);
     const selectedSize = $("#modalSizeSelect")?.value;
 
@@ -2148,7 +2453,7 @@ document.addEventListener("click", (event) => {
 document.addEventListener("change", (e) => {
   if (e.target.name === "customizationType") {
     selectedCustomization = e.target.value;
-    
+
     document.querySelectorAll(".customization-card").forEach(card => {
       card.style.borderColor = "var(--line)";
       card.style.backgroundColor = "transparent";
@@ -2181,6 +2486,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof renderCart === "function") renderCart();
   if (typeof initClientDetailsPersistence === "function") initClientDetailsPersistence();
   if (typeof initHeaderSearch === "function") initHeaderSearch();
+  if (document.getElementById("productGrid") && typeof renderProducts === "function") {
+    renderProducts();
+  }
+  if (document.getElementById("dynamicShowcase") && typeof renderShowcase === "function") {
+    renderShowcase();
+  }
 });
 
 $("#clearCart")?.addEventListener("click", () => {
@@ -2203,7 +2514,7 @@ function triggerMailtoFallback(customerInfo, cart) {
       bodyText += `- ${item.name || 'Product'} (${item.sku || 'N/A'})\n  Size: ${item.size || "N/A"} | Color: ${item.color || "Standard"} | Qty: ${item.quantity || 1}\n  Branding: ${item.branding || "None"}${hasLogo ? '\n  Logo File: [Customer Uploaded Custom Logo Attached]' : ''}\n\n`;
     });
   }
-  
+
   // 1. Try to open the user's email client safely
   try {
     const mailtoLink = `mailto:hello@thefabric8.com?subject=${encodeURIComponent('New Fabric8 Quote Request')}&body=${encodeURIComponent(bodyText)}`;
@@ -2307,10 +2618,22 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
   // Check that cart has items
   loadCart();
   if (!cart || cart.length === 0) {
+    const emptyMsg = "⚠️ Your cart is empty! Please add products to your cart before submitting a quote request.";
     if (typeof showToast === "function") {
-      showToast("⚠️ Your cart is empty. Please add items to your cart before requesting a quote.", "warning", 6000);
+      showToast(emptyMsg, "warning", 6000);
     } else {
-      alert("Your cart is empty. Please add items to your cart before requesting a quote.");
+      alert(emptyMsg);
+    }
+
+    // Highlight empty cart section smoothly
+    const cartItemsEl = document.getElementById("cartItems");
+    if (cartItemsEl) {
+      cartItemsEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      cartItemsEl.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
+      cartItemsEl.style.transform = 'scale(1.02)';
+      setTimeout(() => {
+        cartItemsEl.style.transform = 'scale(1)';
+      }, 350);
     }
     return;
   }
@@ -2339,11 +2662,50 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     dateInput.style.borderColor = 'var(--line)';
   }
 
+  // Validate mandatory Artwork & Intellectual Property Ownership Declaration
+  const artworkDeclarationInput = form.querySelector('#artworkOwnershipDeclaration') || form.querySelector('input[name="Artwork Ownership Declaration"]');
+  const artworkDeclarationWrap = document.getElementById('artworkDeclarationWrap');
+  const artworkDeclarationErr = document.getElementById('artworkDeclarationError');
+
+  if (artworkDeclarationInput && !artworkDeclarationInput.checked) {
+    const declMsg = "⚠️ You must tick and confirm the artwork ownership declaration before submitting your order.";
+    if (artworkDeclarationErr) {
+      artworkDeclarationErr.textContent = declMsg;
+      artworkDeclarationErr.style.display = 'block';
+    }
+    if (artworkDeclarationWrap) {
+      artworkDeclarationWrap.style.borderColor = '#dc2626';
+      artworkDeclarationWrap.style.backgroundColor = '#fff5f5';
+      artworkDeclarationWrap.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.15)';
+      artworkDeclarationWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (typeof showToast === "function") {
+      showToast(declMsg, "warning", 6000);
+    } else {
+      alert(declMsg);
+    }
+    if (submitBtn) {
+      submitBtn.textContent = originalBtnText;
+      submitBtn.disabled = false;
+    }
+    artworkDeclarationInput.focus();
+    return;
+  }
+
+  if (artworkDeclarationWrap) {
+    artworkDeclarationWrap.style.borderColor = 'var(--line)';
+    artworkDeclarationWrap.style.backgroundColor = '#faf8f5';
+    artworkDeclarationWrap.style.boxShadow = 'none';
+  }
+  if (artworkDeclarationErr) {
+    artworkDeclarationErr.style.display = 'none';
+  }
+
   // Save current client details immediately so data is never lost
   if (typeof window.saveClientDetails === "function") {
     window.saveClientDetails();
   }
-  
+
   if (submitBtn) {
     submitBtn.textContent = "Sending Request...";
     submitBtn.disabled = true;
@@ -2389,7 +2751,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     // Clean & compress cart items to prevent payload overflow while preserving customized mockup images and uploaded logos
     const sanitizedCart = await Promise.all((cart || []).map(async (item, cIdx) => {
       const cleanItem = { ...item };
-      
+
       // 1. Optimize customized garment mockup
       const rawCustomImg = item.customizedImage || item.mockupImage || item.previewImage;
       if (typeof rawCustomImg === 'string' && rawCustomImg.startsWith('data:image/')) {
@@ -2454,7 +2816,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
       clearTimeout(timeoutId);
 
       const resJson = await res.json().catch(() => null);
-      
+
       if (res.ok && resJson && resJson.success && !resJson.emailError) {
         showToast("Order submitted successfully! Our team will contact you shortly.", "success", 8000);
         cart.splice(0, cart.length);
@@ -2483,7 +2845,7 @@ $("#quoteForm")?.addEventListener("submit", async (event) => {
     showToast("An unexpected error occurred. Displaying email draft fallback.", "warning", 6000);
     try {
       triggerMailtoFallback(customerInfo || {}, cart || []);
-    } catch (e) {}
+    } catch (e) { }
   } finally {
     if (submitBtn) {
       submitBtn.textContent = originalBtnText;
@@ -2501,6 +2863,7 @@ function initClientDetailsPersistence() {
     if (saved) {
       const data = JSON.parse(saved);
       for (const [key, val] of Object.entries(data)) {
+        if (key === "Artwork Ownership Declaration" || key === "artworkOwnershipDeclaration") continue;
         const input = form.elements[key];
         if (input && input.type !== "file") {
           if (input.type === "checkbox" || input.type === "radio") {
@@ -2530,6 +2893,24 @@ function initClientDetailsPersistence() {
     console.warn("Failed to restore client details", e);
   }
 
+  // Clear artwork declaration validation styling immediately when user ticks the checkbox
+  const artDecInput = document.getElementById('artworkOwnershipDeclaration');
+  if (artDecInput && !artDecInput._changeWired) {
+    artDecInput._changeWired = true;
+    artDecInput.addEventListener('change', () => {
+      const wrap = document.getElementById('artworkDeclarationWrap');
+      const err = document.getElementById('artworkDeclarationError');
+      if (artDecInput.checked) {
+        if (wrap) {
+          wrap.style.borderColor = 'var(--line)';
+          wrap.style.backgroundColor = '#faf8f5';
+          wrap.style.boxShadow = 'none';
+        }
+        if (err) err.style.display = 'none';
+      }
+    });
+  }
+
   const saveDetails = () => {
     try {
       const data = {};
@@ -2551,7 +2932,7 @@ function initClientDetailsPersistence() {
   if (phoneInput) {
     phoneInput.addEventListener('keydown', (e) => {
       if (['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Enter'].includes(e.key) ||
-          e.ctrlKey || e.metaKey) {
+        e.ctrlKey || e.metaKey) {
         return;
       }
       if (!/^[0-9+]$/.test(e.key) || (e.key === '+' && (phoneInput.selectionStart !== 0 || phoneInput.value.includes('+')))) {
@@ -2571,11 +2952,12 @@ function initClientDetailsPersistence() {
 
 function initHeaderSearch() {
   const urlParams = new URLSearchParams(window.location.search);
-  const searchQuery = urlParams.get("search") || urlParams.get("q") || "";
+  const searchQuery = (urlParams.get("search") || urlParams.get("q") || "").trim();
   const productSearchEl = document.getElementById("productSearch");
 
   if (productSearchEl && searchQuery) {
     productSearchEl.value = searchQuery;
+    if (typeof renderProducts === "function") renderProducts();
   }
 
   const headerSearchInputs = document.querySelectorAll('input[type="search"]:not(#productSearch)');
@@ -2583,14 +2965,30 @@ function initHeaderSearch() {
     if (searchQuery) {
       input.value = searchQuery;
     }
-    if (input.dataset.searchWired === "true") return;
-    input.dataset.searchWired = "true";
+
+    // Prevent duplicate event binding via property flag
+    if (input._searchWired) return;
+    input._searchWired = true;
+
+    // Live search sync when on shop page
+    const handleLiveSearch = () => {
+      const query = input.value;
+      if (productSearchEl) {
+        if (productSearchEl.value !== query) {
+          productSearchEl.value = query;
+        }
+        if (typeof renderProducts === "function") renderProducts();
+      }
+    };
+
+    input.addEventListener("input", handleLiveSearch);
+    input.addEventListener("search", handleLiveSearch); // Triggers on clear 'x' click
 
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         const query = input.value.trim();
-        
+
         if (productSearchEl) {
           productSearchEl.value = query;
           if (typeof renderProducts === "function") renderProducts();
@@ -2602,33 +3000,56 @@ function initHeaderSearch() {
           document.body.classList.add("silk-leaving");
           setTimeout(() => {
             window.location.href = `shop.html?search=${encodeURIComponent(query)}`;
-          }, 200);
+          }, 150);
         }
       }
     });
   });
+
+  // Keep header search input in sync if user types directly into shop.html #productSearch
+  if (productSearchEl && !productSearchEl._headerSyncWired) {
+    productSearchEl._headerSyncWired = true;
+    const syncBackToHeader = () => {
+      headerSearchInputs.forEach((input) => {
+        if (input.value !== productSearchEl.value) {
+          input.value = productSearchEl.value;
+        }
+      });
+    };
+    productSearchEl.addEventListener("input", syncBackToHeader);
+    productSearchEl.addEventListener("search", syncBackToHeader);
+  }
 }
 
 function initSite() {
   initHeaderSearch();
   loadCart();
   if (typeof renderCart === 'function') renderCart();
-  
+
   const path = window.location.pathname.toLowerCase();
-  
-  if (path.includes('product.html')) {
+
+  if (path.includes('product') || document.getElementById('productName') || document.getElementById('productMainImage')) {
     const urlParams = new URLSearchParams(window.location.search);
     const sku = urlParams.get('sku');
     if (sku) {
       initProductPage(sku);
     }
     initClientDetailsPersistence();
-  } else if (path.includes('checkout.html') || path.includes('quote.html')) {
+  } else if (path.includes('checkout') || path.includes('quote') || document.getElementById('checkoutForm')) {
     initClientDetailsPersistence();
   } else {
     initClientDetailsPersistence();
     // For shop.html and others
-    if (typeof renderProducts === 'function') renderProducts();
+    if (path.includes('shop') || document.getElementById('productGrid')) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramSector = urlParams.get('sector');
+      const paramCategory = urlParams.get('category');
+      if (paramSector) activeSectorFilter = paramSector;
+      if (paramCategory) activeCategoryFilter = paramCategory;
+      if (typeof renderProducts === 'function') renderProducts();
+    } else {
+      if (typeof renderProducts === 'function') renderProducts();
+    }
     if (typeof setupStudio === 'function') setupStudio();
     if (typeof renderShowcase === 'function') renderShowcase();
   }
@@ -2639,21 +3060,21 @@ let productPageData = { sizeQtys: {} };
 let currentCarouselImages = [];
 let activeCarouselIdx = 0;
 
-window.updateMainImageSmooth = function(newSrc, newIdx = -1) {
+window.updateMainImageSmooth = function (newSrc, newIdx = -1) {
   const mainImg = document.getElementById('productMainImage');
   if (!mainImg) return;
-  
+
   if (newIdx !== -1) {
     activeCarouselIdx = newIdx;
   } else {
     const idx = currentCarouselImages.indexOf(newSrc);
     if (idx !== -1) activeCarouselIdx = idx;
   }
-  
+
   window.highlightActiveThumbnail();
 
   const resolved = window.resolveAssetUrl ? window.resolveAssetUrl(newSrc) : newSrc;
-  
+
   // Clear any past failure record and cached clean path so new image is never locked to previous image
   delete mainImg.dataset.retryCount;
   delete mainImg.dataset.lastFailedSrc;
@@ -2680,7 +3101,7 @@ window.updateMainImageSmooth = function(newSrc, newIdx = -1) {
   }
 };
 
-window.highlightActiveThumbnail = function() {
+window.highlightActiveThumbnail = function () {
   const thumbs = document.querySelectorAll('#productThumbnails img');
   thumbs.forEach((th, idx) => {
     if (idx === activeCarouselIdx) {
@@ -2700,50 +3121,6 @@ function normalizeForMatch(str) {
     .replace(/puple/g, "purple")
     .replace(/strips|stripe|striped/g, "striped")
     .replace(/\s+/g, " ");
-}
-
-function productHasPhotoForColor(product, color) {
-  if (!product || !color) return false;
-
-  // 1. Check if explicitly in colorImageMap
-  if (product.colorImageMap && typeof product.colorImageMap === "object") {
-    for (const [col, colUrl] of Object.entries(product.colorImageMap)) {
-      if (col && col.toLowerCase() === color.toLowerCase() && colUrl && typeof colUrl === "string" && colUrl.trim().length > 0) {
-        return true;
-      }
-    }
-  }
-
-  // 2. Check if any photo in product.images directly matches this color
-  if (Array.isArray(product.images) && product.images.length > 0) {
-    const colNorm = normalizeForMatch(color);
-    const colTokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
-    if (colTokens.length > 0) {
-      const match = product.images.some(img => {
-        if (!img) return false;
-        const imgNorm = normalizeForMatch(img);
-        return colTokens.every(t => new RegExp('(^|[^a-z0-9])' + t + '([^a-z0-9]|$)', 'i').test(imgNorm));
-      });
-      if (match) return true;
-    }
-  }
-
-  return false;
-}
-
-function getAvailableProductColors(product) {
-  if (!product || !Array.isArray(product.colors) || product.colors.length === 0) return [];
-  
-  // Filter colors to only those that have an assigned photo
-  const colorsWithPhotos = product.colors.filter(col => productHasPhotoForColor(product, col));
-  
-  // If at least one color has an assigned photo, show only those colors!
-  if (colorsWithPhotos.length > 0) {
-    return colorsWithPhotos;
-  }
-  
-  // Safe fallback if product has generic non-color-coded photos
-  return product.colors;
 }
 
 function getImagesForColor(product, targetColor) {
@@ -2788,7 +3165,7 @@ function getImagesForColor(product, targetColor) {
     }
     if (explicitImg) {
       const targetNorm = normalizeForMatch(targetColor);
-      
+
       // Collect URLs that belong to OTHER colors in colorImageMap so they are never leaked
       const otherColorsAssignedUrls = new Set();
       for (const [col, colUrl] of Object.entries(product.colorImageMap)) {
@@ -2866,10 +3243,9 @@ function getImagesForColor(product, targetColor) {
         return reg.test(imgNorm);
       });
     });
-    // If color has no matching images, do NOT assign all product images to this color!
-    matchedImgs = fallback.length > 0 
-      ? fallback 
-      : [product.image || (Array.isArray(product.images) && product.images[0]) || "assets/white.png"];
+    matchedImgs = fallback.length > 0
+      ? fallback
+      : (Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : [product.image || "assets/white.png"]);
   }
 
   matchedImgs.sort((a, b) => {
@@ -2935,15 +3311,13 @@ function updateGalleryForColor(product, targetColor) {
 function initProductPage(sku) {
   const p = products.find(x => x.sku === sku);
   if (!p) return;
-  
+
   selectedProductSku = sku;
-  
-  const availableColors = getAvailableProductColors(p);
 
   // Resolve activeCatalogColor: prioritize color associated with the Main Photo (p.image) unless user passed ?color=...
   const urlParams = new URLSearchParams(window.location.search);
   const queryColor = urlParams.get('color');
-  if (queryColor && availableColors.includes(queryColor)) {
+  if (queryColor && p.colors && p.colors.includes(queryColor)) {
     activeCatalogColor = queryColor;
   } else {
     let bestInitColor = null;
@@ -2951,17 +3325,15 @@ function initProductPage(sku) {
       const cleanMain = (p.image || "").split('?')[0].toLowerCase();
       for (const [col, colUrl] of Object.entries(p.colorImageMap)) {
         if (colUrl === p.image || (colUrl && colUrl.split('?')[0].toLowerCase() === cleanMain)) {
-          if (availableColors.includes(col)) {
-            bestInitColor = col;
-            break;
-          }
+          bestInitColor = col;
+          break;
         }
       }
     }
-    if (!bestInitColor && availableColors.length > 0) {
+    if (!bestInitColor && p.colors && p.colors.length > 0) {
       let maxLen = 0;
       const imgNorm = normalizeForMatch(p.image || "");
-      availableColors.forEach(col => {
+      p.colors.forEach(col => {
         const colNorm = normalizeForMatch(col);
         const tokens = colNorm.split(/\s+|[-/]/).filter(t => t.length > 0);
         if (tokens.length > 0 && tokens.every(t => imgNorm.includes(t)) && col.length > maxLen) {
@@ -2970,18 +3342,18 @@ function initProductPage(sku) {
         }
       });
     }
-    if (!bestInitColor && availableColors.length > 0) {
-      bestInitColor = availableColors[0];
+    if (!bestInitColor && p.colors && p.colors.length > 0) {
+      bestInitColor = p.colors[0];
     }
-    activeCatalogColor = bestInitColor || availableColors[0] || (p.colors && p.colors[0]) || "";
+    activeCatalogColor = bestInitColor || (p.colors && p.colors[0]) || "";
   }
-  
+
   window.currentLoadedProduct = p;
   document.getElementById('productName').textContent = p.name;
   const catEl = document.getElementById('productCategory');
   if (catEl) catEl.textContent = p.category;
   document.getElementById('productSku').textContent = `SKU: ${p.sku}`;
-  
+
   const custSection = document.getElementById("productCustomizationSection");
   if (custSection) {
     const custCap = p.customizationCapability || p.customizationPermissions || "both";
@@ -2991,7 +3363,7 @@ function initProductPage(sku) {
       custSection.style.display = "block";
     }
   }
-  
+
   const genderBadge = document.getElementById('productGenderBadge');
   if (genderBadge && p.gender) {
     genderBadge.textContent = p.gender;
@@ -3002,9 +3374,9 @@ function initProductPage(sku) {
 
   const shortDescEl = document.getElementById('productShortDesc');
   if (shortDescEl) shortDescEl.textContent = p.short || p.description || "";
-  
+
   document.getElementById('productDesc').textContent = p.long || p.description || "Detailed tailoring characteristics, construction notes, and ergonomic design elements engineered for intensive daily use.";
-  
+
   document.getElementById('productFabric').textContent = p.fabric || "N/A";
   document.getElementById('productGsm').textContent = p.gsm || "N/A";
   if (document.getElementById('productCare')) {
@@ -3015,7 +3387,7 @@ function initProductPage(sku) {
     careFull.textContent = p.care || "Machine wash cold, tumble dry low. Do not bleach.";
   }
   document.getElementById('productAvailability').textContent = "Made to Order";
-  
+
   const sketchAcc = document.getElementById('sketchAccordion');
   const sketchImg = document.getElementById('productSketch');
   const noSketchMsg = document.getElementById('noSketchMsg');
@@ -3039,7 +3411,7 @@ function initProductPage(sku) {
   }
 
   updateGalleryForColor(p, activeCatalogColor);
-  
+
   // Colors & Label
   const updateColorLabel = (colorName, isPreview = false) => {
     const labelEl = document.getElementById("productColorLabelName");
@@ -3053,8 +3425,8 @@ function initProductPage(sku) {
   };
 
   const colorFilter = document.getElementById("productColorFilter");
-  if (colorFilter && availableColors.length > 0) {
-    colorFilter.innerHTML = availableColors.map(c => colorButton(c, p)).join("");
+  if (colorFilter && p.colors) {
+    colorFilter.innerHTML = p.colors.map(c => colorButton(c, p)).join("");
     let activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(activeCatalogColor)}"]`);
     if (!activeBtn && colorFilter.querySelector('.color-dot')) {
       activeBtn = colorFilter.querySelector('.color-dot');
@@ -3070,11 +3442,11 @@ function initProductPage(sku) {
   const moqVal = p.moq ? p.moq.replace(/[^0-9]/g, '') || "50" : "50";
   const maxQtyVal = p.maxQty || p.max || "";
   if (minQtyLabel) minQtyLabel.textContent = `${moqVal}${maxQtyVal ? ` | Max: ${maxQtyVal}` : ''}`;
-  
+
   if (matrix) {
     const isOneSize = p.category === "Head Wear" || p.name.toLowerCase().includes("apron");
     let displaySizes = isOneSize ? ["ONE SIZE"] : (p.sizes || ["S", "M", "L", "XL", "2XL"]);
-    
+
     matrix.innerHTML = displaySizes.map(size => `
       <div class="size-row">
         <button type="button" class="size-select-btn" data-size="${size}">
@@ -3145,7 +3517,7 @@ function initProductPage(sku) {
 
   // Dynamic Customization Configuration & Direct Studio Redirection
   window.currentLoadedProduct = p;
-  window.launchBrandingStudioFromProduct = function(e) {
+  window.launchBrandingStudioFromProduct = function (e) {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -3158,7 +3530,7 @@ function initProductPage(sku) {
     let selectedSizesList = [];
     let sizeDetailsList = [];
     let sizesBreakdownMap = {};
-    
+
     if (sizeInputs && sizeInputs.length > 0) {
       sizeInputs.forEach(inp => {
         const v = parseInt(inp.value);
@@ -3184,13 +3556,13 @@ function initProductPage(sku) {
     }
 
     const selectedColor = (typeof activeCatalogColor !== 'undefined' && activeCatalogColor !== 'all') ? activeCatalogColor : (prod.colors && prod.colors.length ? prod.colors[0] : "Standard Commercial Spec");
-    
+
     let targetImg = (typeof currentCarouselImages !== 'undefined' && currentCarouselImages[activeCarouselIdx])
       ? currentCarouselImages[activeCarouselIdx]
       : (typeof currentCarouselImages !== 'undefined' && currentCarouselImages[0])
         ? currentCarouselImages[0]
         : (prod.image || "assets/products/Polo White Front.webp?v=5");
-    
+
     let targetSize = sizeDetailsList.length > 0 ? sizeDetailsList.join(", ") : "Standard Commercial Spec";
 
     let modeParam = "dtf";
@@ -3252,7 +3624,7 @@ function initProductPage(sku) {
     const finishVal = document.querySelector('input[name="pageLogoFinish"]:checked')?.value || "";
     const helperEl = document.getElementById("finishHelperText");
     if (!helperEl) return;
-    
+
     if (finishVal === "Embroidery") {
       helperEl.textContent = siteSettings?.brandingSettings?.embroideryHelperNote || "Embroidery is recommended for structured, smaller logos (chest, sleeve, caps, pockets) and holds up best on woven/heavier fabrics.";
       helperEl.style.display = "block";
@@ -3266,7 +3638,7 @@ function initProductPage(sku) {
 
   if (customizationSection) {
     const custType = p.customizationCapability || p.customization || "both";
-    
+
     if (custType.toLowerCase() === "none" || custType.toLowerCase() === "n/a") {
       customizationSection.style.display = "none";
     } else {
@@ -3278,9 +3650,9 @@ function initProductPage(sku) {
       } else if (custType === "embroidery_only" && cardLogo) {
         // Logo still supports embroidery finish, just restrict finish options
       }
-      
+
       const allowedFinishes = ["Embroidery", "Direct To Fabric (DTF) Printing"];
-      
+
       const renderRadioGroup = (name, options) => {
         return options.map((opt, idx) => `
           <label class="radio-btn ${idx === 0 ? 'active' : ''}" style="border: 1px solid ${idx === 0 ? 'var(--ink)' : 'var(--line)'}; background: ${idx === 0 ? '#f2f1ed' : '#fff'}; border-radius: 6px; padding: 12px; cursor: pointer; text-align: center; transition: all 0.2s ease; display: block; font-weight: 800;">
@@ -3293,7 +3665,7 @@ function initProductPage(sku) {
       const bs = siteSettings?.brandingSettings || {};
       const dtfPlacements = bs.dtfPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
       const embPlacements = bs.embPlacements || ["Left Chest", "Right Chest", "Center Back", "Upper Sleeve"];
-      
+
       const logoPlacement = document.getElementById("pageLogoPlacementContainer");
       if (logoPlacement) logoPlacement.innerHTML = renderRadioGroup("pageLogoPlacement", p.supportedPlacements || dtfPlacements);
 
@@ -3384,7 +3756,7 @@ function initProductPage(sku) {
       }
     });
   });
-  
+
   // Customization Type Toggle & Disclaimer Banner
   document.querySelectorAll('input[name="customizationType"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
@@ -3397,15 +3769,15 @@ function initProductPage(sku) {
         activeCard.style.borderColor = "var(--ink)";
         activeCard.style.backgroundColor = "#f4f3ef";
       }
-      
+
       const settings = document.getElementById("customizationSettings");
       const disclaimer = document.getElementById("brandingDisclaimer");
       const logoSet = document.getElementById("logoSettings");
       const textSet = document.getElementById("textSettings");
-      
+
       if (settings) settings.style.display = "block";
       if (disclaimer) disclaimer.style.display = "flex";
-      
+
       if (e.target.value === 'upload_logo') {
         if (logoSet) logoSet.style.display = "flex";
         if (textSet) textSet.style.display = "none";
@@ -3415,14 +3787,14 @@ function initProductPage(sku) {
       }
     });
   });
-  
+
   // Initialize text thread colors (Borderless Premium Swatches)
   const threadColorDiv = document.getElementById("pageTextThreadColors");
   if (threadColorDiv) {
     threadColorDiv.innerHTML = threadColors.map(c => `
       <span class="color-dot ${c.name === 'Black' ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; width: 34px; height: 34px; border-radius: 50%; display: inline-block; cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.18); transition: transform 0.2s ease;" data-thread-color="${c.name}" title="${c.name}"></span>
     `).join("");
-    
+
     threadColorDiv.querySelectorAll('.color-dot').forEach(dot => {
       dot.addEventListener('click', (e) => {
         threadColorDiv.querySelectorAll(".color-dot").forEach((b) => {
@@ -3453,15 +3825,15 @@ function initProductPage(sku) {
         lbl.style.borderColor = 'var(--line)';
         lbl.style.background = '#fff';
         const span = lbl.querySelector('span');
-        if(span) span.style.color = '';
+        if (span) span.style.color = '';
       });
       const activeLbl = e.target.closest('label');
       activeLbl.classList.add('active');
       activeLbl.style.borderColor = 'var(--ink)';
       activeLbl.style.background = '#f2f1ed';
       const activeSpan = activeLbl.querySelector('span');
-      if(activeSpan) activeSpan.style.color = 'var(--ink)';
-      
+      if (activeSpan) activeSpan.style.color = 'var(--ink)';
+
       if (e.target.name === "pageLogoFinish") {
         updateFinishHelper();
       }
@@ -3483,30 +3855,30 @@ function initProductPage(sku) {
           canvas.width = img.width;
           canvas.height = img.height;
           ctx.drawImage(img, 0, 0);
-          
+
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           const data = imageData.data;
-          
+
 
           ctx.putImageData(imageData, 0, 0);
           uploadedLogoBase64 = canvas.toDataURL('image/png').split(',')[1];
-          
+
           const previewWrap = document.getElementById("pageLogoPreview");
           const previewImg = document.getElementById("pageLogoPreviewImg");
           if (previewWrap && previewImg) {
             previewImg.src = canvas.toDataURL('image/png');
             previewWrap.style.display = "block";
-            
+
             // Apply dimension constraints based on placement
             const place = document.querySelector('input[name="pageLogoPlacement"]:checked')?.value || "left-chest";
             if (place.includes("chest") || place.includes("sleeve")) {
-               previewWrap.style.width = "15%"; // Approx 4 inches max
+              previewWrap.style.width = "15%"; // Approx 4 inches max
             } else if (place === "center-chest") {
-               previewWrap.style.width = "25%"; // Approx 8 inches max
+              previewWrap.style.width = "25%"; // Approx 8 inches max
             } else {
-               previewWrap.style.width = "35%"; // Full Back approx 12 inches max
+              previewWrap.style.width = "35%"; // Full Back approx 12 inches max
             }
-            
+
             // Simple drag logic
             let isDragging = false;
             let currentX;
@@ -3565,24 +3937,24 @@ function initProductPage(sku) {
     const l1 = tInput1.value.trim();
     const l2 = tInput2 ? tInput2.value.trim() : "";
     const l3 = tInput3 ? tInput3.value.trim() : "";
-    
+
     if (!l1 && !l2 && !l3) {
       textPreviewWrap.style.display = "none";
       return;
     }
-    
+
     textPreviewWrap.style.display = "block";
     let html = l1;
     if (l2) html += "<br>" + l2;
     if (l3) html += "<br>" + l3;
     textPreviewContent.innerHTML = html;
-    
+
     // Get Font
     const font = document.querySelector('input[name="pageTextFont"]:checked')?.value || "block";
     if (font === "script") textPreviewContent.style.fontFamily = "'Brush Script MT', 'Lucida Calligraphy', cursive";
     else if (font === "serif") textPreviewContent.style.fontFamily = "'Times New Roman', serif";
     else textPreviewContent.style.fontFamily = "'Century Gothic', system-ui, sans-serif";
-    
+
     // Get Color
     const activeColorDot = document.querySelector("#pageTextThreadColors .color-dot.active");
     if (activeColorDot) {
@@ -3600,11 +3972,11 @@ function initProductPage(sku) {
   if (tInput1) tInput1.addEventListener("input", updateLiveTextPreview);
   if (tInput2) tInput2.addEventListener("input", updateLiveTextPreview);
   if (tInput3) tInput3.addEventListener("input", updateLiveTextPreview);
-  
+
   document.querySelectorAll('input[name="pageTextFont"]').forEach(radio => {
     radio.addEventListener("change", updateLiveTextPreview);
   });
-  
+
   if (threadColorDiv) {
     threadColorDiv.addEventListener("click", (e) => {
       if (e.target.classList.contains("color-dot")) {
@@ -3613,7 +3985,7 @@ function initProductPage(sku) {
       }
     });
   }
-  
+
   // Drag logic for text preview
   if (textPreviewWrap) {
     let isTDragging = false;
@@ -3657,7 +4029,7 @@ function initProductPage(sku) {
           totalQty += q;
         }
       });
-      
+
       const moqLimit = parseInt(p.moq ? p.moq.toString().replace(/[^0-9]/g, '') : "50") || 50;
       if (totalQty < moqLimit) {
         addToCartBtn.disabled = false;
@@ -3674,9 +4046,9 @@ function initProductPage(sku) {
         showToast(`Maximum Order Quantity for this product is ${maxLimit} pcs. You have selected ${totalQty} pieces. Please adjust your quantity to continue.`, "warning", 5000);
         return;
       }
-      
+
       let brandingDesc = "Blank";
-      
+
       let matchedImage = p.image;
       if (activeCatalogColor && Array.isArray(p.images) && p.images.length > 0) {
         const match = p.images.find(img => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
@@ -3691,8 +4063,8 @@ function initProductPage(sku) {
 
       // Check for existing cart item for this product and color
       const existing = cart.find(
-        (item) => item.sku === p.sku && 
-          (item.color || "").trim().toLowerCase() === (activeCatalogColor || "").trim().toLowerCase() && 
+        (item) => item.sku === p.sku &&
+          (item.color || "").trim().toLowerCase() === (activeCatalogColor || "").trim().toLowerCase() &&
           (item.branding === brandingDesc || !item.branding || item.branding === "Blank")
       );
 
@@ -3706,9 +4078,9 @@ function initProductPage(sku) {
         existing.baseGarmentImage = matchedImage;
         // Purge any accidental duplicate copies
         for (let i = cart.length - 1; i >= 0; i--) {
-          if (cart[i] !== existing && cart[i].sku === p.sku && 
-              (cart[i].color || "").trim().toLowerCase() === (activeCatalogColor || "").trim().toLowerCase() && 
-              (!cart[i].branding || cart[i].branding === "Blank" || cart[i].branding === brandingDesc)) {
+          if (cart[i] !== existing && cart[i].sku === p.sku &&
+            (cart[i].color || "").trim().toLowerCase() === (activeCatalogColor || "").trim().toLowerCase() &&
+            (!cart[i].branding || cart[i].branding === "Blank" || cart[i].branding === brandingDesc)) {
             cart.splice(i, 1);
           }
         }
@@ -3729,7 +4101,7 @@ function initProductPage(sku) {
           logoData: null
         });
       }
-      
+
       saveCart();
       renderCart();
       showToast("Added to cart successfully!", "success", 4000);
@@ -3772,10 +4144,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function openTextWizard() {
   const selectedProduct = products.find((p) => p.sku === selectedProductSku);
   if (!selectedProduct) return;
-  
+
   const quantityElement = document.getElementById("sidebarProductQuantity") || document.getElementById("modalProductQuantity");
   const quantity = parseInt(quantityElement?.value || 50);
-  
+
   const sizeElement = document.getElementById("sidebarSizeSelect") || document.getElementById("modalSizeSelect");
   const selectedSize = sizeElement?.value;
 
@@ -3783,18 +4155,18 @@ function openTextWizard() {
     showToast("Please select size and color before proceeding.", "warning");
     return;
   }
-  
+
   document.getElementById("wizardProductName").textContent = selectedProduct.name;
   document.getElementById("wizardProductColorDesc").textContent = `Color: ${activeCatalogColor} | Size: ${selectedSize} | Qty: ${quantity}`;
-  
+
   const shirtImg = document.getElementById("wizardShirt");
   if (shirtImg) {
     const colorImg = selectedProduct.images?.find((img) => img.toLowerCase().includes(activeCatalogColor.toLowerCase()));
     if (colorImg) {
-       shirtImg.src = colorImg;
+      shirtImg.src = colorImg;
     } else {
-       const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
-       shirtImg.src = imgSrc;
+      const imgSrc = selectedProduct.image ? (selectedProduct.image.startsWith('http') ? selectedProduct.image : selectedProduct.image) : 'White Polo Shirt.png';
+      shirtImg.src = imgSrc;
     }
   }
 
@@ -3805,31 +4177,31 @@ function openTextWizard() {
     lineCount: 1, selectedStyleSku: '', position: '',
     textLines: { line1: '', line2: '', line3: '' }
   };
-  
+
   const colorContainer = document.getElementById("wizardThreadColors");
   if (colorContainer) {
-    colorContainer.innerHTML = threadColors.map(c => 
+    colorContainer.innerHTML = threadColors.map(c =>
       `<span class="color-dot ${c.name === embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: none; border-radius: 50%; width: 30px; height: 30px;" data-thread-color="${c.name}"></span>`
     ).join("");
   }
 
   const bgContainer = document.getElementById("wizardBgColors");
   if (bgContainer) {
-    bgContainer.innerHTML = threadColors.map(c => 
+    bgContainer.innerHTML = threadColors.map(c =>
       `<span class="color-dot bg-color-dot ${c.name === embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: none; border-radius: 50%; width: 30px; height: 30px;" data-bg-color="${c.name}"></span>`
     ).join("");
   }
 
   const borderContainer = document.getElementById("wizardBorderColors");
   if (borderContainer) {
-    borderContainer.innerHTML = threadColors.map(c => 
+    borderContainer.innerHTML = threadColors.map(c =>
       `<span class="color-dot border-color-dot ${c.name === embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; background-color:${c.hex}; margin-right: 8px; display: inline-block; cursor: pointer; border: none; border-radius: 50%; width: 30px; height: 30px;" data-border-color="${c.name}"></span>`
     ).join("");
   }
-  
+
   const emblemOpts = document.getElementById("emblemColorOptions");
   if (emblemOpts) emblemOpts.style.display = "none";
-  
+
   document.querySelectorAll('.selection-card, .template-card, .placement-card').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('input[name="embroideryType"], input[name="templateStyle"], input[name="wizardPosition"]').forEach(r => r.checked = false);
   document.querySelectorAll('#wizardLineCount button').forEach(b => b.classList.remove('active'));
@@ -3851,17 +4223,17 @@ function updateWizardUI() {
     const stepEl = document.getElementById(`wizardStep${i}`);
     if (stepEl) stepEl.style.display = (i === textWizardStep) ? "block" : "none";
   }
-  
+
   const btnBack = document.getElementById("wizardBtnBack");
   const btnNext = document.getElementById("wizardBtnNext");
   const btnConfirm = document.getElementById("wizardBtnConfirm");
-  
+
   if (textWizardStep === 1) {
     btnBack.style.display = "none";
   } else {
     btnBack.style.display = "block";
   }
-  
+
   if (textWizardStep === 5) {
     btnNext.style.display = "none";
     btnConfirm.style.display = "block";
@@ -3892,7 +4264,7 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
 
   if (!preview) return;
 
-  
+
 
   let text = [];
 
@@ -3908,7 +4280,7 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
 
   preview.innerHTML = text.join("<br>");
 
-  
+
 
   let fontFamily = "sans-serif";
 
@@ -3922,13 +4294,13 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
 
   preview.style.fontFamily = fontFamily;
 
-  
+
 
   const threadColorObj = threadColors.find(c => c.name === data.threadColor);
 
   preview.style.color = threadColorObj ? threadColorObj.hex : "#000";
 
-  
+
 
   if (data.type === "emblem") {
 
@@ -3936,7 +4308,7 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
 
     const borderObj = threadColors.find(c => c.name === data.borderColor);
 
-    
+
 
     preview.style.backgroundColor = bgObj ? bgObj.hex : "#fff";
 
@@ -3944,7 +4316,7 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
 
     preview.style.padding = "16px";
 
-    
+
 
     if (data.selectedStyleSku === "Style EM1092") {
 
@@ -4008,7 +4380,7 @@ function renderTextPreview(preview = document.getElementById("wizardTextPreview"
 
     preview.style.transform = baseTransform;
 
-    
+
 
     const pos = data.position;
 
@@ -4054,16 +4426,16 @@ function renderSummary() {
 
 function addWizardToCart() {
   const selectedProduct = products.find((p) => p.sku === selectedProductSku);
-  
+
   const quantityElement = document.getElementById("sidebarProductQuantity") || document.getElementById("modalProductQuantity");
   const quantity = parseInt(quantityElement?.value || 50);
-  
+
   const sizeElement = document.getElementById("sidebarSizeSelect") || document.getElementById("modalSizeSelect");
   const selectedSize = sizeElement?.value || "Standard";
-  
+
   let linesText = [];
   for (let i = 1; i <= embroideryData.lineCount; i++) linesText.push(embroideryData.textLines[`line${i}`]);
-  
+
   const brandingString = `Text Embroidery (${embroideryData.type}), ${embroideryData.selectedStyleSku}, ${embroideryData.fontStyle} font, ${embroideryData.threadColor} thread, Pos: ${embroideryData.position}, Texts: [${linesText.join(' | ')}]`;
 
   const existing = cart.find(
@@ -4087,14 +4459,14 @@ function addWizardToCart() {
   saveCart();
   renderCart();
   document.getElementById("textWizardModal").style.display = "none";
-  
+
   const productModal = document.getElementById("productModal");
   if (productModal) productModal.style.display = "none";
   const productSidebar = document.getElementById("productSidebar");
   if (productSidebar) productSidebar.classList.remove("open");
   const sidebarBackdrop = document.getElementById("sidebarBackdrop");
   if (sidebarBackdrop) sidebarBackdrop.classList.remove("open");
-  
+
   setTimeout(() => {
     const quoteSection = document.getElementById("quote");
     if (quoteSection) {
@@ -4109,7 +4481,7 @@ document.addEventListener("click", (e) => {
     const productSidebar = document.getElementById("productSidebar");
     if (productSidebar) productSidebar.classList.add("open");
   }
-  
+
   if (e.target.id === "wizardBtnNext") {
     if (textWizardStep === 1 && !embroideryData.type) return showToast("Select an embroidery type.", "warning");
     if (textWizardStep === 2 && !embroideryData.selectedStyleSku) return showToast("Select a template style.", "warning");
@@ -4122,7 +4494,7 @@ document.addEventListener("click", (e) => {
       updateWizardUI();
     }
   }
-  
+
   if (e.target.id === "wizardBtnBack") {
     if (textWizardStep > 1) {
       textWizardStep--;
@@ -4157,7 +4529,7 @@ document.addEventListener("click", (e) => {
     embroideryData.borderColor = borderColorDot.dataset.borderColor;
     renderTextPreview();
   }
-  
+
   const lineBtn = e.target.closest("#wizardLineCount button");
   if (lineBtn) {
     document.querySelectorAll("#wizardLineCount button").forEach(b => b.classList.remove("active"));
@@ -4204,7 +4576,7 @@ document.addEventListener("input", (e) => {
   if (e.target.classList.contains("wizard-text-input")) {
     const lineNum = e.target.dataset.line;
     embroideryData.textLines[`line${lineNum}`] = e.target.value;
-    
+
     const counter = document.getElementById(`counter-line${lineNum}`);
     if (counter) counter.textContent = `${e.target.value.length} / 20 characters`;
     renderTextPreview();
@@ -4239,7 +4611,7 @@ function renderEditOrderSummaryModal(index) {
     </div>
   `;
 }
-window.openEditBasicDetails = function() {
+window.openEditBasicDetails = function () {
   const item = cart[editingCartIndex];
   if (!item) return;
   const product = products.find(p => p.sku === item.sku);
@@ -4249,8 +4621,7 @@ window.openEditBasicDetails = function() {
   }
   const colorFilter = document.getElementById("editBasicColorFilter");
   if (colorFilter && product) {
-    const editColors = getAvailableProductColors(product);
-    colorFilter.innerHTML = editColors.map(c => colorButton(c, product)).join("");
+    colorFilter.innerHTML = product.colors.map(c => colorButton(c)).join("");
     const activeBtn = colorFilter.querySelector(`[data-color="${CSS.escape(item.color)}"]`);
     if (activeBtn) activeBtn.classList.add("active");
   }
@@ -4260,7 +4631,7 @@ window.openEditBasicDetails = function() {
   document.getElementById("editBasicDetailsModal").style.display = "flex";
 }
 
-window.openEditBranding = function() {
+window.openEditBranding = function () {
   loadCart();
   if (editingCartIndex >= 0 && cart[editingCartIndex]) {
     redirectToReCustomize(editingCartIndex);
@@ -4308,7 +4679,7 @@ window.openEditBranding = function() {
     }
     const threadContainer = document.getElementById("editTextThreadColors");
     if (threadContainer) {
-      threadContainer.innerHTML = threadColors.map(c => 
+      threadContainer.innerHTML = threadColors.map(c =>
         `<span class="color-dot ${c.name === item.embroideryData.threadColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-thread-color="${c.name}"></span>`
       ).join("");
     }
@@ -4317,13 +4688,13 @@ window.openEditBranding = function() {
       emblemColorsGroup.style.display = "flex";
       const bgContainer = document.getElementById("editTextBgColors");
       if (bgContainer) {
-        bgContainer.innerHTML = threadColors.map(c => 
+        bgContainer.innerHTML = threadColors.map(c =>
           `<span class="bg-color-dot color-dot ${c.name === item.embroideryData.bgColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-bg-color="${c.name}"></span>`
         ).join("");
       }
       const borderContainer = document.getElementById("editTextBorderColors");
       if (borderContainer) {
-        borderContainer.innerHTML = threadColors.map(c => 
+        borderContainer.innerHTML = threadColors.map(c =>
           `<span class="border-color-dot color-dot ${c.name === item.embroideryData.borderColor ? 'active' : ''}" style="--swatch:${c.hex}; margin-right: 8px; display: inline-block;" data-edit-border-color="${c.name}"></span>`
         ).join("");
       }
@@ -4417,7 +4788,7 @@ document.addEventListener("click", (e) => {
       const pDef = products.find(p => p.sku === item.sku) || item;
       const availableColors = pDef.colors || [item.color || "White"];
       if (filter) {
-        filter.innerHTML = availableColors.map(c => 
+        filter.innerHTML = availableColors.map(c =>
           `<button class="color-dot ${c === item.color ? 'active' : ''}" type="button" data-color="${c}" title="${c}" onclick="selectEditColor('${c}')" style="--swatch:${colorStyle(c)}"><span>${c}</span></button>`
         ).join("");
       }
@@ -4623,20 +4994,36 @@ document.addEventListener("change", (e) => {
   }
 });
 
-function renderShowcase() {
-  const showcase = document.getElementById('dynamicShowcase');
-  if (!showcase || !products || products.length === 0) return;
-  if (showcase.dataset.rendered === "true") return;
-  showcase.dataset.rendered = "true";
+let showcaseHasRendered = false;
 
-  const shuffled = [...products].sort(() => 0.5 - Math.random());
+function renderShowcase(force = false) {
+  const showcase = document.getElementById('dynamicShowcase');
+  if (!showcase) return;
+
+  if ((!products || products.length === 0) && typeof window !== 'undefined' && Array.isArray(window.FABRIC8_DEFAULT_PRODUCTS)) {
+    products = [...window.FABRIC8_DEFAULT_PRODUCTS];
+  }
+  if (!products || products.length === 0) return;
+
+  if (showcaseHasRendered && !force) return;
+  showcaseHasRendered = true;
+
+  // Clean any legacy baked-in attribute so it never freezes
+  showcase.removeAttribute('data-rendered');
+  delete showcase.dataset.rendered;
+
+  const shuffled = [...products];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
   const selected = shuffled.slice(0, 4);
-  
+
   showcase.style.display = 'grid';
   showcase.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
   showcase.style.gap = '32px';
   showcase.style.alignItems = 'stretch';
-  
+
   showcase.innerHTML = selected.map(p => {
     let cardImages = p.images && p.images.length > 0 ? [...p.images] : (p.image ? [p.image] : ['White Polo Shirt.png']);
     if (p.image && cardImages.includes(p.image)) {
@@ -4644,7 +5031,7 @@ function renderShowcase() {
     }
     const mainImg = cardImages[0] || p.image || 'White Polo Shirt.png';
     const imgSrc = window.resolveAssetUrl ? window.resolveAssetUrl(mainImg) : (mainImg.startsWith('http') ? mainImg : mainImg);
-    
+
     return `<article class="product-card" style="background: transparent !important; border: none !important; box-shadow: none !important; display: flex; flex-direction: column;">
       <a href="product.html?sku=${p.sku}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%; position: relative;">
         <div style="background: transparent; height: 340px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: none !important; padding: 10px;">
@@ -4669,53 +5056,14 @@ function initCapabilityBelt() {
   const capHighlight2 = document.getElementById('capHighlight2');
   const capHighlight3 = document.getElementById('capHighlight3');
   const expBox = document.getElementById('capabilityExpansionBox');
-  
+
   if (!row || !capTitle || !expBox) return;
 
-  const sectorSpecs = {
-    food: {
-      title: "🍽️ Food & Beverage Uniform Engineering",
-      desc: "Engineered to endure kitchen heat, grease splashes, and intense industrial washing cycles while delivering exceptional front-of-house elegance. Featuring advanced thermal breathability, stain-release coatings, and ergonomic seam articulation for executive chefs and dining room professionals.",
-      link: "sectors.html#food",
-      h1: "✦ Stain-Release Thermal Cotton", h2: "✦ MOQ: 50 Pieces Custom-Tailored", h3: "✦ Custom Emblem & Text Embroidery"
-    },
-    hospitality: {
-      title: "🏨 Hospitality & Luxury Hotel Couture",
-      desc: "Impeccable uniform choreography tailored for concierge desks, executive reception teams, and house management. Our hospitality garments merge fine suit tailoring with durable daily stretch fibers to uphold five-star brand authority.",
-      link: "sectors.html#hospitality",
-      h1: "✦ Wrinkle-Resistant Luxury Wool Stretch", h2: "✦ Tailored Cut & Ergonomic Fit", h3: "✦ Gold & Silver Thread Cresting"
-    },
-    corporate: {
-      title: "💼 Corporate Workplace Fashion & Apparel",
-      desc: "Modernizing professional business wear with sleek, tailored silhouettes designed for corporate headquarters, banks, and enterprise enterprises. Combining sophisticated executive styling with everyday all-day mobility.",
-      link: "sectors.html#corporate",
-      h1: "✦ Premium Executive Suiting & Polos", h2: "✦ Bespoke Color Palette Synchronization", h3: "✦ High-Definition Subtle Branding"
-    },
-    healthcare: {
-      title: "⚕️ Healthcare, Medical & Clinical Uniforms",
-      desc: "High-performance antimicrobial scrubs and physician coats built for intensive medical laboratory and hospital environments. Crafted with soft, fluids-repellent stretch textiles that withstand stringent autoclave sanitization.",
-      link: "sectors.html#healthcare",
-      h1: "✦ Antimicrobial 4-Way Stretch Fiber", h2: "✦ Fluid-Resistant Protective Barriers", h3: "✦ Ergonomic Utility Tool Pocketing"
-    },
-    industrial: {
-      title: "🏭 Industrial & Safety Workwear Solutions",
-      desc: "Heavy-duty flame-resistant and high-visibility industrial garments structured for factories, engineering sites, and logistical operations. Reinforced with ripstop weaving and industrial bar-tack stitching at high-stress junctions.",
-      link: "sectors.html#industrial",
-      h1: "✦ Certified Flame-Resistant & Ripstop", h2: "✦ Industrial Wash & Abrasion Resistance", h3: "✦ Reinforced Safety Utility Construction"
-    },
-    education: {
-      title: "🎓 Educational & Academic Institution Attire",
-      desc: "Cohesive collegiate blazer collections, faculty apparel, and administrative uniform wardrobes designed for private schools and universities. Built for long-term comfort, seasonal climate resilience, and distinguished academic heritage.",
-      link: "sectors.html#education",
-      h1: "✦ Durable Anti-Pilling Fabrics", h2: "✦ Institutional Emblem Weaving", h3: "✦ Complete Size Customization & Trim"
-    },
-    aviation: {
-      title: "✈️ Aviation, Flight Crew & Ground Operations",
-      desc: "Precision-engineered flight attendant tunics, pilot trench suiting, and terminal logistical wear designed for global airlines. Offering high wrinkle-resilience and cabin-climate thermal adaptation for long-haul duty.",
-      link: "sectors.html#aviation",
-      h1: "✦ Cabin-Tested Thermal Regulation", h2: "✦ Flawless Post-Flight Wrinkle Resistance", h3: "✦ Integrated Epaulette & Wing Mounting"
-    }
-  };
+  function getMergedSpec(sec) {
+    const dSpec = (window.defaultSectorSpecs && window.defaultSectorSpecs[sec]) || (window.defaultSectorSpecs && window.defaultSectorSpecs.food) || {};
+    const customSpecs = (window.siteSettings && window.siteSettings.siteContent && window.siteSettings.siteContent.sectorSpecs && window.siteSettings.siteContent.sectorSpecs[sec]) || {};
+    return Object.assign({}, dSpec, customSpecs);
+  }
 
   const buttons = row.querySelectorAll('.capability-icon-btn');
   buttons.forEach(btn => {
@@ -4726,72 +5074,85 @@ function initCapabilityBelt() {
       });
       btn.style.border = '2px solid var(--ink)';
       btn.classList.add('active');
-      
+
       const sec = btn.getAttribute('data-sector') || 'food';
-      const spec = sectorSpecs[sec] || sectorSpecs.food;
-      
+      const spec = getMergedSpec(sec);
+
       expBox.style.opacity = '0';
       expBox.style.transform = 'translateY(6px)';
-      
+
       setTimeout(() => {
-        capTitle.innerText = spec.title;
-        capDesc.innerText = spec.desc;
-        capLink.href = spec.link;
-        if(capHighlight1) capHighlight1.innerText = spec.h1;
-        if(capHighlight2) capHighlight2.innerText = spec.h2;
-        if(capHighlight3) capHighlight3.innerText = spec.h3;
-        
+        if (spec.title) capTitle.innerText = spec.title;
+        if (spec.desc) capDesc.innerText = spec.desc;
+        if (spec.link) capLink.href = spec.link;
+        if (spec.linkText) capLink.innerText = spec.linkText;
+        if (capHighlight1 && spec.h1) capHighlight1.innerText = spec.h1;
+        if (capHighlight2 && spec.h2) capHighlight2.innerText = spec.h2;
+        if (capHighlight3 && spec.h3) capHighlight3.innerText = spec.h3;
+
         expBox.style.opacity = '1';
         expBox.style.transform = 'translateY(0)';
       }, 150);
     });
   });
 
-  syncSectorsVisibility();
+  // Initial load: populate expansion box with merged specs of the active button
+  const activeBtn = row.querySelector('.capability-icon-btn.active') || buttons[0];
+  if (activeBtn) {
+    const initSec = activeBtn.getAttribute('data-sector') || 'food';
+    const initSpec = getMergedSpec(initSec);
+    if (initSpec.title) capTitle.innerText = initSpec.title;
+    if (initSpec.desc) capDesc.innerText = initSpec.desc;
+    if (initSpec.link) capLink.href = initSpec.link;
+    if (initSpec.linkText) capLink.innerText = initSpec.linkText;
+    if (capHighlight1 && initSpec.h1) capHighlight1.innerText = initSpec.h1;
+    if (capHighlight2 && initSpec.h2) capHighlight2.innerText = initSpec.h2;
+    if (capHighlight3 && initSpec.h3) capHighlight3.innerText = initSpec.h3;
+  }
 }
 
 // Generic Contact Form Handlers
 function setupContactForm(formId, sourceName) {
   const form = document.getElementById(formId);
   if (!form) return;
-  
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
     const statusDiv = document.getElementById(formId + 'Status');
     const originalBtnText = btn.innerText;
-    
+
     btn.innerText = 'Sending...';
     btn.disabled = true;
-    if(statusDiv) statusDiv.style.display = 'none';
-    
+    if (statusDiv) statusDiv.style.display = 'none';
+
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
     data.source = sourceName;
-    
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      
+
       const resJson = await response.json().catch(() => null);
 
       if (!response.ok || (resJson && resJson.success === false)) {
         const errorMsg = resJson?.error?.message || resJson?.error || `Server returned status ${response.status}`;
         throw new Error(errorMsg);
       }
-      
+
       form.reset();
-      if(statusDiv) {
+      if (statusDiv) {
         statusDiv.innerText = 'Message sent successfully! We will be in touch soon.';
         statusDiv.style.color = 'var(--green, #2f873d)';
         statusDiv.style.display = 'block';
       }
     } catch (err) {
       console.warn("Contact form submission note:", err);
-      if(statusDiv) {
+      if (statusDiv) {
         const senderName = (data.firstName ? data.firstName + ' ' + (data.lastName || '') : (data.email || 'Website Visitor')).trim();
         const mailSubject = encodeURIComponent(data.subject ? `[Inquiry] ${data.subject}` : `Fabric-8 Inquiry from ${senderName}`);
         let mailBody = `Inquiry Details:\n`;
@@ -4801,7 +5162,7 @@ function setupContactForm(formId, sourceName) {
           }
         }
         const mailtoUrl = `mailto:hello@thefabric8.com?subject=${mailSubject}&body=${encodeURIComponent(mailBody)}`;
-        
+
         statusDiv.innerHTML = `
           <div style="color: #b7342b; margin-bottom: 8px; font-weight: 600;">Unable to send message automatically (${err.message || 'Server offline or unconfigured'}).</div>
           <div style="font-weight: normal; font-size: 13px; color: #555; margin-bottom: 10px;">Please click below to send your message directly via email:</div>
@@ -4822,6 +5183,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupContactForm('aboutForm', 'About Us Page');
   setupContactForm('contactForm', 'Contact Us Page');
   initCapabilityBelt();
+  applySectorVisibility();
 
   initDeliveryDatePicker();
 });
@@ -4999,7 +5361,7 @@ function initDeliveryDatePicker() {
           dPicker.focus();
           dPicker.click();
         }
-      } catch(err) {
+      } catch (err) {
         dPicker.focus();
         dPicker.click();
       }
@@ -5125,12 +5487,12 @@ function initDeliveryDatePicker() {
 }
 
 
-    
+
 
 
 // Global automatic GitHub fallback for newly uploaded images before Hosting CDN propagation
 if (typeof window !== 'undefined' && window.addEventListener) {
-  window.addEventListener('error', function(e) {
+  window.addEventListener('error', function (e) {
     if (e && e.target && e.target.tagName === 'IMG') {
       window.handleImgError(e.target);
     }
