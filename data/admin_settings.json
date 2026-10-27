@@ -116,7 +116,7 @@
       "name": "Food & beverage"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Hospitality"
     },
     {
@@ -128,7 +128,7 @@
       "name": "Healthcare"
     },
     {
-      "enabled": true,
+      "enabled": false,
       "name": "Industrial"
     },
     {
