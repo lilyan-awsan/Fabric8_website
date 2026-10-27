@@ -257,12 +257,15 @@
     </div>
   </article></section>
 <script>
-  // For mobile tap-to-flip
-  document.querySelectorAll('.method-flip-card').forEach(card => {
-    card.addEventListener('click', () => {
-      card.classList.toggle('is-flipped');
+  // For mobile tap-to-flip (standalone live site only)
+  if (window.self === window.top) {
+    document.querySelectorAll('.method-flip-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a, button')) return;
+        card.classList.toggle('is-flipped');
+      });
     });
-  });
+  }
 </script>
 
 
