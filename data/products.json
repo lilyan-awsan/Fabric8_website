@@ -494,12 +494,16 @@
     ],
     "colors": [
       "White",
-      "Black"
+      "Black",
+      "gray"
     ],
-    "colorHexMap": {},
+    "colorHexMap": {
+      "gray": "#3d3d3d"
+    },
     "colorImageMap": {
       "White": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
-      "Black": "assets/products/1791036529233_chef_jacket_black_front_snaps.webp"
+      "Black": "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
+      "gray": "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
     },
     "fabric": "Premium Poly-Cotton Blend",
     "gsm": "180-220 GSM",
