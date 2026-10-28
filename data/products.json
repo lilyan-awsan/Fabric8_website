@@ -476,49 +476,53 @@
     ]
   },
   {
-    "id": "F8-011",
-    "sku": "F8-011",
-    "name": "Chef Jackets",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
     "category": "TOP WEAR",
-    "gender": "Men / Women / Unisex",
-    "sectors": "Food and beverage, Hospitality",
-    "short": "Signature double-breasted jacket for culinary professionals.",
-    "long": "A durable, heat-resistant jacket featuring the classic double-breasted design and breathable reinforced construction.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
+    "colorHexMap": {
+      "gray": "#3d3d3d"
+    },
+    "colorImageMap": {
+      "Black": "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
+      "White": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
+      "gray": "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
+    },
     "colors": [
       "White",
       "Black",
       "gray"
     ],
-    "colorHexMap": {
-      "gray": "#3d3d3d"
-    },
-    "colorImageMap": {
-      "White": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
-      "Black": "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
-      "gray": "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
-    },
-    "fabric": "Premium Poly-Cotton Blend",
-    "gsm": "180-220 GSM",
-    "leadTime": "14-21 Business Days",
-    "moq": "8 pieces",
-    "maxQty": "",
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
-    "sketch": "assets/products/1790361494921_sketch_TECHNICALS-05.webp",
-    "sketchDescription": "",
-    "supportedPlacements": [
+    "customizationCapability": "both",
+    "dtfPlacements": [
       "Left Chest",
       "Right Chest",
-      "Upper Left Sleeve"
+      "Center Back",
+      "Upper Sleeve"
     ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "fabric": "Premium Poly-Cotton Blend",
+    "gender": "Men / Women / Unisex",
+    "gsm": "180-220 GSM",
+    "id": "F8-011",
+    "image": "assets/products/1790360611444_chef_jacket_white_1-4.webp",
+    "images": [
+      "assets/products/1790360611444_chef_jacket_white_1-4.webp",
+      "assets/products/1790361492168_Chef_Jacket_White_Back_1-2.webp",
+      "assets/products/1790361493146_Chef_Jacket_White_Side_1-1.webp",
+      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp",
+      "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
+      "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
+    ],
+    "leadTime": "14-21 Business Days",
+    "long": "A durable, heat-resistant jacket featuring the classic double-breasted design and breathable reinforced construction.",
+    "maxQty": "",
+    "moq": "8 pieces",
+    "name": "Chef Jackets",
     "placements": [
       {
         "h": 18,
@@ -545,32 +549,28 @@
         "y": 48
       }
     ],
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
+    "sectors": "Food and beverage, Hospitality",
+    "short": "Signature double-breasted jacket for culinary professionals.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
     ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
+    "sketch": "assets/products/1790361494921_sketch_TECHNICALS-05.webp",
+    "sketchDescription": "",
+    "sku": "F8-011",
     "supportedFinishes": [
       "Embroidery",
       "Direct To Fabric (DTF) Printing"
     ],
-    "customizationCapability": "both",
-    "images": [
-      "assets/products/1790360611444_chef_jacket_white_1-4.webp",
-      "assets/products/1790361492168_Chef_Jacket_White_Back_1-2.webp",
-      "assets/products/1790361493146_Chef_Jacket_White_Side_1-1.webp",
-      "assets/products/1790361494119_Chef_Jacket_White_Side_1-2.webp",
-      "assets/products/1791036529233_chef_jacket_black_front_snaps.webp",
-      "assets/products/1791036530079_chef_jacket_grey_front_snaps.webp"
-    ],
-    "image": "assets/products/1790360611444_chef_jacket_white_1-4.webp"
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Upper Left Sleeve"
+    ]
   },
   {
     "availability": "In Stock",
@@ -1950,37 +1950,24 @@
     ]
   },
   {
-    "availability": "In Stock",
-    "care": "Machine wash cold, do not bleach.",
+    "id": "F8-001",
+    "sku": "F8-001",
+    "name": "Premium Polo Shirt",
     "category": "TOP WEAR",
-    "colorImageMap": {
-      "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "Army Green": "assets/products/1790358671142_Army_Green_Olive_Green.webp",
-      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
-      "Black": "assets/products/1790358660717_Polo_Black.webp",
-      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
-      "Brown": "assets/products/1790358662661_Polo_Brown.webp",
-      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
-      "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
-      "Dark Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
-      "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
-      "Green": "assets/products/1790358666198_Polo_Green.webp",
-      "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
-      "Light Blue": "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
-      "Light Grey": "assets/products/1790358669131_Light_Grey_Light_grey.webp",
-      "Navy": "assets/products/1790358670220_Polo_Navy.webp",
-      "Olive Green": "assets/products/1790358658500_Olive_Green_Army_Green.webp",
-      "Orange": "assets/products/1790358672817_Polo_Orange.webp",
-      "Pink": "assets/products/1790358673674_Polo_Pink.webp",
-      "Purple": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
-      "Red": "assets/products/1790358675503_Polo_Red.webp",
-      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp",
-      "White": "assets/products/Polo White Front.webp",
-      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp"
-    },
+    "gender": "Men / Women / Unisex",
+    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage",
+    "short": "Premium corporate polo, clean and professional.",
+    "long": "A tailored, comfortable polo shirt made from durable cotton or cotton-blend fabric. Reinforced collar and cuffs hold their shape through repeated washing, making it ideal for daily corporate wear.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
     "colors": [
       "Blue",
-      "Purple",
       "Purple Blue",
       "Pink",
       "Beige",
@@ -2005,61 +1992,47 @@
       "Deep Turquoise",
       "Yellow"
     ],
-    "customizationCapability": "both",
-    "dtfPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "embroideryPlacements": [
-      "Left Chest",
-      "Right Chest",
-      "Center Back",
-      "Upper Sleeve"
-    ],
-    "fabric": "Premium Poly-Cotton Blend",
-    "gender": "Men / Women / Unisex",
-    "gsm": "180-220 GSM",
-    "id": "F8-001",
-    "image": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
-    "images": [
-      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
-      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
-      "assets/products/1790358673674_Polo_Pink.webp",
-      "assets/products/1790358659699_Polo_Beige.webp",
-      "assets/products/1790358663502_Polo_Burgundy.webp",
-      "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
-      "assets/products/Polo White Front.webp",
-      "assets/products/Polo White Side.webp",
-      "assets/products/Polo White Back.webp",
-      "assets/products/1790358658500_Olive_Green_Army_Green.webp",
-      "assets/products/1790358660717_Polo_Black.webp",
-      "assets/products/1790358662661_Polo_Brown.webp",
-      "assets/products/1790358664388_Polo_Charcoal.webp",
-      "assets/products/1790358666198_Polo_Green.webp",
-      "assets/products/1790358666999_Polo_Kiwi.webp",
-      "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
-      "assets/products/1790358669131_Light_Grey_Light_grey.webp",
-      "assets/products/1790358670220_Polo_Navy.webp",
-      "assets/products/1790358671142_Army_Green_Olive_Green.webp",
-      "assets/products/1790358672817_Polo_Orange.webp",
-      "assets/products/1790358675503_Polo_Red.webp",
-      "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
-      "assets/products/1790358677712_Polo_Yellow.webp",
-      "assets/products/1790358678682_American_Blue_American_Blue.webp",
-      "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
-    ],
-    "leadTime": "14-21 Business Days",
-    "long": "A tailored, comfortable polo shirt made from durable cotton or cotton-blend fabric. Reinforced collar and cuffs hold their shape through repeated washing, making it ideal for daily corporate wear.",
-    "mainImageSelection": {
-      "index": 0,
-      "type": "existing",
-      "url": "assets/products/1790606198521_1790358661712_Polo_blue.webp"
+    "colorHexMap": {},
+    "colorImageMap": {
+      "Blue": "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+      "Purple Blue": "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "Pink": "assets/products/1790358673674_Polo_Pink.webp",
+      "Beige": "assets/products/1790358659699_Polo_Beige.webp",
+      "Burgundy": "assets/products/1790358663502_Polo_Burgundy.webp",
+      "Dark Green": "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "White": "assets/products/Polo White Front.webp",
+      "Olive Green": "assets/products/1790358658500_Olive_Green_Army_Green.webp",
+      "Black": "assets/products/1790358660717_Polo_Black.webp",
+      "Brown": "assets/products/1790358662661_Polo_Brown.webp",
+      "Charcoal": "assets/products/1790358664388_Polo_Charcoal.webp",
+      "Green": "assets/products/1790358666198_Polo_Green.webp",
+      "Kiwi": "assets/products/1790358666999_Polo_Kiwi.webp",
+      "Light Blue": "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
+      "Light Grey": "assets/products/1790358669131_Light_Grey_Light_grey.webp",
+      "Navy": "assets/products/1790358670220_Polo_Navy.webp",
+      "Army Green": "assets/products/1790358671142_Army_Green_Olive_Green.webp",
+      "Orange": "assets/products/1790358672817_Polo_Orange.webp",
+      "Red": "assets/products/1790358675503_Polo_Red.webp",
+      "Deep Turquoise": "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
+      "Yellow": "assets/products/1790358677712_Polo_Yellow.webp",
+      "American Blue": "assets/products/1790358678682_American_Blue_American_Blue.webp",
+      "Turquoise Blue": "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
     },
-    "maxQty": "",
+    "fabric": "Premium Poly-Cotton Blend",
+    "gsm": "180-220 GSM",
+    "leadTime": "14-21 Business Days",
     "moq": "8 pieces",
-    "name": "Premium Polo Shirt",
+    "maxQty": "",
+    "availability": "In Stock",
+    "care": "Machine wash cold, do not bleach.",
+    "sketch": "assets/products/1790361535692_sketch_TECHNICALS-02.webp",
+    "sketchDescription": "",
+    "supportedPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
     "placements": [
       {
         "h": 5,
@@ -2094,29 +2067,51 @@
         "y": 48
       }
     ],
-    "sectors": "Food and beverage, Hospitality, Corporate, Healthcare, Industrial, Education, Aviation, Food & beverage",
-    "short": "Premium corporate polo, clean and professional.",
-    "sizes": [
-      "XS",
-      "S",
-      "M",
-      "L",
-      "XL",
-      "2XL"
-    ],
-    "sketch": "assets/products/1790361535692_sketch_TECHNICALS-02.webp",
-    "sketchDescription": "",
-    "sku": "F8-001",
-    "supportedFinishes": [
-      "Embroidery",
-      "Direct To Fabric (DTF) Printing"
-    ],
-    "supportedPlacements": [
+    "dtfPlacements": [
       "Left Chest",
       "Right Chest",
       "Center Back",
       "Upper Sleeve"
-    ]
+    ],
+    "embroideryPlacements": [
+      "Left Chest",
+      "Right Chest",
+      "Center Back",
+      "Upper Sleeve"
+    ],
+    "supportedFinishes": [
+      "Embroidery",
+      "Direct To Fabric (DTF) Printing"
+    ],
+    "customizationCapability": "both",
+    "images": [
+      "assets/products/1790606198521_1790358661712_Polo_blue.webp",
+      "assets/products/1790358674566_Purple_Blue_Puple_Blue.webp",
+      "assets/products/1790358673674_Polo_Pink.webp",
+      "assets/products/1790358659699_Polo_Beige.webp",
+      "assets/products/1790358663502_Polo_Burgundy.webp",
+      "assets/products/1790358665371_Dark_Green_Dark_Green.webp",
+      "assets/products/Polo White Front.webp",
+      "assets/products/Polo White Side.webp",
+      "assets/products/Polo White Back.webp",
+      "assets/products/1790358658500_Olive_Green_Army_Green.webp",
+      "assets/products/1790358660717_Polo_Black.webp",
+      "assets/products/1790358662661_Polo_Brown.webp",
+      "assets/products/1790358664388_Polo_Charcoal.webp",
+      "assets/products/1790358666198_Polo_Green.webp",
+      "assets/products/1790358666999_Polo_Kiwi.webp",
+      "assets/products/1790358668107_Light_Blue_Light_Blue.webp",
+      "assets/products/1790358669131_Light_Grey_Light_grey.webp",
+      "assets/products/1790358670220_Polo_Navy.webp",
+      "assets/products/1790358671142_Army_Green_Olive_Green.webp",
+      "assets/products/1790358672817_Polo_Orange.webp",
+      "assets/products/1790358675503_Polo_Red.webp",
+      "assets/products/1790358676616_Turquoise_Blue_Turquoise_blue_2-2.webp",
+      "assets/products/1790358677712_Polo_Yellow.webp",
+      "assets/products/1790358678682_American_Blue_American_Blue.webp",
+      "assets/products/1790606590752_Turquoise_Blue_Turquoise_blue_1-2.webp"
+    ],
+    "image": "assets/products/1790606198521_1790358661712_Polo_blue.webp"
   },
   {
     "availability": "In Stock",
